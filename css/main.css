@@ -2400,7 +2400,7 @@ ul.breadcrumb li:last-child {
   }
 }
 .back-to-top {
-  right: 50px;
+  right: 30px;
   width: 70px;
   height: 900px;
   top: -900px;
@@ -2416,7 +2416,7 @@ ul.breadcrumb li:last-child {
   top: calc(100vh - 900px - 200px);
 }
 body {
-  background: url("/images/yourbackground.jpg");
+  background: url("/images/background.JPG");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
