@@ -22,25 +22,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"width":300},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="西郊有密林，助君出重围">
-<meta property="og:type" content="website">
-<meta property="og:title" content="FengYan&#39;s Blog">
-<meta property="og:url" content="https://fengyan-wby.github.io/archives/2023/index.html">
+    <meta name="description" content="Oh My Zsh是一款社区驱动的命令行工具，是基于Zsh命令行的一个扩展工具集，提供了丰富的扩展功能，如：主题配置，插件机制，内置的便捷操作等，可以给我们一种全新的命令行使用体验。下文对Oh My Zsh的安装及配置方法进行总结，只总结最佳的实践。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu&amp;Mac安装配置Oh My Zsh">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/index.html">
 <meta property="og:site_name" content="FengYan&#39;s Blog">
-<meta property="og:description" content="西郊有密林，助君出重围">
+<meta property="og:description" content="Oh My Zsh是一款社区驱动的命令行工具，是基于Zsh命令行的一个扩展工具集，提供了丰富的扩展功能，如：主题配置，插件机制，内置的便捷操作等，可以给我们一种全新的命令行使用体验。下文对Oh My Zsh的安装及配置方法进行总结，只总结最佳的实践。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-10T06:49:03.000Z">
+<meta property="article:modified_time" content="2023-02-10T07:57:55.778Z">
 <meta property="article:author" content="FengYan">
+<meta property="article:tag" content="zsh">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://fengyan-wby.github.io/archives/2023/">
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2023/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/","path":"2023/02/10/Ubuntu-Mac安装配置Oh-My-Zsh/","title":"Ubuntu&Mac安装配置Oh My Zsh"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | FengYan's Blog</title>
+<title>Ubuntu&Mac安装配置Oh My Zsh | FengYan's Blog</title>
   
 
 
@@ -73,7 +76,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">FengYan's Blog</h1>
+      <p class="site-title">FengYan's Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">自知者少苦，知足者长乐</p>
@@ -127,7 +130,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Oh-My-Zsh"><span class="nav-number">1.</span> <span class="nav-text">安装Oh My Zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zsh%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Zsh配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">字体的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">主题的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">修改配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">插件配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#autojump"><span class="nav-number">3.1.</span> <span class="nav-text">autojump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fasd"><span class="nav-number">3.2.</span> <span class="nav-text">fasd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-autosuggestions"><span class="nav-number">3.3.</span> <span class="nav-text">zsh-autosuggestions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-syntax-highlighting"><span class="nav-number">3.4.</span> <span class="nav-text">zsh-syntax-highlighting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">修改配置</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -454,129 +458,152 @@ if(canvas.getContext){
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 5 篇日志。 继续努力。</span>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="西郊有密林，助君出重围">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu&Mac安装配置Oh My Zsh | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu&Mac安装配置Oh My Zsh
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="创建时间：2023-02-10 14:49:03 / 修改时间：15:57:55" itemprop="dateCreated datePublished" datetime="2023-02-10T14:49:03+08:00">2023-02-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><code>Oh My Zsh</code>是一款社区驱动的命令行工具，是基于<code>Zsh</code>命令行的一个扩展工具集，提供了丰富的扩展功能，如：主题配置，插件机制，内置的便捷操作等，可以给我们一种全新的命令行使用体验。下文对<code>Oh My Zsh</code>的安装及配置方法进行总结，只总结最佳的实践。<span id="more"></span></p>
+<h2 id="安装Oh-My-Zsh"><a href="#安装Oh-My-Zsh" class="headerlink" title="安装Oh My Zsh"></a>安装Oh My Zsh</h2><p>第一步：安装<code>Zsh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Zsh</span></span><br><span class="line">sudo apt install zsh  <span class="comment"># Mac使用brew install zsh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将Zsh设置为默认Shell</span></span><br><span class="line">chsh -s /bin/zsh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以通过echo $SHELL 查看当前默认的Shell，如果没有改为/bin/zsh，那么需要重启Shell。</span></span><br></pre></td></tr></table></figure>
+
+<p>第二步：安装Oh My Zsh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Oh My Zsh</span></span><br><span class="line">wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</span><br><span class="line"><span class="comment"># 以上命令可能不好使，可使用如下两条命令</span></span><br><span class="line">wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh</span><br><span class="line">bash ./install.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="Zsh配置"><a href="#Zsh配置" class="headerlink" title="Zsh配置"></a>Zsh配置</h2><h3 id="字体的安装"><a href="#字体的安装" class="headerlink" title="字体的安装"></a>字体的安装</h3><p>推荐在终端使用<code>Powerline</code>类型的主题，该类型主题可以使用图形表示尽可能多的信息，方便用户的使用。推荐安装用户量最大的<code>Powerlevel9k</code>。</p>
+<p><code>Powerlevel9k</code>中需要使用较多的图形符号，字体大多不会自带这些符号，所以需要使用专门的<code>Powerline</code>字体。</p>
+<p>不推荐安装官方默认的<code>Powerline Fonts</code>，理由是图形符号不全，符号处会有乱码。推荐安装<code>Nerd-Fonts</code>系列字体，因为该系列字体附带有尽可能全的符号，并且更新非常频繁，项目地址在这里。例如直接下载 <code>Ubuntu Font Family</code>中的<code>Ubuntu Nerd Font Complete.ttf</code>，然后直接在Ubuntu下安装。</p>
+<h3 id="主题的配置"><a href="#主题的配置" class="headerlink" title="主题的配置"></a>主题的配置</h3><p>如果要在Oh My Zsh中安装Powerlevel9k ，只需执行如下指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k</span><br></pre></td></tr></table></figure>
+
+<p>注：由于Powerlevel9k( 已经被弃用 )升级到Powerlevel10k，更新安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改～/.zshrc</span></span><br><span class="line">ZSH_THEME=<span class="string">&quot;powerlevel10k/powerlevel10k&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="插件配置"><a href="#插件配置" class="headerlink" title="插件配置"></a>插件配置</h2><h3 id="autojump"><a href="#autojump" class="headerlink" title="autojump"></a>autojump</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install autojump  <span class="comment"># mac使用brew install autojump</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="fasd"><a href="#fasd" class="headerlink" title="fasd"></a>fasd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install fasd  <span class="comment"># mac使用brew install fasd</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h3><p>命令行命令键入时的历史命令建议插件<br>按照官方文档提示，直接执行如下命令安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<h3 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h3><p>命令行语法高亮插件<br>按照官方文档提示，直接执行如下命令安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改～/.zshrc</span></span><br><span class="line"><span class="comment"># autojump 功能弱，fasd 功能强，但是没 autojump 实用</span></span><br><span class="line"><span class="comment"># 值得注意的是，根据官方文档，zsh-syntax-highlighting 插件需放在最后</span></span><br><span class="line">plugins=(</span><br><span class="line">  git extract autojump zsh-autosuggestions zsh-syntax-highlighting</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-10T14:49:03+08:00"
-              content="2023-02-10">
-          02-10
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/" itemprop="url">
-            <span itemprop="name">Ubuntu&Mac安装配置Oh My Zsh</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/zsh/" rel="tag"><i class="fa fa-tag"></i> zsh</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="Java线程池的使用">
+                  <i class="fa fa-chevron-left"></i> Java线程池的使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-09T16:37:24+08:00"
-              content="2023-02-09">
-          02-09
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/" itemprop="url">
-            <span itemprop="name">Java线程池的使用</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-02T20:29:04+08:00"
-              content="2023-02-02">
-          02-02
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/02/Hexo-Next%E4%B8%BB%E9%A2%98%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BC%98%E5%8C%96/" itemprop="url">
-            <span itemprop="name">Hexo-Next主题基本配置和优化</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-02T20:28:25+08:00"
-              content="2023-02-02">
-          02-02
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/02/GitHub-Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url">
-            <span itemprop="name">GitHub+Hexo搭建个人博客</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-01T18:57:09+08:00"
-              content="2023-02-01">
-          02-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/01/hello-world/" itemprop="url">
-            <span itemprop="name">Hello World</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
 
 </div>
   </main>
