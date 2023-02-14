@@ -143,7 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E8%B4%A6%E6%88%B7"><span class="nav-number">1.</span> <span class="nav-text">GitHub创建个人账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Node-js"><span class="nav-number">2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Hexo"><span class="nav-number">3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E7%BD%91%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">推送网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">更换主题</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#github%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E8%B4%A6%E6%88%B7"><span class="nav-number">1.</span> <span class="nav-text">GitHub创建个人账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85node.js"><span class="nav-number">2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="nav-number">3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E7%BD%91%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">推送网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">更换主题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -550,27 +550,36 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在GitHub和Heroku上，是搭建博客的首选框架。<span id="more"></span><br>这里我们选用的是GitHub，Hexo同时也是GitHub上的开源项目，参见：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">GitHub Hexo</a><br>如果想要更加全面的了解Hexo，可以到其官网<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a>了解更多的细节，因为Hexo的创建者是台湾人，对中文的支持很友好，可以选择中文进行查看。</p>
-<h2 id="GitHub创建个人账户"><a href="#GitHub创建个人账户" class="headerlink" title="GitHub创建个人账户"></a>GitHub创建个人账户</h2><ol>
-<li>登录到GitHub，点击New repository创建新仓库，仓库名应该为’用户名.github.io’。</li>
+        <p>Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在GitHub和Heroku上，是搭建博客的首选框架。<span id="more"></span>
+这里我们选用的是GitHub，Hexo同时也是GitHub上的开源项目，参见：<a
+target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">GitHub Hexo</a>
+如果想要更加全面的了解Hexo，可以到其官网<a
+target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a>了解更多的细节，因为Hexo的创建者是台湾人，对中文的支持很友好，可以选择中文进行查看。</p>
+<h2 id="github创建个人账户">GitHub创建个人账户</h2>
+<ol type="1">
+<li>登录到GitHub，点击New
+repository创建新仓库，仓库名应该为'用户名.github.io'。</li>
 <li>生成ssh密钥并上传公钥到GitHub中。</li>
 </ol>
-<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>Hexo基于Node.js，<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">下载地址</a>。安装后，在命令行中输入node -v和npm -v查看是否安装完成。</p>
+<h2 id="安装node.js">安装Node.js</h2>
+<p>Hexo基于Node.js，<a
+target="_blank" rel="noopener" href="https://nodejs.org/en/download/">下载地址</a>。安装后，在命令行中输入node
+-v和npm -v查看是否安装完成。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line"><span class="comment"># v18.13.0</span></span><br><span class="line"></span><br><span class="line">npm -v</span><br><span class="line"><span class="comment"># 8.19.3</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架， 这里需要自己在电脑常里创建一个文件夹，Hexo框架与以后你自己发布的网页都在这个文件夹中。</p>
+<h2 id="安装hexo">安装Hexo</h2>
+<p>Hexo就是我们的个人博客网站的框架，
+这里需要自己在电脑常里创建一个文件夹，Hexo框架与以后你自己发布的网页都在这个文件夹中。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用npm命令安装Hexo（权限不够可以在前面加上sudo）</span></span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化博客</span></span><br><span class="line">hexo init <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入目录，并对博客进行操作,完成下面操作后，可在localhost:4000中看到我们写出的第一篇博客</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">hexo new <span class="variable">$&#123;blog_name&#125;</span></span><br><span class="line">hexo generate</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<h2 id="推送网站"><a href="#推送网站" class="headerlink" title="推送网站"></a>推送网站</h2><p>上面只是在本地预览，接下来要做的就是就是推送网站，也就是发布网站，让我们的网站可以被更多的人访问。</p>
+<h2 id="推送网站">推送网站</h2>
+<p>上面只是在本地预览，接下来要做的就是就是推送网站，也就是发布网站，让我们的网站可以被更多的人访问。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装插件</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将$&#123;dir_name&#125;/$&#123;blog_name&#125;/_config.yml文件中的配置进行修改，修改如下</span></span><br><span class="line"><span class="comment"># 其实就是给hexo d 这个命令做相应的配置，让hexo知道你要把blog部署在哪个位置</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/项目名.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
-
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入目录，并对博客进行操作,完成下面操作后，可在“用户名.github.io”中查看博客</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">hexo new <span class="variable">$&#123;blog_name&#125;</span></span><br><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>如果你不喜欢Hexo默认的主题，可以更换不同的主题，主题传送门：<a target="_blank" rel="noopener" href="https://hexo.io/themes/">Themes</a>。<br>现在把默认主题更改成Next主题：</p>
+<h2 id="更换主题">更换主题</h2>
+<p>如果你不喜欢Hexo默认的主题，可以更换不同的主题，主题传送门：<a
+target="_blank" rel="noopener" href="https://hexo.io/themes/">Themes</a>。
+现在把默认主题更改成Next主题：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Downloading Next</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/next-theme/hexo-theme-next themes/next</span><br><span class="line"></span><br><span class="line"><span class="comment"># Upgrading Next</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">$ <span class="built_in">cd</span> themes/next</span><br><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将$&#123;dir_name&#125;/$&#123;blog_name&#125;/_config.yml文件中的配置进行修改，修改如下</span></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
     </div>
@@ -691,6 +700,12 @@ if(canvas.getContext){
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 
