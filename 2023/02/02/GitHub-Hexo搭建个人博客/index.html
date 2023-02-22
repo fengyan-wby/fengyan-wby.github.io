@@ -551,10 +551,8 @@ if(canvas.getContext){
     
     <div class="post-body" itemprop="articleBody">
         <p>Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在GitHub和Heroku上，是搭建博客的首选框架。<span id="more"></span>
-这里我们选用的是GitHub，Hexo同时也是GitHub上的开源项目，参见：<a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">GitHub Hexo</a>
-如果想要更加全面的了解Hexo，可以到其官网<a
-target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a>了解更多的细节，因为Hexo的创建者是台湾人，对中文的支持很友好，可以选择中文进行查看。</p>
+这里我们选用的是GitHub，Hexo同时也是GitHub上的开源项目，参见：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">GitHub Hexo</a>
+如果想要更加全面的了解Hexo，可以到其官网<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a>了解更多的细节，因为Hexo的创建者是台湾人，对中文的支持很友好，可以选择中文进行查看。</p>
 <h2 id="github创建个人账户">GitHub创建个人账户</h2>
 <ol type="1">
 <li>登录到GitHub，点击New
@@ -562,8 +560,7 @@ repository创建新仓库，仓库名应该为'用户名.github.io'。</li>
 <li>生成ssh密钥并上传公钥到GitHub中。</li>
 </ol>
 <h2 id="安装node.js">安装Node.js</h2>
-<p>Hexo基于Node.js，<a
-target="_blank" rel="noopener" href="https://nodejs.org/en/download/">下载地址</a>。安装后，在命令行中输入node
+<p>Hexo基于Node.js，<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">下载地址</a>。安装后，在命令行中输入node
 -v和npm -v查看是否安装完成。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line"><span class="comment"># v18.13.0</span></span><br><span class="line"></span><br><span class="line">npm -v</span><br><span class="line"><span class="comment"># 8.19.3</span></span><br></pre></td></tr></table></figure>
 <h2 id="安装hexo">安装Hexo</h2>
@@ -576,8 +573,7 @@ target="_blank" rel="noopener" href="https://nodejs.org/en/download/">下载地�
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将$&#123;dir_name&#125;/$&#123;blog_name&#125;/_config.yml文件中的配置进行修改，修改如下</span></span><br><span class="line"><span class="comment"># 其实就是给hexo d 这个命令做相应的配置，让hexo知道你要把blog部署在哪个位置</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/项目名.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入目录，并对博客进行操作,完成下面操作后，可在“用户名.github.io”中查看博客</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">hexo new <span class="variable">$&#123;blog_name&#125;</span></span><br><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
 <h2 id="更换主题">更换主题</h2>
-<p>如果你不喜欢Hexo默认的主题，可以更换不同的主题，主题传送门：<a
-target="_blank" rel="noopener" href="https://hexo.io/themes/">Themes</a>。
+<p>如果你不喜欢Hexo默认的主题，可以更换不同的主题，主题传送门：<a target="_blank" rel="noopener" href="https://hexo.io/themes/">Themes</a>。
 现在把默认主题更改成Next主题：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Downloading Next</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/next-theme/hexo-theme-next themes/next</span><br><span class="line"></span><br><span class="line"><span class="comment"># Upgrading Next</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;dir_name&#125;</span></span><br><span class="line">$ <span class="built_in">cd</span> themes/next</span><br><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将$&#123;dir_name&#125;/$&#123;blog_name&#125;/_config.yml文件中的配置进行修改，修改如下</span></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
