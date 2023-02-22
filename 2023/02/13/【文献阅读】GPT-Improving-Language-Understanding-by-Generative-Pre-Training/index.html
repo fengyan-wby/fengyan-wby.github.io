@@ -29,19 +29,19 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="机构：OpenAI 论文地址：  GPT1: Improving Language Understanding by Generative Pre-Training GPT2: Language Models are Unsupervised Multitask Learners GPT3: Language Models are Few-Shot Learners  论文代码：  GPT1: I">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT1.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT2.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT3.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT6.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT4.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//GPT5.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT6.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT4.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT5.png">
 <meta property="article:published_time" content="2023-02-13T09:25:58.000Z">
 <meta property="article:modified_time" content="2023-02-22T02:10:08.175Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="GPT">
 <meta property="article:tag" content="文献阅读">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://fengyan-wby.github.io/.io//GPT1.png">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/">
@@ -602,7 +602,7 @@ GPT使用Transformer的Decoder结构，并对Transformer
 Decoder进行了一些改动，原本的Decoder包含了两个Multi-Head
 Attention结构，GPT只保留了Mask Multi-Head Attention，如下图所示。
 <div data-align="center">
-<img src="/.io//GPT1.png" width="500">
+<img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png" width="500">
 </div>
 <p>GPT是一个AR模型，需要根据上文预测下一个单词，因此使用Mask Multi-Head
 Attention对单词的下文进行遮挡，即在使用<span class="math inline">\([u_1,
@@ -630,7 +630,7 @@ Trm(h_{t-1})\]</span></p></li>
 \sum_{(x, y)}logP(y|x_1,x_2,...,x_m;\Theta)\]</span></p>
 <p>GPT在微调时也考虑预训练的损失函数，所以最终需要优化的函数为： <span class="math display">\[L = L_1 + \lambda L_2\]</span> 这里使用的<span class="math inline">\(L_1\)</span>就是无监督预训练时的损失，但是使用的数据不是前面无监督的数据，而是当前有监督任务的数据。</p>
 <h3 id="其他任务的下游改造">其他任务的下游改造</h3>
-<p>针对不同的下游任务，需要对输入格式做不同的改造。 <img src="/.io//GPT2.png" alt="GPT下游改造"></p>
+<p>针对不同的下游任务，需要对输入格式做不同的改造。 <img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT2.png" alt="GPT下游改造"></p>
 <ul>
 <li>Classification：对于文本分类任务基本不需要怎么变动。</li>
 <li>Entailment：对于推理问题，可以将先验与假设使用一个分隔符分开。</li>
@@ -688,13 +688,13 @@ larger batchsize of 512 is used.</li>
 <li>One-shot Learning</li>
 <li>Zero-shot Learning</li>
 </ul>
-<p><img src="/.io//GPT3.png" alt="In Context Learning"> <img src="/.io//GPT6.png" alt="In Context Learning"></p>
+<p><img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT3.png" alt="In Context Learning"> <img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT6.png" alt="In Context Learning"></p>
 <h4 id="gpt3的数据集">GPT3的数据集</h4>
 <p>GPT3共使用了5个语料，并根据数据集的不同质量赋予了不同的权重，权重越高的在训练的时候越容易被抽样到，如下表所示：
-<img src="/.io//GPT4.png" alt="GPT3数据集"></p>
+<img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT4.png" alt="GPT3数据集"></p>
 <h4 id="gpt3的网络结构">GPT3的网络结构</h4>
 <figure>
-<img src="/.io//GPT5.png" alt="GPT3模型结构">
+<img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT5.png" alt="GPT3模型结构">
 <figcaption aria-hidden="true">GPT3模型结构</figcaption>
 </figure>
 <p>We use the same model and architecture as GPT-2, including the

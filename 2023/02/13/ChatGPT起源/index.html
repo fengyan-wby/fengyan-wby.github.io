@@ -29,19 +29,19 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="最近ChatGPT大火，写一篇介绍ChatGPT起源的文章来梳理一下自己对ChatGPT的理解。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%901.jpg">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%902.jpg">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%903.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%904.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%905.png">
-<meta property="og:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%906.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%901.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%902.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%903.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%904.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%905.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%906.png">
 <meta property="article:published_time" content="2023-02-13T07:42:28.000Z">
 <meta property="article:modified_time" content="2023-02-22T02:54:21.919Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="GPT">
 <meta property="article:tag" content="文献阅读">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://fengyan-wby.github.io/.io//ChatGPT%E8%B5%B7%E6%BA%901.jpg">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%901.jpg">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/">
@@ -545,7 +545,7 @@ if(canvas.getContext){
     <div class="post-body" itemprop="articleBody">
         <p>最近ChatGPT大火，写一篇介绍ChatGPT起源的文章来梳理一下自己对ChatGPT的理解。
 <span id="more"></span></p>
-<p><img src="/.io//ChatGPT起源1.jpg"></p>
+<p><img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT起源1.jpg"></p>
 <p>ChatGPT起源于OpenAI的GPT系列模型，模型细节可参考<a href="https://fengyan-wby.github.io/2023/02/13/【文献阅读】GPT-Improving-Language-Understanding-by-Generative-Pre-Training/">【文献阅读】GPT:
 Improving Language Understanding by Generative</a>这一篇文章。</p>
 <p>初始的GPT3模型通过：</p>
@@ -576,13 +576,13 @@ Fine-Tuning数据集除了独立函数之外，还包含类实现、配置文件
 <p>Codex的模型直接采用了GPT3，并尝试了从头训练模型和基于GPT3的参数Fine-Tuning两种方法，结果基于GPT3的参数进行微调并没有取得效果上的提升，但基于GPT3的参数微调可以使模型更快地收敛。</p>
 <h2 id="instructgpt">InstructGPT</h2>
 <p>目前OpenAI没有公布ChatGPT的技术细节，但是在其官网上提到它有一个兄弟模型<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.02155">InstructGPT</a>，以下内容基于InstructGPT的论文来探究ChatGPT中的技术点。
-<img src="/.io//ChatGPT%E8%B5%B7%E6%BA%902.jpg"></p>
+<img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%902.jpg"></p>
 <h3 id="论文导言">论文导言</h3>
 <p>基于prompt的大规模语言模型在一系列的下游任务中都有惊人的表现，但与此同时，这些模型经常表现出不受人控制的行为，例如捏造事实，产生大量带有偏见或有毒的文本。作者认为产生这些现象的根本原因是训练模型时的损失函数是<code>最大化预测下一个token的概率</code>，这和人们期望的目标<code>安全且有帮助的听从人的指示</code>存在偏差，二者没有对齐。避免这些有害的行为对语言模型的实际使用至关重要。</p>
 <h3 id="模型-1">模型</h3>
 <p>在InstructGPT模型中，作者采用来自人类反馈的强化学习（RLHF）来对GPT3进行微调，希望让GPT3的输出更符合人类的偏好，方法主要如下所示：
-<img src="/.io//ChatGPT%E8%B5%B7%E6%BA%903.png"></p>
-<p>在ChatGPT中，方法示意图基本一致，只是GPT3变成了GPT3.5: <img src="/.io//ChatGPT%E8%B5%B7%E6%BA%904.png"></p>
+<img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%903.png"></p>
+<p>在ChatGPT中，方法示意图基本一致，只是GPT3变成了GPT3.5: <img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%904.png"></p>
 <p>由上面的流程图可以看出，模型的训练分为以下三个步骤：</p>
 <ul>
 <li><p><code>Supervised fine-tuning (SFT)</code> <span class="math inline">\(\quad\)</span>作者收集了来自OpenAI
@@ -608,7 +608,7 @@ log(\pi_{\phi}^{RL}(y|x)/\pi^{SFT}(y|x))]\)</span>：计算KL散度，由于奖�
 E_{x～D_{pretrain}}[log(\pi_{\phi}^{RL}(x))]\)</span>：强化模型得到的模型不仅希望可以满足奖励函数，同时也希望可以保留原先在预训练阶段学习到的知识，因此作者将预训练阶段的损失也加入了模型进行训练，<span class="math inline">\(\gamma\)</span>是权重超参。</li>
 </ul></li>
 </ul>
-<p>以上三步骤使用的数据集大小如下： <img src="/.io//ChatGPT%E8%B5%B7%E6%BA%905.png"> 其中：</p>
+<p>以上三步骤使用的数据集大小如下： <img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%905.png"> 其中：</p>
 <ol type="1">
 <li><code>SFT dataset</code>, 收集来自OpenAI
 API和标注人员后期编写的提示(prompt) + 标注人员编写的结果。</li>
@@ -627,7 +627,7 @@ API和标注人员后期编写的提示(prompt)，没有人工标注，直接输
 </ol>
 <p>对于OpenAI
 API中的提示数据，作者通过检查公共前缀来启发式的删除重复提示，并设置每个用户的提示上限为200个来保证多样性，以下为来自API提示的种类分布及样例：
-<img src="/.io//ChatGPT%E8%B5%B7%E6%BA%906.png">
+<img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%906.png">
 为了对这些提示进行结果撰写，OpenAI雇佣了一个大约 40
 人的标记团队。由于标记的任务偶尔会包含有争议和敏感的话题，OpenAI在选择标记者还从“对敏感信息的认可度”，“结果排序的合理程度”，“回复敏感提示的能力”，“不同话题下敏感问题的识别能力”这4方面进行了筛选。此外他们建立了一个入职培训流程，来指导标记者有限生成真实且无害的数据。从结果来看，尽管任务很复杂，但标记者之间的一致率相当高（约72%）。</p>
 <h2 id="chatgpt检测器">ChatGPT检测器</h2>
