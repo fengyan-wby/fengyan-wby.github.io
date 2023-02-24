@@ -22,25 +22,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"width":300},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="西郊有密林，助君出重围">
-<meta property="og:type" content="website">
-<meta property="og:title" content="FengYan&#39;s Blog">
-<meta property="og:url" content="https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+    <meta name="description" content="前言 转载自Jake Boxer的博客。 For the past few days, I’ve been reading various explanations of the Knuth-Morris-Pratt string searching algorithms. For some reason, none of the explanations were doing it for me">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="FengYan&#39;s Blog">
-<meta property="og:description" content="西郊有密林，助君出重围">
+<meta property="og:description" content="前言 转载自Jake Boxer的博客。 For the past few days, I’ve been reading various explanations of the Knuth-Morris-Pratt string searching algorithms. For some reason, none of the explanations were doing it for me">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-24T07:00:35.000Z">
+<meta property="article:modified_time" content="2023-02-24T07:04:36.871Z">
 <meta property="article:author" content="FengYan">
+<meta property="article:tag" content="KMP">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/多线程/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/","path":"2023/02/24/KMP算法/","title":"KMP算法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: 多线程 | FengYan's Blog</title>
+<title>KMP算法 | FengYan's Blog</title>
   
 
 
@@ -127,7 +130,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +143,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-partial-match-table"><span class="nav-number">2.</span> <span class="nav-text">The Partial Match Table</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#how-to-use-the-partial-match-table"><span class="nav-number">3.</span> <span class="nav-text">How to use the Partial Match
+Table</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-number">4.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -454,50 +459,228 @@ if(canvas.getContext){
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">多线程
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="西郊有密林，助君出重围">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="KMP算法 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KMP算法
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="创建时间：2023-02-24 15:00:35 / 修改时间：15:04:36" itemprop="dateCreated datePublished" datetime="2023-02-24T15:00:35+08:00">2023-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言">前言</h2>
+<p>转载自<a target="_blank" rel="noopener" href="http://jakeboxer.com/blog/2009/12/13/the-knuth-morris-pratt-algorithm-in-my-own-words/">Jake
+Boxer</a>的博客。</p>
+<p>For the past few days, I’ve been reading various explanations of the
+<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Knuth-Morris-Pratt_algorithm">Knuth-Morris-Pratt
+string searching algorithms</a>. For some reason, none of the
+explanations were doing it for me. I kept banging my head against a
+brick wall once I started reading “the prefix of the suffix of the
+prefix of the…”.</p>
+<p>Finally, after reading the same paragraph of <a target="_blank" rel="noopener" href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/dp/0262033844/">CLRS</a>
+over and over for about 30 minutes, I decided to sit down, do a bunch of
+examples, and diagram them out. I now understand the algorithm, and can
+explain it. For those who think like me, here it is in my own words. As
+a side note, I’m not going to explain why it’s more efficient than
+na”ive string matching; that’s explained perfectly well in a multitude
+of places. I’m going to explain exactly how it works, as my brain
+understands it.</p>
+<h2 id="the-partial-match-table">The Partial Match Table</h2>
+<p>The key to KMP, of course, is the partial match table. The main
+obstacle between me and understanding KMP was the fact that I didn’t
+quite fully grasp what the values in the partial match table really
+meant. I will now try to explain them in the simplest words
+possible.</p>
+<p>KMP算法的核心部分就是<code>partial match table</code>，这里会解释一下<code>partial match table</code>里面每个值所对应的含义。</p>
+<p>Here’s the partial match table for the pattern “abababca”:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char:  | a | b | a | b | a | b | c | a |</span><br><span class="line">index: | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | </span><br><span class="line">value: | 0 | 0 | 1 | 2 | 3 | 4 | 0 | 1 |</span><br></pre></td></tr></table></figure>
+<p>If I have an eight-character pattern (let’s say “abababca” for the
+duration of this example), my partial match table will have eight cells.
+If I’m looking at the eighth and last cell in the table, I’m interested
+in the entire pattern (“abababca”). If I’m looking at the seventh cell
+in the table, I’m only interested in the first seven characters in the
+pattern (“abababc”); the eighth one (“a”) is irrelevant, and can go fall
+off a building or something. If I’m looking at the sixth cell of the in
+the table… you get the idea. Notice that I haven’t talked about what
+each cell means yet, but just what it’s referring to.</p>
+<p>这里说了字符串匹配所关注的子串，当匹配第N个字符时，只会关注前N个字符，第N个字符后面的字符对于当前匹配是没有影响的。</p>
+<p>Now, in order to talk about the meaning, we need to know about
+<code>proper prefixes</code> and <code>proper suffixes</code>.</p>
+<ul>
+<li><code>Proper prefix</code>: All the characters in a string, with one
+or more cut off the end. “S”, “Sn”, “Sna”, and “Snap” are all the proper
+prefixes of “Snape”.</li>
+<li><code>Proper suffix</code>: All the characters in a string, with one
+or more cut off the beginning. “agrid”, “grid”, “rid”, “id”, and “d” are
+all proper suffixes of “Hagrid”.</li>
+</ul>
+<p>With this in mind, I can now give the one-sentence meaning of the
+values in the partial match table: <strong>The length of the longest
+proper prefix in the (sub)pattern that matches a proper suffix in the
+same (sub)pattern.</strong></p>
+<p>Let’s examine what I mean by that. Say we’re looking in the third
+cell. As you’ll remember from above, this means we’re only interested in
+the first three characters (“aba”). In “aba”, there are two proper
+prefixes (“a” and “ab”) and two proper suffixes (“a” and “ba”). The
+proper prefix “ab” does not match either of the two proper suffixes.
+However, the proper prefix “a” matches the proper suffix “a”. Thus,
+<code>the length of the longest proper prefix that matches a proper suffix</code>,
+in this case, is 1.</p>
+<p>Let’s try it for cell four. Here, we’re interested in the first four
+characters (“abab”). We have three proper prefixes (“a”, “ab”, and
+“aba”) and three proper suffixes (“b”, “ab”, and “bab”). This time, “ab”
+is in both, and is two characters long, so cell four gets value 2.</p>
+<p>Just because it’s an interesting example, let’s also try it for cell
+five, which concerns “ababa”. We have four proper prefixes (“a”, “ab”,
+“aba”, and “abab”) and four proper suffixes (“a”, “ba”, “aba”, and
+“baba”). Now, we have two matches: “a” and “aba” are both proper
+prefixes and proper suffixes. Since “aba” is longer than “a”, it wins,
+and cell five gets value 3.</p>
+<p>Let’s skip ahead to cell seven (the second-to-last cell), which is
+concerned with the pattern “abababc”. Even without enumerating all the
+proper prefixes and suffixes, it should be obvious that there aren’t
+going to be any matches; all the suffixes will end with the letter “c”,
+and none of the prefixes will. Since there are no matches, cell seven
+gets 0.</p>
+<p>Finally, let’s look at cell eight, which is concerned with the entire
+pattern (“abababca”). Since they both start and end with “a”, we know
+the value will be at least 1. However, that’s where it ends; at lengths
+two and up, all the suffixes contain a c, while only the last prefix
+(“abababc”) does. This seven-character prefix does not match the
+seven-character suffix (“bababca”), so cell eight gets 1.</p>
+<h2 id="how-to-use-the-partial-match-table">How to use the Partial Match
+Table</h2>
+<p>We can use the values in the partial match table to skip ahead
+(rather than redoing unnecessary old comparisons) when we find partial
+matches. The formula works like this:</p>
+<p>If a partial match of length partial_match_length is found and
+<kbd>table[partial_match_length] &gt; 1</kbd>, we may skip ahead
+<kbd>partial_match_length - table[partial_match_length - 1]</kbd>
+characters.</p>
+<p>Let’s say we’re matching the pattern “abababca” against the text
+“bacbababaabcbab”. Here’s our partial match table again for easy
+reference:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char:  | a | b | a | b | a | b | c | a |</span><br><span class="line">index: | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | </span><br><span class="line">value: | 0 | 0 | 1 | 2 | 3 | 4 | 0 | 1 |</span><br></pre></td></tr></table></figure>
+<p>The first time we get a partial match is here:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bacbababaabcbab</span><br><span class="line"> |</span><br><span class="line"> abababca</span><br></pre></td></tr></table></figure>
+<p>This is a partial_match_length of 1. The value at
+<kbd>table[partial_match_length - 1]</kbd> (or <kbd>table[0]</kbd>) is
+0, so we don’t get to skip ahead any. The next partial match we get is
+here:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bacbababaabcbab</span><br><span class="line">    |||||</span><br><span class="line">    abababca</span><br></pre></td></tr></table></figure>
+<p>This is a partial_match_length of 5. The value at
+<kbd>table[partial_match_length - 1]</kbd> (or <kbd>table[4]</kbd>) is
+3. That means we get to skip ahead <kbd>partial_match_length -
+table[partial_match_length - 1]</kbd> (or <kbd>5 - table[4]</kbd> or
+<kbd>5 - 3</kbd> or <kbd>2</kbd>) characters:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// x denotes a skip</span><br><span class="line"></span><br><span class="line">bacbababaabcbab</span><br><span class="line">    xx|||</span><br><span class="line">      abababca</span><br></pre></td></tr></table></figure>
+<p>This is a partial_match_length of 3. The value at
+<kbd>table[partial_match_length - 1]</kbd> (or <kbd>table[2]</kbd>) is
+1. That means we get to skip ahead <kbd>partial_match_length -
+table[partial_match_length - 1]</kbd> (or <kbd>3 - table[2]</kbd> or
+<kbd>3 - 1</kbd> or <kbd>2</kbd>) characters:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// x denotes a skip</span><br><span class="line"></span><br><span class="line">bacbababaabcbab</span><br><span class="line">      xx|</span><br><span class="line">        abababca</span><br></pre></td></tr></table></figure>
+<p>At this point, our pattern is longer than the remaining characters in
+the text, so we know there’s no match.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So there you have it. Like I promised before, it’s no exhaustive
+explanation or formal proof of KMP; it’s a walk through my brain, with
+the parts I found confusing spelled out in extreme detail. If you have
+any questions or notice something I messed up, please leave a comment;
+maybe we’ll all learn something.</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-09T16:37:24+08:00"
-              content="2023-02-09">
-          02-09
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/" itemprop="url">
-            <span itemprop="name">Java线程池的使用</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/KMP/" rel="tag"><i class="fa fa-tag"></i> KMP</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/" rel="prev" title="Markdown语法">
+                  <i class="fa fa-chevron-left"></i> Markdown语法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>
