@@ -2328,7 +2328,7 @@ mjx-container[display='true'] + br {
 .main-inner {
   border-radius: 20px 20px 20px 20px;
   box-sizing: border-box;
-  width: calc(100% - 312px);
+  width: calc(100% - 252px);
 }
 @media (max-width: 991px) {
   .main-inner {
@@ -2337,7 +2337,7 @@ mjx-container[display='true'] + br {
   }
 }
 .footer-inner {
-  padding-left: 312px;
+  padding-left: 252px;
 }
 @media (max-width: 991px) {
   .footer-inner {
@@ -2347,7 +2347,7 @@ mjx-container[display='true'] + br {
   }
 }
 .column {
-  width: 300px;
+  width: 240px;
 }
 @media (max-width: 991px) {
   .column {
