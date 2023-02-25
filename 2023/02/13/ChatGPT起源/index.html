@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%905.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT%E8%B5%B7%E6%BA%906.png">
 <meta property="article:published_time" content="2023-02-13T07:42:28.000Z">
-<meta property="article:modified_time" content="2023-02-23T09:12:51.775Z">
+<meta property="article:modified_time" content="2023-02-25T10:38:41.208Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="GPT">
 <meta property="article:tag" content="文献阅读">
@@ -513,7 +513,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-23 17:12:51" itemprop="dateModified" datetime="2023-02-23T17:12:51+08:00">2023-02-23</time>
+      <time title="修改时间：2023-02-25 18:38:41" itemprop="dateModified" datetime="2023-02-25T18:38:41+08:00">2023-02-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -545,9 +545,29 @@ if(canvas.getContext){
     <div class="post-body" itemprop="articleBody">
         <p>最近ChatGPT大火，写一篇介绍ChatGPT起源的文章来梳理一下自己对ChatGPT的理解。
 <span id="more"></span></p>
-<p><img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT起源1.jpg"></p>
-<p>ChatGPT起源于OpenAI的GPT系列模型，模型细节可参考<a href="https://fengyan-wby.github.io/2023/02/13/【文献阅读】GPT-Improving-Language-Understanding-by-Generative-Pre-Training/">【文献阅读】GPT:
-Improving Language Understanding by Generative</a>这一篇文章。</p>
+<p><img src="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/ChatGPT起源1.jpg">
+在2020年7月，OpenAI发布了模型索引为<code>davinci</code>的初代 GPT-3
+论文，从此它就开始不断进化。在2021年7月，Codex论文发布，其中初始的Codex是根据（可能是内部的）120亿参数的
+GPT-3 变体进行微调的。后来这个 120 亿参数的模型演变成 OpenAI API
+中的<code>code-cushman-001</code>。在2022年3月，OpenAI 发布了指令微调
+(instruction tuning) 的论文，其监督微调 (supervised instruction tuning)
+的部分对应了<code>davinci-instruct-beta</code>和<code>text-davinci-001</code>。在2022年4月至7月，OpenAI
+开始对<code>code-davinci-002</code>模型进行 Beta 测试，也称其为
+Codex。然后<code>text-davinci-002</code>、<code>text-davinci-003</code>和<code>ChatGPT</code>都是从<code>code-davinci-002</code>进行指令微调得到的。详细信息请参阅
+OpenAI的模型索引文档。</p>
+<p>总的来说，在 2020 - 2021
+年期间，在<code>code-davinci-002</code>之前，OpenAI
+已经投入了大量的精力通过代码训练和指令微调来增强GPT-3。当他们完成<code>code-davinci-002</code>时，所有的能力都已经存在了。很可能后续的指令微调，无论是通过有监督的版本还是强化学习的版本，都会做以下事情：</p>
+<ul>
+<li>指令微调不会为模型注入新的能力 ——
+所有的能力都已经存在了。指令微调的作用是解锁 /
+激发这些能力。这主要是因为指令微调的数据量比预训练数据量少几个数量级（基础的能力是通过预训练注入的）。</li>
+<li>指令微调将 GPT-3.5
+的分化到不同的技能树。有些更擅长上下文学习，如<code>text-davinci-003</code>，有些更擅长对话，如<code>ChatGPT</code>。</li>
+<li>指令微调通过牺牲性能换取与人类的对齐（alignment）。OpenAI
+的作者在他们的指令微调论文中称其为 “对齐税” (alignment
+tax)。许多论文都报道了<code>code-davinci-002</code>在基准测试中实现了最佳性能（但模型不一定符合人类期望）。在<code>code-davinci-002</code>上进行指令微调后，模型可以生成更加符合人类期待的反馈（或者说模型与人类对齐），例如：零样本问答、生成安全和公正的对话回复、拒绝超出模型它知识范围的问题。</li>
+</ul>
 <p>初始的GPT3模型通过：</p>
 <ol type="1">
 <li>在代码上进行预训练（Codex、Copilot）</li>
