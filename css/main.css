@@ -2628,7 +2628,7 @@ mjx-container[display='true'] + br {
   top: calc(100vh - 900px - 200px);
 }
 body {
-  background: url("/images/background.JPG");
+  background: url("/images/rain.gif");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
