@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="机构：Google Brain 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1706.03762  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;tensorflow&#x2F;tensor2tensor&#x2F;blob&#x2F;master&#x2F;tensor2tensor&#x2F;models&#x2F;transformer.py">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献阅读】Transformer: Attention Is All You Need">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="机构：Google Brain 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1706.03762  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;tensorflow&#x2F;tensor2tensor&#x2F;blob&#x2F;master&#x2F;tensor2tensor&#x2F;models&#x2F;transformer.py">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/4.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/5.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/6.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/7.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/8.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/9.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/10.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/11.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/12.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/13.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/14.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/15.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/16.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/17.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/18.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/21.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/19.gif">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/20.gif">
+<meta property="article:published_time" content="2023-03-06T08:34:43.000Z">
+<meta property="article:modified_time" content="2023-03-06T09:32:23.241Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="文献阅读">
+<meta property="article:tag" content="Transformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/1.png">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/","path":"2023/03/06/【文献阅读】Transformer-Attention-Is-All-You-Need/","title":"【文献阅读】Transformer: Attention Is All You Need"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【文献阅读】Transformer: Attention Is All You Need | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自知者少苦，知足者长乐</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">模型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#encoder%E5%92%8Cdecoder"><span class="nav-number">1.1.</span> <span class="nav-text">Encoder和Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#encoder%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">Encoder结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#decoder%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.2.</span> <span class="nav-text">Decoder结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E7%BC%96%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">输入编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-attention"><span class="nav-number">1.3.</span> <span class="nav-text">Self-Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">1.4.</span> <span class="nav-text">Multi-Head Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#encoder-decoder-attention"><span class="nav-number">1.5.</span> <span class="nav-text">Encoder-Decoder Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transformer%E5%9B%BE%E8%A7%A3%E8%BF%87%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">Transformer图解过程</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">西郊有密林，助君出重围</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="西郊有密林，助君出重围">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【文献阅读】Transformer: Attention Is All You Need | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【文献阅读】Transformer: Attention Is All You Need
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-03-06 16:34:43 / 修改时间：17:32:23" itemprop="dateCreated datePublished" datetime="2023-03-06T16:34:43+08:00">2023-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>机构：Google Brain 论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py">https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py</a></li>
+</ul>
+<span id="more"></span>
+<p>Transformer模型在Encoder-Decoder结构中抛弃RNN或者CNN模型，只使用attention机制。采用Attention机制的原因是考虑到RNN（或者LSTM，GRU等）的计算是顺序的，也就是说RNN相关算法只能从左向右依次计算或者从右向左依次计算，这种机制带来了两个问题：</p>
+<ul>
+<li>时间片 t 的计算依赖 t-1
+时刻的计算结果，这样限制了模型的并行能力；</li>
+<li>顺序计算的过程中信息会丢失，尽管LSTM等门机制的结构一定程度上缓解了长期依赖的问题，但是对于特别长期的依赖现象，LSTM依旧无能为力。而如果采用CNN，虽然具备良好的并行条件，但是通过加深层深的方式获得更大的感受野，捕获长距离特征方向仍然很受限。或许后期CNN还有其他方式可以解决这个问题。</li>
+</ul>
+<p>Transformer的提出解决了上面两个问题，首先它使用了Attention机制，将序列中的任意两个位置之间的距离是缩小为一个常量；其次它不是类似RNN的顺序结构，因此具有更好的并行性，符合现有的GPU框架。</p>
+<h2 id="模型介绍">模型介绍</h2>
+Transformer的结构由<strong>Encoder</strong>和<strong>Decoder</strong>组成：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/1.png" width="300">
+</div>
+论文中的验证Transformer的实验室基于机器翻译的，下面我们就以机器翻译为例子详细剖析Transformer的结构，在机器翻译中，Transformer可概括如下图：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/2.png" width="500">
+</div>
+Transformer的本质上是一个Encoder-Decoder的结构，那么上图可以表示为下图的结构：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/3.png" width="300">
+</div>
+如论文中所设置的，编码器由6个编码block组成，解码器由6个解码block组成。与所有的生成模型相同的是，编码器的输出会作为解码器的输入，如图所示：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/4.png" width="400">
+</div>
+<h3 id="encoder和decoder">Encoder和Decoder</h3>
+<h4 id="encoder结构">Encoder结构</h4>
+<p>我们继续分析每个encoder的详细结构：在Transformer的encoder中，数据首先会经过一个叫做<code>self-attention</code>的模块得到一个加权之后的特征向量<span class="math inline">\(Z\)</span>，这个<span class="math inline">\(Z\)</span> 便是论文公式1中的<span class="math inline">\(Attention(Q,K,V)\)</span> ： <span class="math display">\[Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}}V)\]</span></p>
+<p>第一次看到这个公式你可能会一头雾水，在后面的文章中我们会揭开这个公式背后的实际含义，在这一段暂时将其叫做<span class="math inline">\(Z\)</span> 。</p>
+<p>得到 <span class="math inline">\(Z\)</span>之后，它会被送到encoder的下一个模块，即Feed
+Forward Neural
+Network。这个全连接有两层，第一层的激活函数是ReLU，第二层是一个线性激活函数，可以表示为：
+<span class="math display">\[FFN(Z)=Relu(Z)W_2+b_2=max(0, ZW_1 + b_1)W_2
++ b2\]</span></p>
+Encoder的结构如下图所示：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/5.png" width="400">
+</div>
+<h4 id="decoder结构">Decoder结构</h4>
+<p>Decoder的结构如下图所示，它和encoder的不同之处在于Decoder多了一个Encoder-Decoder
+Attention：</p>
+<ul>
+<li>Self-Attention：当前翻译和已经翻译的前文之间的关系；</li>
+<li>Encoder-Decnoder
+Attention：当前翻译和编码的特征向量之间的关系。</li>
+</ul>
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/6.png" width="500">
+</div>
+<h3 id="输入编码">输入编码</h3>
+上面介绍的就是Transformer的主要框架，下面我们将介绍它的输入数据。如下图所示，首先通过Word2Vec等词嵌入方法将输入语料转化成特征向量，论文中使用的词嵌入的维度为<span class="math inline">\(d_{model}=512\)</span> 。
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/7.png" width="500">
+</div>
+然后这些词向量将被输入到Encoder层。
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/8.png" width="400">
+</div>
+在最底层的block中， <span class="math inline">\(x\)</span>将直接作为Transformer的输入，而在其他层中，输入则是上一个block的输出。为了画图更简单，我们使用更简单的例子来表示接下来的过程，如图所示：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/9.png" width="500">
+</div>
+<p>截止目前为止，我们介绍的Transformer模型并没有捕捉顺序序列的能力，也就是说无论句子的结构怎么打乱，Transformer都会得到类似的结果。换句话说，Transformer只是一个功能更强大的词袋模型而已。</p>
+<p>为了解决这个问题，论文中在编码词向量时引入了位置编码（Position
+Embedding）的特征。具体地说，位置编码会在词向量中加入了单词的位置信息，这样Transformer就能区分不同位置的单词了。</p>
+那么怎么编码这个位置信息呢？常见的模式有：a. 根据数据学习；b.
+自己设计编码规则。在这里作者采用了第二种方式。那么这个位置编码该是什么样子呢？通常位置编码是一个长度为<span class="math inline">\(d_{model}\)</span>的特征向量，这样便于和词向量进行单位加的操作。
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/10.png" width="500">
+</div>
+<h3 id="self-attention">Self-Attention</h3>
+<p>Self-Attention是Transformer最核心的内容，然而作者并没有详细讲解，下面我们来补充一下作者遗漏的地方。回想Bahdanau等人提出的用Attention，其核心内容是为输入向量的每个单词学习一个权重，例如在下面的例子中我们判断it代指的内容，</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The animal didn&#x27;t cross the street because it was too tired</span><br></pre></td></tr></table></figure>
+通过加权之后可以得到类似下图的加权情况，在讲解self-attention的时候我们也会使用类似的表示方式
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/11.png" width="300">
+</div>
+在self-attention中，每个单词有3个不同的向量，它们分别是Query向量（<span class="math inline">\(Q\)</span>），Key向量（<span class="math inline">\(K\)</span> ）和Value向量（ <span class="math inline">\(V\)</span>），长度均是64。它们是通过3个不同的权值矩阵由嵌入向量
+<span class="math inline">\(X\)</span>乘以三个不同的权值矩阵 <span class="math inline">\(W_Q\)</span>,<span class="math inline">\(W_K\)</span>,<span class="math inline">\(W_V\)</span>得到，其中三个矩阵的尺寸也是相同的。均是<span class="math inline">\(512 \times 64\)</span> 。
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/12.png" width="400">
+</div>
+<p>那么Query，Key，Value是什么意思呢？它们在Attention的计算中扮演着什么角色呢？我们先看一下Attention的计算方法，整个过程可以分成7步：</p>
+<ol type="1">
+<li>如上文，将输入单词转化成嵌入向量；</li>
+<li>根据嵌入向量得到<span class="math inline">\(q\)</span>，<span class="math inline">\(k\)</span> ，<span class="math inline">\(v\)</span> 三个向量；</li>
+<li>为每个向量计算一个score：<span class="math inline">\(score=q \cdot
+k\)</span> ；</li>
+<li>为了梯度的稳定，Transformer使用了score归一化，即除以<span class="math inline">\(\sqrt{d_k}\)</span>，<span class="math inline">\(d_k\)</span>是<span class="math inline">\(k\)</span>的维数；</li>
+<li>对score施以softmax激活函数；</li>
+<li>softmax点乘Value值<span class="math inline">\(v\)</span>
+，得到加权的每个输入向量的评分<span class="math inline">\(v\)</span>
+；</li>
+<li>相加之后得到最终的输出结果<span class="math inline">\(z\)</span> ：
+<span class="math inline">\(z=\sum v\)</span> 。</li>
+</ol>
+上面步骤的可以表示为下图的形式。
+[在这里插入图片描述](https://img-blog.csdnimg.cn/20210220174222244.png?
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/13.png" width="400">
+</div>
+实际计算过程中是采用基于矩阵的计算方式，那么论文中的<span class="math inline">\(Q\)</span> ，<span class="math inline">\(K\)</span> ， <span class="math inline">\(V\)</span> 的计算方式如图
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/14.png" width="200">
+</div>
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/15.png" width="300">
+</div>
+在self-attention需要强调的最后一点是其采用了残差网络中的short-cut结构，目的是解决深度学习中的退化问题，得到的最终结果如图。
+<div data-align="center">
+<p><img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/16.png" width="300">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/17.png" width="300"></p>
+</div>
+<h3 id="multi-head-attention">Multi-Head Attention</h3>
+<p>Multi-Head Attention相当于<span class="math inline">\(h\)</span>个不同的self-attention的集成（ensemble），在这里我们以<span class="math inline">\(h=8\)</span> 举例说明。Multi-Head
+Attention的输出分成3步：</p>
+<ol type="1">
+<li>将数据<span class="math inline">\(X\)</span>分别输入到8个self-attention中，得到8个加权后的特征矩阵<span class="math inline">\(Z_i,i \in \{1,2,...,8\}\)</span> 。</li>
+<li>将8个<span class="math inline">\(Z_i\)</span>按列拼成一个大的特征矩阵；</li>
+<li>特征矩阵经过一层全连接后得到输出<span class="math inline">\(Z\)</span> 。</li>
+</ol>
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/18.png" width="400">
+</div>
+<p>同self-attention一样，multi-head attention也加入了short-cut机制。</p>
+<h3 id="encoder-decoder-attention">Encoder-Decoder Attention</h3>
+<p>在解码器中，Transformer block比编码器中多了个encoder-cecoder
+attention。在encoder-decoder attention中，<span class="math inline">\(Q\)</span>来自于解码器的上一个输出，<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>则来自于与编码器的输出。
+由于在机器翻译中，解码过程是一个顺序操作的过程，也就是当解码第<span class="math inline">\(k\)</span>个特征向量时，我们只能看到第<span class="math inline">\(k-1\)</span>及其之前的解码结果，论文中把这种情况下的multi-head
+attention叫做masked multi-head attention（代码中通过加入一个attention
+mask实现）。</p>
+<h3 id="transformer图解过程">Transformer图解过程</h3>
+总体结构：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/21.png" width="500">
+</div>
+Encoder：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/19.gif" width="500">
+</div>
+Decoder：
+<div data-align="center">
+<img src="/2023/03/06/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Transformer-Attention-Is-All-You-Need/20.gif" width="500">
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/" rel="tag"><i class="fa fa-tag"></i> 文献阅读</a>
+              <a href="/tags/Transformer/" rel="tag"><i class="fa fa-tag"></i> Transformer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/01/NLP%E4%B8%AD%E7%9A%84%E8%87%AA%E7%9B%91%E7%9D%A3%E4%BB%BB%E5%8A%A1/" rel="prev" title="NLP中的自监督任务">
+                  <i class="fa fa-chevron-left"></i> NLP中的自监督任务
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FengYan</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
