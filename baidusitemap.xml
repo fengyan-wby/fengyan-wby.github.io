@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fengyan-wby.github.io/2023/03/14/Hadoop%E5%B8%B8%E7%94%A8%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/</loc>
+    <loc>https://fengyan-wby.github.io/2023/03/15/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91KOSMOS-1-Language-Is-Not-All-You-Need-Aligning-Perception-with-Language-Models/</loc>
     <lastmod>2023-03-15</lastmod>
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2023-03-13</lastmod>
+    <lastmod>2023-03-15</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/03/14/Hadoop%E5%B8%B8%E7%94%A8%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/</loc>
+    <lastmod>2023-03-15</lastmod>
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/03/08/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91UniLM-Unified-Language-Model-Pre-training-for-Natural-Language-Understanding-and-Generation/</loc>
