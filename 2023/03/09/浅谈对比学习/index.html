@@ -31,12 +31,22 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="对比学习论文的一些总结和综述。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/4.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/5.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/6.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/7.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/8.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/9.png">
 <meta property="article:published_time" content="2023-03-09T08:26:29.000Z">
-<meta property="article:modified_time" content="2023-03-15T08:40:31.250Z">
+<meta property="article:modified_time" content="2023-03-16T08:40:47.602Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="对比学习">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/">
@@ -172,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -512,7 +522,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-15 16:40:31" itemprop="dateModified" datetime="2023-03-15T16:40:31+08:00">2023-03-15</time>
+      <time title="修改时间：2023-03-16 16:40:47" itemprop="dateModified" datetime="2023-03-16T16:40:47+08:00">2023-03-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -539,7 +549,7 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>23</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -559,13 +569,83 @@ if(canvas.getContext){
     <div class="post-body" itemprop="articleBody">
         <p>对比学习论文的一些总结和综述。 <span id="more"></span></p>
 <h2 id="simclr">SimCLR</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2002.05709">https://arxiv.org/abs/2002.05709</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/google-research/simclr">https://github.com/google-research/simclr</a></li>
+</ul>
+<p>人类是可以通过对比来学习特征知识的，如下图所示：</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png">
+通过给定左边猫的图像，人类可以通过对比得到右边哪一张图像是猫，哪一些不是。那么是否可以让机器也学会对比，通过区分相似样本和不相似样本来得到图像、文本的特征——对比学习。</p>
+<p>SimCLR的流程如下所示，一张图像经过不同的数据增强得到两张不相同但具有相同语义的图像<span class="math inline">\(x_i\)</span>和<span class="math inline">\(x_j\)</span>。然后这两张图像通过一个Encoder得到中间向量表征<span class="math inline">\(h_i\)</span>和<span class="math inline">\(h_j\)</span>，之后中间向量表征再通过一个非线性层得到向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>。最后去最大化这两张具有相同语义信息的图像的向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>来优化模型。</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/2.png"></p>
+<p>但是上面只通过正样本进行学习是没有办法将模型训练起来的，这是因为只用正样本对会使模型学到一个捷径解，即不管输入什么，都输出相同的向量表示，这样就会造成模型坍塌。所以需要同时加入正样本对和负样本对，这里的负样本数据来自同一个<span class="math inline">\(batch\)</span>中不匹配的数据。这里以<span class="math inline">\(batch\_size=2\)</span>为例：</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/3.png"> 这样就得到了<span class="math inline">\(2N=4\)</span>张图像，对每一个图像对算相似度得到相似度矩阵，需要最大化正样本对的相似度。</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/4.png"><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/5.png"></p>
+<p>SimCLR的损失函数为InfoNCE： <span class="math display">\[l(i, j) =
+-log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i,
+k})}\]</span> <span class="math display">\[L =
+\frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k,
+2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span>
+首先计算图像i对图像j的损失： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/6.png">
+然后交换位置，再算一次，保持对称性： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/7.png">
+最后将所有对的损失求平均： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/8.png"></p>
+<p>当SimCLR训练完成后，就可以将模型冻住，使用中间向量特征完成下游任务。
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/9.png"></p>
 <h2 id="moco">MoCo</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.05722">https://arxiv.org/abs/1911.05722</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/moco">https://github.com/facebookresearch/moco</a></li>
+</ul>
 <h2 id="byol">BYOL</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.07733">https://arxiv.org/abs/2006.07733</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/deepmind/deepmind-research/tree/master/byol">https://github.com/deepmind/deepmind-research/tree/master/byol</a></li>
+</ul>
 <h2 id="simsiam">SimSiam</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2011.10566">https://arxiv.org/abs/2011.10566</a></li>
+</ul>
 <h2 id="simbert">SimBERT</h2>
+<p>开源地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZhuiyiTechnology/simbert">https://github.com/ZhuiyiTechnology/simbert</a></li>
+</ul>
 <h2 id="simcse">SimCSE</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.08821">https://arxiv.org/abs/2104.08821</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/princeton-nlp/SimCSE">https://github.com/princeton-nlp/SimCSE</a></li>
+</ul>
 <h2 id="clip">Clip</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.00020">https://arxiv.org/abs/2103.00020</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/CLIP">https://github.com/openai/CLIP</a></li>
+</ul>
 <h2 id="dalle">DALL·E</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.06125">https://arxiv.org/abs/2204.06125</a></li>
+</ul>
 
     </div>
 
@@ -640,14 +720,14 @@ if(canvas.getContext){
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">56k</span>
+    <span title="站点总字数">63k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">51 分钟</span>
+    <span title="站点阅读时长">58 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
