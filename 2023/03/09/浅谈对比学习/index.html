@@ -31,6 +31,7 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="对比学习论文的一些总结和综述。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/0.jpg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/2.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/3.png">
@@ -40,13 +41,18 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/7.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/8.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/9.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/10.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/11.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/12.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/14.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/13.png">
 <meta property="article:published_time" content="2023-03-09T08:26:29.000Z">
-<meta property="article:modified_time" content="2023-03-16T08:40:47.602Z">
+<meta property="article:modified_time" content="2023-03-25T15:17:37.278Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="对比学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/0.jpg">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/">
@@ -156,7 +162,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#simclr"><span class="nav-number">1.</span> <span class="nav-text">SimCLR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#moco"><span class="nav-number">2.</span> <span class="nav-text">MoCo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#byol"><span class="nav-number">3.</span> <span class="nav-text">BYOL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simsiam"><span class="nav-number">4.</span> <span class="nav-text">SimSiam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simbert"><span class="nav-number">5.</span> <span class="nav-text">SimBERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simcse"><span class="nav-number">6.</span> <span class="nav-text">SimCSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clip"><span class="nav-number">7.</span> <span class="nav-text">Clip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dalle"><span class="nav-number">8.</span> <span class="nav-text">DALL·E</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">对比学习简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simclr"><span class="nav-number">2.</span> <span class="nav-text">SimCLR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#moco"><span class="nav-number">3.</span> <span class="nav-text">MoCo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#byol"><span class="nav-number">4.</span> <span class="nav-text">BYOL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simsiam"><span class="nav-number">5.</span> <span class="nav-text">SimSiam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simbert"><span class="nav-number">6.</span> <span class="nav-text">SimBERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simcse"><span class="nav-number">7.</span> <span class="nav-text">SimCSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clip"><span class="nav-number">8.</span> <span class="nav-text">Clip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dalle"><span class="nav-number">9.</span> <span class="nav-text">DALL·E</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -522,7 +528,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-16 16:40:47" itemprop="dateModified" datetime="2023-03-16T16:40:47+08:00">2023-03-16</time>
+      <time title="修改时间：2023-03-25 23:17:37" itemprop="dateModified" datetime="2023-03-25T23:17:37+08:00">2023-03-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -549,14 +555,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -568,6 +574,8 @@ if(canvas.getContext){
     
     <div class="post-body" itemprop="articleBody">
         <p>对比学习论文的一些总结和综述。 <span id="more"></span></p>
+<h2 id="对比学习简介">对比学习简介</h2>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/0.jpg"></p>
 <h2 id="simclr">SimCLR</h2>
 <p>论文地址：</p>
 <ul>
@@ -589,8 +597,8 @@ if(canvas.getContext){
 -log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i,
 k})}\]</span> <span class="math display">\[L =
 \frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k,
-2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span>
-首先计算图像i对图像j的损失： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/6.png">
+2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span></p>
+<p>首先计算图像i对图像j的损失： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/6.png">
 然后交换位置，再算一次，保持对称性： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/7.png">
 最后将所有对的损失求平均： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/8.png"></p>
 <p>当SimCLR训练完成后，就可以将模型冻住，使用中间向量特征完成下游任务。
@@ -604,6 +612,20 @@ k})}\]</span> <span class="math display">\[L =
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/moco">https://github.com/facebookresearch/moco</a></li>
 </ul>
+<p>首先来看一下MoCo和SimCLR的区别： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/10.jpg"></p>
+<p>可以看到，MoCo和SimCLR不同的地方主要有两个方面：</p>
+<ol type="1">
+<li>负样本并不是在同一个batch中取，而是通过一个队列进行存储，从而将负样本数量和batch
+size解耦。</li>
+<li>正负样本的编码器并没有共享参数，而是使用动量更新的方法来更新负样本编码器。</li>
+</ol>
+<p>MoCo通过使用队列将负样本存储起来，如下图所示。将最新得到的负样本特征加入队列，并将最早的负样本特征移出队列，从而去维护一个负样本队列。这样负样本的数量就是队列的大小，队列中的负样本可以来自多个batch。
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/11.jpeg"></p>
+<p>但是使用队列存储负样本就会出现一个问题，每个不同batch的数据都是来自不同时刻的模型，如下图所示：
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/12.jpeg"> 如果像simCLR一样直接将<span class="math inline">\(\theta_q\)</span>的参数复制给<span class="math inline">\(\theta_k\)</span>，即<span class="math inline">\(\theta_k \leftarrow
+\theta_q\)</span>，则会出现负样本队列中数据特征不一致的问题。因为负样本队列中的数据来自不同的batch，而且<span class="math inline">\(\theta_q\)</span>是根据梯度在快速更新的，如果<span class="math inline">\(\theta_k\)</span>的参数也快速更新，则队列中<span class="math inline">\(\theta_{k-1}\)</span>、<span class="math inline">\(\theta_{k-2}\)</span>等模型得到的特征分布会和<span class="math inline">\(\theta_k\)</span>的得到的特征分布有很大的区别，这样模型就会学到一个捷径解，即根据特征分布的不同来区分正负样本，而不是理解样本的语义信息。
+因此，MoCo在这里使用了动量更新来改变<span class="math inline">\(\theta_k\)</span>模型的参数： <span class="math display">\[\theta_k = m\theta_{k-1} + (1-m)\theta_q\]</span>
+从而使<span class="math inline">\(\theta_k\)</span>模型缓慢更新，保证了队列中负样本队列中特征分布的一致性。在论文中，作者将<span class="math inline">\(m\)</span>设为了0.999。 <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/14.png"> 最后，放一张MoCo的伪代码图： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/13.png"></p>
 <h2 id="byol">BYOL</h2>
 <p>论文地址：</p>
 <ul>
@@ -727,7 +749,7 @@ k})}\]</span> <span class="math display">\[L =
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">58 分钟</span>
+    <span title="站点阅读时长">3:49</span>
   </span>
 </div>
 <div class="busuanzi-count">
