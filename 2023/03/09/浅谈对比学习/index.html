@@ -46,8 +46,19 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/12.jpeg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/14.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/13.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/15.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/16.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/17.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/18.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/19.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/20.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/21.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/22.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/23.jpeg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/24.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/25.png">
 <meta property="article:published_time" content="2023-03-09T08:26:29.000Z">
-<meta property="article:modified_time" content="2023-03-25T15:17:37.278Z">
+<meta property="article:modified_time" content="2023-03-26T10:13:32.375Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="对比学习">
@@ -528,7 +539,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-25 23:17:37" itemprop="dateModified" datetime="2023-03-25T23:17:37+08:00">2023-03-25</time>
+      <time title="修改时间：2023-03-26 18:13:32" itemprop="dateModified" datetime="2023-03-26T18:13:32+08:00">2023-03-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -555,7 +566,7 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.1k</span>
+      <span>4.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -635,11 +646,110 @@ size解耦。</li>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/deepmind/deepmind-research/tree/master/byol">https://github.com/deepmind/deepmind-research/tree/master/byol</a></li>
 </ul>
+<p>在对比学习中，负样本是一个约束，如果在算损失函数时只有正样本，即让所有相似样本的特征尽可能的接近，那么就会出现一个很明显的捷径解。对于模型来说，不论输入什么样本，都返回同样的特征，那么损失就会为0，模型不用再学习语义信息。而只有加上负样本的约束，不光相似的样本要有相似的特征，不相似的物体同样也需要有不相似的特征，这样模型才有动力去学习样本的语义信息。因此，负样本在对比学习中至关重要，它能防止模型学到捷径解。但BYOL的方法可以在没有负样本的情况下进行对比学习，只有正样本参与训练。</p>
+<p>在SimCLR中，任务流程如下所示： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/15.jpeg">
+在MoCo中，任务流程如下所示： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/16.jpeg">
+在BYOL中，任务流程如下图所示： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/17.jpeg">
+可以看到BYOL增加了一个Predictor，并且将InfoNCE Loss改为了MSE
+Loss，使用<span class="math inline">\(\theta\)</span>模型得到的结果，去预测<span class="math inline">\(\xi\)</span>模型的结果，将匹配的问题换成了一个预测的问题，并且还取得了很好效果：
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/18.png"></p>
+<p>BYOL可以不使用负样本进行学习非常神奇，所以有人对论文进行复现，发现了一个比较有意思的现象。对BYOL的这一现象进行了解释，<a target="_blank" rel="noopener" href="https://generallyintelligent.com/blog/2020-08-24-understanding-self-supervised-contrastive-learning/">Understanding
+Self-Supervised and Contrastive Learning with "Bootstrap Your Own
+Latent" (BYOL)</a>。</p>
+<p>该博客的作者在复现BYOL论文的时候遗漏了一个小细节，出现了模型坍塌的现象。
+在SimCLR中，Projector <span class="math inline">\(g_{\theta}\)</span>由一个MLP构成，其组成结构如右边所示：
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/19.png"> 在MoCo中，Projector <span class="math inline">\(g_{\theta}\)</span>同样由一个MLP构成，但其内部结构略有不同（没有用BatchNorm），如右边所示：
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/20.png"> 在BYOL中，Projector <span class="math inline">\(g_{\theta}\)</span>和Predictor <span class="math inline">\(q_{\xi}\)</span>由同样结构的MLP组成，如右边所示：
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/21.png">
+这篇博客的作者在复现BYOL时使用了MoCo的代码，少加了一个BatchNorm层，就导致了模型的坍塌。所以作者又做了一些额外的实验进行对比：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Projection MLP Norm</th>
+<th style="text-align: left;">Prediction MLP Norm</th>
+<th style="text-align: left;">Loss Function</th>
+<th style="text-align: left;">Contrastive</th>
+<th style="text-align: left;">Performance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Contrastive Loss</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">Cross Entropy</td>
+<td style="text-align: left;">Explicit</td>
+<td style="text-align: left;">44.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BYOL</td>
+<td style="text-align: left;">Batch Norm</td>
+<td style="text-align: left;">Batch Norm</td>
+<td style="text-align: left;">L2</td>
+<td style="text-align: left;">Implicit</td>
+<td style="text-align: left;">57.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Projection BN Only</td>
+<td style="text-align: left;">Batch Norm</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">L2</td>
+<td style="text-align: left;">Implicit</td>
+<td style="text-align: left;">55.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Prediction BN Only</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">Batch Norm</td>
+<td style="text-align: left;">L2</td>
+<td style="text-align: left;">Implicit</td>
+<td style="text-align: left;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">No Normalization</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">L2</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">28.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Layer Norm</td>
+<td style="text-align: left;">Layer Norm</td>
+<td style="text-align: left;">Layer Norm</td>
+<td style="text-align: left;">L2</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">29.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Random</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">28.8</td>
+</tr>
+</tbody>
+</table>
+<p>所以最后作者总结BYOL在训练时可以只用正样本而模型不坍塌，是因为BatchNorm计算了整个batch里面样本的均值和方差去做归一化，这意味着当模型在计算某个正样本的Loss的时候，其实也看到了这个batch里面的其他样本的特征，相当于整个batch里面样本构成了一个隐式的负样本。所以在加入BatchNorm之后，BYOL其实不光是只用了正样本，其实也在和batch内的平均样本进行对比，相当于也使用了负样本。</p>
+<p>但是BYOL的作者看到该博客后又发了一篇<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.10241">论文</a>来进行解释： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/22.png"> 使用GroupNorm和weight standarlization（GN
+with
+WS）来训练模型，在没有使用batch信息的情况下模型照样可以训练，没有坍塌。</p>
 <h2 id="simsiam">SimSiam</h2>
 <p>论文地址：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2011.10566">https://arxiv.org/abs/2011.10566</a></li>
 </ul>
+<p>SimSiam就是把BYOL中的动量更新去掉，两个编码器共享权重： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/23.jpeg"> 伪代码如下： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/24.png"></p>
 <h2 id="simbert">SimBERT</h2>
 <p>开源地址：</p>
 <ul>
@@ -663,6 +773,12 @@ size解耦。</li>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/openai/CLIP">https://github.com/openai/CLIP</a></li>
 </ul>
+<p>先来看一下模型总览图： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/25.png">
+Clip将配对的图片文本对作为对比学习的正样本。在训练过程中，输入是相互匹配的文本图片对。图片通过图片的编码器（Res50、ViT）得到图片的特征，文本通过文本的编码器（Transformer
+Encoder）得到文本的特征。假设每个batch大小为<span class="math inline">\(N\)</span>，即有<span class="math inline">\(N\)</span>个配对的图片文本对，则可以得到<span class="math inline">\(N *
+N\)</span>大小的相似度矩阵，然后去进行对比学习。</p>
+<p>在下游任务中，Clip使用zero
+shot方式进行预测，通过prompt生成对应类别的句子，然后将句子通过文本编码器得到文本特征。在推理的时候，任意输入一张图片，通过图片编码器得到图片的特征，只需计算图片特征和句子特征的相似度，选择最相似的文本作为分类结果即可。而且，当Clip真正使用的时候，文本处的标签是可以随时变化的（变更标签、新增表现），而模型参数完全不需要重新训练。</p>
 <h2 id="dalle">DALL·E</h2>
 <p>论文地址：</p>
 <ul>
@@ -742,14 +858,14 @@ size解耦。</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">55k</span>
+    <span title="站点总字数">58k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:21</span>
+    <span title="站点阅读时长">53 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
