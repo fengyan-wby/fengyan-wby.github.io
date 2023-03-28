@@ -59,11 +59,13 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/28.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/30.jpeg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/29.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/31.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/32.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/25.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/26.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/27.png">
 <meta property="article:published_time" content="2023-03-09T08:26:29.000Z">
-<meta property="article:modified_time" content="2023-03-28T12:34:23.490Z">
+<meta property="article:modified_time" content="2023-03-28T12:56:03.379Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="对比学习">
@@ -544,7 +546,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-28 20:34:23" itemprop="dateModified" datetime="2023-03-28T20:34:23+08:00">2023-03-28</time>
+      <time title="修改时间：2023-03-28 20:56:03" itemprop="dateModified" datetime="2023-03-28T20:56:03+08:00">2023-03-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -571,14 +573,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.8k</span>
+      <span>3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>10 分钟</span>
+      <span>11 分钟</span>
     </span>
 </div>
 
@@ -787,6 +789,11 @@ Encoder模型成为单向、双向以及序列到序列的模型。如下所示�
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/princeton-nlp/SimCSE">https://github.com/princeton-nlp/SimCSE</a></li>
 </ul>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/31.png"></p>
+对于无监督的部分，最核心的创新点就是使用droupout来对文本增加噪音，从而构造一个正样本对，而负样本对则是在batch中选取的其它句子。其实对于图像任务来说，做数据增强其实非常简单，有各种的手段。但是对于NLP任务来说做数据增强且不影响句子的语义会更加的困难，传统的方法有词替换，裁剪以及回译，但是作者发现这些方法都没有简单的dropout效果好。结果如下:
+<div data-align="center">
+<img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/32.png" alt width="500">
+</div>
 <h2 id="clip">Clip</h2>
 <p>论文地址：</p>
 <ul>
