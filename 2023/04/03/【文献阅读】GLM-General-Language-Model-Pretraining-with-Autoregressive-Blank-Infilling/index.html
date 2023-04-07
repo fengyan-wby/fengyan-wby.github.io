@@ -31,12 +31,16 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="机构：清华 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2103.10360#  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;THUDM&#x2F;GLM">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/3.png">
 <meta property="article:published_time" content="2023-04-03T11:43:04.000Z">
-<meta property="article:modified_time" content="2023-04-03T11:46:34.730Z">
+<meta property="article:modified_time" content="2023-04-07T09:46:11.373Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="GLM">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/1.png">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/">
@@ -133,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -146,6 +150,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">预训练过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#autoregressive-blank-infilling"><span class="nav-number">2.1.</span> <span class="nav-text">Autoregressive Blank
+Infilling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.</span> <span class="nav-text">多任务预训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">位置编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83"><span class="nav-number">4.</span> <span class="nav-text">微调</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -503,9 +509,15 @@ if(canvas.getContext){
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-04-03 19:43:04 / 修改时间：19:46:34" itemprop="dateCreated datePublished" datetime="2023-04-03T19:43:04+08:00">2023-04-03</time>
+      <time title="创建时间：2023-04-03 19:43:04" itemprop="dateCreated datePublished" datetime="2023-04-03T19:43:04+08:00">2023-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-07 17:46:11" itemprop="dateModified" datetime="2023-04-07T17:46:11+08:00">2023-04-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -532,14 +544,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>21</span>
+      <span>872</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -560,6 +572,62 @@ if(canvas.getContext){
 <li><a target="_blank" rel="noopener" href="https://github.com/THUDM/GLM">https://github.com/THUDM/GLM</a></li>
 </ul>
 <span id="more"></span>
+<p>ChatGPT已经火了一段时间了，国内也出现了一些平替，其中比较容易使用的是<a target="_blank" rel="noopener" href="https://github.com/THUDM/ChatGLM-6B">ChatGLM-6B</a>，该模型能够让我们基于单卡自己部署。ChatGLM的基座是GLM，下面对GLM论文进行解读。</p>
+<h2 id="介绍">介绍</h2>
+<p>预训练语言模型大体可以分为三种：自回归（GPT系列）、自编码（BERT系列）、编码-解码（T5、BART）。它们在各自的领域上都表现不俗，但是，目前没有一个预训练模型能很好地完成所有任务。GPT在NLU任务中只可以利用上文信息，无法使用下文信息；BERT无法完成生成类任务；编码-解码类模型没有上述的限制，但需要更多的参数才能match
+performance。GLM是一个通用的预训练语言模型，它在NLU（自然语言理解）、conditional
+generation（条件文本生成）和unconditional
+generation（非条件文本生成）上都有着不俗的表现。</p>
+<h2 id="预训练过程">预训练过程</h2>
+<h3 id="autoregressive-blank-infilling">Autoregressive Blank
+Infilling</h3>
+<p>GLM的流程图如下： <img src="/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/1.png"></p>
+<p>GLM的核心是Autoregregressive Blank
+Infilling，即生成文本中的一段或者多段空白。具体细节如下图所示： <img src="/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/2.png"></p>
+<p>对于输入<span class="math inline">\(x=[x_1, ...,
+x_n]\)</span>，采样多个片段<span class="math inline">\({s_1, ...,
+s_m}\)</span>，其中每个片段会包含多个token，如<span class="math inline">\(s_i=[s_{i,1}, ...,
+s_{i,l_i}]\)</span>。每个被采样的片段都会被替换为一个特殊字符<code>[MASK]</code>，这样就得到了<span class="math inline">\(x_{corrupt}\)</span>。给定<span class="math inline">\(x_{corrupt}\)</span>，模型通过自回归的方式预测被<code>[MASK]</code>字符替换的片段，由于是自回归的方式，所以模型只能获取<span class="math inline">\(x_{corrupt}\)</span>和之前已经被预测出来的片段的信息。此外，为了让片段之间相互关注彼此，文中还将各个被遮掩的片段打乱之后再预测，如上图所示。文中将蓝色部分作为<code>Part A</code>，将预测的片段作为<code>Part B</code>。</p>
+<h3 id="多任务预训练">多任务预训练</h3>
+<p>为了能够兼顾NLU和文本生成任务，对于文档级别的输入和句子级别的输入使用不同的方法获取片段：</p>
+<ul>
+<li><code>Document-level</code>：We sample a single span whose length is
+sampled from a uniform distribution over 50%–100% of the original
+length. The objective aims for long text generation.</li>
+<li><code>Sentence-level</code>：We restrict that the masked spans must
+be full sentences. Multiple spans (sentences) are sampled to cover 15%
+of the original tokens. This objective aims for seq2seq tasks whose
+predictions are often complete sentences or paragraphs.</li>
+</ul>
+<h2 id="模型">模型</h2>
+<h3 id="模型结构">模型结构</h3>
+<p>GLM使用了Transformer结构，并进行了如下优化：</p>
+<ol type="1">
+<li>调整layer normalization和residual connection的顺序。</li>
+<li>使用一个线性层来进行输出token预测。</li>
+<li>将ReLU激活函数替换为GeLUs</li>
+</ol>
+<h3 id="位置编码">位置编码</h3>
+<p>GLM中使用了两个位置编码来表示token的位置信息：</p>
+<ul>
+<li>第一个位置编码表示的是<span class="math inline">\(x_{corrupt}\)</span>中的位置。对于被<code>[MASK]</code>字符替换的token，其第一个位置编码都表示成<code>[MASK]</code>字符的位置。</li>
+<li>第二个位置编码表示片段内的位置。对于Part
+A中的token，第二个位置编码统一为0。而Part B中片段则表示为[1, length of
+the span]。</li>
+</ul>
+<h2 id="微调">微调</h2>
+<p><img src="/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/3.png">
+对于分类任务，通过prompt来预测类别：</p>
+<ul>
+<li>It's a beautiful day, I'm in a great mood. It is [MASK]. [S]
+good</li>
+<li>I failed in the exam today. I was very depressed. It is [MASK]. [S]
+bad</li>
+</ul>
+<p>对于文本生成任务，将输入文本视为A部分，直接在文本的最后加入[MASK]，然后进行文本生成：</p>
+<ul>
+<li>Today [MASK]</li>
+</ul>
 
     </div>
 
@@ -631,14 +699,14 @@ if(canvas.getContext){
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">186k</span>
+    <span title="站点总字数">187k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:18</span>
+    <span title="站点阅读时长">11:21</span>
   </span>
 </div>
 <div class="busuanzi-count">
