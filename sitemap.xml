@@ -2,9 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ViT-An-Image-is-Worth-16x16-Words-Transformers-for-Image-Recognition-at-Scale/</loc>
+    
+    <lastmod>2023-04-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/</loc>
     
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -14,15 +23,6 @@
     <loc>https://fengyan-wby.github.io/2023/04/13/TensorFlow%E6%95%99%E7%A8%8B/</loc>
     
     <lastmod>2023-04-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ViT-An-Image-is-Worth-16x16-Words-Transformers-for-Image-Recognition-at-Scale/</loc>
-    
-    <lastmod>2023-04-12</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -283,7 +283,7 @@
 
   <url>
     <loc>https://fengyan-wby.github.io/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -291,168 +291,168 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/AC/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/hexo/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/GPT/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/BPE/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%88%86%E8%AF%8D/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Hadoop/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Markdown/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Java/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/zsh/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Transformer/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/KOSMOS-1/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/SimCLR/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/UniLM/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/KMP/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Spring-Boot/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/DALL%C2%B7E/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/ViT/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/GLM/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/PyTorch/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/TensorFlow/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -461,28 +461,28 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2023-04-14</lastmod>
+    <lastmod>2023-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
