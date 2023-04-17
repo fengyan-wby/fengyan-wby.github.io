@@ -532,14 +532,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>5k</span>
+      <span>2.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>18 分钟</span>
+      <span>8 分钟</span>
     </span>
 </div>
 
@@ -559,31 +559,24 @@ if(canvas.getContext){
 <h2 id="绝对位置编码">绝对位置编码</h2>
 <p>形式上来看，绝对位置编码是相对简单的一种方案。一般来说，绝对位置编码会加到输入中：在输入的第<span class="math inline">\(\textcolor{blue}{k}\)</span>个向量<span class="math inline">\(\textcolor{blue}{x_k}\)</span>中加入位置向量<span class="math inline">\(\textcolor{blue}{p_k}\)</span>变成<span class="math inline">\(\textcolor{blue}{x_k + p_k}\)</span>，其中<span class="math inline">\(\textcolor{blue}{p_k}\)</span>只依赖于位置编号<span class="math inline">\(\textcolor{blue}{k}\)</span>。</p>
 <h3 id="训练式">训练式</h3>
-<p>很显然，绝对位置编码的一个最朴素方案式不特意去设计什么，而是直接<code>将位置编码当作可训练参数</code>，比如最大长度为512，编码维度为768，那么就初始化一个<span class="math inline">\(512 \times
-768\)</span>的矩阵作为位置向量，让它随着训练过程更新。现在的BERT、GPT等模型用的就是这种位置编码。</p>
+<p>很显然，绝对位置编码的一个最朴素方案式不特意去设计什么，而是直接<code>将位置编码当作可训练参数</code>，比如最大长度为512，编码维度为768，那么就初始化一个<span class="math inline">\(512 \times 768\)</span>的矩阵作为位置向量，让它随着训练过程更新。现在的BERT、GPT等模型用的就是这种位置编码。</p>
 <p>对于这种训练式的绝对位置编码，缺点是没有外推性，即如果预训练最大长度为512，那么在预测的时候最多就只能处理长度为512的句子，再长就处理不了了。</p>
 <h3 id="三角式">三角式</h3>
-<p>三角函数位置编码，一般也称为Sinusoidal位置编码，是Google论文《Attention
-is All You Need》所提出来的一个位置编码方法。 <span class="math display">\[
+<p>三角函数位置编码，一般也称为Sinusoidal位置编码，是Google论文《Attention is All You Need》所提出来的一个位置编码方法。 <span class="math display">\[
 \textcolor{blue}{
 p_{k,2i}=sin(k/10000^{2i/d}) \\
 p_{k,2i+1}=cos(k/10000^{2i/d})
 }
-\]</span> 其中<span class="math inline">\(\textcolor{blue}{p_{k,2i},p_{k,2i+1}}\)</span>分别是位置<span class="math inline">\(\textcolor{blue}{k}\)</span>的编码向量的第<span class="math inline">\(\textcolor{blue}{2i,2i+1}\)</span>个分量，<span class="math inline">\(\textcolor{blue}{d}\)</span>是位置向量的维度。
-三角函数式位置编码的特点是有显式的生成规律，因此可以期望它拥有一定的外推性。</p>
+\]</span> 其中<span class="math inline">\(\textcolor{blue}{p_{k,2i},p_{k,2i+1}}\)</span>分别是位置<span class="math inline">\(\textcolor{blue}{k}\)</span>的编码向量的第<span class="math inline">\(\textcolor{blue}{2i,2i+1}\)</span>个分量，<span class="math inline">\(\textcolor{blue}{d}\)</span>是位置向量的维度。 三角函数式位置编码的特点是有显式的生成规律，因此可以期望它拥有一定的外推性。</p>
 <h3 id="递归式">递归式</h3>
 <p>原则上来说，RNN模型不需要位置编码，它在结构上就自带了学习到位置信息的可能性。因此，如果在输入后面先接一层RNN，然后再接Transformer，那么理论上就不需要加位置编码了。同理，我们也可以用RNN模型来学习一种绝对位置编码，比如从一个向量<span class="math inline">\(p_0\)</span>出发，通过递归格式<span class="math inline">\(p_{k+1}=f(p_k)\)</span>来得到各个位置的编码向量。</p>
 <p>理论上来说，基于递归模型的位置编码也具有比较好的外推性，同时它也比三角函数式的位置编码有更好的灵活性。但是，递归式形式的位置编码牺牲了一定的并行性，可能会带来速度瓶颈。</p>
 <h3 id="相乘式">相乘式</h3>
-<p>之前说到，输入<span class="math inline">\(\textcolor{blue}{x_k}\)</span>与绝对位置编码<span class="math inline">\(\textcolor{blue}{p_k}\)</span>的组合方式一般是<span class="math inline">\(\textcolor{blue}{x_k +
-p_k}\)</span>，那有没有“不一般”的组合方式呢？比如<span class="math inline">\(\textcolor{blue}{x_k⊗p_k}\)</span>（逐位相乘）？我们平时在搭建模型的时候，对于融合两个向量有多种方式，相加、相乘甚至拼接都是可以考虑的。可能大家默认选择相加是因为向量的相加具有比较鲜明的几何意义，但是对于深度学习模型来说，这种几何意义其实没有什么实际的价值。</p>
+<p>之前说到，输入<span class="math inline">\(\textcolor{blue}{x_k}\)</span>与绝对位置编码<span class="math inline">\(\textcolor{blue}{p_k}\)</span>的组合方式一般是<span class="math inline">\(\textcolor{blue}{x_k + p_k}\)</span>，那有没有“不一般”的组合方式呢？比如<span class="math inline">\(\textcolor{blue}{x_k⊗p_k}\)</span>（逐位相乘）？我们平时在搭建模型的时候，对于融合两个向量有多种方式，相加、相乘甚至拼接都是可以考虑的。可能大家默认选择相加是因为向量的相加具有比较鲜明的几何意义，但是对于深度学习模型来说，这种几何意义其实没有什么实际的价值。</p>
 <h2 id="相对位置编码">相对位置编码</h2>
 <p>相对位置并没有完整建模每个输入的位置信息，而是在算Attention的时候考虑当前位置与被Attention的位置的相对距离，由于自然语言一般更依赖于相对位置，所以相对位置编码通常也有着优秀的表现。</p>
 <h3 id="经典式">经典式</h3>
-<p>相对位置编码起源于Google的论文《Self-Attention with Relative Position
-Representations》，华为开源的NEZHA模型也用到了这种位置编码，后面各种相对位置编码变体基本也是在此基础上的简单修改。
-一般认为，相对位置编码是由绝对位置编码启发而来，考虑一般的带绝对位置编码的Attention：
-<span class="math display">\[
+<p>相对位置编码起源于Google的论文《Self-Attention with Relative Position Representations》，华为开源的NEZHA模型也用到了这种位置编码，后面各种相对位置编码变体基本也是在此基础上的简单修改。 一般认为，相对位置编码是由绝对位置编码启发而来，考虑一般的带绝对位置编码的Attention： <span class="math display">\[
 \textcolor{blue}{
 \left\{
 \begin{aligned}
@@ -595,62 +588,40 @@ o_i &amp;= \sum_ja_{i,j}v_j
 \right.
 }
 \]</span></p>
-<p>这里初步展开<span class="math inline">\(\textcolor{blue}{q_ik_j}\)</span>: <span class="math display">\[\textcolor{blue}{q_ik_j^{\top}=(x_i +
-p_i)W_QW_K^{\top}(x_j+p_j)^\top=(x_iW_Q + p_iW_Q)(W_K^\top x_j^\top +
-W_K^\top p_j^\top) \tag{1}}\]</span></p>
-<p>为了引入相对位置信息，Google把第一项位置去掉，第二项<span class="math inline">\(\textcolor{blue}{p_jW_K}\)</span>改为二元位置向量<span class="math inline">\(\textcolor{blue}{R_{i,j}^K}\)</span>，变成： <span class="math display">\[\textcolor{blue}{a_{i,j}=softmax(x_iW_Q(x_jW_K+\textcolor{green}{R_{i,j}^K})^\top)}\]</span>
-以及<span class="math inline">\(\textcolor{blue}{i_i=\sum_ja_{i,j}v_j=\sum_ja_{i,j}(x_jW_V+p_jW_V)}\)</span>中的<span class="math inline">\(\textcolor{blue}{p_jW_V}\)</span>换成<span class="math inline">\(\textcolor{blue}{R_{i,j}^V}\)</span>: <span class="math display">\[\textcolor{blue}{o_i=\sum_ja_{i,j}(x_jW_V+\textcolor{green}{R_{i,j}^V})}\]</span></p>
-<p>所谓相对位置，是将本来依赖于二元坐标<span class="math inline">\((i,j)\)</span>的向量<span class="math inline">\(\textcolor{blue}{R_{i,j}^K,R_{i,j}^V}\)</span>改为只依赖于相对距离<span class="math inline">\((i-j)\)</span>，并且通常来说会进行截断，以适应任意的距离：
-<span class="math display">\[
+<p>这里初步展开<span class="math inline">\(\textcolor{blue}{q_ik_j}\)</span>: <span class="math display">\[\textcolor{blue}{q_ik_j^{\top}=(x_i + p_i)W_QW_K^{\top}(x_j+p_j)^\top=(x_iW_Q + p_iW_Q)(W_K^\top x_j^\top + W_K^\top p_j^\top) \tag{1}}\]</span></p>
+<p>为了引入相对位置信息，Google把第一项位置去掉，第二项<span class="math inline">\(\textcolor{blue}{p_jW_K}\)</span>改为二元位置向量<span class="math inline">\(\textcolor{blue}{R_{i,j}^K}\)</span>，变成： <span class="math display">\[\textcolor{blue}{a_{i,j}=softmax(x_iW_Q(x_jW_K+\textcolor{green}{R_{i,j}^K})^\top)}\]</span> 以及<span class="math inline">\(\textcolor{blue}{i_i=\sum_ja_{i,j}v_j=\sum_ja_{i,j}(x_jW_V+p_jW_V)}\)</span>中的<span class="math inline">\(\textcolor{blue}{p_jW_V}\)</span>换成<span class="math inline">\(\textcolor{blue}{R_{i,j}^V}\)</span>: <span class="math display">\[\textcolor{blue}{o_i=\sum_ja_{i,j}(x_jW_V+\textcolor{green}{R_{i,j}^V})}\]</span></p>
+<p>所谓相对位置，是将本来依赖于二元坐标<span class="math inline">\((i,j)\)</span>的向量<span class="math inline">\(\textcolor{blue}{R_{i,j}^K,R_{i,j}^V}\)</span>改为只依赖于相对距离<span class="math inline">\((i-j)\)</span>，并且通常来说会进行截断，以适应任意的距离： <span class="math display">\[
 \textcolor{blue}{
 R_{i,j}^K=p_k[clip(i-j,p_{min}, p_{max})]
 R_{i,j}^V=p_v[clip(i-j,p_{min}, p_{max})]
 }
-\]</span>
-这样一来，只需要有限个位置编码，就可以表达出任意长度的相对位置（因为进行了截断），不管相对位置编码式可训练式的还是三角函数式的，都可以达到处理任意长度文本的需求。</p>
+\]</span> 这样一来，只需要有限个位置编码，就可以表达出任意长度的相对位置（因为进行了截断），不管相对位置编码式可训练式的还是三角函数式的，都可以达到处理任意长度文本的需求。</p>
 <h3 id="xlnet式">XLNET式</h3>
-<p>XLNET式位置编码其实源自Transformer-XL的论文《Transformer-XL:
-Attentive Language Models Beyond a Fixed-Length
-Context》，只不过因为使用了Transformer-XL架构的XLNET模型并在一定程度上超过了BERT后，Transformer-XL才算广为人知，因此这种位置编码通常也被冠以XLNET之名。</p>
+<p>XLNET式位置编码其实源自Transformer-XL的论文《Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context》，只不过因为使用了Transformer-XL架构的XLNET模型并在一定程度上超过了BERT后，Transformer-XL才算广为人知，因此这种位置编码通常也被冠以XLNET之名。</p>
 <p>XLNET式的位置编码源于对上述（公式(1)）<span class="math inline">\(q_ik_j^\top\)</span>的完全展开： <span class="math display">\[
 \textcolor{blue}{
-q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}p_j^{\top} +
-p_iW_QW_K^{\top}x_j^{\top} + p_iW_QW_K^{\top}p_j^{\top} \tag{2}
+q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}p_j^{\top} + p_iW_QW_K^{\top}x_j^{\top} + p_iW_QW_K^{\top}p_j^{\top} \tag{2}
 }
 \]</span></p>
 <p>Transformer-XL的做法很简单，直接将<span class="math inline">\(\textcolor{blue}{p_j}\)</span>替换为相对位置向量<span class="math inline">\(R_{i-j}\)</span>，至于两个<span class="math inline">\(\textcolor{blue}{p_i}\)</span>，则替换为两个可训练的向量<span class="math inline">\(\textcolor{blue}{u,v}\)</span>： <span class="math display">\[
 \textcolor{blue}{
-q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} +
-x_iW_QW_K^{\top}\textcolor{green}{R_{i-j}^{\top}} +
-\textcolor{red}{u}W_QW_K^{\top}x_j^{\top} +
-\textcolor{red}{v}W_QW_K^{\top}\textcolor{green}{R_{i-j}^{\top}} \tag{2}
+q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}\textcolor{green}{R_{i-j}^{\top}} + \textcolor{red}{u}W_QW_K^{\top}x_j^{\top} + \textcolor{red}{v}W_QW_K^{\top}\textcolor{green}{R_{i-j}^{\top}} \tag{2}
 }
-\]</span> 该编码方式中的<span class="math inline">\(\textcolor{blue}{R_{i-j}}\)</span>没有进行截断，而是直接用了Sinusoidal式的生成方案。此外，<span class="math inline">\(\textcolor{blue}{v_j}\)</span>上的位置偏置就直接去掉了，即直接令<span class="math inline">\(\textcolor{blue}{o_i=\sum_ja_{i,j}x_jW_V}\)</span>。
-<code>似乎从这个工作开始，后面的相对位置编码都只加到Attention矩阵上去，而不加到vj上去了。</code></p>
+\]</span> 该编码方式中的<span class="math inline">\(\textcolor{blue}{R_{i-j}}\)</span>没有进行截断，而是直接用了Sinusoidal式的生成方案。此外，<span class="math inline">\(\textcolor{blue}{v_j}\)</span>上的位置偏置就直接去掉了，即直接令<span class="math inline">\(\textcolor{blue}{o_i=\sum_ja_{i,j}x_jW_V}\)</span>。 <code>似乎从这个工作开始，后面的相对位置编码都只加到Attention矩阵上去，而不加到vj上去了。</code></p>
 <h3 id="t5式">T5式</h3>
-<p>T5模型出自文章《Exploring the Limits of Transfer Learning with a
-Unified Text-to-Text
-Transformer》，里面用到了一种更简单的相对位置编码。仍然将<span class="math inline">\(q_ik_j^\top\)</span>的完全展开： <span class="math display">\[
+<p>T5模型出自文章《Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer》，里面用到了一种更简单的相对位置编码。仍然将<span class="math inline">\(q_ik_j^\top\)</span>的完全展开： <span class="math display">\[
 \textcolor{blue}{
-q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}p_j^{\top} +
-p_iW_QW_K^{\top}x_j^{\top} + p_iW_QW_K^{\top}p_j^{\top}
+q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}p_j^{\top} + p_iW_QW_K^{\top}x_j^{\top} + p_iW_QW_K^{\top}p_j^{\top}
 }
-\]</span>
-如果分析每一项的含义，那么可以理解为<code>“输入-输入”</code>、<code>“输入位置”</code>、<code>“位置-输入”</code>、<code>位置-位置</code>四项注意力的结合。如果我们认为输入信息与位置信息应该式独立的，那么它们就不应该有过多的交互，所以<code>“输入位置”</code>、<code>“位置-输入”</code>这两项可以删掉，而<code>位置-位置</code>这一项实际上是一个只依赖于(i,j)的量，我们可以直接将它作为参数训练出来，则上式可以简化为：
-<span class="math display">\[
+\]</span> 如果分析每一项的含义，那么可以理解为<code>“输入-输入”</code>、<code>“输入位置”</code>、<code>“位置-输入”</code>、<code>位置-位置</code>四项注意力的结合。如果我们认为输入信息与位置信息应该式独立的，那么它们就不应该有过多的交互，所以<code>“输入位置”</code>、<code>“位置-输入”</code>这两项可以删掉，而<code>位置-位置</code>这一项实际上是一个只依赖于(i,j)的量，我们可以直接将它作为参数训练出来，则上式可以简化为： <span class="math display">\[
 \textcolor{blue}{
 x_iW_QW_K^{\top}x_j^{\top} + \textcolor{green}{\beta_{i,j}}
 }
-\]</span>
-说白了，T5的相对位置编码仅仅是在Attention矩阵的基础上加一个可以训练的偏置项。和XLNET一样，对于<span class="math inline">\(\textcolor{blue}{v_j}\)</span>上的位置偏置被直接去掉了。比较别致的是，不同于常规位置编码将<span class="math inline">\(\textcolor{blue}{\beta_{i,j}}\)</span>视为(i-j)的函数并进行截断的做法，T5对相对位置进行了一个分桶的操作。具体的映射代码，可以看源码。这个设计的思路其实也很直观，就是比较邻近的位置（0～7），我们需要比较得精细一些，所以给它们都分配一个独立的位置编码，至于稍远的位置（比如8～11），我们不用区分得太清楚，所以它们可以共用一个位置编码，距离越远，共用的范围就可以越大，直到达到指定范围再clip。</p>
+\]</span> 说白了，T5的相对位置编码仅仅是在Attention矩阵的基础上加一个可以训练的偏置项。和XLNET一样，对于<span class="math inline">\(\textcolor{blue}{v_j}\)</span>上的位置偏置被直接去掉了。比较别致的是，不同于常规位置编码将<span class="math inline">\(\textcolor{blue}{\beta_{i,j}}\)</span>视为(i-j)的函数并进行截断的做法，T5对相对位置进行了一个分桶的操作。具体的映射代码，可以看源码。这个设计的思路其实也很直观，就是比较邻近的位置（0～7），我们需要比较得精细一些，所以给它们都分配一个独立的位置编码，至于稍远的位置（比如8～11），我们不用区分得太清楚，所以它们可以共用一个位置编码，距离越远，共用的范围就可以越大，直到达到指定范围再clip。</p>
 <h3 id="deberta式">DeBERTa式</h3>
-<p>DeBERTa来自论文《DeBERTa: Decoding-enhanced BERT with Disentangled
-Attention》。 其实DeBERTa的主要改进也是在位置编码上，同样还是从<span class="math inline">\(q_ik_j^\top\)</span>的完全展开出发，T5是干脆去掉了第2、3项，只保留第4项并替换为相对位置编码，而DeBERTa则刚刚相反，它扔掉了第4项，保留第2、3项并且替换为相对位置编码。
-<span class="math display">\[
+<p>DeBERTa来自论文《DeBERTa: Decoding-enhanced BERT with Disentangled Attention》。 其实DeBERTa的主要改进也是在位置编码上，同样还是从<span class="math inline">\(q_ik_j^\top\)</span>的完全展开出发，T5是干脆去掉了第2、3项，只保留第4项并替换为相对位置编码，而DeBERTa则刚刚相反，它扔掉了第4项，保留第2、3项并且替换为相对位置编码。 <span class="math display">\[
 \textcolor{blue}{
-q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} +
-x_iW_QW_K^{\top}\textcolor{green}{R_{i,j}^{\top}} +
-\textcolor{green}{R_{j,i}}W_QW_K^{\top}x_j^{\top}
+q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}\textcolor{green}{R_{i,j}^{\top}} + \textcolor{green}{R_{j,i}}W_QW_K^{\top}x_j^{\top}
 }
 \]</span></p>
 
@@ -731,14 +702,14 @@ x_iW_QW_K^{\top}\textcolor{green}{R_{i,j}^{\top}} +
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">191k</span>
+    <span title="站点总字数">62k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:34</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">

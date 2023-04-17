@@ -565,25 +565,20 @@ if(canvas.getContext){
         <p>机构： OpenAI<br>
 论文地址：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.06125">https://arxiv.org/abs/2204.06125</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.06125" class="uri">https://arxiv.org/abs/2204.06125</a></li>
 </ul>
 <span id="more"></span>
 <h2 id="模型">模型</h2>
-<p>DALL·E 2的总体流程图如下： <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/1.png">
-可以看到，上半部分就是一个CLIP。CLIP模型在被训练好之后，其参数就会完全被冻住，不会再进行训练和finetune。
-然后下半部分就是一个两阶段的训练过程：</p>
+<p>DALL·E 2的总体流程图如下： <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/1.png"> 可以看到，上半部分就是一个CLIP。CLIP模型在被训练好之后，其参数就会完全被冻住，不会再进行训练和finetune。 然后下半部分就是一个两阶段的训练过程：</p>
 <ol type="1">
-<li>prior训练阶段
-prior训练阶段是将CLIP的图像编码器得到的图像特征作为GroundTruth，然后通过文本编码器得到的文本特征进行预测，是一个有监督的过程，从而将prior部分训练出来。</li>
+<li>prior训练阶段 prior训练阶段是将CLIP的图像编码器得到的图像特征作为GroundTruth，然后通过文本编码器得到的文本特征进行预测，是一个有监督的过程，从而将prior部分训练出来。</li>
 <li>decoder训练阶段 decoder训练阶段就是训练一个扩散模型的过程。</li>
 </ol>
 <h2 id="dalle-2的一些应用">DALL·E 2的一些应用</h2>
 <h3 id="生成风格类似的图片">生成风格类似的图片</h3>
-<p>将输入图像通过CLIP的图像编码器得到图像特征，然后通过decoder生成相同风格的图像。
-<img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/2.png"></p>
+<p>将输入图像通过CLIP的图像编码器得到图像特征，然后通过decoder生成相同风格的图像。 <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/2.png"></p>
 <h3 id="进行图像风格融合">进行图像风格融合</h3>
-<p>将两张图像得到的特征进行插值，可以将两张图像进行融合。 <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/3.png">
-同样的，文本特征也可以进行插值，然后通过prior和decoder生成图片。 <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/4.png"></p>
+<p>将两张图像得到的特征进行插值，可以将两张图像进行融合。 <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/3.png"> 同样的，文本特征也可以进行插值，然后通过prior和decoder生成图片。 <img src="/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/4.png"></p>
 
     </div>
 
@@ -663,14 +658,14 @@ prior训练阶段是将CLIP的图像编码器得到的图像特征作为GroundTr
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">191k</span>
+    <span title="站点总字数">62k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:34</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">
