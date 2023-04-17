@@ -1,3 +1,7 @@
+https://fengyan-wby.github.io/tags/index.html
+https://fengyan-wby.github.io/categories/index.html
+https://fengyan-wby.github.io/archives/index.html
+https://fengyan-wby.github.io/about/index.html
 https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ViT-An-Image-is-Worth-16x16-Words-Transformers-for-Image-Recognition-at-Scale/
 https://fengyan-wby.github.io/2023/04/13/TensorFlow%E6%95%99%E7%A8%8B/
@@ -25,10 +29,6 @@ https://fengyan-wby.github.io/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/
 https://fengyan-wby.github.io/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/
 https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/
 https://fengyan-wby.github.io/2023/02/10/Ubuntu-Mac%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEOh-My-Zsh/
-https://fengyan-wby.github.io/about/index.html
-https://fengyan-wby.github.io/archives/index.html
-https://fengyan-wby.github.io/categories/index.html
-https://fengyan-wby.github.io/tags/index.html
 https://fengyan-wby.github.io/
 https://fengyan-wby.github.io/tags/AC/
 https://fengyan-wby.github.io/tags/GPT/
