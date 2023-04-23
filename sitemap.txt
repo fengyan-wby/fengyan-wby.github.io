@@ -1,3 +1,4 @@
+https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/
 https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/
 https://fengyan-wby.github.io/tags/index.html
 https://fengyan-wby.github.io/categories/index.html
@@ -56,6 +57,7 @@ https://fengyan-wby.github.io/tags/ViT/
 https://fengyan-wby.github.io/tags/%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/tags/Markdown/
 https://fengyan-wby.github.io/tags/P-tuning/
+https://fengyan-wby.github.io/tags/P-Tuning/
 https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/
 https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/
 https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/
