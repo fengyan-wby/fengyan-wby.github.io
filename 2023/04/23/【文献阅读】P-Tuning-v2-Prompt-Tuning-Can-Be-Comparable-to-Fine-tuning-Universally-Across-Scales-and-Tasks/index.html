@@ -31,12 +31,15 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="机构：清华 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2110.07602  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;THUDM&#x2F;P-tuning-v2">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/2.png">
 <meta property="article:published_time" content="2023-04-23T09:02:45.000Z">
-<meta property="article:modified_time" content="2023-04-23T09:07:32.301Z">
+<meta property="article:modified_time" content="2023-04-24T14:02:35.938Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="P-Tuning">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/1.png">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/">
@@ -133,7 +136,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -146,6 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82%E5%92%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">2.</span> <span class="nav-text">其他细节和结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reparameterization"><span class="nav-number">2.1.</span> <span class="nav-text">Reparameterization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prompt-length"><span class="nav-number">2.2.</span> <span class="nav-text">Prompt Length</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-task-learning"><span class="nav-number">2.3.</span> <span class="nav-text">Multi-task Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">2.4.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -503,9 +507,15 @@ if(canvas.getContext){
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-04-23 17:02:45 / 修改时间：17:07:32" itemprop="dateCreated datePublished" datetime="2023-04-23T17:02:45+08:00">2023-04-23</time>
+      <time title="创建时间：2023-04-23 17:02:45" itemprop="dateCreated datePublished" datetime="2023-04-23T17:02:45+08:00">2023-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-24 22:02:35" itemprop="dateModified" datetime="2023-04-24T22:02:35+08:00">2023-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -546,7 +556,7 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>23</span>
+      <span>373</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -574,6 +584,27 @@ if(canvas.getContext){
 <li><a target="_blank" rel="noopener" href="https://github.com/THUDM/P-tuning-v2" class="uri">https://github.com/THUDM/P-tuning-v2</a></li>
 </ul>
 <span id="more"></span>
+<h2 id="模型">模型</h2>
+<p>P-tuning存在一下两个缺陷：</p>
+<ol type="1">
+<li><code>Lack of universality across scales</code>: 对于参数数量在10B以下的模型，prompt-tuning表现的比fine-tuning要差很多。</li>
+<li><code>Lack of universality across tasks</code>: 对于分类问题，prompt-tuning可以表现的较好，但是对于序列标注这种<code>hard sequence tagging tasks</code>，prompt-tuning表现的较差。</li>
+</ol>
+<p>针对上述问题，作者提出了P-Tuning v2。 <img src="/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/1.png"></p>
+<p>如上图所示，在P-tuning中，<code>continuous prompts</code>只在embedding层插入。而在P-tuning v2中，<code>continuous prompts</code>在每一个layer层都可以作为<code>prefix tokens</code>被插入。这样可以带来两个好处：</p>
+<ol type="1">
+<li>P-tuning v2拥有更多的可学习参数，可以在微调的时候学到更多的东西。</li>
+<li>在更深层中加入的<code>continuous prompts</code>可以更好的影响模型的输出。</li>
+</ol>
+<h2 id="其他细节和结果">其他细节和结果</h2>
+<h3 id="reparameterization">Reparameterization</h3>
+<p>P-tuning中使用了双向的LSTM对<code>continuous prompts</code>进行编码，在P-tuning v2中发现这一改进在有些任务中会带来积极作用，但在有些任务中会带来消极作用。</p>
+<h3 id="prompt-length">Prompt Length</h3>
+<p>We find that different NLU tasks usually achieve their best performance with different prompt lengths. Generally, simple classification tasks prefer shorter prompts (less than 20); hard sequence labeling tasks prefer longer ones (around 100).</p>
+<h3 id="multi-task-learning">Multi-task Learning</h3>
+<p>可以通过多任务训练共享的<code>continuous prompts</code>来对其进行更好的初始化，然后再在特定的下游任务中对<code>continuous prompts</code>进行微调。</p>
+<h3 id="结果">结果</h3>
+<p><img src="/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/2.png"></p>
 
     </div>
 
