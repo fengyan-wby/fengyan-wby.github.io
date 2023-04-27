@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/1.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/2.png">
 <meta property="article:published_time" content="2023-04-23T09:02:45.000Z">
-<meta property="article:modified_time" content="2023-04-25T02:51:12.340Z">
+<meta property="article:modified_time" content="2023-04-25T09:33:15.770Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="P-Tuning">
@@ -515,7 +515,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-04-25 10:51:12" itemprop="dateModified" datetime="2023-04-25T10:51:12+08:00">2023-04-25</time>
+      <time title="修改时间：2023-04-25 17:33:15" itemprop="dateModified" datetime="2023-04-25T17:33:15+08:00">2023-04-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -590,8 +590,8 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <h2 id="模型">模型</h2>
 <p>P-tuning存在一下两个缺陷：</p>
 <ol type="1">
-<li><code>Lack of universality across scales</code>: 对于参数数量在10B以下的模型，prompt-tuning表现的比fine-tuning要差很多。</li>
-<li><code>Lack of universality across tasks</code>: 对于分类问题，prompt-tuning可以表现的较好，但是对于序列标注这种<code>hard sequence tagging tasks</code>，prompt-tuning表现的较差。</li>
+<li><code>Lack of universality across scales</code>: 对于参数数量在10B以下的模型，p-tuning表现的比fine-tuning要差很多。</li>
+<li><code>Lack of universality across tasks</code>: 对于分类问题，p-tuning可以表现的较好，但是对于序列标注这种<code>hard sequence tagging tasks</code>，p-tuning表现的较差。</li>
 </ol>
 <p>针对上述问题，作者提出了P-Tuning v2。 <img src="/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/1.png"></p>
 <p>如上图所示，在P-tuning中，<code>continuous prompts</code>只在embedding层插入。而在P-tuning v2中，<code>continuous prompts</code>在每一个layer层都可以作为<code>prefix tokens</code>被插入。这样可以带来两个好处：</p>
@@ -687,14 +687,14 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">63k</span>
+    <span title="站点总字数">64k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:49</span>
+    <span title="站点阅读时长">3:52</span>
   </span>
 </div>
 <div class="busuanzi-count">
