@@ -56,8 +56,8 @@ https://fengyan-wby.github.io/tags/DALL%C2%B7E/
 https://fengyan-wby.github.io/tags/GLM/
 https://fengyan-wby.github.io/tags/KOSMOS-1/
 https://fengyan-wby.github.io/tags/LoRA/
-https://fengyan-wby.github.io/tags/P-tuning/
 https://fengyan-wby.github.io/tags/P-Tuning/
+https://fengyan-wby.github.io/tags/P-tuning/
 https://fengyan-wby.github.io/tags/SimCLR/
 https://fengyan-wby.github.io/tags/UniLM/
 https://fengyan-wby.github.io/tags/ViT/
