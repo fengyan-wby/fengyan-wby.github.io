@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
-    <lastmod>2023-04-27</lastmod>
-  </url>
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/04/25/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LoRA-Low-Rank-Adaptation-of-Large-Language-Models/</loc>
-    <lastmod>2023-04-27</lastmod>
-  </url>
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
-    <lastmod>2023-04-25</lastmod>
-  </url>
-  <url>
     <loc>https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/</loc>
-    <lastmod>2023-04-25</lastmod>
+    <lastmod>2023-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/</loc>
+    <lastmod>2023-04-28</lastmod>
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
-    <lastmod>2023-04-24</lastmod>
+    <lastmod>2023-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
+    <lastmod>2023-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/25/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LoRA-Low-Rank-Adaptation-of-Large-Language-Models/</loc>
+    <lastmod>2023-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
+    <lastmod>2023-04-27</lastmod>
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/</loc>
