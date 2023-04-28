@@ -1,3 +1,4 @@
+https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Prefix-Tuning-Optimizing-Continuous-Prompts-for-Generation/
 https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/
 https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/
 https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/
