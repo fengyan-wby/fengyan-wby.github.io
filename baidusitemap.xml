@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fengyan-wby.github.io/2023/05/05/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Prompt-Tuning-The-Power-of-Scale-for-Parameter-Efficient-Prompt-Tuning/</loc>
+    <loc>https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/</loc>
     <lastmod>2023-05-08</lastmod>
   </url>
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/</loc>
-    <lastmod>2023-05-05</lastmod>
+    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
+    <lastmod>2023-05-08</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/05/05/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Prompt-Tuning-The-Power-of-Scale-for-Parameter-Efficient-Prompt-Tuning/</loc>
+    <lastmod>2023-05-08</lastmod>
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Prefix-Tuning-Optimizing-Continuous-Prompts-for-Generation/</loc>
@@ -18,10 +22,6 @@
   </url>
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
-    <lastmod>2023-04-28</lastmod>
-  </url>
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
     <lastmod>2023-04-28</lastmod>
   </url>
   <url>
