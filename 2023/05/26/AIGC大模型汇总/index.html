@@ -32,7 +32,7 @@
 <meta property="og:description" content="汇总开源AIGC大模型，持续更新。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-26T05:55:30.000Z">
-<meta property="article:modified_time" content="2023-05-26T07:12:11.711Z">
+<meta property="article:modified_time" content="2023-05-26T07:31:53.510Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="AIGC">
 <meta name="twitter:card" content="summary">
@@ -505,7 +505,7 @@ if(canvas.getContext){
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-05-26 13:55:30 / 修改时间：15:12:11" itemprop="dateCreated datePublished" datetime="2023-05-26T13:55:30+08:00">2023-05-26</time>
+      <time title="创建时间：2023-05-26 13:55:30 / 修改时间：15:31:53" itemprop="dateCreated datePublished" datetime="2023-05-26T13:55:30+08:00">2023-05-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -659,7 +659,8 @@ if(canvas.getContext){
 <p>Dolly在Alpaca的启发下，用Alpaca数据集，在GPT-J-6B上实现微调，由于Dolly本身是一个模型的“克隆”，所以团队最终决定将其命名为“多莉”。这种克隆式在Alpaca启发下越来越多，总结起来大致采用Alpaca开源的数据获取方式，在6B或者7B规模大小的旧模型上进行指令微调，获得类似ChatGPT的的效果。这种思想很经济，也能迅速模仿出ChatGPT的韵味来，广受欢迎，一经推出star爆棚。该项目github地址是：</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly" class="uri">https://github.com/databrickslabs/dolly</a></p>
 <p>4月12日，Databricks发布了Dolly2.0，号称业内第一个开源、遵循指令的LLM，数据集由Databricks员工生成，并进行了开源且可用于商业目的。新提出的Dolly2.0是一个120亿参数的语言模型，基于开源EleutherAI pythia模型系列，针对小型开源指令记录语料库进行了微调。</p>
-<p>开源地址为： <a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly" class="uri">https://github.com/databrickslabs/dolly</a> <a target="_blank" rel="noopener" href="https://huggingface.co/databricks/dolly-v2-12b" class="uri">https://huggingface.co/databricks/dolly-v2-12b</a></p>
+<p>开源地址为： <a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly" class="uri">https://github.com/databrickslabs/dolly</a><br>
+<a target="_blank" rel="noopener" href="https://huggingface.co/databricks/dolly-v2-12b" class="uri">https://huggingface.co/databricks/dolly-v2-12b</a></p>
 <h3 id="vicuna和chinese-vicuna">Vicuna和Chinese-Vicuna</h3>
 <p>斯坦福学者继推出alpaca后，联手CMU、UC伯克利等，推出一个全新模型——130亿参数的Vicuna（俗称小羊驼、骆马）。仅需300美元就能实现ChatGPT 90%的性能。Vicuna是通过在ShareGPT收集的用户共享对话上对LLaMA进行微调训练而来，测试过程使用GPT-4作为评判标准，结果显示Vicuna-13B在超过90%的情况下实现了与ChatGPT和Bard相匹敌的能力。</p>
 <p>UC伯克利LMSys org近期又发布了70亿参数的Vicuna，不仅体积小、效率高、能力强，而且只需两行命令就能在M1/M2芯片的Mac上运行，还能开启GPU加速！ github开源地址为： <a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat/" class="uri">https://github.com/lm-sys/FastChat/</a></p>
@@ -700,8 +701,8 @@ if(canvas.getContext){
 <p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/LAION-AI/Open-Assistant" class="uri">https://github.com/LAION-AI/Open-Assistant</a></p>
 <h3 id="huggingchat">HuggingChat</h3>
 <p>HuggingChat是Huggingface继OpenAssistant推出的对标ChatGPT的开源平替。其能力域基本与ChatGPT一致，在英文等语系上效果惊艳，被成为ChatGPT目前最强开源平替。但笔者尝试了中文，可谓一塌糊涂，中文能力还需要有较大的提升。HuggingChat的底座是oasst-sft-6-llama-30b，也是基于Meta的LLaMA-30B微调的语言模型。</p>
-<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor" class="uri">https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor</a></p>
-<p>在线体验地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/chat" class="uri">https://huggingface.co/chat</a></p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor" class="uri">https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor</a><br>
+在线体验地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/chat" class="uri">https://huggingface.co/chat</a></p>
 <h3 id="stablelm">StableLM</h3>
 <p>StableVicuna是一个Vicuna-13B v0（LLaMA-13B上的微调）的RLHF的微调模型。</p>
 <p>StableLM-Alpha是以开源数据集the Pile（含有维基百科、Stack Exchange和PubMed等多个数据源）基础上训练所得，训练token量达1.5万亿。</p>
@@ -712,7 +713,8 @@ if(canvas.getContext){
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese" class="uri">https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese</a></p>
 <h3 id="chatrwkvraven">ChatRWKV(Raven)</h3>
 <p>该模型的底座采用了自主研发的RWKV语言模型，100% RNN，微调部分仍然是经典的Alpaca、CodeAlpaca、Guanaco、GPT4All、 ShareGPT等。其开源了1B5、3B、7B和14B的模型，目前支持中英两个语种，提供不同语种比例的模型文件。</p>
-<p>该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/BlinkDL/ChatRWKV" class="uri">https://github.com/BlinkDL/ChatRWKV</a> <a target="_blank" rel="noopener" href="https://huggingface.co/BlinkDL/rwkv-4-raven" class="uri">https://huggingface.co/BlinkDL/rwkv-4-raven</a></p>
+<p>该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/BlinkDL/ChatRWKV" class="uri">https://github.com/BlinkDL/ChatRWKV</a><br>
+<a target="_blank" rel="noopener" href="https://huggingface.co/BlinkDL/rwkv-4-raven" class="uri">https://huggingface.co/BlinkDL/rwkv-4-raven</a></p>
 <h3 id="self-align和dromedary">SELF-ALIGN和Dromedary</h3>
 <p>目前大部分类ChatGPT基本都是采用人工对齐方式，如RLHF，Alpaca模式只是实现了ChatGPT的效仿式对齐，对齐能力受限于原始ChatGPT对齐能力。卡内基梅隆大学语言技术研究所、IBM 研究院MIT-IBM Watson AI Lab和马萨诸塞大学阿默斯特分校的研究者提出了一种全新的自对齐方法。其结合了原则驱动式推理和生成式大模型的生成能力，用极少的监督数据就能达到很好的效果。该项目工作成功应用在LLaMA-65b模型上，研发出了Dromedary（单峰骆驼）。</p>
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/IBM/Dromedary" class="uri">https://github.com/IBM/Dromedary</a></p>
@@ -729,7 +731,8 @@ if(canvas.getContext){
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Neutralzz/BiLLa" class="uri">https://github.com/Neutralzz/BiLLa</a></p>
 <h3 id="ziya-llama-13b-v1">Ziya-LLaMA-13B-v1</h3>
 <p>该项目是由IDEA开源，被成为&quot;姜子牙&quot;，是在LLaMA-13B基础上训练而得。该模型也采用了三阶段策略，一是重新构建中文词表；二是在千亿token量级数据规模基础上继续预训练，使模型具备原生中文能力；最后经过500万条多任务样本的有监督微调（SFT）和综合人类反馈训练（RM+PPO+HFFT+COHFT+RBRS），增强各种AI能力。其同时开源了一个评估集，包括常识类问答、推理、自然语言理解任务、数学、写作、代码、翻译、角色扮演、翻译9大类任务，32个子类，共计185个问题。</p>
-<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1" class="uri">https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1</a> 评估集开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese" class="uri">https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese</a></p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1" class="uri">https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1</a><br>
+评估集开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese" class="uri">https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese</a></p>
 
     </div>
 
