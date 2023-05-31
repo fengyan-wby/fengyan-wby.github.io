@@ -1,5 +1,5 @@
-https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/
 https://fengyan-wby.github.io/2023/05/25/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Toolformer-Language-Models-Can-Teach-Themselves-to-Use-Tools/
+https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/
 https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/
 https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/
