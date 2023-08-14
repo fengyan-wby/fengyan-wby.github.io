@@ -1,3 +1,4 @@
+https://fengyan-wby.github.io/2023/08/11/%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B%E6%8C%87%E5%8D%97/
 https://fengyan-wby.github.io/2023/02/27/Transformer%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E8%AF%A6%E8%A7%A3/
 https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/06/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RoFormer-Enhanced-Transformer-with-Rotary-Position-Embedding/
@@ -74,6 +75,7 @@ https://fengyan-wby.github.io/tags/UniLM/
 https://fengyan-wby.github.io/tags/Toolformer/
 https://fengyan-wby.github.io/tags/AIGC/
 https://fengyan-wby.github.io/tags/RoFormer/
+https://fengyan-wby.github.io/tags/Prompt/
 https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/
 https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/
 https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/
