@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/1.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/2.png">
 <meta property="article:published_time" content="2023-08-22T08:23:45.000Z">
-<meta property="article:modified_time" content="2023-08-23T08:30:32.489Z">
+<meta property="article:modified_time" content="2023-08-23T11:26:09.525Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="Sparse Transformers&quot;">
 <meta name="twitter:card" content="summary">
@@ -148,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">算法动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sparse-transformer"><span class="nav-number">3.</span> <span class="nav-text">Sparse Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-number">3.1.</span> <span class="nav-text">传统自注意力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#factorized-self-attention"><span class="nav-number">3.2.</span> <span class="nav-text">Factorized Self-Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strided-attention"><span class="nav-number">3.2.1.</span> <span class="nav-text">Strided Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fixed-attention"><span class="nav-number">3.2.2.</span> <span class="nav-text">Fixed Attention</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">算法动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sparse-transformer"><span class="nav-number">3.</span> <span class="nav-text">Sparse Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-number">3.1.</span> <span class="nav-text">传统自注意力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#factorized-self-attention"><span class="nav-number">3.2.</span> <span class="nav-text">Factorized Self-Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strided-attention"><span class="nav-number">3.2.1.</span> <span class="nav-text">Strided Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fixed-attention"><span class="nav-number">3.2.2.</span> <span class="nav-text">Fixed Attention</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#factorized-attention-heads"><span class="nav-number">3.3.</span> <span class="nav-text">Factorized attention heads</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -514,7 +514,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-23 16:30:32" itemprop="dateModified" datetime="2023-08-23T16:30:32+08:00">2023-08-23</time>
+      <time title="修改时间：2023-08-23 19:26:09" itemprop="dateModified" datetime="2023-08-23T19:26:09+08:00">2023-08-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -555,14 +555,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
+      <span>1.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
@@ -609,11 +609,22 @@ if(canvas.getContext){
 <h4 id="strided-attention">Strided Attention</h4>
 <p>Strided Attention由两种形式的连接模式组成，如上图(b)所示，其包含行和列两种注意力核。假设步长为<span class="math inline">\(l\)</span>，行注意力核指的是在连接模式中，当前时间片的前<span class="math inline">\(l\)</span>个时间片的值是1，其余的值是0.列注意力核指的是连接模式中每隔l个时间片的值为1，其余值为0。<br>
 行注意力核和列注意力核的表达式如下： <span class="math display">\[
-A_i^{(1)}=\{t,t+1,...,i\}, t=max(0, i-l) \\
-A_i^{(2)}=\{j:(i-j) \space mod \space l = 0\}
+\begin{matrix}
+    A_i^{(1)}=&amp;\{t,t+1,...,i\}, t=max(0, i-l) \\
+    A_i^{(2)}=&amp;\{j:(i-j) \space mod \space l = 0\}
+\end{matrix}
 \]</span> 对于图片生成这一类任务来说，<span class="math inline">\(l\)</span>一般为图像的宽或者高。所以复杂度为<span class="math inline">\(O(l)=O(\sqrt{n})\)</span>。</p>
 <h4 id="fixed-attention">Fixed Attention</h4>
-<p>如上图中的</p>
+<p>Fixed Attention同样也是由行注意力核和列注意力核组成，如上图中(c)所示。行注意力核是当前时间片同行的的时间片。表示为下面的式子： <span class="math display">\[A_i^{(1)}=\{j:(\lfloor j/l \rfloor=\lfloor i/l \rfloor)\}\]</span></p>
+<p>列注意力核表示为： <span class="math display">\[A_i^{(2)}=\{j:j \space mod \space l \in \{t,t+1,...,l\}\}\]</span> 其中<span class="math inline">\(t=l-c\)</span>，Fixed Attention的列注意力核又被叫做滑窗注意力核，超参数<span class="math inline">\(c\)</span>相当于滑窗卷积窗口的大小。上述两个注意力核的复杂度同样为<span class="math inline">\(O(\sqrt{n})\)</span>。</p>
+<h3 id="factorized-attention-heads">Factorized attention heads</h3>
+<p>上面介绍了多种不同形式的注意力核，下面将介绍如何既那个这些不同形式的注意力核融入到网络中。</p>
+<p>传统的Transformer通过如下方式计算注意力核： <span class="math display">\[attention(X) = W_p \cdot attend(X,S)\]</span> 本文作者提出了一下三种新的方式：</p>
+<ol type="1">
+<li>每个残差块使用不同的注意力核类型，一个深层网络是由多个连续的残差块组成的，对于每个残差块，我们可以使用不同类型的注意力核，表示为下式： <span class="math display">\[attention(X)=W_p \cdot attend(X, A^{(r \space mod \space p)})\]</span></li>
+<li>第二个方式是每个注意力头都计算所有类型的注意力核，然后合并他们的结果，如下式所示： <span class="math display">\[attention(X)=W_p \cdot attend(X,\bigcup_{m=1}^{p}A^{(m)})\]</span></li>
+<li>第三个方式是对于多头的注意力机制，每组头选择一个形式的注意力核，然后将他们合并起来，如下式所示： <span class="math display">\[attention(X)=W_p(attend(X,A)^{(i)})_{i \in \{1,...,n_h\}}\]</span> 其中<span class="math inline">\(n_h\)</span>组不同的注意力核会并行计算，然后在特征维度进行特征拼接。实验结果证明这种方式是最好的融合策略。</li>
+</ol>
 
     </div>
 
@@ -696,7 +707,7 @@ A_i^{(2)}=\{j:(i-j) \space mod \space l = 0\}
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:15</span>
+    <span title="站点阅读时长">11:17</span>
   </span>
 </div>
 <div class="busuanzi-count">
