@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Longformer-The-Long-Document-Transformer/</loc>
+    <lastmod>2023-08-23</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
+    <lastmod>2023-08-23</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Axial-Attention-in-Multidimensional-Transformers/</loc>
+    <lastmod>2023-08-23</lastmod>
+  </url>
+  <url>
     <loc>https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/</loc>
     <lastmod>2023-08-23</lastmod>
   </url>
