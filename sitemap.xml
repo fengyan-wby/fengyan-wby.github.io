@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Longformer-The-Long-Document-Transformer/</loc>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
     
     <lastmod>2023-08-28</lastmod>
     
@@ -11,9 +11,9 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Longformer-The-Long-Document-Transformer/</loc>
     
-    <lastmod>2023-08-23</lastmod>
+    <lastmod>2023-08-28</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
