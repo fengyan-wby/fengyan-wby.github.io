@@ -1085,7 +1085,7 @@
 <p>Transformer结构的模型难以处理长序列文本，这是因为Transformer中的self-attention的复杂度是和输入长度成2次方关系的<span class="math inline">\((O(n^2))\)</span>。文章提出了Longformer以解决上述问题。</p>
 <h3 id="longformer-1">Longformer</h3>
 <p>如下图（a）所示，传统Transformer的所有token都会互相关注，因此复杂度是<span class="math inline">\(O(n^2)\)</span>。而Longformer可以将传统Transformer中self-attention的复杂度从<span class="math inline">\(O(n^2)\)</span>降低到<span class="math inline">\(O(n)\)</span>，从而可以处理更长的序列。</p>
-<p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/1.png"></p>
+<p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/3.png"></p>
 <h4 id="注意力模式">注意力模式</h4>
 <p>Longformer定义了如下几种形式的改进self-attention。</p>
 <h5 id="sliding-window">Sliding window</h5>
@@ -1112,7 +1112,7 @@
 <div class="note info"><p>一个模型图灵完备意味着一切可以计算的问题模型都能完成，理论上，它可以用来解决任何算法。</p>
 </div>
 <h3 id="big-bird架构">Big Bird架构</h3>
-<p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/1.png"></p>
+<p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/4.png"></p>
 <p>由于BERT使用的是完全注意力机制，即每个token都需要关注所有的token，所以内存消耗就是序列长度的二次方。Big Bird中引入了稀疏注意力机制，将二次依赖降至线形，其主要由以下三个部分组成：</p>
 <ol type="1">
 <li><code>Random attention</code>：随机注意力，每个token随机关注r个token，r为超参数。</li>
@@ -1123,7 +1123,7 @@
 <li>ETC(extended transformer construction)，通过添加一些token(比如<code>[CLS]</code>)作为全局token。</li>
 </ol></li>
 </ol>
-<p>三种注意力的消融实验，三者联合的效果是最好的： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/2.png"></p>
+<p>三种注意力的消融实验，三者联合的效果是最好的： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/5.png"></p>
 <p>从模型角度来看，Big Bird和Longformer模型非常类似。相对Longformer模型，Big Bird模型增加了<code>Random attention</code>，而在<code>Sliding window attention</code>没有使用空洞，其他基本都一致。</p>
 ]]></content>
       <categories>
