@@ -1044,6 +1044,26 @@
 <li><a href="https://github.com/allenai/longformer" class="uri">https://github.com/allenai/longformer</a></li>
 </ul>
 <span id="more"></span>
+<h2 id="摘要">摘要</h2>
+<p>Transformer结构的模型难以处理长序列文本，这是因为Transformer中的self-attention的复杂度是和输入长度成2次方关系的<span class="math inline">\((O(n^2))\)</span>。文章提出了Longformer以解决上述问题。</p>
+<h2 id="longformer">Longformer</h2>
+<p>如下图（a）所示，传统Transformer的所有token都会互相关注，因此复杂度是<span class="math inline">\(O(n^2)\)</span>。而Longformer可以将传统Transformer中self-attention的复杂度从<span class="math inline">\(O(n^2)\)</span>降低到<span class="math inline">\(O(n)\)</span>，从而可以处理更长的序列。</p>
+<p><img src="/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Longformer-The-Long-Document-Transformer/1.png"></p>
+<h3 id="注意力模式">注意力模式</h3>
+<p>Longformer定义了如下几种形式的改进self-attention。</p>
+<h4 id="sliding-window">Sliding window</h4>
+<p>Sliding window如上图(b)所示，每个位置的token只关注其相邻窗口位置的token，相当于CNN的卷积窗口。 给定一个固定窗口大小<span class="math inline">\(w\)</span>，每个token关注其左右<span class="math inline">\(\frac{1}{2}\)</span>长度的token，则复杂度为<span class="math inline">\(O(n \times w)\)</span>。对于一个<span class="math inline">\(l\)</span>层的Transformer模型，顶层token的感受野大小为<span class="math inline">\(l \times w\)</span>（假设每一层的窗口大小都是<span class="math inline">\(w\)</span>），设置合适的窗口大小可以让顶层token关注到所有的输入token。</p>
+<h4 id="dilated-sliding-window">Dilated Sliding Window</h4>
+<p>Dilated Sliding Window如上图(c)所示。为了进一步提升感受野大小，可以在滑动窗口中加入空洞，相当于CNN中的空洞卷积。给定窗口大小<span class="math inline">\(w\)</span>，窗口之间的空洞个数<span class="math inline">\(d\)</span>，假设每一层都采用上述参数，则感受野大小为<span class="math inline">\(l \times d \times w\)</span>。</p>
+<p>此外，作者发现在多头自注意力中，对每个头使用不同的<span class="math inline">\(d\)</span>可以有更好的效果。通过设置空洞参数，某些头可以不使用空洞从而可以更加关注附近的信息，而某些头使用空洞去关注长距离的文本信息。</p>
+<h4 id="global-attention">Global Attention</h4>
+<p>全局注意力如上图(d)所示。除了上述两种形式的self-attention之外，作者还定义了全局注意力，即选择一些token关注全局的token。特别的是，全局注意力token是对称的，即全局注意力token会关注所有的token，所有的其他token也会关注全局token。</p>
+<p>由于全局注意力token的个数只会相对输入长度较小，且是人为定义的常数，所以全局注意力的复杂度是<span class="math inline">\(O(n)\)</span>。</p>
+<h3 id="实现细节">实现细节</h3>
+<ol type="1">
+<li>上述提出的方法的矩阵乘法没有在Pytorch、Tensorflow等框架中实现，作者自己基于cuda进行了实现。</li>
+<li>在训练时进行阶段式的训练方法：序列长度和窗口大小逐步提高。每个阶段窗口大小和序列长度增加一倍，学习率减半。</li>
+</ol>
 ]]></content>
       <categories>
         <category>算法</category>
