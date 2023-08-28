@@ -1125,6 +1125,30 @@
 </ol>
 <p>三种注意力的消融实验，三者联合的效果是最好的： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/5.png"></p>
 <p>从模型角度来看，Big Bird和Longformer模型非常类似。相对Longformer模型，Big Bird模型增加了<code>Random attention</code>，而在<code>Sliding window attention</code>没有使用空洞，其他基本都一致。</p>
+<h3 id="etc">ETC</h3>
+<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2007.14062.pdf" class="uri">https://arxiv.org/pdf/2007.14062.pdf</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/google-research/google-research/tree/master/etcmodel" class="uri">https://github.com/google-research/google-research/tree/master/etcmodel</a></li>
+</ul>
+<h4 id="global-local-attention">Global-Local Attention</h4>
+<p>ETC接收两个序列作为输入：</p>
+<ol type="1">
+<li><code>global input</code>： <span class="math inline">\(x^g=(x_1^g,...,x_{n_g}^g)\)</span></li>
+<li><code>long input</code>： <span class="math inline">\(x_l=(x_1^l,...,x_{n_l}^l)\)</span></li>
+</ol>
+<p>其中<code>long input</code>输入和传统Transformer一致。而<code>global input</code>是新增加的辅助token，其数量远小于<code>long input</code>，即<span class="math inline">\(n_g &lt;&lt; n_l\)</span>。</p>
+<p>然后，注意力被分成了如下四部分：</p>
+<ol type="1">
+<li>global-to-global(g2g)</li>
+<li>global-to-long(g2l)</li>
+<li>long-to-global(l2g)</li>
+<li>long-to-long(l2l)</li>
+</ol>
+<p>其中复杂度最高的<span class="math inline">\(l2l\)</span>部分被限制在一个固定的半径<span class="math inline">\(r(r&lt;&lt;n_l)\)</span>之内，这样<span class="math inline">\(l2l\)</span>中的token只能关注到邻近的<span class="math inline">\(2r+1\)</span>个token。如下图所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/6.png"> 而且，ETC的attention矩阵可以更加的灵活，如下所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/9.png"> <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/10.png"></p>
 ]]></content>
       <categories>
         <category>算法</category>
