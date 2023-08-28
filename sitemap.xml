@@ -40,7 +40,7 @@
   <url>
     <loc>https://fengyan-wby.github.io/2023/08/11/%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B%E6%8C%87%E5%8D%97/</loc>
     
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-08-22</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -518,6 +518,20 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/Attention/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/AIGC/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/TensorFlow/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -539,13 +553,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/zsh/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/tags/PEFT/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -554,6 +561,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/Big-Bird/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -574,6 +588,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/Sparse-Transformers/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/KOSMOS-1/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -582,6 +603,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/LoRA/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/Longformer/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -616,28 +644,14 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/RoFormer/</loc>
+    <lastmod>2023-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/SimCLR/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/ViT/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/UniLM/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -651,14 +665,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/AIGC/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/RoFormer/</loc>
+    <loc>https://fengyan-wby.github.io/tags/UniLM/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -672,28 +679,21 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/Sparse-Transformers/</loc>
+    <loc>https://fengyan-wby.github.io/tags/%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/Big-Bird/</loc>
+    <loc>https://fengyan-wby.github.io/tags/ViT/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/Longformer/</loc>
-    <lastmod>2023-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/Attention/</loc>
+    <loc>https://fengyan-wby.github.io/tags/zsh/</loc>
     <lastmod>2023-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
