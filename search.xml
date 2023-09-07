@@ -11,6 +11,9 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">saver = tf.train.Saver(max_to_keep=<span class="number">3</span>)</span><br><span class="line">saver.save(sess, <span class="string">&quot;model.ckpt&quot;</span>, global_step=step)</span><br></pre></td></tr></table></figure>
 <h4 id="保存为pb模型">保存为pb模型</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">constant_graph = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names=[<span class="string">&quot;probs&quot;</span>])</span><br><span class="line">tf.train.write_graph(constant_graph, logdir=<span class="string">&quot;&quot;</span>, name=<span class="string">&quot;model.pb&quot;</span>, as_text=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="模型载入">模型载入</h3>
+<h4 id="载入checkpoint">载入checkpoint</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init_vars = tf.train.list_variables(init_checkpoint_name)</span><br><span class="line">assignment_map = collections.OrderedDict()</span><br><span class="line"><span class="keyword">for</span> (name, var) <span class="keyword">in</span> init_vars:</span><br><span class="line">    assignment_map[name] = name</span><br><span class="line"></span><br><span class="line">tf.train.init_from_checkpoint(init_checkpoint_name, assignment_map)</span><br></pre></td></tr></table></figure>
 <h2 id="tensorflow2.x">Tensorflow2.x</h2>
 ]]></content>
       <categories>
@@ -1034,7 +1037,7 @@
   <entry>
     <title>文本对抗生成方法</title>
     <url>/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>总结一下文本对抗生成的方法。</p>
+    <content><![CDATA[<p>总结一下文本对抗生成的方法。文本对抗攻击一般指我们有一个分类模型以及一些正确命中的样本（可以是训练集里的正样本），然后通过对输入的样本进行扰动，导致分类模型产生错误的判断。在扰动过程中，我们要保持扰动文本和原始文本尽可能相似，并且语义和语法基本不变。</p>
 <span id="more"></span>
 <h2 id="textfooler">TextFooler</h2>
 <p>论文地址：</p>
@@ -1059,6 +1062,26 @@
 <ul>
 <li><a href="https://github.com/cookielee77/CLARE" class="uri">https://github.com/cookielee77/CLARE</a></li>
 </ul>
+<p>CLARE定义了<code>Replace</code>、<code>Insert</code>、<code>Merge</code>三种操作，通过<code>mask-then-infill</code>的方式对输入文本进行扰动。如下图所示： <img src="/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/3.1.png"></p>
+<p><code>mask-then-infill</code>流程分为两步：</p>
+<ol type="1">
+<li>在输入样本的给定位置上进行mask操作。</li>
+<li>通过预训练的语言模型对mask的位置进行还原。</li>
+</ol>
+<p>下面介绍CLARE定义的三种操作。</p>
+<p><code>Replace</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 对位置i进行mask操作得到: <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[replace(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+1}...x_n\]</span></p>
+<p>对于文本扰动来说，需满足几个条件，作者通过如下方式进行约束：</p>
+<ul>
+<li>扰动<span class="math inline">\(z\)</span>在输入位置i上出现应该是合适且符合语法语义的。 使用了ROBERTa模型，并且限定了<span class="math inline">\(z\)</span>出现的概率要大于阈值，即<span class="math inline">\(p_{MLM}(z|\widetilde{x})&gt;k\)</span>。</li>
+<li><span class="math inline">\(\widetilde{x}_z\)</span>应该和<span class="math inline">\(x\)</span>相似。 通过一个模型提取句向量，并使用余弦相似度计算句子之间的相似度。<span class="math inline">\(sim(x,\widetilde{x}_z)&gt;l\)</span>。</li>
+<li><span class="math inline">\(\widetilde{x}_z\)</span>会使分类模型出错。 分类模型<span class="math inline">\(f\)</span>对于扰动输入输出的标签概率尽可能低，即<span class="math inline">\(p_f(y|\widetilde{x}_z)尽可能小\)</span>。</li>
+</ul>
+<p>将阈值<span class="math inline">\(k、l\)</span>设置的高可以让经过扰动之后的样本更加贴近原文，但也会使扰动输入对分类模型的攻击的成功率变低。论文中，<span class="math inline">\(k=5 \times 10^{-3},l=0.7\)</span>。</p>
+<p>经过上述步骤，可以得到扰动<span class="math inline">\(z\)</span>的候选集： <span class="math display">\[Z=\{z&#39; \in V | p_{MLM}(z&#39;|\widetilde{x})&gt;k,sim(x,\widetilde{x}_{z&#39;})&gt;l\}\]</span> 其中<span class="math inline">\(V\)</span>是预训练模型的词汇表大小，为了尽可能对分类模型攻击成功，对扰动<span class="math inline">\(z\)</span>选取标签概率最小的预测，即： <span class="math display">\[z=\argmin_{z&#39; \in Z}p_f(y|\widetilde{x}_{z&#39;})\]</span></p>
+<p><code>Insert</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[insert(x,i)=\widetilde{x}_z=x_1...x_{i}zx_{i+1}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
+<p><code>Merge</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+2}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[merge(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+2}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
+<p>对于同一个位置i，只会从<code>Replace</code>，<code>Insert</code>和<code>Merge</code>中选取分数最高的操作。其中分数由扰动的成功率来得出，即： <span class="math display">\[s(x,y)(a)=-p_f(y|a(x))\]</span> 其中<span class="math inline">\(a\)</span>表示<code>Replace</code>，<code>Insert</code>和<code>Merge</code>三种操作。</p>
+<p>具体算法流程如下图所示： <img src="/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/3.2.png"></p>
 <h2 id="bae">BAE</h2>
 <p>论文地址：</p>
 <ul>
