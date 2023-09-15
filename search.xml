@@ -14,6 +14,8 @@
 <h3 id="模型载入">模型载入</h3>
 <h4 id="载入checkpoint">载入checkpoint</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init_vars = tf.train.list_variables(init_checkpoint_name)</span><br><span class="line">assignment_map = collections.OrderedDict()</span><br><span class="line"><span class="keyword">for</span> (name, var) <span class="keyword">in</span> init_vars:</span><br><span class="line">    assignment_map[name] = name</span><br><span class="line"></span><br><span class="line">tf.train.init_from_checkpoint(init_checkpoint_name, assignment_map)</span><br></pre></td></tr></table></figure>
+<h4 id="载入pb">载入pb</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line"><span class="keyword">with</span> tf.gfile.FastGFile(<span class="string">&quot;model.pb&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    graph_def = tf.GraphDef()</span><br><span class="line">    graph_def.ParseFromString(f.read())</span><br><span class="line">    sess.graph.as_default()</span><br><span class="line">    output = tf.import_graph_def(</span><br><span class="line">        graph_def,</span><br><span class="line">        input_map=&#123;<span class="string">&quot;input_ids:0&quot;</span>: input_ids&#125;,</span><br><span class="line">        return_elements=[<span class="string">&quot;probs:0&quot;</span>]</span><br><span class="line">    )</span><br><span class="line">sess.run(ouput, feed_dict=feed_dict)</span><br></pre></td></tr></table></figure>
 <h2 id="tensorflow2.x">Tensorflow2.x</h2>
 ]]></content>
       <categories>
@@ -1115,16 +1117,11 @@ I_{w_i}=
 <li><span class="math inline">\(\widetilde{x}_z\)</span>会使分类模型出错。 分类模型<span class="math inline">\(f\)</span>对于扰动输入输出的标签概率尽可能低，即<span class="math inline">\(p_f(y|\widetilde{x}_z)尽可能小\)</span>。</li>
 </ul>
 <p>将阈值<span class="math inline">\(k、l\)</span>设置的高可以让经过扰动之后的样本更加贴近原文，但也会使扰动输入对分类模型的攻击的成功率变低。论文中，<span class="math inline">\(k=5 \times 10^{-3},l=0.7\)</span>。</p>
-<p>经过上述步骤，可以得到扰动<span class="math inline">\(z\)</span>的候选集： <span class="math display">\[Z=\{z&#39; \in V | p_{MLM}(z&#39;|\widetilde{x})&gt;k,sim(x,\widetilde{x}_{z&#39;})&gt;l\}\]</span> 其中<span class="math inline">\(V\)</span>是预训练模型的词汇表大小，为了尽可能对分类模型攻击成功，对扰动<span class="math inline">\(z\)</span>选取标签概率最小的预测，即： <span class="math display">\[z={\argmin}_{z&#39; \in Z} p_f(y|\widetilde{x}_{z&#39;})\]</span></p>
+<p>经过上述步骤，可以得到扰动<span class="math inline">\(z\)</span>的候选集： <span class="math display">\[Z=\{z&#39; \in V | p_{MLM}(z&#39;|\widetilde{x})&gt;k,sim(x,\widetilde{x}_{z&#39;})&gt;l\}\]</span> 其中<span class="math inline">\(V\)</span>是预训练模型的词汇表大小，为了尽可能对分类模型攻击成功，对扰动<span class="math inline">\(z\)</span>选取标签概率最小的预测，即： <span class="math display">\[z=argmin_{z&#39; \in Z} p_f(y|\widetilde{x}_{z&#39;})\]</span></p>
 <p><code>Insert</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[insert(x,i)=\widetilde{x}_z=x_1...x_{i}zx_{i+1}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
 <p><code>Merge</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+2}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[merge(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+2}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
 <p>对于同一个位置i，只会从<code>Replace</code>，<code>Insert</code>和<code>Merge</code>中选取分数最高的一个操作。其中分数由扰动的成功率来得出，即： <span class="math display">\[s(x,y)(a)=-p_f(y|a(x))\]</span> 其中<span class="math inline">\(a\)</span>表示<code>Replace</code>，<code>Insert</code>和<code>Merge</code>三种操作。</p>
 <p>具体算法流程如下图所示： <img src="/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/3.2.png"></p>
-<h2 id="bae">BAE</h2>
-<p>论文地址：</p>
-<ul>
-<li><a href="https://arxiv.org/abs/2004.01970" class="uri">https://arxiv.org/abs/2004.01970</a></li>
-</ul>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -2766,6 +2763,14 @@ Results调用结果如下：</p>
 <tr class="even">
 <td><span class="math inline">\(\underline{h i j}\)</span></td>
 <td><code>\underline&#123;h i j&#125;</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\widehat{h i j}\)</span></td>
+<td><code>\widehat&#123;h i j&#125;</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\widetilde{h i j}\)</span></td>
+<td><code>\widetilde&#123;h i j&#125;</code></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\underbrace{a+b+\cdots+z}_{10}\)</span></td>
