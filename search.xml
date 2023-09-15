@@ -1109,7 +1109,8 @@ I_{w_i}=
 <li>通过预训练的语言模型对mask的位置进行还原。</li>
 </ol>
 <p>下面介绍CLARE定义的三种操作。</p>
-<p><code>Replace</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 对位置i进行mask操作得到: <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[replace(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+1}...x_n\]</span></p>
+<h3 id="replace">Replace</h3>
+<p>给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 对位置i进行mask操作得到: <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[replace(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+1}...x_n\]</span></p>
 <p>对于文本扰动来说，需满足几个条件，作者通过如下方式进行约束：</p>
 <ul>
 <li>扰动<span class="math inline">\(z\)</span>在输入位置i上出现应该是合适且符合语法语义的。 使用了ROBERTa模型，并且限定了<span class="math inline">\(z\)</span>出现的概率要大于阈值，即<span class="math inline">\(p_{MLM}(z|\widetilde{x})&gt;k\)</span>。</li>
@@ -1118,8 +1119,10 @@ I_{w_i}=
 </ul>
 <p>将阈值<span class="math inline">\(k、l\)</span>设置的高可以让经过扰动之后的样本更加贴近原文，但也会使扰动输入对分类模型的攻击的成功率变低。论文中，<span class="math inline">\(k=5 \times 10^{-3},l=0.7\)</span>。</p>
 <p>经过上述步骤，可以得到扰动<span class="math inline">\(z\)</span>的候选集： <span class="math display">\[Z=\{z&#39; \in V | p_{MLM}(z&#39;|\widetilde{x})&gt;k,sim(x,\widetilde{x}_{z&#39;})&gt;l\}\]</span> 其中<span class="math inline">\(V\)</span>是预训练模型的词汇表大小，为了尽可能对分类模型攻击成功，对扰动<span class="math inline">\(z\)</span>选取标签概率最小的预测，即： <span class="math display">\[z=argmin_{z&#39; \in Z} p_f(y|\widetilde{x}_{z&#39;})\]</span></p>
-<p><code>Insert</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[insert(x,i)=\widetilde{x}_z=x_1...x_{i}zx_{i+1}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
-<p><code>Merge</code> 给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+2}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[merge(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+2}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
+<h3 id="insert">Insert</h3>
+<p>给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i}[MASK]x_{i+1}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[insert(x,i)=\widetilde{x}_z=x_1...x_{i}zx_{i+1}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
+<h3 id="merge">Merge</h3>
+<p>给定输入样本: <span class="math display">\[x=x_1x_2...x_n\]</span> 在位置i进行insert操作得到： <span class="math display">\[\widetilde{x}=x_1...x_{i-1}[MASK]x_{i+2}...x_n\]</span> 然后通过预训练语言模型对其进行还原得到: <span class="math display">\[merge(x,i)=\widetilde{x}_z=x_1...x_{i-1}zx_{i+2}...x_n\]</span> 其余操作和<code>Replace</code>一致。</p>
 <p>对于同一个位置i，只会从<code>Replace</code>，<code>Insert</code>和<code>Merge</code>中选取分数最高的一个操作。其中分数由扰动的成功率来得出，即： <span class="math display">\[s(x,y)(a)=-p_f(y|a(x))\]</span> 其中<span class="math inline">\(a\)</span>表示<code>Replace</code>，<code>Insert</code>和<code>Merge</code>三种操作。</p>
 <p>具体算法流程如下图所示： <img src="/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/3.2.png"></p>
 ]]></content>
