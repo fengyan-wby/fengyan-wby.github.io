@@ -31,12 +31,23 @@
 <meta property="og:site_name" content="FengYan&#39;s Blog">
 <meta property="og:description" content="参考:  https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;9f113adc0c50 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;468828804 https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;av24724071&#x2F;?p&#x3D;4">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/1.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/3.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/4.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/6.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/7.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/9.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/10.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/11.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/12.jpg">
 <meta property="article:published_time" content="2023-09-15T08:23:37.000Z">
-<meta property="article:modified_time" content="2023-09-19T06:25:08.649Z">
+<meta property="article:modified_time" content="2023-09-22T06:46:07.014Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="PPO">
 <meta property="article:tag" content="强化学习">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/1.jpg">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">
@@ -512,7 +523,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:25:08" itemprop="dateModified" datetime="2023-09-19T14:25:08+08:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 14:46:07" itemprop="dateModified" datetime="2023-09-22T14:46:07+08:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -560,7 +571,7 @@ if(canvas.getContext){
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
@@ -579,7 +590,7 @@ if(canvas.getContext){
 </ul>
 <span id="more"></span>
 <h2 id="pgpolicy-gradient算法">PG（Policy Gradient）算法</h2>
-<p>强化学习中，有一个Agent作为我们的智能体，它根据策略<span class="math inline">\(\pi\)</span>在不同的环境状态<span class="math inline">\(s\)</span>下选择相应的动作来执行，环境根据Agent的动作，反馈新的状态以及奖励，Agent又根据新的状态选择新的动作，这样不断循环，直到游戏结束，便完成了eposide。在深度强化学习中，策略<span class="math inline">\(\pi\)</span>是由神经网络构成，神经网络参数为<span class="math inline">\(\theta\)</span>，表示成<span class="math inline">\(\pi_{\theta}\)</span>。 <embed src="PPO算法原理/1.webp"> 一个完整的eposide序列，用<span class="math inline">\(\tau\)</span>表示。而一个特定的<span class="math inline">\(\tau\)</span>序列发生的概率为： <span class="math display">\[
+<p>强化学习中，有一个Agent作为我们的智能体，它根据策略<span class="math inline">\(\pi\)</span>在不同的环境状态<span class="math inline">\(s\)</span>下选择相应的动作来执行，环境根据Agent的动作，反馈新的状态以及奖励，Agent又根据新的状态选择新的动作，这样不断循环，直到游戏结束，便完成了eposide。在深度强化学习中，策略<span class="math inline">\(\pi\)</span>是由神经网络构成，神经网络参数为<span class="math inline">\(\theta\)</span>，表示成<span class="math inline">\(\pi_{\theta}\)</span>。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/1.jpg"> 一个完整的eposide序列，用<span class="math inline">\(\tau\)</span>表示。而一个特定的<span class="math inline">\(\tau\)</span>序列发生的概率为： <span class="math display">\[
 \begin{align}
     p_{\theta}(\tau)  \\
     &amp; =p(s_1)p_{\theta}(a_1|s_1)p(s_2|s_1,a_1)p_{\theta}(a_2|s_2)p(s_3|s_2,a_2)...  \\
@@ -589,26 +600,26 @@ if(canvas.getContext){
 <div class="note info"><p>如果是固定的开局方式，上式中的<span class="math inline">\(p(s_1)\)</span>可以省略掉。</p>
 </div>
 <p>对于一个完整的<span class="math inline">\(\tau\)</span>序列，其在整个游戏期间获得的总奖励用<span class="math inline">\(R(\tau)\)</span>表示。对于给定参数<span class="math inline">\(\theta\)</span>的策略，其奖励期望为： <span class="math display">\[\bar{R}_{\theta}=\sum_{\tau}R(\tau)p_{\theta}(\tau)=E_{\tau \sim p_{\theta}(\tau)}[R(\tau)]\]</span></p>
-<p>对于一个游戏，我们自然希望通过调整策略参数<span class="math inline">\(\theta\)</span>，得到的<span class="math inline">\(\bar{R}_{\theta}\)</span>越大越好。所以就可以使用下面梯度下降的方式来求解，将<span class="math inline">\(\bar{R}_{\theta}\)</span>对<span class="math inline">\(\theta\)</span>求导： <embed src="PPO算法原理/2.webp"></p>
+<p>对于一个游戏，我们自然希望通过调整策略参数<span class="math inline">\(\theta\)</span>，得到的<span class="math inline">\(\bar{R}_{\theta}\)</span>越大越好。所以就可以使用下面梯度下降的方式来求解，将<span class="math inline">\(\bar{R}_{\theta}\)</span>对<span class="math inline">\(\theta\)</span>求导： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2.jpg"></p>
 <p>上面的过程中，我们首先利用log函数求导的特点进行转化，随后用N次采样的平均值来近似期望，最后将<span class="math inline">\(p_{\theta}\)</span>展开，将与<span class="math inline">\(\theta\)</span>无关的项去掉，即得到了最终的结果。</p>
 <p>形象的解释上面的式子：每一条采样到的数据序列都希望<span class="math inline">\(\theta\)</span>向着自己的方向进行更新。而在总体上，我们希望<span class="math inline">\(\theta\)</span>向着奖励比较大的那条序列，因此用每条序列的奖励来加权平均他们的更新方向。</p>
 <div class="note info"><p>假设第三条数据的奖励很大，通过上述式子的更新策略，使得<span class="math inline">\(p_{\theta}(a_t^3|s_t^3)\)</span>发生的概率更大，以后再遇到<span class="math inline">\(s_t^3\)</span>这个状态的时候，我们就更倾向于采取<span class="math inline">\(a_t^3\)</span>这个动作。</p>
 </div>
-<p>所以，一个PG方法的完整过程如下： <embed src="PPO算法原理/3.webp"> 我们首先采集数据，然后基于前面得到的梯度更新公式更新参数，随后再根据更新后的策略再次采集数据，再更新参数，如此循环进行。注意到图中<code>only used once</code>，因为在更新参数后，我们的策略已经变了，而先前的数据是基于更新前的策略得到的。</p>
+<p>所以，一个PG方法的完整过程如下： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/3.jpg"> 我们首先采集数据，然后基于前面得到的梯度更新公式更新参数，随后再根据更新后的策略再次采集数据，再更新参数，如此循环进行。注意到图中<code>only used once</code>，因为在更新参数后，我们的策略已经变了，而先前的数据是基于更新前的策略得到的。</p>
 <h3 id="增加一个基线">增加一个基线</h3>
-<p>通过上面的介绍可以发现，PG方法在更新策略时，基本思想就是增加reward大的动作出现的概率，减小reward小的策略出现的概率。假设现在有一种情况，我们的reward无论何时都是正的，对于没有采样到的动作，它的reward是0.因此，如果一个比较好的动作没有被采样到，而采样到的不好的动作得到了一个比较小的正reward，那么没有被采样到的好动作的出现概率会越来越小，这显然是不合适的。因此我们需要增加一个奖励的基线，让reward有正有负。一般增加的基线是所获得奖励的平均值。 <embed src="PPO算法原理/4.webp"></p>
+<p>通过上面的介绍可以发现，PG方法在更新策略时，基本思想就是增加reward大的动作出现的概率，减小reward小的策略出现的概率。假设现在有一种情况，我们的reward无论何时都是正的，对于没有采样到的动作，它的reward是0.因此，如果一个比较好的动作没有被采样到，而采样到的不好的动作得到了一个比较小的正reward，那么没有被采样到的好动作的出现概率会越来越小，这显然是不合适的。因此我们需要增加一个奖励的基线，让reward有正有负。一般增加的基线是所获得奖励的平均值。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/4.jpg"></p>
 <h3 id="增加折扣因子">增加折扣因子</h3>
-<p>类似买股票，未来1块钱的价值要小于当前1块钱的价值，因此未来1块钱变成现在的价值，需要进行一定的折扣。 <embed src="PPO算法原理/6.webp"></p>
+<p>类似买股票，未来1块钱的价值要小于当前1块钱的价值，因此未来1块钱变成现在的价值，需要进行一定的折扣。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/6.jpg"></p>
 <h3 id="使用优势函数">使用优势函数</h3>
 <p>我们之前介绍的PG方法，对于同一个eposide中的所有数据，使用的奖励都是一样的。这样的做法不够细致，可以将奖励替换成关于<span class="math inline">\(s_t,a_t\)</span>的函数，我们把这个函数叫做优势函数: <span class="math display">\[A^{\theta}(s_t, a_t)=Q_{\pi}(s_t,a_t)-V_{\pi}(s_t)=\sum_{t&#39;&gt;t}\gamma^{t&#39;-t}r_{t&#39;}-V_{\phi}(s_t)\]</span> 其中前半部分表示实际的折扣奖励，后半部分<span class="math inline">\(V_{\phi}(s_t)\)</span>是拟合的折扣奖励，通过critic来计算得到，它由一个结构与策略网络相同但参数不同的神经网络构成，主要是来拟合从<span class="math inline">\(s_t\)</span>到终局的折扣奖励。</p>
 <p><span class="math inline">\(A^{\theta}(s_t, a_t)\)</span>表示在<span class="math inline">\(s_t\)</span>状态下采用动作<span class="math inline">\(a_t\)</span>时，实际得到的折扣奖励相对于模拟折扣奖励的优势。模拟的折扣奖励是在<span class="math inline">\(s_t\)</span>状态下所有采样过动作的折扣奖励的拟合（通过critic模型拟合），因此优势函数代表了采用动作<span class="math inline">\(a_t\)</span>相对于这些动作的平均优势。</p>
 <h2 id="ppo算法">PPO算法</h2>
 <p>接着上面的讲，PG方法一个很大的缺点就是参数更新慢，因为我们每更新一次参数都需要进行重新采样，这其实是<code>on-policy</code>的策略，即我们想要训练的agent和与环境进行交互的agent是同一个agent。与之对应的是<code>off-policy</code>策略，即想要训练的agent和与环境交互的agent不是同一个agent。</p>
-<p>那么为了提升我们的训练速度，让采样到的数据可以重复使用，我们可以将<code>on-policy</code>的方式转换为<code>off-policy</code>的方式。即我们训练的模型是一个actor，与环境交互采样数据的模型使用另一个actor。 <embed src="PPO算法原理/7.webp"> 通过这种方式，我们的<span class="math inline">\(p(x)\)</span>和<span class="math inline">\(q(x)\)</span>的分布不能差别太大。<br>
-那么此时我们想要期望奖励最大化，则变为： <embed src="PPO算法原理/9.webp"> 最后一项因为假设两个分布不能差太远，所以认为它们是相等的，为了求解方便，直接划掉。此时似然函数变为： <span class="math display">\[J^{\theta&#39;}(\theta)=E_{(s_t,a_t)\sim\pi_{\theta&#39;}}\bigg[\frac{p_{\theta}(a_t|s_t)}{p_{\theta&#39;}(a_t|s_t)}A^{\theta&#39;}(s_t,a_t)\bigg]\]</span></p>
-<p>前面介绍了，我们希望<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>不要差太远。我们可以用KL散度来计算，将其加入PPO模型的似然函数中，变为： <embed src="PPO算法原理/10.webp"></p>
-<p>在实际中，我们会动态改变对<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>分布差异的惩罚，如果KL散度太大，则增加这一部分的惩罚；如果小到一定的值，就减小这一部分的惩罚。基于此，我们得到了PPO算法的过程： <embed src="PPO算法原理/11.webp"></p>
-<p>PPO算法还有另一种实现方式，不将KL散度直接放入似然函数中，而是进行一定程度的裁剪： <embed src="PPO算法原理/12.webp"> 上图中，绿色的线代表min中的第一项，即不做任何处理。蓝色的线为第二项，如果两个分布差距太大，则进行一定程度的裁剪。最后这两项取min，防止<span class="math inline">\(\theta\)</span>更新太快。</p>
+<p>那么为了提升我们的训练速度，让采样到的数据可以重复使用，我们可以将<code>on-policy</code>的方式转换为<code>off-policy</code>的方式。即我们训练的模型是一个actor，与环境交互采样数据的模型使用另一个actor。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/7.jpg"> 通过这种方式，我们的<span class="math inline">\(p(x)\)</span>和<span class="math inline">\(q(x)\)</span>的分布不能差别太大。<br>
+那么此时我们想要期望奖励最大化，则变为： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/9.jpg"> 最后一项因为假设两个分布不能差太远，所以认为它们是相等的，为了求解方便，直接划掉。此时似然函数变为： <span class="math display">\[J^{\theta&#39;}(\theta)=E_{(s_t,a_t)\sim\pi_{\theta&#39;}}\bigg[\frac{p_{\theta}(a_t|s_t)}{p_{\theta&#39;}(a_t|s_t)}A^{\theta&#39;}(s_t,a_t)\bigg]\]</span></p>
+<p>前面介绍了，我们希望<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>不要差太远。我们可以用KL散度来计算，将其加入PPO模型的似然函数中，变为： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/10.jpg"></p>
+<p>在实际中，我们会动态改变对<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>分布差异的惩罚，如果KL散度太大，则增加这一部分的惩罚；如果小到一定的值，就减小这一部分的惩罚。基于此，我们得到了PPO算法的过程： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/11.jpg"></p>
+<p>PPO算法还有另一种实现方式，不将KL散度直接放入似然函数中，而是进行一定程度的裁剪： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/12.jpg"> 上图中，绿色的线代表min中的第一项，即不做任何处理。蓝色的线为第二项，如果两个分布差距太大，则进行一定程度的裁剪。最后这两项取min，防止<span class="math inline">\(\theta\)</span>更新太快。</p>
 
     </div>
 
@@ -692,7 +703,7 @@ if(canvas.getContext){
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:46</span>
+    <span title="站点阅读时长">7:06</span>
   </span>
 </div>
 <div class="busuanzi-count">
