@@ -6,6 +6,42 @@
     <content><![CDATA[<p>对日常TensorFlow的使用进行归纳和总结。</p>
 <span id="more"></span>
 <h2 id="tensorflow1.x">Tensorflow1.x</h2>
+<h3 id="变量初始化">变量初始化</h3>
+<h4 id="tf.ones">tf.ones</h4>
+<p>生成指定shape的矩阵，并且所有元素设置为1</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.ones([<span class="number">3</span>, <span class="number">3</span>], dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.zeros">tf.zeros</h4>
+<p>生成指定shape的矩阵，并且所有元素设置为0</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.zeros([<span class="number">3</span>, <span class="number">3</span>], dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.ones_like">tf.ones_like</h4>
+<p>生成和<code>tensor</code>同样维度的矩阵，里面的所有元素值为1</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.zeros([<span class="number">3</span>, <span class="number">3</span>], dtype=tf.float32)</span><br><span class="line">b = tf.ones_like(a, dtype=float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.zeros_like">tf.zeros_like</h4>
+<p>生成和<code>tensor</code>同样维度的矩阵，里面的所有元素值为1</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.zeros([<span class="number">3</span>, <span class="number">3</span>], dtype=tf.float32)</span><br><span class="line">b = tf.zeros_like(a, dtype=float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.fill">tf.fill</h4>
+<p>生成指定<code>dims</code>的矩阵，里面所有元素的值为<code>value</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.fill([<span class="number">3</span>, <span class="number">3</span>], value=<span class="number">4.2</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.constant">tf.constant</h4>
+<p>生成指定<code>shape</code>的矩阵，里面所有元素的值为<code>value</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.constant(<span class="number">2.43</span>, shape=[<span class="number">3</span>, <span class="number">3</span>], dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.random_normal">tf.random_normal</h4>
+<p>生成指定<code>shape</code>的矩阵，里面的元素的值根据正态分布随机生成，均值为<code>mean</code>，标准差为<code>stddev</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.random_normal([<span class="number">3</span>, <span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">0.01</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.truncated_normal">tf.truncated_normal</h4>
+<p>和<code>tf.random_normal</code>类似，不过只保留[mean - 2✖️stddev, mean + 2✖️stddev]范围内的随机数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">0.01</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.random_uniform">tf.random_uniform</h4>
+<p>生成指定<code>shape</code>的矩阵，里面的元素的值根据均匀分布随机生成，最小值为<code>minval</code>，最大值为<code>maxval</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.random_uniform([<span class="number">3</span>, <span class="number">3</span>], minval=-<span class="number">1</span>, maxval=<span class="number">1</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.lin_space">tf.lin_space</h4>
+<p>生成等差数列，起始值为<code>start</code>，结束值为<code>stop</code>，共取<code>num</code>个值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.lin_space(<span class="number">0.0</span>, <span class="number">6.0</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="tf.range">tf.range</h4>
+<p>生成等差数列，起始值为start，结束值为stop，以间隔delta取值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.<span class="built_in">range</span>(<span class="number">0</span>, <span class="number">6</span>, <span class="number">1</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h4 id="使用自定义矩阵初始化variable">使用自定义矩阵初始化variable</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">init = tf.constant_initializer(value)</span><br><span class="line">x = tf.get_variable(<span class="string">&quot;x&quot;</span>, shape=[<span class="number">8</span>], initializer=init)</span><br></pre></td></tr></table></figure>
 <h3 id="模型保存">模型保存</h3>
 <h4 id="保存为checkpoint">保存为checkpoint</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">saver = tf.train.Saver(max_to_keep=<span class="number">3</span>)</span><br><span class="line">saver.save(sess, <span class="string">&quot;model.ckpt&quot;</span>, global_step=step)</span><br></pre></td></tr></table></figure>
