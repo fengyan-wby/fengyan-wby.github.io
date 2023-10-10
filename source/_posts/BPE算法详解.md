@@ -448,3 +448,59 @@ class TextEncoder(object):
                 texts_tokens.append(text_tokens)
         return texts_tokens
 ```
+
+一些细节上的区别：
+
+1. 最后一个字符和停止符`</w>`之间不加空格。
+
+### 词表构建
+
+可以看到代码中有两个文件，一个是`encoder_path`，一个是`bpe_path`。
+其中`bpe_path`是上述步骤中的每次迭代的best pair，即每次迭代出现频率最高的字节对，其形式如下：
+
+```txt
+t h
+i n
+e d</w>
+a n
+th e</w>
+o u
+e r</w>
+in g</w>
+t o</w>
+e r
+h e</w>
+an d</w>
+a r
+h i
+......
+```
+
+而`encoder_path`是最终得到的词表，形式如下：
+
+```json
+{".": 1, ",": 2, "t": 3, "h": 4, "e": 5, "\"": 6, "o": 7, "a": 8, "n": 9, "d": 10, "i": 11, "f": 12, "w": 13, "s": 14, "y": 15, "u": 16, "r": 17, "'": 18, "?": 19, "m": 20, ......, "bib</w>": 40474, "benteley</w>": 40475, "bachelorette</w>": 40476, "\n</w>": 40477, "<unk>": 0}
+```
+
+### 编码
+
+按照`bpe_path`中的pair顺序，将输入中的字符合并，无法合并后得到最终的输出。具体参考`bpe`和`encode`两个函数。
+
+例如：
+
+```python
+# 给定输入
+["the"]
+
+# 处理成字符形式
+["t", "h", "e</w>"]
+
+# bpe_path表
+{("t", "h"): 0, ("i", "n"): 1}
+
+# 合并("t", "h")
+["th", "e</w>"]
+
+# 继续合并，直到无法合并，或者长度为1（没有pair）。
+......
+```
