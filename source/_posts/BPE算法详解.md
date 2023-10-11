@@ -334,7 +334,7 @@ Tokenizating of the unknown word:
 ['I', 'like', 'ea', 'ting', 'app', 'l', 'es!</w>']
 ```
 
-## GPT中的BPE
+## GPT1中的BPE
 
 GPT中的BPE代码实现在编码部分和上述的有些不同，这里展示GPT1的实现：
 
@@ -504,3 +504,12 @@ h i
 # 继续合并，直到无法合并，或者长度为1（没有pair）。
 ......
 ```
+
+## GPT2中的BBPE(Byte-Level BPE)
+
+从GPT2开始使用了Byte-Level BPE，包括以后得GPT3、ChatGPT等方法中都使用了这种tokenize方法。
+
+Byte-Level BPE的优点：
+
+1. 减小词表大小。
+2. 统一所有语言的字符编码。
