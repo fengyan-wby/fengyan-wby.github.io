@@ -16,6 +16,7 @@ Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，
 ## 安装Node.js
 
 Hexo基于Node.js，[下载地址](https://nodejs.org/en/download/)。安装后，在命令行中输入node -v和npm -v查看是否安装完成。
+Ubuntu或则Linux下Node.js的安装可以参考这里[https://github.com/nodesource/distributions](https://github.com/nodesource/distributions)。
 
 ```bash
 node -v
