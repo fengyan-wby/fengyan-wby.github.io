@@ -55,6 +55,7 @@ mathjax: true
 | $\le$       | `\le或\leq` | $\ge$       | `\ge或\geq` | $\mp$     | `\mp`     |
 | $\leqq$     | `\leqq`     | $\geqq$     | `\geqq`     | $\neq$    | `\neq`    |
 | $\leqslant$ | `\leqslant` | $\geqslant$ | `\geqslant` | $\approx$ | `\approx` |
+| $\sum$      | `\sum`      | $\prod$     | `\prod`     |           |           |
 
 ## 集合
 
@@ -85,11 +86,13 @@ mathjax: true
 
 ## 上、下划线和上、下括号
 
-| 显示                             | 符号                           |
-| -------------------------------- | ------------------------------ |
+| 显示                             | 符号                              |
+| -------------------------------- | -------------------------------- |
+| $\dot{h}$                        | `\dot{h}`                        |
+| $\vec{h}$                        | `\vec{h}`                        |
 | $\overline{h i j}$               | `\overline{h i j}`               |
 | $\underline{h i j}$              | `\underline{h i j}`              |
-| $\widehat{h i j}$                | `\widehat{h i j}`              |
+| $\widehat{h i j}$                | `\widehat{h i j}`                |
 | $\widetilde{h i j}$              | `\widetilde{h i j}`              |
 | $\underbrace{a+b+\cdots+z}_{10}$ | `\underbrace{a+b+\cdots+z}_{10}` |
 | $\overbrace{a+b+\cdots+z}^{10}$  | `\overbrace{a+b+\cdots+z}^{10}`  |
