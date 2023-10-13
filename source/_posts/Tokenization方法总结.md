@@ -108,7 +108,8 @@ WordPiece例子如下：
 
 ### BPE
 
-BPE的详细解读可参考这篇文章：[https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3](https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3)
+BPE的详细解读可参考这篇文章：  
+[https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3](https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3)
 
 BPE的核心思想是逐步合并出现频率最高的子词对而不是像WordPiece合并最大互信息词对，下面是核心步骤：
 
