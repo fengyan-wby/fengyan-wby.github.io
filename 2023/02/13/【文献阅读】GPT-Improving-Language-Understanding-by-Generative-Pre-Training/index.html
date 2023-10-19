@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="机构：OpenAI 论文地址：  GPT1: Improving Language Understanding by Generative Pre-Training GPT2: Language Models are Unsupervised Multitask Learners GPT3: Language Models are Few-Shot Learners  论文代码：  GPT1: I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="机构：OpenAI 论文地址：  GPT1: Improving Language Understanding by Generative Pre-Training GPT2: Language Models are Unsupervised Multitask Learners GPT3: Language Models are Few-Shot Learners  论文代码：  GPT1: I">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT6.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT4.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT5.png">
+<meta property="article:published_time" content="2023-02-13T09:25:58.000Z">
+<meta property="article:modified_time" content="2023-10-19T07:53:21.134Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="GPT">
+<meta property="article:tag" content="文献阅读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/","path":"2023/02/13/【文献阅读】GPT-Improving-Language-Understanding-by-Generative-Pre-Training/","title":"【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">GPT模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">GPT训练过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9A%84%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">2.1.</span> <span class="nav-text">无监督的预训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%9B%91%E7%9D%A3%E7%9A%84fine-tuning"><span class="nav-number">2.2.</span> <span class="nav-text">有监督的Fine-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%8B%E6%B8%B8%E6%94%B9%E9%80%A0"><span class="nav-number">2.3.</span> <span class="nav-text">其他任务的下游改造</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt%E7%89%B9%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">GPT特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">3.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt1gpt2gpt3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.</span> <span class="nav-text">GPT1、GPT2、GPT3的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gpt1"><span class="nav-number">4.1.</span> <span class="nav-text">GPT1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt1%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">4.1.1.</span> <span class="nav-text">GPT1的数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt1%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.2.</span> <span class="nav-text">GPT1的网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpt2"><span class="nav-number">4.2.</span> <span class="nav-text">GPT2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt2%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">4.2.1.</span> <span class="nav-text">GPT2的数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt2%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">4.2.2.</span> <span class="nav-text">GPT2的网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpt3"><span class="nav-number">4.3.</span> <span class="nav-text">GPT3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt3%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">4.3.1.</span> <span class="nav-text">GPT3的数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpt3%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">4.3.2.</span> <span class="nav-text">GPT3的网络结构</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-13 17:25:58" itemprop="dateCreated datePublished" datetime="2023-02-13T17:25:58+08:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-19 15:53:21" itemprop="dateModified" datetime="2023-10-19T15:53:21+08:00">2023-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/13/【文献阅读】GPT-Improving-Language-Understanding-by-Generative-Pre-Training/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>机构：OpenAI<br>
+论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">GPT1: Improving Language Understanding by Generative Pre-Training</a></li>
+<li><a target="_blank" rel="noopener" href="https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">GPT2: Language Models are Unsupervised Multitask Learners</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2005.14165">GPT3: Language Models are Few-Shot Learners</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/finetune-transformer-lm">GPT1: Improving Language Understanding by Generative Pre-Training</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/gpt-2">GPT2: : Language Models are Unsupervised Multitask Learners</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/gpt-3">GPT3: Language Models are Few-Shot Learners</a></li>
+</ul>
+<span id="more"></span>
+<p>OpenAI在论文《Improving Language Understanding by Generative Pre-Training》中提出了GPT模型，后面又在论文《Language Models are Unsupervised Multitask Learners》提出了GPT2模型。之后又推出了《Language Models are Few-Shot Learners》，即GPT3。</p>
+<p>这三个模型的对比如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">模型</th>
+<th style="text-align: left;">发布时间</th>
+<th style="text-align: left;">参数量</th>
+<th style="text-align: center;">预训练数据量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GPT</td>
+<td style="text-align: left;">2018年6月</td>
+<td style="text-align: left;">1.17亿</td>
+<td style="text-align: center;">5GB</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GPT2</td>
+<td style="text-align: left;">2019年2月</td>
+<td style="text-align: left;">15亿</td>
+<td style="text-align: center;">40GB</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GPT3</td>
+<td style="text-align: left;">2020年5月</td>
+<td style="text-align: left;">1750亿</td>
+<td style="text-align: center;">45TB</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gpt模型结构">GPT模型结构</h2>
+GPT使用Transformer的Decoder结构，并对Transformer Decoder进行了一些改动，原本的Decoder包含了两个Multi-Head Attention结构，GPT只保留了Mask Multi-Head Attention，如下图所示。
+<div data-align="center">
+<img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT1.png" width="500">
+</div>
+<p>GPT是一个AR模型，需要根据上文预测下一个单词，因此使用Mask Multi-Head Attention对单词的下文进行遮挡，即在使用<span class="math inline">\([u_1, u_2, ..., u_{i-1}]\)</span>预测单词<span class="math inline">\(u_i\)</span>的时候，会将<span class="math inline">\(u_i\)</span>之后的单词Mask掉，防止信息泄露。</p>
+<h2 id="gpt训练过程">GPT训练过程</h2>
+<p>GPT 训练过程分为两个部分，无监督预训练语言模型和有监督的下游任务fine-tuning。</p>
+<h3 id="无监督的预训练">无监督的预训练</h3>
+<p>给定句子<span class="math inline">\(U=[u_1, u_2, ..., u_n]\)</span>，GPT训练语言模型时需要最大化下面的似然函数。 <span class="math display">\[L_1 = \sum_{i=1}^n logP(u_i|u_1,u_2,...,u_{i-1};\Theta)\]</span> 其中，i是上下文窗口的大小，<span class="math inline">\(\Theta\)</span>是模型参数。</p>
+<p>训练的过程也非常简单，就是将n个词的词嵌入输入到Transformer中，n个位置分别预测该位置的下一个词。</p>
+<ol type="1">
+<li><p>Embedding层（包括Position Embedding和Word Embedding）: <span class="math display">\[h_0 = Embedding(U) = UW_e + W_p\]</span></p></li>
+<li><p>Transformer层（包括12层）： <span class="math display">\[h_t = Trm(h_{t-1})\]</span></p></li>
+<li><p>输出层（预测下一个单词的概率）： <span class="math display">\[P(u) = softmax(h_tW_e^T)\]</span></p></li>
+</ol>
+<h3 id="有监督的fine-tuning">有监督的Fine-Tuning</h3>
+<p>预训练之后，我们还需要针对特定任务进行Fine-Tuning。假设监督数据集合<span class="math inline">\(C\)</span>的输入<span class="math inline">\(X\)</span>是一个序列<span class="math inline">\(x^1,x^2,...,x^m\)</span>，输出是一个分类<span class="math inline">\(y\)</span>的标签，比如情感分类任务。</p>
+<p>我们把<span class="math inline">\(x^1,x^2,...,x^m\)</span>输入Transformer模型，得到最上层最后一个时刻的输出<span class="math inline">\(h_l^m\)</span>，将其通过一个新增的Linear层进行分类，最后用交叉熵计算损失，从而根据有监督数据调整Transformer的参数以及Linear层的参数： <span class="math display">\[P(y|x^1,x^2,...,x^m)=softmax(h_l^mW_y)\]</span> 微调时最大化下面的似然函数。 <span class="math display">\[L_2 = \sum_{(x, y)}logP(y|x_1,x_2,...,x_m;\Theta)\]</span></p>
+<p>GPT在微调时也考虑预训练的损失函数，所以最终需要优化的函数为： <span class="math display">\[L = L_1 + \lambda L_2\]</span> 这里使用的<span class="math inline">\(L_1\)</span>就是无监督预训练时的损失，但是使用的数据不是前面无监督的数据，而是当前有监督任务的数据。</p>
+<h3 id="其他任务的下游改造">其他任务的下游改造</h3>
+<p>针对不同的下游任务，需要对输入格式做不同的改造。 <img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT2.png" alt="GPT下游改造"></p>
+<ul>
+<li>Classification：对于文本分类任务基本不需要怎么变动。</li>
+<li>Entailment：对于推理问题，可以将先验与假设使用一个分隔符分开。</li>
+<li>Similarity：对于相似度问题，由于模型是单向的，但相似度与顺序无关，所以要将两个句子顺序颠倒后的结果相加来做最后的推测。</li>
+<li>Multiple-Choice：对于问答问题，将上下文、问题放在一起与答案分隔开，然后进行预测。</li>
+</ul>
+<h2 id="gpt特点">GPT特点</h2>
+<h3 id="优点">优点</h3>
+<ul>
+<li>特征抽取器使用了强大的Transformer，能够捕捉到更长的记忆信息，且较传统的RNN更易于并行化。</li>
+<li>使用两阶段模式进行训练，先训练一个通用的模型，然后在各个子任务上进行微调，减少了传统方法需要针对各个任务定制设计模型的麻烦。</li>
+</ul>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>GPT最大的问题就是其语言模型是单向的，我们只能根据之前的历史来预测当前词，但是没有办法利用后面的信息。比如句子<code>The animal didn't cross the street because it was too tired</code>，我们在编码it的语义的时候需要同时利用前后的信息，因为在这个句子中，it可能指代animal也可能指代street。根据tired，我们推断它指代的是animal。但是如果把tired改成wide，那么it就是指代street了。Transformer的Self-Attention理论上是可以同时关注到这两个词的，但是根据前面的介绍，为了使用Transformer学习语言模型，必须用Mask来让它看不到未来的信息，所以GPT无法将下文信息加入到it中。</li>
+</ul>
+<h2 id="gpt1gpt2gpt3的区别">GPT1、GPT2、GPT3的区别</h2>
+<h3 id="gpt1">GPT1</h3>
+<h4 id="gpt1的数据集">GPT1的数据集</h4>
+<p>GPT1使用了BooksCorpus数据集，这个数据集包含7000本没有发布的书籍。作者选这个数据集的原因有二：</p>
+<ol type="1">
+<li>数据集拥有更长的上下文依赖关系，使得模型能学到更长期的依赖关系</li>
+<li>这些书籍因为没有发布，所以很难在下游数据集上见到，更能验证模型的泛化能力。</li>
+</ol>
+<h4 id="gpt1的网络结构">GPT1的网络结构</h4>
+<p>GPT1使用了12层的Transformer Decoder结构，使用了masked self-attention heads来防止信息泄漏（768 dimensional states and 12 attention heads），feed-forward中间层维数3072。</p>
+<h3 id="gpt2">GPT2</h3>
+<p>GPT2的目标旨在训练一个泛化能力更强的词向量模型，它并没有对GPT1的网络结构进行过多的调整，只是使用了更多的网络参数和更大的数据集。 GPT2的核心思想为：任何有监督任务都是无监督语言模型的一个子集，当模型的容量非常大且数据量足够丰富时，仅仅靠无监督预训练语言模型的学习便可以完成其他有监督学习的任务。 如当模型学习完<code>Michael Jordan is the best basketball player in the history</code>之后，便也学会了<code>Q: who is the best basketball player in the history? A: Michael Jordan</code>的Q&amp;A任务。</p>
+<h4 id="gpt2的数据集">GPT2的数据集</h4>
+<p>GPT2的训练数据取自Reddit上的高赞文章，命名为WebText。数据集共有约800万篇文章，累计体积约40G。为了避免和测试集的冲突，WebText移除了涉及Wikipedia的文章。</p>
+<h4 id="gpt2的网络结构">GPT2的网络结构</h4>
+<p>The model largely follows the details of the OpenAI GPT model with a few modifications.</p>
+<ul>
+<li>Layer normalization was moved to the input of each sub-block, similar to a pre-activation residual network and an additional layer normalization was added after the final selfattention block.</li>
+<li>A modified initialization which accounts for the accumulation on the residual path with model depth is used.</li>
+<li>We scale the weights of residual layers at initialization by a factor of <span class="math inline">\(1/\sqrt{N}\)</span> where N is the number of residual layers.</li>
+<li>The vocabulary is expanded to 50,257.</li>
+<li>We also increase the context size from 512 to 1024 tokens and a larger batchsize of 512 is used.</li>
+</ul>
+<h3 id="gpt3">GPT3</h3>
+<p>GPT3提出了<code>In Context Learning</code>，包含：</p>
+<ul>
+<li>Few-shot Learning</li>
+<li>One-shot Learning</li>
+<li>Zero-shot Learning</li>
+</ul>
+<p><img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT3.png" alt="In Context Learning"> <img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT6.png" alt="In Context Learning"></p>
+<h4 id="gpt3的数据集">GPT3的数据集</h4>
+<p>GPT3共使用了5个语料，并根据数据集的不同质量赋予了不同的权重，权重越高的在训练的时候越容易被抽样到，如下表所示： <img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT4.png" alt="GPT3数据集"></p>
+<h4 id="gpt3的网络结构">GPT3的网络结构</h4>
+<figure>
+<img src="/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/GPT5.png" alt><figcaption>GPT3模型结构</figcaption>
+</figure>
+<p>We use the same model and architecture as GPT-2, including the modified initialization, pre-normalization, and reversible tokenization described therein, with the exception that we use alternating dense and locally banded sparse attention patterns in the layers of the transformer, similar to the Sparse Transformer. Table shows the sizes and architectures of our 8 models. Here <span class="math inline">\(n_{params}\)</span> is the total number of trainable parameters, <span class="math inline">\(n_{layers}\)</span> is the total number of layers, <span class="math inline">\(d_{model}\)</span> is the number of units in each bottleneck layer (we always have the feedforward layer four times the size of the bottleneck layer, <span class="math inline">\(d_{ff} = 4 ∗ d_{model}\)</span>), and <span class="math inline">\(d_{head}\)</span> is the dimension of each attention head. All models use a context window of <span class="math inline">\(n_{ctx}\)</span> = 2048 tokens. We partition the model across GPUs along both the depth and width dimension in order to minimize data-transfer between nodes. The precise architectural parameters for each model are chosen based on computational efficiency and load-balancing in the layout of models across GPU’s.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GPT-Improving-Language-Understanding-by-Generative-Pre-Training/" title="【文献阅读】GPT: Improving Language Understanding by Generative Pre-Training">https://fengyan-wby.github.io/2023/02/13/【文献阅读】GPT-Improving-Language-Understanding-by-Generative-Pre-Training/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/GPT/" rel="tag"><i class="fa fa-tag"></i> GPT</a>
+              <a href="/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/" rel="tag"><i class="fa fa-tag"></i> 文献阅读</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/" rel="prev" title="ChatGPT起源">
+                  <i class="fa fa-angle-left"></i> ChatGPT起源
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/14/Hexo-NexT%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95/" rel="next" title="Hexo-NexT版本更新记录">
+                  Hexo-NexT版本更新记录 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">131k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

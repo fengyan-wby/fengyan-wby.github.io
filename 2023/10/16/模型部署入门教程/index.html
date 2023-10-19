@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载自https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;openmmlab。 介绍以下内容：  部署流水线 PyTorch - ONNX - ONNX Runtime&#x2F;TensorRT 的示例及常见部署问题的解决方法 PyTorch 模型转换到 ONNX 模型的方法 中间表示 ONNX 的定义标准 推理引擎 ONNX Runtime、TensorRT 的使用方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模型部署入门教程">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="转载自https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;openmmlab。 介绍以下内容：  部署流水线 PyTorch - ONNX - ONNX Runtime&#x2F;TensorRT 的示例及常见部署问题的解决方法 PyTorch 模型转换到 ONNX 模型的方法 中间表示 ONNX 的定义标准 推理引擎 ONNX Runtime、TensorRT 的使用方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1-2.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1-3.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/4.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/5.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/6.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/7.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/8.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/9.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/10.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/11.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/12.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/13.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/14.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/15.png">
+<meta property="article:published_time" content="2023-10-16T07:57:19.000Z">
+<meta property="article:modified_time" content="2023-10-19T07:53:21.230Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="ONNX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1-2.jpg">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/","path":"2023/10/16/模型部署入门教程/","title":"模型部署入门教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>模型部署入门教程 | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">模型部署简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2"><span class="nav-number">1.1.</span> <span class="nav-text">初识模型部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">部署第一个模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BApytorch%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建Pytorch模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA-onnx"><span class="nav-number">1.2.2.</span> <span class="nav-text">中间表示-ONNX</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E--onnx-runtime"><span class="nav-number">1.2.3.</span> <span class="nav-text">推理引擎 -ONNX Runtime</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E4%B8%AD%E7%9A%84%E9%9A%BE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">解决模型部署中的难题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E9%9A%BE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">模型部署中常见的难题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E6%94%BE%E5%A4%A7%E7%9A%84%E8%B6%85%E5%88%86%E8%BE%A8%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">问题：实现动态放大的超分辨率模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%97%E5%AD%90"><span class="nav-number">2.3.</span> <span class="nav-text">解决方法：自定义算子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">2.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch%E8%BD%AConnx%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">PyTorch转ONNX详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#torch.onnx.export-%E7%BB%86%E8%A7%A3"><span class="nav-number">3.1.</span> <span class="nav-text">torch.onnx.export 细解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE%E5%AF%BC%E5%87%BA%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.1.</span> <span class="nav-text">计算图导出方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E8%AE%B2%E8%A7%A3"><span class="nav-number">3.1.2.</span> <span class="nav-text">参数讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#export_params"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">export_params</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#input_names-output_names"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">input_names, output_names</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#opset_version"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">opset_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dynamic_axes"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">dynamic_axes</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8F%90%E7%A4%BA"><span class="nav-number">3.1.3.</span> <span class="nav-text">使用提示</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E6%A8%A1%E5%9E%8B%E5%9C%A8-onnx-%E8%BD%AC%E6%8D%A2%E6%97%B6%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">使模型在 ONNX 转换时有不同的行为</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E4%B8%AD%E6%96%AD%E5%BC%A0%E9%87%8F%E8%B7%9F%E8%B8%AA%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">利用中断张量跟踪的操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%BC%A0%E9%87%8F%E4%B8%BA%E8%BE%93%E5%85%A5"><span class="nav-number">3.1.3.3.</span> <span class="nav-text">使用张量为输入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pytorch%E5%AF%B9onnx%E7%9A%84%E7%AE%97%E5%AD%90%E6%94%AF%E6%8C%81"><span class="nav-number">3.2.</span> <span class="nav-text">PyTorch对ONNX的算子支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#onnx%E7%AE%97%E5%AD%90%E6%96%87%E6%A1%A3"><span class="nav-number">3.2.1.</span> <span class="nav-text">ONNX算子文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pytorch%E5%AF%B9onnx%E7%AE%97%E5%AD%90%E7%9A%84%E6%98%A0%E5%B0%84"><span class="nav-number">3.2.2.</span> <span class="nav-text">PyTorch对ONNX算子的映射</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-2"><span class="nav-number">3.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-pytorch-%E4%B8%AD%E6%94%AF%E6%8C%81%E6%9B%B4%E5%A4%9A-onnx-%E7%AE%97%E5%AD%90"><span class="nav-number">4.</span> <span class="nav-text">在 PyTorch 中支持更多 ONNX 算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-aten-%E7%AE%97%E5%AD%90"><span class="nav-number">4.1.</span> <span class="nav-text">支持 ATen 算子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-aten-%E4%B8%AD%E7%AE%97%E5%AD%90%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">4.1.1.</span> <span class="nav-text">获取 ATen 中算子接口定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%AC%A6%E5%8F%B7%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">添加符号函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%AE%97%E5%AD%90"><span class="nav-number">4.1.3.</span> <span class="nav-text">测试算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-torchscript-%E7%AE%97%E5%AD%90"><span class="nav-number">4.2.</span> <span class="nav-text">支持 TorchScript 算子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-torchscript-%E7%AE%97%E5%AD%90"><span class="nav-number">4.2.1.</span> <span class="nav-text">使用 TorchScript 算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-onnx-%E7%AE%97%E5%AD%90"><span class="nav-number">4.2.2.</span> <span class="nav-text">自定义 ONNX 算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-torch.autograd.function"><span class="nav-number">4.3.</span> <span class="nav-text">使用 torch.autograd.Function</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA-pytorch-%E6%B7%BB%E5%8A%A0-c-%E6%8B%93%E5%B1%95"><span class="nav-number">4.3.1.</span> <span class="nav-text">为 PyTorch 添加 C++ 拓展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8-torch.autograd.function-%E5%B0%81%E8%A3%85"><span class="nav-number">4.3.2.</span> <span class="nav-text">用 torch.autograd.Function 封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%AE%97%E5%AD%90-1"><span class="nav-number">4.3.3.</span> <span class="nav-text">测试算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-3"><span class="nav-number">4.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onnx%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BF%AE%E6%94%B9%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="nav-number">5.</span> <span class="nav-text">ONNX模型的修改与调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onnx%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.1.</span> <span class="nav-text">ONNX的底层实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#onnx%E7%9A%84%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">5.1.1.</span> <span class="nav-text">ONNX的存储格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onnx%E7%9A%84%E7%BB%93%E6%9E%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.2.</span> <span class="nav-text">ONNX的结构定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99onnx%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.</span> <span class="nav-text">读写ONNX模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E9%80%A0onnx%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.1.</span> <span class="nav-text">构造ONNX模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E5%B9%B6%E4%BF%AE%E6%94%B9onnx%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.2.</span> <span class="nav-text">读写并修改ONNX模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95onnx%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.3.</span> <span class="nav-text">调试ONNX模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E6%A8%A1%E5%9E%8B%E6%8F%90%E5%8F%96"><span class="nav-number">5.3.1.</span> <span class="nav-text">子模型提取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%87%BAonnx%E4%B8%AD%E9%97%B4%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC"><span class="nav-number">5.3.2.</span> <span class="nav-text">输出ONNX中间节点的值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-4"><span class="nav-number">5.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="模型部署入门教程 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          模型部署入门教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-16 15:57:19" itemprop="dateCreated datePublished" datetime="2023-10-16T15:57:19+08:00">2023-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-19 15:53:21" itemprop="dateModified" datetime="2023-10-19T15:53:21+08:00">2023-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/10/16/模型部署入门教程/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>17k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1:04</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转载自<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/openmmlab">https://www.zhihu.com/people/openmmlab</a>。</p>
+<p>介绍以下内容：</p>
+<ul>
+<li>部署流水线 PyTorch - ONNX - ONNX Runtime/TensorRT 的示例及常见部署问题的解决方法</li>
+<li>PyTorch 模型转换到 ONNX 模型的方法</li>
+<li>中间表示 ONNX 的定义标准</li>
+<li>推理引擎 ONNX Runtime、TensorRT 的使用方法</li>
+</ul>
+<span id="more"></span>
+<h2 id="模型部署简介">模型部署简介</h2>
+<h3 id="初识模型部署">初识模型部署</h3>
+<p>在软件工程中，部署指把开发完毕的软件投入使用的过程，包括环境配置、软件安装等步骤。类似地，对于深度学习模型来说，模型部署指让训练好的模型在特定环境中运行的过程。相比于软件部署，模型部署会面临更多的难题：</p>
+<ol type="1">
+<li>运行模型所需的环境难以配置。深度学习模型通常是由一些框架编写，比如 PyTorch、TensorFlow。由于框架规模、依赖环境的限制，这些框架不适合在手机、开发板等生产环境中安装。</li>
+<li>深度学习模型的结构通常比较庞大，需要大量的算力才能满足实时运行的需求。模型的运行效率需要优化。</li>
+</ol>
+<p>为了让模型最终能够部署到某一环境上，开发者们可以使用任意一种<code>深度学习框架</code>来定义网络结构，并通过训练确定网络中的参数。之后，模型的结构和参数会被转换成一种只描述网络结构的中间表示，一些针对网络结构的优化会在<code>中间表示</code>上进行。最后，用面向硬件的高性能编程框架(如 CUDA，OpenCL）编写，能高效执行深度学习网络中算子的<code>推理引擎</code>会把中间表示转换成特定的文件格式，并在对应硬件平台上高效运行模型。</p>
+<p>这一条流水线解决了模型部署中的两大问题：使用对接深度学习框架和推理引擎的中间表示，开发者不必担心如何在新环境中运行各个复杂的框架；通过中间表示的网络结构优化和推理引擎对运算的底层优化，模型的运算效率大幅提升。</p>
+<p>现在，让我们从一个模型部署的“Hello World”项目入手，见识一下模型部署各方面的知识吧！</p>
+<h3 id="部署第一个模型">部署第一个模型</h3>
+<h4 id="创建pytorch模型">创建Pytorch模型</h4>
+<p>让我们用 PyTorch 实现一个超分辨率模型，并把模型部署到 ONNX Runtime 这个推理引擎上。</p>
+<p>首先，我们需要创建一个有 PyTorch 库的 Python 编程环境。如果你的 PyTorch 环境还没有装好，可以参考官方的入门教程。我们强烈推荐使用 conda 来管理 Python 库。使用 conda 可以靠如下的命令初始化一个 PyTorch 环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建预安装 Python 3.7 的名叫 deploy 虚拟环境 </span></span><br><span class="line">conda create -n deploy python=3.7 -y </span><br><span class="line"><span class="comment"># 进入虚拟环境 </span></span><br><span class="line">conda activate deploy </span><br><span class="line"><span class="comment"># 安装 cpu 版本的 PyTorch </span></span><br><span class="line">conda install pytorch torchvision cpuonly -c pytorch</span><br></pre></td></tr></table></figure>
+<p>如果你的设备支持 cuda 编程，我们建议你在配置 cuda 环境后使用 gpu 上的 PyTorch。比如将上面安装 PyTorch 的命令改成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 cuda 11.3 的 PyTorch </span></span><br><span class="line"><span class="comment"># 如果你用的是其他版本的 cuda，请参考上面 PyTorch 的官方安装教程选择安装命令 </span></span><br><span class="line">conda install pytorch torchvision cudatoolkit=11.3 -c pytorch</span><br></pre></td></tr></table></figure>
+<p>本教程会用到其他一些第三方库。你可以用以下命令来安装这些库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 ONNX Runtime, ONNX, OpenCV </span></span><br><span class="line">pip install onnxruntime onnx opencv-python</span><br></pre></td></tr></table></figure>
+<p>在一切都配置完毕后，用下面的代码来创建一个经典的超分辨率模型 SRCNN。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os </span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> cv2 </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> requests </span><br><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">import</span> torch.onnx </span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SuperResolutionNet</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, upscale_factor</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.upscale_factor = upscale_factor </span><br><span class="line">        self.img_upsampler = nn.Upsample( </span><br><span class="line">            scale_factor=self.upscale_factor, </span><br><span class="line">            mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">            align_corners=<span class="literal">False</span>) </span><br><span class="line"> </span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>,<span class="number">64</span>,kernel_size=<span class="number">9</span>,padding=<span class="number">4</span>) </span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">64</span>,<span class="number">32</span>,kernel_size=<span class="number">1</span>,padding=<span class="number">0</span>) </span><br><span class="line">        self.conv3 = nn.Conv2d(<span class="number">32</span>,<span class="number">3</span>,kernel_size=<span class="number">5</span>,padding=<span class="number">2</span>) </span><br><span class="line"> </span><br><span class="line">        self.relu = nn.ReLU() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        x = self.img_upsampler(x) </span><br><span class="line">        out = self.relu(self.conv1(x)) </span><br><span class="line">        out = self.relu(self.conv2(out)) </span><br><span class="line">        out = self.conv3(out) </span><br><span class="line">        <span class="keyword">return</span> out </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Download checkpoint and test image </span></span><br><span class="line">urls = [<span class="string">&#x27;https://download.openmmlab.com/mmediting/restorers/srcnn/srcnn_x4k915_1x16_1000k_div2k_20200608-4186f232.pth&#x27;</span>, </span><br><span class="line">    <span class="string">&#x27;https://raw.githubusercontent.com/open-mmlab/mmediting/master/tests/data/face/000001.png&#x27;</span>] </span><br><span class="line">names = [<span class="string">&#x27;srcnn.pth&#x27;</span>, <span class="string">&#x27;face.png&#x27;</span>] </span><br><span class="line"><span class="keyword">for</span> url, name <span class="keyword">in</span> <span class="built_in">zip</span>(urls, names): </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(name): </span><br><span class="line">        <span class="built_in">open</span>(name, <span class="string">&#x27;wb&#x27;</span>).write(requests.get(url).content) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_torch_model</span>(): </span><br><span class="line">    torch_model = SuperResolutionNet(upscale_factor=<span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    state_dict = torch.load(<span class="string">&#x27;srcnn.pth&#x27;</span>)[<span class="string">&#x27;state_dict&#x27;</span>] </span><br><span class="line"> </span><br><span class="line">    <span class="comment"># Adapt the checkpoint </span></span><br><span class="line">    <span class="keyword">for</span> old_key <span class="keyword">in</span> <span class="built_in">list</span>(state_dict.keys()): </span><br><span class="line">        new_key = <span class="string">&#x27;.&#x27;</span>.join(old_key.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">1</span>:]) </span><br><span class="line">        state_dict[new_key] = state_dict.pop(old_key) </span><br><span class="line"> </span><br><span class="line">    torch_model.load_state_dict(state_dict) </span><br><span class="line">    torch_model.<span class="built_in">eval</span>() </span><br><span class="line">    <span class="keyword">return</span> torch_model </span><br><span class="line"> </span><br><span class="line">model = init_torch_model() </span><br><span class="line">input_img = cv2.imread(<span class="string">&#x27;face.png&#x27;</span>).astype(np.float32) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># HWC to NCHW </span></span><br><span class="line">input_img = np.transpose(input_img, [<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>]) </span><br><span class="line">input_img = np.expand_dims(input_img, <span class="number">0</span>) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Inference </span></span><br><span class="line">torch_output = model(torch.from_numpy(input_img)).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="comment"># NCHW to HWC </span></span><br><span class="line">torch_output = np.squeeze(torch_output, <span class="number">0</span>) </span><br><span class="line">torch_output = np.clip(torch_output, <span class="number">0</span>, <span class="number">255</span>) </span><br><span class="line">torch_output = np.transpose(torch_output, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]).astype(np.uint8) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show image </span></span><br><span class="line">cv2.imwrite(<span class="string">&quot;face_torch.png&quot;</span>, torch_output)</span><br></pre></td></tr></table></figure>
+<p>SRCNN 先把图像上采样到对应分辨率，再用 3 个卷积层处理图像。为了方便起见，我们跳过训练网络的步骤，直接下载模型权重（由于 MMEditing 中 SRCNN 的权重结构和我们定义的模型不太一样，我们修改了权重字典的 key 来适配我们定义的模型），同时下载好输入图片。为了让模型输出成正确的图片格式，我们把模型的输出转换成 HWC 格式，并保证每一通道的颜色值都在 0~255 之间。如果脚本正常运行的话，一幅超分辨率的人脸照片会保存在 “face_torch.png” 中。</p>
+<p>在 PyTorch 模型测试正确后，我们来正式开始部署这个模型。我们下一步的任务是把 PyTorch 模型转换成用中间表示 ONNX 描述的模型。</p>
+<h4 id="中间表示-onnx">中间表示-ONNX</h4>
+在介绍 ONNX 之前，我们先从本质上来认识一下神经网络的结构。神经网络实际上只是描述了数据计算的过程，其结构可以用计算图表示。比如 a+b 可以用下面的计算图来表示：
+<div data-align="center">
+<img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1-2.jpg" alt width="250">
+</div>
+<p>为了加速计算，一些框架会使用对神经网络“先编译，后执行”的静态图来描述网络。静态图的缺点是难以描述控制流（比如 if-else 分支语句和 for 循环语句），直接对其引入控制语句会导致产生不同的计算图。比如循环执行 n 次 a=a+b，对于不同的 n，会生成不同的计算图（如下图中n=2和n=3，生成了不同的静态图）： <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1-3.jpg"></p>
+<p>ONNX （Open Neural Network Exchange）是 Facebook 和微软在2017年共同发布的，用于标准描述计算图的一种格式。目前，在数家机构的共同维护下，ONNX 已经对接了多种深度学习框架和多种推理引擎。因此，ONNX 被当成了深度学习框架到推理引擎的桥梁，就像编译器的中间语言一样。由于各框架兼容性不一，我们通常只用 ONNX 表示更容易部署的静态图。</p>
+<p>让我们用下面的代码来把 PyTorch 的模型转换成 ONNX 格式的模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">256</span>, <span class="number">256</span>) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">    torch.onnx.export( </span><br><span class="line">        model, </span><br><span class="line">        x, </span><br><span class="line">        <span class="string">&quot;srcnn.onnx&quot;</span>, </span><br><span class="line">        opset_version=<span class="number">11</span>, </span><br><span class="line">        input_names=[<span class="string">&#x27;input&#x27;</span>], </span><br><span class="line">        output_names=[<span class="string">&#x27;output&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p>其中，<code>torch.onnx.export</code> 是 PyTorch 自带的把模型转换成 ONNX 格式的函数。让我们先看一下前三个必选参数：前三个参数分别是要转换的模型、模型的任意一组输入、导出的 ONNX 文件的文件名。转换模型时，需要原模型和输出文件名是很容易理解的，但为什么需要为模型提供一组输入呢？这就涉及到 ONNX 转换的原理了。从 PyTorch 的模型到 ONNX 的模型，本质上是一种语言上的翻译。直觉上的想法是像编译器一样彻底解析原模型的代码，记录所有控制流。但前面也讲到，我们通常只用 ONNX 记录不考虑控制流的静态图。因此，PyTorch 提供了一种叫做追踪（trace）的模型转换方法：给定一组输入，再实际执行一遍模型，即把这组输入对应的计算图记录下来，保存为 ONNX 格式。export 函数用的就是追踪导出方法，需要给任意一组输入，让模型跑起来。我们的测试图片是三通道，256x256大小的，这里也构造一个同样形状的随机张量。</p>
+<p>剩下的参数中，opset_version 表示 ONNX 算子集的版本。深度学习的发展会不断诞生新算子，为了支持这些新增的算子，ONNX会经常发布新的算子集，目前已经更新15个版本。我们令 opset_version = 11，即使用第11个 ONNX 算子集，是因为 SRCNN 中的 bicubic （双三次插值）在 opset11 中才得到支持。剩下的两个参数 input_names, output_names 是输入、输出 tensor 的名称，我们稍后会用到这些名称。</p>
+<p>如果上述代码运行成功，目录下会新增一个"srcnn.onnx"的 ONNX 模型文件。我们可以用下面的脚本来验证一下模型文件是否正确。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnx </span><br><span class="line"> </span><br><span class="line">onnx_model = onnx.load(<span class="string">&quot;srcnn.onnx&quot;</span>) </span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line">    onnx.checker.check_model(onnx_model) </span><br><span class="line"><span class="keyword">except</span> Exception: </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Model incorrect&quot;</span>) </span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Model correct&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>其中，<code>onnx.load</code> 函数用于读取一个 ONNX 模型。<code>onnx.checker.check_model</code> 用于检查模型格式是否正确，如果有错误的话该函数会直接报错。我们的模型是正确的，控制台中应该会打印出"Model correct"。</p>
+<p>接下来，让我们来看一看 ONNX 模型具体的结构是怎么样的。我们可以使用 <a target="_blank" rel="noopener" href="https://netron.app/">Netron</a> 来可视化 ONNX 模型。把 srcnn.onnx 文件从本地的文件系统拖入网站，即可看到如下的可视化结果： <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1.png"> 点击 input 或者 output，可以查看 ONNX 模型的基本信息，包括模型的版本信息，以及模型输入、输出的名称和数据类型。 <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/2.png"> 点击某一个算子节点，可以看到算子的具体信息。比如点击第一个 Conv 可以看到： <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/3.png"></p>
+<p>每个算子记录了算子属性、图结构、权重三类信息。</p>
+<ul>
+<li><code>算子属性信息</code>即图中 attributes 里的信息，对于卷积来说，算子属性包括了卷积核大小(kernel_shape)、卷积步长(strides)等内容。这些算子属性最终会用来生成一个具体的算子。</li>
+<li><code>图结构信息</code>指算子节点在计算图中的名称、邻边的信息。对于图中的卷积来说，该算子节点叫做 Conv_2，输入数据叫做 11，输出数据叫做 12。根据每个算子节点的图结构信息，就能完整地复原出网络的计算图。</li>
+<li><code>权重信息</code>指的是网络经过训练后，算子存储的权重信息。对于卷积来说，权重信息包括卷积核的权重值和卷积后的偏差值。点击图中 conv1.weight, conv1.bias 后面的加号即可看到权重信息的具体内容。</li>
+</ul>
+<p>现在，我们有了 SRCNN 的 ONNX 模型。让我们看看最后该如何把这个模型运行起来。</p>
+<h4 id="推理引擎--onnx-runtime">推理引擎 -ONNX Runtime</h4>
+<p><code>ONNX Runtime</code> 是由微软维护的一个跨平台机器学习推理加速器，也就是我们前面提到的”推理引擎“。ONNX Runtime 是直接对接 ONNX 的，即 ONNX Runtime 可以直接读取并运行 .onnx 文件, 而不需要再把 .onnx 格式的文件转换成其他格式的文件。也就是说，对于 PyTorch - ONNX - ONNX Runtime 这条部署流水线，只要在目标设备中得到 .onnx 文件，并在 ONNX Runtime 上运行模型，模型部署就算大功告成了。</p>
+<p>通过刚刚的操作，我们把 PyTorch 编写的模型转换成了 ONNX 模型，并通过可视化检查了模型的正确性。最后，让我们用 ONNX Runtime 运行一下模型，完成模型部署的最后一步。</p>
+<p>ONNX Runtime 提供了 Python 接口。接着刚才的脚本，我们可以添加如下代码运行模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnxruntime </span><br><span class="line"> </span><br><span class="line">ort_session = onnxruntime.InferenceSession(<span class="string">&quot;srcnn.onnx&quot;</span>) </span><br><span class="line">ort_inputs = &#123;<span class="string">&#x27;input&#x27;</span>: input_img&#125; </span><br><span class="line">ort_output = ort_session.run([<span class="string">&#x27;output&#x27;</span>], ort_inputs)[<span class="number">0</span>] </span><br><span class="line"> </span><br><span class="line">ort_output = np.squeeze(ort_output, <span class="number">0</span>) </span><br><span class="line">ort_output = np.clip(ort_output, <span class="number">0</span>, <span class="number">255</span>) </span><br><span class="line">ort_output = np.transpose(ort_output, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]).astype(np.uint8) </span><br><span class="line">cv2.imwrite(<span class="string">&quot;face_ort.png&quot;</span>, ort_output)</span><br></pre></td></tr></table></figure>
+<p>这段代码中，除去后处理操作外，和 ONNX Runtime 相关的代码只有三行。让我们简单解析一下这三行代码。<code>onnxruntime.InferenceSession</code>用于获取一个 ONNX Runtime 推理器，其参数是用于推理的 ONNX 模型文件。推理器的 run 方法用于模型推理，其第一个参数为输出张量名的列表，第二个参数为输入值的字典。其中输入值字典的 key 为张量名，value 为 numpy 类型的张量值。输入输出张量的名称需要和<code>torch.onnx.export</code> 中设置的输入输出名对应。</p>
+<p>如果代码正常运行的话，另一幅超分辨率照片会保存在"face_ort.png"中。这幅图片和刚刚得到的"face_torch.png"是一模一样的。这说明 ONNX Runtime 成功运行了 SRCNN 模型，模型部署完成了！以后有用户想实现超分辨率的操作，我们只需要提供一个 "srcnn.onnx" 文件，并帮助用户配置好 ONNX Runtime 的 Python 环境，用几行代码就可以运行模型了。或者还有更简便的方法，我们可以利用 ONNX Runtime 编译出一个可以直接执行模型的应用程序。我们只需要给用户提供 ONNX 模型文件，并让用户在应用程序选择要执行的 ONNX 模型文件名就可以运行模型了。</p>
+<h3 id="总结">总结</h3>
+<p>在这篇教程里，我们利用成熟的模型部署工具，轻松部署了一个初始版本的超分辨率模型 SRCNN。但在实际应用场景中，随着模型结构的复杂度不断加深，碰到的困难的也会越来越多。在下一篇教程里，我们将“升级”一下这个超分辨率模型，让它支持动态的输入。</p>
+<p>看完这篇教程，是不是感觉知识太多一下消化不过来？没关系，模型部署本身有非常多的东西要学。为了举例的方便，这篇教程包含了许多未来才会讲到的知识点。事实上，读完这篇教程后，记下以下知识点就够了：</p>
+<ul>
+<li>模型部署，指把训练好的模型在特定环境中运行的过程。模型部署要解决模型框架兼容性差和模型运行速度慢这两大问题。</li>
+<li>模型部署的常见流水线是“深度学习框架-中间表示-推理引擎”。其中比较常用的一个中间表示是 ONNX。</li>
+<li>深度学习模型实际上就是一个计算图。模型部署时通常把模型转换成静态的计算图，即没有控制流（分支语句、循环语句）的计算图。</li>
+<li>PyTorch 框架自带对 ONNX 的支持，只需要构造一组随机的输入，并对模型调用 <code>torch.onnx.export</code> 即可完成 PyTorch 到 ONNX 的转换。</li>
+<li>推理引擎 ONNX Runtime 对 ONNX 模型有原生的支持。给定一个 .onnx 文件，只需要简单使用 ONNX Runtime 的 Python API 就可以完成模型推理。</li>
+</ul>
+<h2 id="解决模型部署中的难题">解决模型部署中的难题</h2>
+<p>上期教程中，我们部署了一个简单的超分辨率模型，一切都十分顺利。但是，上一个模型还有一些缺陷——图片的放大倍数固定是 3，我们无法让图片放大任意的倍数。现在，我们来尝试部署一个支持动态放大倍数的模型，体验一下在模型部署中可能会碰到的困难。</p>
+<h3 id="模型部署中常见的难题">模型部署中常见的难题</h3>
+<p>在之前的学习中，我们在模型部署上顺风顺水，没有碰到任何问题。这是因为 SRCNN 模型只包含几个简单的算子，而这些卷积、插值算子已经在各个中间表示和推理引擎上得到了完美支持。如果模型的操作稍微复杂一点，我们可能就要为兼容模型而付出大量的功夫了。实际上，模型部署时一般会碰到以下几类困难：</p>
+<ul>
+<li>模型的动态化。出于性能的考虑，各推理框架都默认模型的输入形状、输出形状、结构是静态的。而为了让模型的泛用性更强，部署时需要在尽可能不影响原有逻辑的前提下，让模型的输入输出或是结构动态化。</li>
+<li>新算子的实现。深度学习技术日新月异，提出新算子的速度往往快于 ONNX 维护者支持的速度。为了部署最新的模型，部署工程师往往需要自己在 ONNX 和推理引擎中支持新算子。</li>
+<li>中间表示与推理引擎的兼容问题。由于各推理引擎的实现不同，对 ONNX 难以形成统一的支持。为了确保模型在不同的推理引擎中有同样的运行效果，部署工程师往往得为某个推理引擎定制模型代码，这为模型部署引入了许多工作量。</li>
+</ul>
+<p>我们会在后续教程详细讲述解决这些问题的方法。</p>
+<p>现在，让我们对原来的 SRCNN 模型做一些小的修改，体验一下模型动态化对模型部署造成的困难，并学习解决该问题的一种方法。</p>
+<h3 id="问题实现动态放大的超分辨率模型">问题：实现动态放大的超分辨率模型</h3>
+<p>在原来的 SRCNN 中，图片的放大比例是写死在模型里的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SuperResolutionNet</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, upscale_factor</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.upscale_factor = upscale_factor </span><br><span class="line">        self.img_upsampler = nn.Upsample( </span><br><span class="line">            scale_factor=self.upscale_factor, </span><br><span class="line">            mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">            align_corners=<span class="literal">False</span>) </span><br><span class="line"> </span><br><span class="line"><span class="meta">... </span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_torch_model</span>(): </span><br><span class="line">    torch_model = SuperResolutionNet(upscale_factor=<span class="number">3</span>) </span><br></pre></td></tr></table></figure>
+<p>我们使用 upscale_factor 来控制模型的放大比例。初始化模型的时候，我们默认令 upscale_factor 为 3，生成了一个放大 3 倍的 PyTorch 模型。这个 PyTorch 模型最终被转换成了 ONNX 格式的模型。如果我们需要一个放大 4 倍的模型，需要重新生成一遍模型，再做一次到 ONNX 的转换。</p>
+<p>现在，假设我们要做一个超分辨率的应用。我们的用户希望图片的放大倍数能够自由设置。而我们交给用户的，只有一个 .onnx 文件和运行超分辨率模型的应用程序。我们在不修改 .onnx 文件的前提下改变放大倍数。</p>
+<p>因此，我们必须修改原来的模型，令模型的放大倍数变成推理时的输入。在上一篇文章中的 Python 脚本的基础上，我们做一些修改，得到这样的脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn </span><br><span class="line"><span class="keyword">from</span> torch.nn.functional <span class="keyword">import</span> interpolate </span><br><span class="line"><span class="keyword">import</span> torch.onnx </span><br><span class="line"><span class="keyword">import</span> cv2 </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SuperResolutionNet</span>(nn.Module): </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">64</span>, kernel_size=<span class="number">9</span>, padding=<span class="number">4</span>) </span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">64</span>, <span class="number">32</span>, kernel_size=<span class="number">1</span>, padding=<span class="number">0</span>) </span><br><span class="line">        self.conv3 = nn.Conv2d(<span class="number">32</span>, <span class="number">3</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>) </span><br><span class="line"> </span><br><span class="line">        self.relu = nn.ReLU() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, upscale_factor</span>): </span><br><span class="line">        x = interpolate(x, </span><br><span class="line">                        scale_factor=upscale_factor, </span><br><span class="line">                        mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">                        align_corners=<span class="literal">False</span>) </span><br><span class="line">        out = self.relu(self.conv1(x)) </span><br><span class="line">        out = self.relu(self.conv2(out)) </span><br><span class="line">        out = self.conv3(out) </span><br><span class="line">        <span class="keyword">return</span> out </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_torch_model</span>(): </span><br><span class="line">    torch_model = SuperResolutionNet() </span><br><span class="line"> </span><br><span class="line">    state_dict = torch.load(<span class="string">&#x27;srcnn.pth&#x27;</span>)[<span class="string">&#x27;state_dict&#x27;</span>] </span><br><span class="line"> </span><br><span class="line">    <span class="comment"># Adapt the checkpoint </span></span><br><span class="line">    <span class="keyword">for</span> old_key <span class="keyword">in</span> <span class="built_in">list</span>(state_dict.keys()): </span><br><span class="line">        new_key = <span class="string">&#x27;.&#x27;</span>.join(old_key.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">1</span>:]) </span><br><span class="line">        state_dict[new_key] = state_dict.pop(old_key) </span><br><span class="line"> </span><br><span class="line">    torch_model.load_state_dict(state_dict) </span><br><span class="line">    torch_model.<span class="built_in">eval</span>() </span><br><span class="line">    <span class="keyword">return</span> torch_model </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">model = init_torch_model() </span><br><span class="line"> </span><br><span class="line">input_img = cv2.imread(<span class="string">&#x27;face.png&#x27;</span>).astype(np.float32) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># HWC to NCHW </span></span><br><span class="line">input_img = np.transpose(input_img, [<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>]) </span><br><span class="line">input_img = np.expand_dims(input_img, <span class="number">0</span>) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Inference </span></span><br><span class="line">torch_output = model(torch.from_numpy(input_img), <span class="number">3</span>).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="comment"># NCHW to HWC </span></span><br><span class="line">torch_output = np.squeeze(torch_output, <span class="number">0</span>) </span><br><span class="line">torch_output = np.clip(torch_output, <span class="number">0</span>, <span class="number">255</span>) </span><br><span class="line">torch_output = np.transpose(torch_output, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]).astype(np.uint8) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show image </span></span><br><span class="line">cv2.imwrite(<span class="string">&quot;face_torch_2.png&quot;</span>, torch_output) </span><br></pre></td></tr></table></figure>
+<p>SuperResolutionNet 未修改之前，nn.Upsample 在初始化阶段固化了放大倍数，而 PyTorch 的 interpolate 插值算子可以在运行阶段选择放大倍数。因此，我们在新脚本中使用 interpolate 代替 nn.Upsample，从而让模型支持动态放大倍数的超分。 在第 55 行使用模型推理时，我们把放大倍数设置为 3。最后，图片保存在文件 "face_torch_2.png" 中。一切正常的话，"face_torch_2.png" 和 "face_torch.png" 的内容一模一样。</p>
+<p>通过简单的修改，PyTorch 模型已经支持了动态分辨率。现在我们来尝试一下导出模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">256</span>, <span class="number">256</span>) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">    torch.onnx.export(model, (x, <span class="number">3</span>), </span><br><span class="line">                      <span class="string">&quot;srcnn2.onnx&quot;</span>, </span><br><span class="line">                      opset_version=<span class="number">11</span>, </span><br><span class="line">                      input_names=[<span class="string">&#x27;input&#x27;</span>, <span class="string">&#x27;factor&#x27;</span>], </span><br><span class="line">                      output_names=[<span class="string">&#x27;output&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p>运行这些脚本时，会报一长串错误。没办法，我们碰到了模型部署中的兼容性问题。</p>
+<h3 id="解决方法自定义算子">解决方法：自定义算子</h3>
+<p>直接使用 PyTorch 模型的话，我们修改几行代码就能实现模型输入的动态化。但在模型部署中，我们要花数倍的时间来设法解决这一问题。现在，让我们顺着解决问题的思路，体验一下模型部署的困难，并学习使用自定义算子的方式，解决超分辨率模型的动态化问题。</p>
+<p>刚刚的报错是因为 PyTorch 模型在导出到 ONNX 模型时，模型的输入参数的类型必须全部是 torch.Tensor。而实际上我们传入的第二个参数" 3 "是一个整形变量。这不符合 PyTorch 转 ONNX 的规定。我们必须要修改一下原来的模型的输入。为了保证输入的所有参数都是 torch.Tensor 类型的，我们做如下修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">... </span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SuperResolutionNet</span>(nn.Module): </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, upscale_factor</span>): </span><br><span class="line">        x = interpolate(x, </span><br><span class="line">                        scale_factor=upscale_factor.item(), </span><br><span class="line">                        mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">                        align_corners=<span class="literal">False</span>) </span><br><span class="line"> </span><br><span class="line"><span class="meta">... </span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Inference </span></span><br><span class="line"><span class="comment"># Note that the second input is torch.tensor(3) </span></span><br><span class="line">torch_output = model(torch.from_numpy(input_img), torch.tensor(<span class="number">3</span>)).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="meta">... </span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">    torch.onnx.export(model, (x, torch.tensor(<span class="number">3</span>)), </span><br><span class="line">                      <span class="string">&quot;srcnn2.onnx&quot;</span>, </span><br><span class="line">                      opset_version=<span class="number">11</span>, </span><br><span class="line">                      input_names=[<span class="string">&#x27;input&#x27;</span>, <span class="string">&#x27;factor&#x27;</span>], </span><br><span class="line">                      output_names=[<span class="string">&#x27;output&#x27;</span>]) </span><br></pre></td></tr></table></figure>
+<p>由于 PyTorch 中 interpolate 的 scale_factor 参数必须是一个数值，我们使用 torch.Tensor.item() 来把只有一个元素的 torch.Tensor 转换成数值。之后，在模型推理时，我们使用 torch.tensor(3) 代替 3，以使得我们的所有输入都满足要求。现在运行脚本的话，无论是直接运行模型，还是导出 ONNX 模型，都不会报错了。</p>
+<p>但是，导出 ONNX 时却报了一条 TraceWarning 的警告。这条警告说有一些量可能会追踪失败。这是怎么回事呢？让我们把生成的 srcnn2.onnx 用 Netron 可视化一下：</p>
+<p><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/1.png"></p>
+<p>可以发现，虽然我们把模型推理的输入设置为了两个，但 ONNX 模型还是长得和原来一模一样，只有一个叫 " input " 的输入。这是由于我们使用了 torch.Tensor.item() 把数据从 Tensor 里取出来，而导出 ONNX 模型时这个操作是无法被记录的，只好报了一条 TraceWarning。这导致 interpolate 插值函数的放大倍数还是被设置成了" 3 "这个固定值，我们导出的" srcnn2.onnx "和最开始的" srcnn.onnx "完全相同。</p>
+<p>直接修改原来的模型似乎行不通，我们得从 PyTorch 转 ONNX 的原理入手，强行令 ONNX 模型明白我们的想法了。</p>
+<p>仔细观察 Netron 上可视化出的 ONNX 模型，可以发现在 PyTorch 中无论是使用最早的 nn.Upsample，还是后来的 interpolate，PyTorch 里的插值操作最后都会转换成 ONNX 定义的 Resize 操作。也就是说，所谓 PyTorch 转 ONNX，实际上就是把每个 PyTorch 的操作映射成了 ONNX 定义的算子。</p>
+<p>点击该算子，可以看到它的详细参数如下：</p>
+<p><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/4.png"></p>
+<p>其中，展开 scales，可以看到 scales 是一个长度为 4 的一维张量，其内容为 [1, 1, 3, 3], 表示 Resize 操作每一个维度的缩放系数；其类型为 Initializer，表示这个值是根据常量直接初始化出来的。如果我们能够自己生成一个 ONNX 的 Resize 算子，让 scales 成为一个可变量而不是常量，就像它上面的 X 一样，那这个超分辨率模型就能动态缩放了。</p>
+<p>现有实现插值的 PyTorch 算子有一套规定好的映射到 ONNX Resize 算子的方法，这些映射出的 Resize 算子的 scales 只能是常量，无法满足我们的需求。我们得自己定义一个实现插值的 PyTorch 算子，然后让它映射到一个我们期望的 ONNX Resize 算子上。</p>
+<p>下面的脚本定义了一个 PyTorch 插值算子，并在模型里使用了它。我们先通过运行模型来验证该算子的正确性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn </span><br><span class="line"><span class="keyword">from</span> torch.nn.functional <span class="keyword">import</span> interpolate </span><br><span class="line"><span class="keyword">import</span> torch.onnx </span><br><span class="line"><span class="keyword">import</span> cv2 </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewInterpolate</span>(torch.autograd.Function): </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g, <span class="built_in">input</span>, scales</span>): </span><br><span class="line">        <span class="keyword">return</span> g.op(<span class="string">&quot;Resize&quot;</span>, </span><br><span class="line">                    <span class="built_in">input</span>, </span><br><span class="line">                    g.op(<span class="string">&quot;Constant&quot;</span>, </span><br><span class="line">                         value_t=torch.tensor([], dtype=torch.float32)), </span><br><span class="line">                    scales, </span><br><span class="line">                    coordinate_transformation_mode_s=<span class="string">&quot;pytorch_half_pixel&quot;</span>, </span><br><span class="line">                    cubic_coeff_a_f=-<span class="number">0.75</span>, </span><br><span class="line">                    mode_s=<span class="string">&#x27;cubic&#x27;</span>, </span><br><span class="line">                    nearest_mode_s=<span class="string">&quot;floor&quot;</span>) </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">ctx, <span class="built_in">input</span>, scales</span>): </span><br><span class="line">        scales = scales.tolist()[-<span class="number">2</span>:] </span><br><span class="line">        <span class="keyword">return</span> interpolate(<span class="built_in">input</span>, </span><br><span class="line">                           scale_factor=scales, </span><br><span class="line">                           mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">                           align_corners=<span class="literal">False</span>) </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrangeSuperResolutionNet</span>(nn.Module): </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">64</span>, kernel_size=<span class="number">9</span>, padding=<span class="number">4</span>) </span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">64</span>, <span class="number">32</span>, kernel_size=<span class="number">1</span>, padding=<span class="number">0</span>) </span><br><span class="line">        self.conv3 = nn.Conv2d(<span class="number">32</span>, <span class="number">3</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>) </span><br><span class="line"> </span><br><span class="line">        self.relu = nn.ReLU() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, upscale_factor</span>): </span><br><span class="line">        x = NewInterpolate.apply(x, upscale_factor) </span><br><span class="line">        out = self.relu(self.conv1(x)) </span><br><span class="line">        out = self.relu(self.conv2(out)) </span><br><span class="line">        out = self.conv3(out) </span><br><span class="line">        <span class="keyword">return</span> out </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_torch_model</span>(): </span><br><span class="line">    torch_model = StrangeSuperResolutionNet() </span><br><span class="line"> </span><br><span class="line">    state_dict = torch.load(<span class="string">&#x27;srcnn.pth&#x27;</span>)[<span class="string">&#x27;state_dict&#x27;</span>] </span><br><span class="line"> </span><br><span class="line">    <span class="comment"># Adapt the checkpoint </span></span><br><span class="line">    <span class="keyword">for</span> old_key <span class="keyword">in</span> <span class="built_in">list</span>(state_dict.keys()): </span><br><span class="line">        new_key = <span class="string">&#x27;.&#x27;</span>.join(old_key.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">1</span>:]) </span><br><span class="line">        state_dict[new_key] = state_dict.pop(old_key) </span><br><span class="line"> </span><br><span class="line">    torch_model.load_state_dict(state_dict) </span><br><span class="line">    torch_model.<span class="built_in">eval</span>() </span><br><span class="line">    <span class="keyword">return</span> torch_model </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">model = init_torch_model() </span><br><span class="line">factor = torch.tensor([<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], dtype=torch.<span class="built_in">float</span>) </span><br><span class="line"> </span><br><span class="line">input_img = cv2.imread(<span class="string">&#x27;face.png&#x27;</span>).astype(np.float32) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># HWC to NCHW </span></span><br><span class="line">input_img = np.transpose(input_img, [<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>]) </span><br><span class="line">input_img = np.expand_dims(input_img, <span class="number">0</span>) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Inference </span></span><br><span class="line">torch_output = model(torch.from_numpy(input_img), factor).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="comment"># NCHW to HWC </span></span><br><span class="line">torch_output = np.squeeze(torch_output, <span class="number">0</span>) </span><br><span class="line">torch_output = np.clip(torch_output, <span class="number">0</span>, <span class="number">255</span>) </span><br><span class="line">torch_output = np.transpose(torch_output, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]).astype(np.uint8) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show image </span></span><br><span class="line">cv2.imwrite(<span class="string">&quot;face_torch_3.png&quot;</span>, torch_output) </span><br></pre></td></tr></table></figure>
+<p>模型运行正常的话，一幅放大3倍的超分辨率图片会保存在"face_torch_3.png"中，其内容和"face_torch.png"完全相同。</p>
+<p>在刚刚那个脚本中，我们定义 PyTorch 插值算子的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">NewInterpolate</span>(torch.autograd.Function): </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g, <span class="built_in">input</span>, scales</span>): </span><br><span class="line">        <span class="keyword">return</span> g.op(<span class="string">&quot;Resize&quot;</span>, </span><br><span class="line">                    <span class="built_in">input</span>, </span><br><span class="line">                    g.op(<span class="string">&quot;Constant&quot;</span>, </span><br><span class="line">                         value_t=torch.tensor([], dtype=torch.float32)), </span><br><span class="line">                    scales, </span><br><span class="line">                    coordinate_transformation_mode_s=<span class="string">&quot;pytorch_half_pixel&quot;</span>, </span><br><span class="line">                    cubic_coeff_a_f=-<span class="number">0.75</span>, </span><br><span class="line">                    mode_s=<span class="string">&#x27;cubic&#x27;</span>, </span><br><span class="line">                    nearest_mode_s=<span class="string">&quot;floor&quot;</span>) </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">ctx, <span class="built_in">input</span>, scales</span>): </span><br><span class="line">        scales = scales.tolist()[-<span class="number">2</span>:] </span><br><span class="line">        <span class="keyword">return</span> interpolate(<span class="built_in">input</span>, </span><br><span class="line">                           scale_factor=scales, </span><br><span class="line">                           mode=<span class="string">&#x27;bicubic&#x27;</span>, </span><br><span class="line">                           align_corners=<span class="literal">False</span>) </span><br></pre></td></tr></table></figure>
+<p>在具体介绍这个算子的实现前，让我们先理清一下思路。我们希望新的插值算子有两个输入，一个是被用于操作的图像，一个是图像的放缩比例。前面讲到，为了对接 ONNX 中 Resize 算子的 scales 参数，这个放缩比例是一个 [1, 1, x, x] 的张量，其中 x 为放大倍数。在之前放大3倍的模型中，这个参数被固定成了[1, 1, 3, 3]。因此，在插值算子中，我们希望模型的第二个输入是一个 [1, 1, w, h] 的张量，其中 w 和 h 分别是图片宽和高的放大倍数。</p>
+<p>搞清楚了插值算子的输入，再看一看算子的具体实现。算子的推理行为由算子的 foward 方法决定。该方法的第一个参数必须为 ctx，后面的参数为算子的自定义输入，我们设置两个输入，分别为被操作的图像和放缩比例。为保证推理正确，需要把 [1, 1, w, h] 格式的输入对接到原来的 interpolate 函数上。我们的做法是截取输入张量的后两个元素，把这两个元素以 list 的格式传入 interpolate 的 scale_factor 参数。</p>
+<p>接下来，我们要决定新算子映射到 ONNX 算子的方法。映射到 ONNX 的方法由一个算子的 symbolic 方法决定。symbolic 方法第一个参数必须是g，之后的参数是算子的自定义输入，和 forward 函数一样。ONNX 算子的具体定义由 g.op 实现。g.op 的每个参数都可以映射到 ONNX 中的算子属性。</p>
+<p>对于其他参数，我们可以照着现在的 Resize 算子填。而要注意的是，我们现在希望 scales 参数是由输入动态决定的。因此，在填入 ONNX 的 scales 时，我们要把 symbolic 方法的输入参数中的 scales 填入。</p>
+<p>接着，让我们把新模型导出成 ONNX 模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">256</span>, <span class="number">256</span>) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">    torch.onnx.export(model, (x, factor), </span><br><span class="line">                      <span class="string">&quot;srcnn3.onnx&quot;</span>, </span><br><span class="line">                      opset_version=<span class="number">11</span>, </span><br><span class="line">                      input_names=[<span class="string">&#x27;input&#x27;</span>, <span class="string">&#x27;factor&#x27;</span>], </span><br><span class="line">                      output_names=[<span class="string">&#x27;output&#x27;</span>]) </span><br></pre></td></tr></table></figure>
+<p>把导出的 " srcnn3.onnx " 进行可视化：</p>
+<p><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/5.png"></p>
+<p>可以看到，正如我们所期望的，导出的 ONNX 模型有了两个输入！第二个输入表示图像的放缩比例。</p>
+<p>之前在验证 PyTorch 模型和导出 ONNX 模型时，我们宽高的缩放比例设置成了 3x3。现在，在用 ONNX Runtime 推理时，我们尝试使用 4x4 的缩放比例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnxruntime </span><br><span class="line"> </span><br><span class="line">input_factor = np.array([<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>], dtype=np.float32) </span><br><span class="line">ort_session = onnxruntime.InferenceSession(<span class="string">&quot;srcnn3.onnx&quot;</span>) </span><br><span class="line">ort_inputs = &#123;<span class="string">&#x27;input&#x27;</span>: input_img, <span class="string">&#x27;factor&#x27;</span>: input_factor&#125; </span><br><span class="line">ort_output = ort_session.run(<span class="literal">None</span>, ort_inputs)[<span class="number">0</span>] </span><br><span class="line"> </span><br><span class="line">ort_output = np.squeeze(ort_output, <span class="number">0</span>) </span><br><span class="line">ort_output = np.clip(ort_output, <span class="number">0</span>, <span class="number">255</span>) </span><br><span class="line">ort_output = np.transpose(ort_output, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]).astype(np.uint8) </span><br><span class="line">cv2.imwrite(<span class="string">&quot;face_ort_3.png&quot;</span>, ort_output) </span><br></pre></td></tr></table></figure>
+<p>运行上面的代码，可以得到一个边长放大4倍的超分辨率图片 "face_ort_3.png"。动态的超分辨率模型生成成功了！只要修改 input_factor，我们就可以自由地控制图片的缩放比例。</p>
+<p>我们刚刚的工作，实际上是绕过 PyTorch 本身的限制，凭空“捏”出了一个 ONNX 算子。事实上，我们不仅可以创建现有的 ONNX 算子，还可以定义新的 ONNX 算子以拓展 ONNX 的表达能力。后续教程中我们将介绍自定义新 ONNX 算子的方法。</p>
+<h3 id="总结-1">总结</h3>
+<p>通过学习前两篇教程，我们走完了整个部署流水线，成功部署了支持动态放大倍数的超分辨率模型。在这个过程中，我们既学会了如何简单地调用各框架的API实现模型部署，又学到了如何分析并尝试解决模型部署时碰到的难题。</p>
+<p>同样，让我们总结一下本篇教程的知识点：</p>
+<ul>
+<li>模型部署中常见的几类困难有：模型的动态化；新算子的实现；框架间的兼容。</li>
+<li>PyTorch 转 ONNX，实际上就是把每一个操作转化成 ONNX 定义的某一个算子。比如对于 PyTorch 中的 Upsample 和 interpolate，在转 ONNX 后最终都会成为 ONNX 的 Resize 算子。</li>
+<li>通过修改继承自 torch.autograd.Function 的算子的 symbolic 方法，可以改变该算子映射到 ONNX 算子的行为。</li>
+</ul>
+<h2 id="pytorch转onnx详解">PyTorch转ONNX详解</h2>
+<p>在前两期的教程中，我们带领大家成功部署了第一个模型，解决了一些在模型部署中可能会碰到的困难。这一期教程，我们将由浅入深地介绍ONNX相关的知识。ONNX是目前模型部署中最重要的中间表示之一。学懂了ONNX的技术细节，就能规避大量的模型部署问题。<br>
+在把 PyTorch 模型转换成 ONNX 模型时，我们往往只需要轻松地调用一句<code>torch.onnx.export</code>就行了。这个函数的接口看上去简单，但它在使用上还有着诸多的“潜规则”。在这篇教程中，我们会详细介绍 PyTorch 模型转 ONNX 模型的原理及注意事项。除此之外，我们还会介绍 PyTorch 与 ONNX 的算子对应关系，以教会大家如何处理 PyTorch 模型转换时可能会遇到的算子支持问题。</p>
+<h3 id="torch.onnx.export-细解">torch.onnx.export 细解</h3>
+<p>在这一节里，我们将详细介绍PyTorch到ONNX的转换函数——<code>torch.onnx.export</code>。我们希望大家能够更加灵活地使用这个模型转换接口，并通过了解它的实现原理来更好地应对该函数的报错。</p>
+<h4 id="计算图导出方法">计算图导出方法</h4>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/jit.html">TorchScript</a>是一种序列化和优化PyTorch模型的格式，在优化过程中，一个<code>torch.nn.Module</code>模型会被转换成TorchScript的<code>torch.jit.ScriptModule</code>模型。现在，TorchScript也常被当成一种中间表示使用。 <code>torch.onnx.export</code>中需要的模型实际上是一个<code>torch.jit.ScriptModule</code>。而需要把普通PyTorch模型转成这样的TorchScript模型，有跟踪（trace）和记录（script）两种导出计算图的方法。如果给<code>torch.onnx.export</code>传入了一个普通PyTorch模型（<code>torch.nn.Module</code>），那么这个模型会默认使用跟踪的方法导出。这一过程如下图所示： <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/6.jpg"></p>
+<p>回忆一下我们第一篇教程知识：跟踪法只能通过实际运行一遍模型的方法导出模型的静态图，即无法识别出模型中的控制流（如循环）；记录法则能通过解析模型来正确记录所有的控制流。我们以下面这段代码为例来看一看这两种转换方法的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.n = n </span><br><span class="line">        self.conv = torch.nn.Conv2d(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.n): </span><br><span class="line">            x = self.conv(x) </span><br><span class="line">        <span class="keyword">return</span> x </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">models = [Model(<span class="number">2</span>), Model(<span class="number">3</span>)] </span><br><span class="line">model_names = [<span class="string">&#x27;model_2&#x27;</span>, <span class="string">&#x27;model_3&#x27;</span>] </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> model, model_name <span class="keyword">in</span> <span class="built_in">zip</span>(models, model_names): </span><br><span class="line">    dummy_input = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">    dummy_output = model(dummy_input) </span><br><span class="line">    model_trace = torch.jit.trace(model, dummy_input) </span><br><span class="line">    model_script = torch.jit.script(model) </span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 跟踪法与直接 torch.onnx.export(model, ...)等价 </span></span><br><span class="line">    torch.onnx.export(model_trace, dummy_input, <span class="string">f&#x27;<span class="subst">&#123;model_name&#125;</span>_trace.onnx&#x27;</span>) </span><br><span class="line">    <span class="comment"># 记录法必须先调用 torch.jit.sciprt </span></span><br><span class="line">    torch.onnx.export(model_script, dummy_input, <span class="string">f&#x27;<span class="subst">&#123;model_name&#125;</span>_script.onnx&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<p>在这段代码里，我们定义了一个带循环的模型，模型通过参数<code>n</code>来控制输入张量被卷积的次数。之后，我们各创建了一个<code>n=2</code>和<code>n=3</code>的模型。我们把这两个模型分别用跟踪和记录的方法进行导出。 值得一提的是，由于这里的两个模型（<code>model_trace</code>, <code>model_script</code>)是 TorchScript 模型，export函数已经不需要再运行一遍模型了。（如果模型是用跟踪法得到的，那么在执行<code>torch.jit.trace</code>的时候就运行过一遍了；而用记录法导出时，模型不需要实际运行）参数中的<code>dummy_input</code>仅仅是为了获取输入张量的类型和形状。</p>
+<p>运行上面的代码，我们把得到的 4 个 onnx 文件用 <a target="_blank" rel="noopener" href="https://netron.app/">Netron</a> 可视化（左边为script，右边为trace）：</p>
+<p><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/7.png"></p>
+<p>由于推理引擎对静态图的支持更好，通常我们在模型部署时不需要显式地把 PyTorch 模型转成 TorchScript 模型，直接把 PyTorch 模型用 torch.onnx.export 跟踪导出即可。了解这部分的知识主要是为了在模型转换报错时能够更好地定位问题是否发生在 PyTorch 转 TorchScript 阶段。</p>
+<h4 id="参数讲解">参数讲解</h4>
+<p>了解完转换函数的原理后，我们来详细介绍一下该函数的主要参数的作用。我们主要会从应用的角度来介绍每个参数在不同的模型部署场景中应该如何设置，而不会去列出每个参数的所有设置方法。该函数详细的 API 文档可参考： <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/onnx.html#functions">torch.onnx ‒ PyTorch 1.11.0 documentation</a></p>
+<p><code>torch.onnx.export</code> 在 <code>torch.onnx.__init__.py</code>文件中的定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">export</span>(<span class="params">model, args, f, export_params=<span class="literal">True</span>, verbose=<span class="literal">False</span>, training=TrainingMode.EVAL, </span></span><br><span class="line"><span class="params">           input_names=<span class="literal">None</span>, output_names=<span class="literal">None</span>, aten=<span class="literal">False</span>, export_raw_ir=<span class="literal">False</span>, </span></span><br><span class="line"><span class="params">           operator_export_type=<span class="literal">None</span>, opset_version=<span class="literal">None</span>, _retain_param_name=<span class="literal">True</span>, </span></span><br><span class="line"><span class="params">           do_constant_folding=<span class="literal">True</span>, example_outputs=<span class="literal">None</span>, strip_doc_string=<span class="literal">True</span>, </span></span><br><span class="line"><span class="params">           dynamic_axes=<span class="literal">None</span>, keep_initializers_as_inputs=<span class="literal">None</span>, custom_opsets=<span class="literal">None</span>, </span></span><br><span class="line"><span class="params">           enable_onnx_checker=<span class="literal">True</span>, use_external_data_format=<span class="literal">False</span></span>):</span><br></pre></td></tr></table></figure>
+<p>前三个必选参数为模型、模型输入、导出的 onnx 文件名，我们对这几个参数已经很熟悉了。我们来着重看一下后面的一些常用可选参数。</p>
+<h5 id="export_params">export_params</h5>
+<p>模型中是否存储模型权重。一般中间表示包含两大类信息：模型结构和模型权重，这两类信息可以在同一个文件里存储，也可以分文件存储。ONNX 是用同一个文件表示记录模型的结构和权重的。 我们部署时一般都默认这个参数为 True。如果 onnx 文件是用来在不同框架间传递模型（比如 PyTorch 到 Tensorflow）而不是用于部署，则可以令这个参数为 False。</p>
+<h5 id="input_names-output_names">input_names, output_names</h5>
+<p>设置输入和输出张量的名称。如果不设置的话，会自动分配一些简单的名字（如数字）。 ONNX 模型的每个输入和输出张量都有一个名字。很多推理引擎在运行 ONNX 文件时，都需要以“名称-张量值”的数据对来输入数据，并根据输出张量的名称来获取输出数据。在进行跟张量有关的设置（比如添加动态维度）时，也需要知道张量的名字。 在实际的部署流水线中，我们都需要设置输入和输出张量的名称，并保证 ONNX 和推理引擎中使用同一套名称。</p>
+<h5 id="opset_version">opset_version</h5>
+<p>转换时参考哪个 ONNX 算子集版本。后文会详细介绍 PyTorch 与 ONNX 的算子对应关系。</p>
+<h5 id="dynamic_axes">dynamic_axes</h5>
+<p>指定输入输出张量的哪些维度是动态的。 为了追求效率，ONNX 默认所有参与运算的张量都是静态的（张量的形状不发生改变）。但在实际应用中，我们又希望模型的输入张量是动态的，尤其是本来就没有形状限制的全卷积模型。因此，我们需要显式地指明输入输出张量的哪几个维度的大小是可变的。 我们来看一个<code>dynamic_axes</code>的设置例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.conv = torch.nn.Conv2d(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        x = self.conv(x) </span><br><span class="line">        <span class="keyword">return</span> x </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">model = Model() </span><br><span class="line">dummy_input = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">model_names = [<span class="string">&#x27;model_static.onnx&#x27;</span>,  </span><br><span class="line"><span class="string">&#x27;model_dynamic_0.onnx&#x27;</span>,  </span><br><span class="line"><span class="string">&#x27;model_dynamic_23.onnx&#x27;</span>] </span><br><span class="line"> </span><br><span class="line">dynamic_axes_0 = &#123; </span><br><span class="line">    <span class="string">&#x27;in&#x27;</span> : [<span class="number">0</span>], </span><br><span class="line">    <span class="string">&#x27;out&#x27;</span> : [<span class="number">0</span>] </span><br><span class="line">&#125; </span><br><span class="line">dynamic_axes_23 = &#123; </span><br><span class="line">    <span class="string">&#x27;in&#x27;</span> : [<span class="number">2</span>, <span class="number">3</span>], </span><br><span class="line">    <span class="string">&#x27;out&#x27;</span> : [<span class="number">2</span>, <span class="number">3</span>] </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line">torch.onnx.export(model, dummy_input, model_names[<span class="number">0</span>],  </span><br><span class="line">input_names=[<span class="string">&#x27;in&#x27;</span>], output_names=[<span class="string">&#x27;out&#x27;</span>]) </span><br><span class="line">torch.onnx.export(model, dummy_input, model_names[<span class="number">1</span>],  </span><br><span class="line">input_names=[<span class="string">&#x27;in&#x27;</span>], output_names=[<span class="string">&#x27;out&#x27;</span>], dynamic_axes=dynamic_axes_0) </span><br><span class="line">torch.onnx.export(model, dummy_input, model_names[<span class="number">2</span>],  </span><br><span class="line">input_names=[<span class="string">&#x27;in&#x27;</span>], output_names=[<span class="string">&#x27;out&#x27;</span>], dynamic_axes=dynamic_axes_23) </span><br></pre></td></tr></table></figure>
+<p>首先，我们导出 3 个 ONNX 模型，分别为没有动态维度、第 0 维动态、第 2 第 3 维动态的模型。 在这份代码里，我们是用列表的方式表示动态维度，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dynamic_axes_0 = &#123; </span><br><span class="line">    <span class="string">&#x27;in&#x27;</span> : [<span class="number">0</span>], </span><br><span class="line">    <span class="string">&#x27;out&#x27;</span> : [<span class="number">0</span>] </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>由于 ONNX 要求每个动态维度都有一个名字，这样写的话会引出一条 UserWarning，警告我们通过列表的方式设置动态维度的话系统会自动为它们分配名字。一种显式添加动态维度名字的方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dynamic_axes_0 = &#123; </span><br><span class="line">    <span class="string">&#x27;in&#x27;</span> : &#123;<span class="number">0</span>: <span class="string">&#x27;batch&#x27;</span>&#125;, </span><br><span class="line">    <span class="string">&#x27;out&#x27;</span> : &#123;<span class="number">0</span>: <span class="string">&#x27;batch&#x27;</span>&#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>由于在这份代码里我们没有更多的对动态维度的操作，因此简单地用列表指定动态维度即可。 之后，我们用下面的代码来看一看动态维度的作用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnxruntime </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"> </span><br><span class="line">origin_tensor = np.random.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>).astype(np.float32) </span><br><span class="line">mult_batch_tensor = np.random.rand(<span class="number">2</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>).astype(np.float32) </span><br><span class="line">big_tensor = np.random.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">20</span>, <span class="number">20</span>).astype(np.float32) </span><br><span class="line"> </span><br><span class="line">inputs = [origin_tensor, mult_batch_tensor, big_tensor] </span><br><span class="line">exceptions = <span class="built_in">dict</span>() </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> model_name <span class="keyword">in</span> model_names: </span><br><span class="line">    <span class="keyword">for</span> i, <span class="built_in">input</span> <span class="keyword">in</span> <span class="built_in">enumerate</span>(inputs): </span><br><span class="line">        <span class="keyword">try</span>: </span><br><span class="line">            ort_session = onnxruntime.InferenceSession(model_name) </span><br><span class="line">            ort_inputs = &#123;<span class="string">&#x27;in&#x27;</span>: <span class="built_in">input</span>&#125; </span><br><span class="line">            ort_session.run([<span class="string">&#x27;out&#x27;</span>], ort_inputs) </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e: </span><br><span class="line">            exceptions[(i, model_name)] = e </span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&#x27;Input[<span class="subst">&#123;i&#125;</span>] on model <span class="subst">&#123;model_name&#125;</span> error.&#x27;</span>) </span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&#x27;Input[<span class="subst">&#123;i&#125;</span>] on model <span class="subst">&#123;model_name&#125;</span> succeed.&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<p>我们在模型导出计算图时用的是一个形状为<code>(1, 3, 10, 10)</code>的张量。现在，我们来尝试以形状分别是<code>(1, 3, 10, 10)</code>, <code>(2, 3, 10, 10)</code>, <code>(1, 3, 20, 20)</code>为输入，用ONNX Runtime运行一下这几个模型，看看哪些情况下会报错，并保存对应的报错信息。得到的输出信息应该如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Input[0] on model model_static.onnx succeed. </span><br><span class="line">Input[1] on model model_static.onnx error. </span><br><span class="line">Input[2] on model model_static.onnx error. </span><br><span class="line">Input[0] on model model_dynamic_0.onnx succeed. </span><br><span class="line">Input[1] on model model_dynamic_0.onnx succeed. </span><br><span class="line">Input[2] on model model_dynamic_0.onnx error. </span><br><span class="line">Input[0] on model model_dynamic_23.onnx succeed. </span><br><span class="line">Input[1] on model model_dynamic_23.onnx error. </span><br><span class="line">Input[2] on model model_dynamic_23.onnx succeed. </span><br></pre></td></tr></table></figure>
+<p>可以看出，形状相同的<code>(1, 3, 10, 10)</code>的输入在所有模型上都没有出错。而对于batch（第 0 维）或者长宽（第 2、3维）不同的输入，只有在设置了对应的动态维度后才不会出错。我们可以错误信息中找出是哪些维度出了问题。比如我们可以用以下代码查看input[1]在<code>model_static.onnx</code>中的报错信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(exceptions[(<span class="number">1</span>, <span class="string">&#x27;model_static.onnx&#x27;</span>)]) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># output </span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">[ONNXRuntimeError] : 2 : INVALID_ARGUMENT : Got invalid dimensions for input: in for the following indices</span></span><br><span class="line"><span class="string"> index: 0 Got: 2 Expected: 1</span></span><br><span class="line"><span class="string"> Please fix either the inputs or the model.</span></span><br><span class="line"><span class="string"> &#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="使用提示">使用提示</h4>
+<p>通过学习之前的知识，我们基本掌握了<code>torch.onnx.export</code>函数的部分实现原理和参数设置方法，足以完成简单模型的转换了。但在实际应用中，使用该函数还会踩很多坑。这里我们模型部署团队把在实战中积累的一些经验分享给大家。</p>
+<h5 id="使模型在-onnx-转换时有不同的行为">使模型在 ONNX 转换时有不同的行为</h5>
+<p>有些时候，我们希望模型在导出至 ONNX 时有一些不同的行为。模型在直接用 PyTorch 推理时有一套逻辑，而在导出的ONNX模型中有另一套逻辑。比如，我们可以把一些后处理的逻辑放在模型里，以简化除运行模型之外的其他代码。<code>torch.onnx.is_in_onnx_export()</code>可以实现这一任务，该函数仅在执行<code>torch.onnx.export()</code>时为真。以下是一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.conv = torch.nn.Conv2d(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        x = self.conv(x) </span><br><span class="line">        <span class="keyword">if</span> torch.onnx.is_in_onnx_export(): </span><br><span class="line">            x = torch.clip(x, <span class="number">0</span>, <span class="number">1</span>) </span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>这里，我们仅在模型导出时把输出张量的数值限制在[0, 1]之间。</p>
+<h5 id="利用中断张量跟踪的操作">利用中断张量跟踪的操作</h5>
+<p>PyTorch 转 ONNX 的跟踪导出法不是万能的。如果我们在模型中做了一些很“出格”的操作，跟踪法会把某些取决于输入的中间结果变成常量，从而使导出的 ONNX 模型和原来的模型有出入。以下是一个会造成这种“跟踪中断”的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        x = x * x[<span class="number">0</span>].item() </span><br><span class="line">        <span class="keyword">return</span> x, torch.Tensor([i <span class="keyword">for</span> i <span class="keyword">in</span> x]) </span><br><span class="line"> </span><br><span class="line">model = Model()       </span><br><span class="line">dummy_input = torch.rand(<span class="number">10</span>) </span><br><span class="line">torch.onnx.export(model, dummy_input, <span class="string">&#x27;a.onnx&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<p>如果你尝试去导出这个模型，会得到一大堆 warning，告诉你转换出来的模型可能不正确。这也难怪，我们在这个模型里使用了.item()把 torch 中的张量转换成了普通的 Python 变量，还尝试遍历 torch 张量，并用一个列表新建一个 torch 张量。这些涉及张量与普通变量转换的逻辑都会导致最终的 ONNX 模型不太正确。 另一方面，我们也可以利用这个性质，在保证正确性的前提下令模型的中间结果变成常量。这个技巧常常用于模型的静态化上，即令模型中所有的张量形状都变成常量。在未来的教程中，我们会在部署实例中详细介绍这些“高级”操作。</p>
+<h5 id="使用张量为输入">使用张量为输入</h5>
+<p>正如我们第一篇教程所展示的，在较旧(&lt; 1.9.0)的 PyTorch 中把 Python 数值作为<code>torch.onnx.export()</code>的模型输入时会报错。出于兼容性的考虑，我们还是推荐以张量为模型转换时的模型输入。</p>
+<h3 id="pytorch对onnx的算子支持">PyTorch对ONNX的算子支持</h3>
+<p>在确保<code>torch.onnx.export()</code>的调用方法无误后，PyTorch 转 ONNX 时最容易出现的问题就是算子不兼容了。这里我们会介绍如何判断某个PyTorch算子在ONNX中是否兼容，以助大家在碰到报错时能更好地把错误归类。而具体添加算子的方法我们会在之后的文章里介绍。 在转换普通的<code>torch.nn.Module</code>模型时，PyTorch 一方面会用跟踪法执行前向推理，把遇到的算子整合成计算图；另一方面，PyTorch 还会把遇到的每个算子翻译成 ONNX 中定义的算子。在这个翻译过程中，可能会碰到以下情况：</p>
+<ul>
+<li>该算子可以一对一地翻译成一个 ONNX 算子。</li>
+<li>该算子在 ONNX 中没有直接对应的算子，会翻译成一至多个 ONNX 算子。</li>
+<li>该算子没有定义翻译成 ONNX 的规则，报错。</li>
+</ul>
+<p>那么，该如何查看 PyTorch 算子与 ONNX 算子的对应情况呢？由于 PyTorch 算子是向 ONNX 对齐的，这里我们先看一下 ONNX 算子的定义情况，再看一下 PyTorch 定义的算子映射关系。</p>
+<h4 id="onnx算子文档">ONNX算子文档</h4>
+<p>ONNX 算子的定义情况，都可以在官方的<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md">算子文档</a>中查看。这份文档十分重要，我们碰到任何和 ONNX 算子有关的问题都得来“请教”这份文档。 <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/8.png"></p>
+<p>这份文档中最重要的开头的这个算子变更表格。表格的第一列是算子名，第二列是该算子发生变动的算子集版本号，也就是我们之前在<code>torch.onnx.export</code>中提到的<code>opset_version</code>表示的算子集版本号。通过查看算子第一次发生变动的版本号，我们可以知道某个算子是从哪个版本开始支持的；通过查看某算子小于等于<code>opset_version</code>的第一个改动记录，我们可以知道当前算子集版本中该算子的定义规则。</p>
+<p><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/9.png"></p>
+<p>通过点击表格中的链接，我们可以查看某个算子的输入、输出参数规定及使用示例。比如上图是 Relu 在 ONNX 中的定义规则，这份定义表明 Relu 应该有一个输入和一个输入，输入输出的类型相同，均为 tensor。</p>
+<h4 id="pytorch对onnx算子的映射">PyTorch对ONNX算子的映射</h4>
+<p>在 PyTorch 中，和 ONNX 有关的定义全部放在<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/tree/main/torch/onnx">torch.onnx目录</a>中，如下图所示： <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/10.png"></p>
+<p>其中，<code>symbolic_opset&#123;n&#125;.py</code>（符号表文件）即表示 PyTorch 在支持第 n 版 ONNX 算子集时新加入的内容。我们之前讲过， bicubic 插值是在第 11 个版本开始支持的。我们以它为例来看看如何查找算子的映射情况。 首先，使用搜索功能，在<code>torch/onnx</code>文件夹搜索"bicubic"，可以发现这个这个插值在第 11 个版本的定义文件中: <img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/11.png"></p>
+<p>之后，我们按照代码的调用逻辑，逐步跳转直到最底层的 ONNX 映射函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">upsample_bicubic2d = _interpolate(<span class="string">&quot;upsample_bicubic2d&quot;</span>, <span class="number">4</span>, <span class="string">&quot;cubic&quot;</span>) </span><br><span class="line"> </span><br><span class="line">-&gt; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_interpolate</span>(<span class="params">name, dim, interpolate_mode</span>): </span><br><span class="line">    <span class="keyword">return</span> sym_help._interpolate_helper(name, dim, interpolate_mode) </span><br><span class="line"> </span><br><span class="line">-&gt; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_interpolate_helper</span>(<span class="params">name, dim, interpolate_mode</span>): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">symbolic_fn</span>(<span class="params">g, <span class="built_in">input</span>, output_size, *args</span>): </span><br><span class="line">        ... </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> symbolic_fn </span><br></pre></td></tr></table></figure>
+<p>最后，在<code>symbolic_fn</code>中，我们可以看到插值算子是怎么样被映射成多个 ONNX 算子的。其中，每一个<code>g.op</code>就是一个 ONNX 的定义。比如其中的 <code>Resize</code> 算子就是这样写的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> g.op(<span class="string">&quot;Resize&quot;</span>, </span><br><span class="line">                <span class="built_in">input</span>, </span><br><span class="line">                empty_roi, </span><br><span class="line">                empty_scales, </span><br><span class="line">                output_size, </span><br><span class="line">                coordinate_transformation_mode_s=coordinate_transformation_mode, </span><br><span class="line">                cubic_coeff_a_f=-<span class="number">0.75</span>,  <span class="comment"># only valid when mode=&quot;cubic&quot; </span></span><br><span class="line">                mode_s=interpolate_mode,  <span class="comment"># nearest, linear, or cubic </span></span><br><span class="line">                nearest_mode_s=<span class="string">&quot;floor&quot;</span>)  <span class="comment"># only valid when mode=&quot;nearest&quot; </span></span><br></pre></td></tr></table></figure>
+<p>通过在前面提到的<a href="https://link.zhihu.com/?target=https%3A//github.com/onnx/onnx/blob/main/docs/Operators.md%23resize">ONNX算子文档</a>中查找 Resize 算子的定义，我们就可以知道这每一个参数的含义了。用类似的方法，我们可以去查询其他 ONNX 算子的参数含义，进而知道 PyTorch 中的参数是怎样一步一步传入到每个 ONNX 算子中的。 掌握了如何查询 PyTorch 映射到 ONNX 的关系后，我们在实际应用时就可以在<code>torch.onnx.export()</code>的<code>opset_version</code>中先预设一个版本号，碰到了问题就去对应的 PyTorch 符号表文件里去查。如果某算子确实不存在，或者算子的映射关系不满足我们的要求，我们就可能得用其他的算子绕过去，或者自定义算子了。</p>
+<h3 id="总结-2">总结</h3>
+<p>在这篇教程中，我们系统地介绍了 PyTorch 转 ONNX 的原理。我们先是着重讲解了使用最频繁的 torch.onnx.export函数，又给出了查询 PyTorch 对 ONNX 算子支持情况的方法。通过本文，我们希望大家能够成功转换出大部分不需要添加新算子的 ONNX 模型，并在碰到算子问题时能够有效定位问题原因。具体而言，大家读完本文后应该了解以下的知识：</p>
+<ul>
+<li>跟踪法和记录法在导出带控制语句的计算图时有什么区别。</li>
+<li><code>torch.onnx.export()</code>中该如何设置<code>input_names</code>, <code>output_names</code>, <code>dynamic_axes</code>。</li>
+<li>使用<code>torch.onnx.is_in_onnx_export()</code>来使模型在转换到 ONNX 时有不同的行为。</li>
+<li>如何查询 ONNX 算子文档（https://github.com/onnx/onnx/blob/main/docs/Operators.md）。</li>
+<li>如何查询 PyTorch 对某个 ONNX 版本的新特性支持情况。</li>
+<li>如何判断 PyTorch 对某个 ONNX 算子是否支持，支持的方法是怎样的。</li>
+</ul>
+<h2 id="在-pytorch-中支持更多-onnx-算子">在 PyTorch 中支持更多 ONNX 算子</h2>
+<p>在上一篇教程中，我们系统地学习了 PyTorch 转 ONNX 的方法，可以发现 PyTorch 对 ONNX 的支持还不错。但在实际的部署过程中，难免碰到模型无法用原生 PyTorch 算子表示的情况。这个时候，我们就得考虑扩充 PyTorch，即在 PyTorch 中支持更多 ONNX 算子。</p>
+<p>而要使 PyTorch 算子顺利转换到 ONNX ，我们需要保证以下三个环节都不出错：</p>
+<ul>
+<li>算子在 PyTorch 中有实现</li>
+<li>有把该 PyTorch 算子映射成一个或多个 ONNX 算子的方法</li>
+<li>ONNX 有相应的算子</li>
+</ul>
+<p>可在实际部署中，这三部分的内容都可能有所缺失。其中最坏的情况是：我们定义了一个全新的算子，它不仅缺少 PyTorch 实现，还缺少 PyTorch 到 ONNX 的映射关系。但所谓车到山前必有路，对于这三个环节，我们也分别都有以下的添加支持的方法：</p>
+<ul>
+<li>PyTorch 算子
+<ul>
+<li>组合现有算子</li>
+<li>添加 TorchScript 算子</li>
+<li>添加普通 C++ 拓展算子</li>
+</ul></li>
+<li>映射方法
+<ul>
+<li>为 ATen 算子添加符号函数</li>
+<li>为 TorchScript 算子添加符号函数</li>
+<li>封装成 <code>torch.autograd.Function</code> 并添加符号函数</li>
+</ul></li>
+<li>ONNX 算子
+<ul>
+<li>使用现有 ONNX 算子</li>
+<li>定义新 ONNX 算子</li>
+</ul></li>
+</ul>
+<p>那么面对不同的情况时，就需要我们灵活地选用和组合这些方法。听起来是不是很复杂？别担心，本篇文章中，我们将围绕着三种算子映射方法，学习三个添加算子支持的实例，来理清如何合适地为 PyTorch 算子转 ONNX 算子的三个环节添加支持。</p>
+<h3 id="支持-aten-算子">支持 ATen 算子</h3>
+<div class="note info"><p><a target="_blank" rel="noopener" href="https://pytorch.org/cppdocs/#aten">ATen</a> 是 PyTorch 内置的 C++ 张量计算库，PyTorch 算子在底层绝大多数计算都是用 ATen 实现的。</p>
+</div>
+<p>实际的部署过程中，我们都有可能会碰到一个最简单的算子缺失问题： 算子在 ATen 中已经实现了，ONNX 中也有相关算子的定义，但是相关算子映射成 ONNX 的规则没有写。在这种情况下，我们只需要为 ATen 算子补充描述映射规则的符号函数就行了。</p>
+<p>比如 ONNX 的 Asinh 算子。这个算子在 ATen 中有实现，却缺少了映射到 ONNX 算子的符号函数。如果直接使用<code>torch.onnx.export</code>，会报错<code>torch.onnx.errors.UnsupportedOperatorError</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.asinh(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = Model()</span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">torch.onnx.export(model, <span class="built_in">input</span>, <span class="string">&#x27;asinh.onnx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>在这里，我们来尝试为它补充符号函数，并导出一个包含这个算子的 ONNX 模型。</p>
+<h4 id="获取-aten-中算子接口定义">获取 ATen 中算子接口定义</h4>
+<p>为了编写符号函数，我们需要获得 <code>asinh</code> 推理接口的输入参数定义。这时，我们要去 <code>torch/_C/_VariableFunctions.pyi</code> 和 <code>torch/nn/functional.pyi</code> 这两个文件中搜索我们刚刚得到的这个算子名。这两个文件是编译 PyTorch 时本地自动生成的文件，里面包含了 ATen 算子的 PyTorch 调用接口。通过搜索，我们可以知道 <code>asinh</code> 在文件 <code>torch/_C/_VariableFunctions.pyi</code> 中，其接口定义为:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">asinh</span>(<span class="params"><span class="built_in">input</span>: Tensor, *, out: <span class="type">Optional</span>[Tensor]=<span class="literal">None</span></span>) -&gt; Tensor: ... </span><br></pre></td></tr></table></figure>
+<p>经过这些步骤，我们确认了缺失的算子名为 <code>asinh</code>，它是一个有实现的 ATen 算子。我们还记下了 <code>asinh</code> 的调用接口。接下来，我们要为它补充符号函数，使它在转换成 ONNX 模型时不再报错。</p>
+<h4 id="添加符号函数">添加符号函数</h4>
+<p>到目前为止，我们已经多次接触了定义 PyTorch 到 ONNX 映射规则的符号函数了。现在，我们向大家正式介绍一下符号函数。</p>
+<p>符号函数，可以看成是 PyTorch 算子类的一个静态方法。在把 PyTorch 模型转换成 ONNX 模型时，各个 PyTorch 算子的符号函数会被依次调用，以完成 PyTorch 算子到 ONNX 算子的转换。符号函数的定义一般如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g: torch._C.Graph, input_0: torch._C.Value, input_1: torch._C.Value, ...</span>): </span><br></pre></td></tr></table></figure>
+<p>其中，<code>torch._C.Graph</code> 和 <code>torch._C.Value</code> 都对应 PyTorch 的 C++ 实现里的一些类。我们在这篇文章不深究它们的细节，只需要知道第一个参数就固定叫 <code>g</code>，它表示和计算图相关的内容；后面的每个参数都表示算子的输入，需要和算子的前向推理接口的输入相同。对于 ATen 算子来说，它们的前向推理接口就是上述两个 <code>.pyi</code> 文件里的函数接口。</p>
+<p><code>g</code> 有一个方法 <code>op</code>。在把 PyTorch 算子转换成 ONNX 算子时，需要在符号函数中调用此方法来为最终的计算图添加一个 ONNX 算子。其定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">op</span>(<span class="params">name: <span class="built_in">str</span>, input_0: torch._C.Value, input_1: torch._C.Value, ...</span>) </span><br></pre></td></tr></table></figure>
+<p>其中，第一个参数是算子名称。如果该算子是普通的 ONNX 算子，只需要把它在 ONNX 官方文档里的名称填进去即可。</p>
+<p>在最简单的情况下，我们只要把 PyTorch 算子的输入用<code>g.op()</code>一一对应到 ONNX 算子上即可，并把<code>g.op()</code>的返回值作为符号函数的返回值。在情况更复杂时，我们转换一个 PyTorch 算子可能要新建若干个 ONNX 算子。</p>
+<p>补充完了背景知识，让我们回到 <code>asinh</code> 算子上，来为它编写符号函数。我们先去翻阅一下 ONNX 算子文档，学习一下我们在符号函数里的映射关系 <code>g.op()</code> 里应该怎么写。<code>Asinh</code> 的<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md#asinh">文档</a>写道：该算子有一个输入 input，一个输出 output，二者的类型都为张量。</p>
+<p>到这里，我们已经完成了信息收集环节。我们在上一小节得知了 <code>asinh</code> 的推理接口定义，在这一小节里收集了 ONNX 算子 <code>Asinh</code> 的定义。现在，我们可以用代码来补充这二者的映射关系了。在刚刚导出 <code>asinh</code> 算子的代码中，我们添加以下内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.onnx.symbolic_registry <span class="keyword">import</span> register_op </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">asinh_symbolic</span>(<span class="params">g, <span class="built_in">input</span>, *, out=<span class="literal">None</span></span>): </span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;Asinh&quot;</span>, <span class="built_in">input</span>) </span><br><span class="line"> </span><br><span class="line">register_op(<span class="string">&#x27;asinh&#x27;</span>, asinh_symbolic, <span class="string">&#x27;&#x27;</span>, <span class="number">9</span>) </span><br></pre></td></tr></table></figure>
+<p>这里的<code>asinh_symbolic</code>就是<code>asinh</code>的符号函数。从除<code>g</code>以外的第二个输入参数开始，其输入参数应该严格对应它在 ATen 中的定义：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">asinh</span>(<span class="params"><span class="built_in">input</span>: Tensor, *, out: <span class="type">Optional</span>[Tensor]=<span class="literal">None</span></span>) -&gt; Tensor: ... </span><br></pre></td></tr></table></figure>
+<p>在符号函数的函数体中，<code>g.op("Asinh", input)</code>则完成了 ONNX 算子的定义。其中，第一个参数<code>Asinh</code>是算子在 ONNX 中的名称。至于第二个参数 <code>input</code>，如我们刚刚在文档里所见，这个算子只有一个输入，因此我们只要把符号函数的输入参数 <code>input</code> 对应过去就行。ONNX 的 <code>Asinh</code> 的输出和 ATen 的 <code>asinh</code> 的输出是一致的，因此我们直接把 <code>g.op()</code> 的结果返回即可。</p>
+<p>定义完符号函数后，我们要把这个符号函数和原来的 ATen 算子“绑定”起来。这里，我们要用到 <code>register_op</code> 这个 PyTorch API 来完成绑定。如示例所示，只需要一行简单的代码即可把符号函数 <code>asinh_symbolic</code> 绑定到算子 <code>asinh</code> 上。</p>
+<p><code>register_op</code>的第一个参数是目标 ATen 算子名，第二个是要注册的符号函数，这两个参数很好理解。第三个参数是算子的“域”，对于普通 ONNX 算子，直接填空字符串即可。第四个参数表示向哪个算子集版本注册。我们遵照 ONNX 标准，向第 9 号算子集注册。值得注意的是，这里向第 9 号算子集注册，不代表较新的算子集（第 10 号、第 11 号……）都得到了注册。在示例中，我们先只向第 9 号算子集注册。</p>
+<p>整理一下，我们最终的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        <span class="keyword">return</span> torch.asinh(x) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> torch.onnx.symbolic_registry <span class="keyword">import</span> register_op </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">asinh_symbolic</span>(<span class="params">g, <span class="built_in">input</span>, *, out=<span class="literal">None</span></span>): </span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;Asinh&quot;</span>, <span class="built_in">input</span>) </span><br><span class="line"> </span><br><span class="line">register_op(<span class="string">&#x27;asinh&#x27;</span>, asinh_symbolic, <span class="string">&#x27;&#x27;</span>, <span class="number">9</span>) </span><br><span class="line"> </span><br><span class="line">model = Model() </span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">torch.onnx.export(model, <span class="built_in">input</span>, <span class="string">&#x27;asinh.onnx&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<div class="note warning"><p>PyTorch2.x接口变了，代码需要改成如下样式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.asinh(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">asinh_symbolic</span>(<span class="params">g, <span class="built_in">input</span>, *, out=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;Asinh&quot;</span>, <span class="built_in">input</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">torch.onnx.register_custom_op_symbolic(<span class="string">&quot;aten::asinh&quot;</span>, asinh_symbolic, <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">model = Model()</span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">torch.onnx.export(model, <span class="built_in">input</span>, <span class="string">&#x27;asinh.onnx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+</div>
+<p>成功导出的话，<code>asinh.onnx</code>应该长这个样子：</p>
+<table>
+<thead>
+<tr class="header">
+<th><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/12.png"></th>
+<th><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/13.png"></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h4 id="测试算子">测试算子</h4>
+<p>在完成了一份自定义算子后，我们一定要测试一下算子的正确性。一般我们要用PyTorch运行一遍原算子，再用推理引擎（ONNX Runtime）运行一下ONNX算子，最后比对两次运行的结果。对于我们刚刚得到的<code>asinh.onnx</code>，可以用如下代码来验证：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> onnxruntime</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.asinh(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">asinh_symbolic</span>(<span class="params">g, <span class="built_in">input</span>, *, out=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;Asinh&quot;</span>, <span class="built_in">input</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = Model()</span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">torch_output = model(<span class="built_in">input</span>).detach().numpy()</span><br><span class="line"></span><br><span class="line">sess = onnxruntime.InferenceSession(<span class="string">&quot;asinh.onnx&quot;</span>)</span><br><span class="line">ort_output = sess.run(<span class="literal">None</span>, &#123;<span class="string">&quot;onnx::Asinh_0&quot;</span>: <span class="built_in">input</span>.numpy()&#125;)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> np.allclose(torch_output, ort_output)</span><br></pre></td></tr></table></figure>
+<p>在这份代码里，我们用 PyTorch 做了一遍推理，并把结果转成了 numpy 格式。之后，我们又用 ONNX Runtime 对 onnx 文件做了一次推理。 最后，我们使用 <code>np.allclose</code> 来保证两个结果张量的误差在一个可以允许的范围内。一切正常的话，运行这段代码后，<code>assert</code> 所在行不会报错，程序应该没有任何输出。</p>
+<h3 id="支持-torchscript-算子">支持 TorchScript 算子</h3>
+<p>对于一些比较复杂的运算，仅使用 PyTorch 原生算子是无法实现的。这个时候，就要考虑自定义一个 PyTorch 算子，再把它转换到 ONNX 中了。新增 PyTorch 算子的方法有很多，PyTorch 官方比较推荐的一种做法是添加<a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/advanced/torch_script_custom_ops.html">TorchScript算子</a> 。</p>
+<p>由于添加算子的方法较繁琐，我们今天跳过新增 TorchScript 算子的内容，以可变形卷积（Deformable Convolution）算子为例，介绍为现有 TorchScript 算子添加 ONNX 支持的方法。</p>
+<div class="note info"><p>可变形卷积（Deformable Convolution）是在 Torchvision 中实现的 TorchScript 算子，虽然尚未得到广泛支持，但是出现在许多模型中。</p>
+</div>
+<p>有了支持 ATen 算子的经验之后，我们可以知道为算子添加符号函数一般要经过以下几步：</p>
+<ol type="1">
+<li>获取原算子的前向推理接口。</li>
+<li>获取目标 ONNX 算子的定义。</li>
+<li>编写符号函数并绑定。</li>
+</ol>
+<p>在为可变形卷积添加符号函数时，我们也可以尝试走一遍这个流程。</p>
+<h4 id="使用-torchscript-算子">使用 TorchScript 算子</h4>
+<p>和之前一样，我们首先定义一个包含了算子的模型，为之后转换 ONNX 模型做准备。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">import</span> torchvision </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.conv1 = torch.nn.Conv2d(<span class="number">3</span>, <span class="number">18</span>, <span class="number">3</span>) </span><br><span class="line">        self.conv2 = torchvision.ops.DeformConv2d(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        <span class="keyword">return</span> self.conv2(x, self.conv1(x))</span><br></pre></td></tr></table></figure>
+<p>其中，<code>torchvision.ops.DeformConv2d</code> 就是 Torchvision 中的可变形卷积层。相比于普通卷积，可变形卷积的其他参数都大致相同，唯一的区别就是在推理时需要多输入一个表示偏移量的张量。</p>
+<p>然后，我们查询算子的前向推理接口。<code>DeformConv2d</code> 层最终会调用 <code>deform_conv2d</code> 这个算子。我们可以在 <code>torchvision/csrc/ops/deform_conv2d.cpp</code> 中查到该算子的调用接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">m.<span class="keyword">def</span>(TORCH_SELECTIVE_SCHEMA( </span><br><span class="line">      <span class="string">&quot;torchvision::deform_conv2d(Tensor input,  </span></span><br><span class="line"><span class="string">      Tensor weight,  </span></span><br><span class="line"><span class="string">      Tensor offset,  </span></span><br><span class="line"><span class="string">      ...... </span></span><br><span class="line"><span class="string">      bool use_mask) -&gt; Tensor&quot;</span>)); </span><br></pre></td></tr></table></figure>
+<p>那么接下来，根据之前的经验，我们就是要去 ONNX 官方文档中查找算子的定义了。</p>
+<h4 id="自定义-onnx-算子">自定义 ONNX 算子</h4>
+<p>很遗憾的是，如果我们去 ONNX 的官方算子页面搜索 "deform"，将搜不出任何内容。目前，ONNX 还没有提供可变形卷积的算子，我们要自己定义一个 ONNX 算子了。</p>
+<p>我们在前面讲过，<code>g.op()</code> 是用来定义 ONNX 算子的函数。对于 ONNX 官方定义的算子，<code>g.op()</code> 的第一个参数就是该算子的名称。而对于一个自定义算子，`g.op()`` 的第一个参数是一个带命名空间的算子名，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.op(<span class="string">&quot;custom::deform_conv2d, ...) </span></span><br></pre></td></tr></table></figure>
+<p>其中，"::"前面的内容就是我们的命名空间。该概念和 C++ 的命名空间类似，是为了防止命名冲突而设定的。如果在 <code>g.op()</code> 里不加前面的命名空间，则算子会被默认成 ONNX 的官方算子。</p>
+<p>PyTorch 在运行 <code>g.op()</code> 时会对官方的算子做检查，如果算子名有误，或者算子的输入类型不正确， <code>g.op()</code> 就会报错。为了让我们随心所欲地定义新 ONNX 算子，我们必须设定一个命名空间，给算子取个名，再定义自己的算子。</p>
+<p>我们在第一篇教程讲过：ONNX 是一套标准，本身不包括实现。在这里，我们就简略地定义一个 ONNX 可变形卷积算子，而不去写它在某个推理引擎上的实现。在后续的文章中，我们再介绍在各个推理引擎中添加新 ONNX 算子支持的方法。此处，我们只关心如何导出一个包含新 ONNX 算子节点的 onnx 文件。因此，我们可以为新算子编写如下简单的符号函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@parse_args(<span class="params"><span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;none&quot;</span></span>) </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g,  </span></span><br><span class="line"><span class="params">        <span class="built_in">input</span>, </span></span><br><span class="line"><span class="params">        weight, </span></span><br><span class="line"><span class="params">        offset, </span></span><br><span class="line"><span class="params">        mask, </span></span><br><span class="line"><span class="params">        bias, </span></span><br><span class="line"><span class="params">        stride_h, stride_w, </span></span><br><span class="line"><span class="params">        pad_h, pad_w, </span></span><br><span class="line"><span class="params">        dil_h, dil_w, </span></span><br><span class="line"><span class="params">        n_weight_grps, </span></span><br><span class="line"><span class="params">        n_offset_grps, </span></span><br><span class="line"><span class="params">        use_mask</span>): </span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;custom::deform_conv2d&quot;</span>, <span class="built_in">input</span>, offset)</span><br></pre></td></tr></table></figure>
+<p>在这个符号函数中，我们以刚刚搜索到的算子输入参数作为符号函数的输入参数，并只用 <code>input</code> 和 <code>offset</code> 来构造一个简单的 ONNX 算子。</p>
+<p>这段代码中，最令人疑惑的就是装饰器 <code>@parse_args</code> 了。简单来说，TorchScript 算子的符号函数要求标注出每一个输入参数的类型。比如"v"表示 Torch 库里的 <code>value</code> 类型，一般用于标注张量，而"i"表示 <code>int</code> 类型，"f"表示 <code>float</code> 类型，"none"表示该参数为空。具体的类型含义可以在 <code>torch.onnx.symbolic_helper.py</code> (<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/onnx/symbolic_helper.py">https://github.com/pytorch/pytorch/blob/master/torch/onnx/symbolic_helper.py</a>)中查看。这里输入参数中的 <code>input</code>, <code>weight</code>, <code>offset</code>, <code>mask</code>, <code>bias</code> 都是张量，所以用"v"表示。后面的其他参数同理。我们不必纠结于 <code>@parse_args</code> 的原理，根据实际情况对符号函数的参数标注类型即可。</p>
+<p>有了符号函数后，我们通过如下的方式注册符号函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">torch.onnx.register_custom_op_symbolic(<span class="string">&quot;torchvision::deform_conv2d&quot;</span>, symbolic, <span class="number">9</span>) </span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">和前面的 `register_op` 类似，注册符号函数时，我们要输入算子名、符号函数、算子集版本。与前面不同的是，这里的算子集版本是最早生效版本，在这里设定版本 <span class="number">9</span>，意味着之后的第 <span class="number">10</span> 号、第 <span class="number">11</span> 号……版本集都能使用这个新算子。</span><br><span class="line"></span><br><span class="line">最后，我们完整的模型导出代码如下：</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">import</span> torchvision </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        self.conv1 = torch.nn.Conv2d(<span class="number">3</span>, <span class="number">18</span>, <span class="number">3</span>) </span><br><span class="line">        self.conv2 = torchvision.ops.DeformConv2d(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>) </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        <span class="keyword">return</span> self.conv2(x, self.conv1(x)) </span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> torch.onnx <span class="keyword">import</span> register_custom_op_symbolic </span><br><span class="line"><span class="keyword">from</span> torch.onnx.symbolic_helper <span class="keyword">import</span> parse_args </span><br><span class="line"> </span><br><span class="line"><span class="meta">@parse_args(<span class="params"><span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;none&quot;</span></span>) </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g,  </span></span><br><span class="line"><span class="params">        <span class="built_in">input</span>, </span></span><br><span class="line"><span class="params">        weight, </span></span><br><span class="line"><span class="params">        offset, </span></span><br><span class="line"><span class="params">        mask, </span></span><br><span class="line"><span class="params">        bias, </span></span><br><span class="line"><span class="params">        stride_h, stride_w, </span></span><br><span class="line"><span class="params">        pad_h, pad_w, </span></span><br><span class="line"><span class="params">        dil_h, dil_w, </span></span><br><span class="line"><span class="params">        n_weight_grps, </span></span><br><span class="line"><span class="params">        n_offset_grps, </span></span><br><span class="line"><span class="params">        use_mask</span>): </span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;custom::deform_conv2d&quot;</span>, <span class="built_in">input</span>, offset) </span><br><span class="line"> </span><br><span class="line">register_custom_op_symbolic(<span class="string">&quot;torchvision::deform_conv2d&quot;</span>, symbolic, <span class="number">9</span>) </span><br><span class="line"> </span><br><span class="line">model = Model() </span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">torch.onnx.export(model, <span class="built_in">input</span>, <span class="string">&#x27;dcn.onnx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>代码成功运行的话，我们应该能得到如下的 ONNX 模型：</p>
+<table>
+<thead>
+<tr class="header">
+<th><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/14.png"></th>
+<th><img src="/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/15.png"></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>可以看到，我们自定义的 ONNX 算子 deform_conv2d 包含了两个输入，一个输出，和我们预想得一样。</p>
+<h3 id="使用-torch.autograd.function">使用 torch.autograd.Function</h3>
+<p>最后，我们来学习一种简单的为 PyTorch 添加 C++ 算子实现的方法，来代替较为复杂的新增 TorchScript 算子。同时，我们会用 <code>torch.autograd.Function</code> 封装这个新算子。<code>torch.autograd.Function</code> 能完成算子实现和算子调用的隔离。不管算子是怎么实现的，它封装后的使用体验以及 ONNX 导出方法会和原生的 PyTorch 算子一样。这是我们比较推荐的为算子添加 ONNX 支持的方法。</p>
+<p>为了应对更复杂的情况，我们来自定义一个奇怪的 <code>my_add</code> 算子。这个算子的输入张量 <code>a</code>, <code>b</code> ，输出 <code>2a + b</code> 的值。我们会先把它在 PyTorch 中实现，再把它导出到 ONNX 中。</p>
+<h4 id="为-pytorch-添加-c-拓展">为 PyTorch 添加 C++ 拓展</h4>
+<p>为 PyTorch 添加简单的 C++ 拓展还是很方便的。对于我们定义的 <code>my_add</code> 算子，可以用以下的 C++ 源文件来实现。我们把该文件命名为 "my_add.cpp"：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// my_add.cpp </span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;torch/torch.h&gt;</span> </span></span><br><span class="line"> </span><br><span class="line"><span class="function">torch::Tensor <span class="title">my_add</span><span class="params">(torch::Tensor a, torch::Tensor b)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * a + b; </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="built_in">PYBIND11_MODULE</span>(my_lib, m) </span><br><span class="line">&#123; </span><br><span class="line">    m.<span class="built_in">def</span>(<span class="string">&quot;my_add&quot;</span>, my_add); </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>由于在 PyTorch 中添加 C++ 拓展和模型部署关系不大，这里我们仅给出这个简单的示例，并不对其原理做过多讲解。</p>
+<p>在这段代码中，<code>torch::Tensor</code> 就是 C++ 中 torch 的张量类型，它的加法和乘法等运算符均已重载。因此，我们可以像对普通标量一样对张量做加法和乘法。</p>
+<p>轻松地完成了算子的实现后，我们用 <code>PYBIND11_MODULE</code> 来为 C++ 函数提供 Python 调用接口。这里的 <code>my_lib</code> 是我们未来要在 Python 里导入的模块名。双引号中的 <code>my_add</code> 是 Python 调用接口的名称，这里我们对齐 C++ 函数的名称，依然用 "my_add"这个名字。</p>
+<p>之后，我们可以编写如下的 Python 代码并命名为 "setup.py"，来编译刚刚的 C++ 文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup </span><br><span class="line"><span class="keyword">from</span> torch.utils <span class="keyword">import</span> cpp_extension </span><br><span class="line"> </span><br><span class="line">setup(name=<span class="string">&#x27;my_add&#x27;</span>, </span><br><span class="line">      ext_modules=[cpp_extension.CppExtension(<span class="string">&#x27;my_lib&#x27;</span>, [<span class="string">&#x27;my_add.cpp&#x27;</span>])], </span><br><span class="line">      cmdclass=&#123;<span class="string">&#x27;build_ext&#x27;</span>: cpp_extension.BuildExtension&#125;) </span><br></pre></td></tr></table></figure>
+<p>这段代码使用了 Python 的 setuptools 编译功能和 PyTorch 的 C++ 拓展工具函数，可以编译包含了 torch 库的 C++ 源文件。这里我们需要填写的只有模块名和模块中的源文件名。我们刚刚把模块命名为 <code>my_lib</code>，而源文件只有一个 <code>my_add.cpp</code>，因此拓展模块那一行要写成 <code>ext_modules=[cpp_extension.CppExtension('my_lib', ['my_add.cpp'])]</code>。</p>
+<p>之后，像处理普通的 Python 包一样执行安装命令，我们的 C++ 代码就会自动编译了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py develop </span><br></pre></td></tr></table></figure>
+<h4 id="用-torch.autograd.function-封装">用 torch.autograd.Function 封装</h4>
+<p>直接用 Python 接口调用 C++ 函数不太“美观”，一种比较优雅的做法是把这个调用接口封装起来。这里我们用 <code>torch.autograd.Function</code> 来封装算子的底层调用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">import</span> my_lib </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyAddFunction</span>(torch.autograd.Function): </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">ctx, a, b</span>): </span><br><span class="line">        <span class="keyword">return</span> my_lib.my_add(a, b) </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g, a, b</span>): </span><br><span class="line">        two = g.op(<span class="string">&quot;Constant&quot;</span>, value_t=torch.tensor([<span class="number">2</span>])) </span><br><span class="line">        a = g.op(<span class="string">&#x27;Mul&#x27;</span>, a, two) </span><br><span class="line">        <span class="keyword">return</span> g.op(<span class="string">&#x27;Add&#x27;</span>, a, b) </span><br></pre></td></tr></table></figure>
+<p>我们在前面的教程中已经见过 <code>torch.autograd.Function</code>，这里我们正式地对其做一个介绍。<code>Function</code> 类本身表示 PyTorch 的一个可导函数，只要为其定义了前向推理和反向传播的实现，我们就可以把它当成一个普通 PyTorch 函数来使用。</p>
+<p>PyTorch 会自动调度该函数，合适地执行前向和反向计算。对模型部署来说，<code>Function</code> 类有一个很好的性质：如果它定义了 <code>symbolic</code> 静态方法，该 <code>Function</code> 在执行 <code>torch.onnx.export()</code> 时就可以根据 <code>symbolic</code> 中定义的规则转换成 ONNX 算子。这个 <code>symbolic</code> 就是前面提到的符号函数，只是它的名称必须是 <code>symbolic</code> 而已。</p>
+<p>在 <code>forward</code> 函数中，我们用 <code>my_lib.my_add(a, b)</code> 就可以调用之前写的C++函数了。这里 <code>my_lib</code> 是库名，<code>my_add</code> 是函数名，这两个名字是在前面C++的 <code>PYBIND11_MODULE</code> 中定义的。</p>
+<p>在 <code>symbolic</code> 函数中，我们用 <code>g.op()</code> 定义了三个算子：常量、乘法、加法。这里乘法和加法的用法和前面提到的 <code>asinh</code> 一样，只需要根据 ONNX 算子定义规则把输入参数填入即可。而在定义常量算子时，我们要把 PyTorch 张量的值传入 <code>value_t</code> 参数中。</p>
+<p>在 ONNX 中，我们需要把新建常量当成一个算子来看待，尽管这个算子并不会以节点的形式出现在 ONNX 模型的可视化结果里。</p>
+<p>把算子封装成 <code>Function</code> 后，我们可以把 <code>my_add</code>算子用起来了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">my_add = MyAddFunction.apply </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyAdd</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, a, b</span>): </span><br><span class="line">        <span class="keyword">return</span> my_add(a, b) </span><br></pre></td></tr></table></figure>
+<p>在这份代码里，我们先用 <code>my_add = MyAddFunction.apply</code> 获取了一个奇怪的变量。这个变量是用来做什么的呢？其实，<code>apply</code>是<code>torch.autograd.Function</code> 的一个方法，这个方法完成了 <code>Function</code> 在前向推理或者反向传播时的调度。我们在使用 <code>Function</code> 的派生类做推理时，不应该显式地调用 <code>forward()</code>，而应该调用其 <code>apply</code> 方法。</p>
+<p>这里我们使用 <code>my_add = MyAddFunction.apply</code> 把这个调用方法取了一个更简短的别名 <code>my_add</code>。以后在使用 <code>my_add</code> 算子时，我们应该忽略 <code>MyAddFunction</code> 的实现细节，而只通过 <code>my_add</code> 这个接口来访问算子。这里 <code>my_add</code> 的地位，和 PyTorch 的 <code>asinh</code>, <code>interpolate</code>, <code>conv2d</code>等原生函数是类似的。</p>
+<p>有了访问新算子的接口后，我们可以进一步把算子封装成一个神经网络中的计算层。我们定义一个叫做的 <code>MyAdd</code> 的 <code>torch.nn.Module</code>，它封装了<code>my_add</code>，就和封装了<code>conv2d</code> 的 <code>torch.nn.Conv2d</code> 一样。</p>
+<h4 id="测试算子-1">测试算子</h4>
+<p>费了好大的功夫来“包装”我们的新算子后，我们终于可以来使用它了。和之前的测试流程一样，让我们用下面的代码来导出一个包含新算子的 ONNX 模型，并验证一下它是否正确。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">model = MyAdd() </span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">torch.onnx.export(model, (<span class="built_in">input</span>, <span class="built_in">input</span>), <span class="string">&#x27;my_add.onnx&#x27;</span>) </span><br><span class="line">torch_output = model(<span class="built_in">input</span>, <span class="built_in">input</span>).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> onnxruntime </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line">sess = onnxruntime.InferenceSession(<span class="string">&#x27;my_add.onnx&#x27;</span>) </span><br><span class="line">ort_output = sess.run(<span class="literal">None</span>, &#123;<span class="string">&#x27;a&#x27;</span>: <span class="built_in">input</span>.numpy(), <span class="string">&#x27;b&#x27;</span>: <span class="built_in">input</span>.numpy()&#125;)[<span class="number">0</span>] </span><br><span class="line"> </span><br><span class="line"><span class="keyword">assert</span> np.allclose(torch_output, ort_output) </span><br></pre></td></tr></table></figure>
+<p>在这份代码中，我们直接把 <code>MyAdd</code> 作为要导出的模型。我们计算了一个 PyTorch 模型的运行结果，又导出 ONNX 模型，计算了 ONNX 模型在 ONNX Runtime 上的运算结果。如果一切正常的话，这两个结果是一样的，这份代码不会报任何错误，没有任何输出。</p>
+<p>可视化一下 <code>my_add.onnx</code>，可以看出，和我们设计得一样，<code>my_add</code> 算子被翻译成了两个 ONNX 算子节点（其中常量算子被放入了 <code>Mul</code> 的参数中）。</p>
+<p>整理一下，整个流程的 Python 代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">import</span> my_lib </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyAddFunction</span>(torch.autograd.Function): </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">ctx, a, b</span>): </span><br><span class="line">        <span class="keyword">return</span> my_lib.my_add(a, b) </span><br><span class="line"> </span><br><span class="line"><span class="meta">    @staticmethod </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">symbolic</span>(<span class="params">g, a, b</span>): </span><br><span class="line">        two = g.op(<span class="string">&quot;Constant&quot;</span>, value_t=torch.tensor([<span class="number">2</span>])) </span><br><span class="line">        a = g.op(<span class="string">&#x27;Mul&#x27;</span>, a, two) </span><br><span class="line">        <span class="keyword">return</span> g.op(<span class="string">&#x27;Add&#x27;</span>, a, b) </span><br><span class="line"> </span><br><span class="line">my_add = MyAddFunction.apply </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyAdd</span>(torch.nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, a, b</span>): </span><br><span class="line">        <span class="keyword">return</span> my_add(a, b) </span><br><span class="line"> </span><br><span class="line">model = MyAdd() </span><br><span class="line"><span class="built_in">input</span> = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">torch.onnx.export(model, (<span class="built_in">input</span>, <span class="built_in">input</span>), <span class="string">&#x27;my_add.onnx&#x27;</span>) </span><br><span class="line">torch_output = model(<span class="built_in">input</span>, <span class="built_in">input</span>).detach().numpy() </span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> onnxruntime </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line">sess = onnxruntime.InferenceSession(<span class="string">&#x27;my_add.onnx&#x27;</span>) </span><br><span class="line">ort_output = sess.run(<span class="literal">None</span>, &#123;<span class="string">&#x27;a&#x27;</span>: <span class="built_in">input</span>.numpy(), <span class="string">&#x27;b&#x27;</span>: <span class="built_in">input</span>.numpy()&#125;)[<span class="number">0</span>] </span><br><span class="line"> </span><br><span class="line"><span class="keyword">assert</span> np.allclose(torch_output, ort_output) </span><br></pre></td></tr></table></figure>
+<h3 id="总结-3">总结</h3>
+<p>在这篇教程中，我们围绕“为 ATen 算子添加符号函数”、“为 TorchScript 算子添加符号函数”、“封装成 <code>torch.autograd.Function</code> 并添加符号函数”这三种添加映射关系的方法，讲解了 3 个为 PyTorch 和 ONNX 添加支持的实例。在这个过程中，我们学到了很多零散的知识，来总结一下吧。</p>
+<ul>
+<li>ATen 是 PyTorch 的 C++ 张量运算库。通过查询 <code>torch/_C/_VariableFunctions.pyi</code> 和 <code>torch/nn/functional.pyi</code>，我们可以知道 ATen 算子的 Python 接口定义。</li>
+<li>用 <code>register_op</code> 可以为 ATen 算子补充注册符号函数。</li>
+<li>用 <code>register_custom_op_symbolic</code> 可以为 TorchScript 算子补充注册符号函数</li>
+<li>如何在 PyTorch 里添加 C++ 拓展。</li>
+<li>如何用 torch.autograd.Function 封装一个自定义 PyTorch 算子。</li>
+<li>如何用 <code>g.op()</code> 把一个 PyTorch 算子映射成一个或多个 ONNX 算子，或者是自定义的 ONNX 算子。</li>
+</ul>
+<h2 id="onnx模型的修改与调试">ONNX模型的修改与调试</h2>
+<h3 id="onnx的底层实现">ONNX的底层实现</h3>
+<h4 id="onnx的存储格式">ONNX的存储格式</h4>
+<h4 id="onnx的结构定义">ONNX的结构定义</h4>
+<h3 id="读写onnx模型">读写ONNX模型</h3>
+<h4 id="构造onnx模型">构造ONNX模型</h4>
+<h4 id="读写并修改onnx模型">读写并修改ONNX模型</h4>
+<h3 id="调试onnx模型">调试ONNX模型</h3>
+<h4 id="子模型提取">子模型提取</h4>
+<h4 id="输出onnx中间节点的值">输出ONNX中间节点的值</h4>
+<h3 id="总结-4">总结</h3>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" title="模型部署入门教程">https://fengyan-wby.github.io/2023/10/16/模型部署入门教程/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ONNX/" rel="tag"><i class="fa fa-tag"></i> ONNX</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/12/Ubuntu%E5%AE%89%E8%A3%85%E5%BE%AE%E4%BF%A1%E6%95%99%E7%A8%8B/" rel="prev" title="Ubuntu安装微信教程">
+                  <i class="fa fa-angle-left"></i> Ubuntu安装微信教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">131k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

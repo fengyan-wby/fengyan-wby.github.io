@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转自https:&#x2F;&#x2F;github.com&#x2F;chenking2020&#x2F;FindTheChatGPTer。 汇总开源AIGC大模型，持续更新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AIGC大模型汇总">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="转自https:&#x2F;&#x2F;github.com&#x2F;chenking2020&#x2F;FindTheChatGPTer。 汇总开源AIGC大模型，持续更新。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-26T05:55:30.000Z">
+<meta property="article:modified_time" content="2023-10-19T07:53:21.066Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="AIGC">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/","path":"2023/05/26/AIGC大模型汇总/","title":"AIGC大模型汇总"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AIGC大模型汇总 | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E4%B8%BB%E6%A8%A1%E5%9E%8B%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">自主模型篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#chatyuan"><span class="nav-number">1.1.</span> <span class="nav-text">ChatYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#colossal-ai"><span class="nav-number">1.2.</span> <span class="nav-text">Colossal AI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chatglm"><span class="nav-number">1.3.</span> <span class="nav-text">ChatGLM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#palm-rlhf-pytorch"><span class="nav-number">1.4.</span> <span class="nav-text">PaLM-rlhf-pytorch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openflamingo"><span class="nav-number">1.5.</span> <span class="nav-text">OpenFlamingo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#moss"><span class="nav-number">1.6.</span> <span class="nav-text">MOSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mplug-owl"><span class="nav-number">1.7.</span> <span class="nav-text">mPLUG-Owl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pandalm"><span class="nav-number">1.8.</span> <span class="nav-text">PandaLM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#llama%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">LLaMA篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stanford-alpaca"><span class="nav-number">2.1.</span> <span class="nav-text">stanford-alpaca</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chatllama"><span class="nav-number">2.2.</span> <span class="nav-text">ChatLLaMA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openchatkit"><span class="nav-number">2.3.</span> <span class="nav-text">OpenChatKit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#belle"><span class="nav-number">2.4.</span> <span class="nav-text">BELLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alpaca-lora"><span class="nav-number">2.5.</span> <span class="nav-text">alpaca-lora</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dolly"><span class="nav-number">2.6.</span> <span class="nav-text">Dolly</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vicuna%E5%92%8Cchinese-vicuna"><span class="nav-number">2.7.</span> <span class="nav-text">Vicuna和Chinese-Vicuna</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lmflow"><span class="nav-number">2.8.</span> <span class="nav-text">LMFLOW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#baize%E7%99%BD%E6%B3%BD"><span class="nav-number">2.9.</span> <span class="nav-text">Baize白泽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#koala%E8%80%83%E6%8B%89"><span class="nav-number">2.10.</span> <span class="nav-text">Koala考拉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stackllama"><span class="nav-number">2.11.</span> <span class="nav-text">StackLLaMA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chinese-llama-alpaca"><span class="nav-number">2.12.</span> <span class="nav-text">Chinese-LLaMA-Alpaca</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deep-speed-chat"><span class="nav-number">2.13.</span> <span class="nav-text">Deep Speed Chat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wombat"><span class="nav-number">2.14.</span> <span class="nav-text">Wombat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#guanaco"><span class="nav-number">2.15.</span> <span class="nav-text">Guanaco</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llmzoo%E5%87%A4%E5%87%B0phoenix%E5%92%8Cchimera"><span class="nav-number">2.16.</span> <span class="nav-text">LLMZoo（凤凰Phoenix和Chimera）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openassistant"><span class="nav-number">2.17.</span> <span class="nav-text">OpenAssistant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#huggingchat"><span class="nav-number">2.18.</span> <span class="nav-text">HuggingChat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stablelm"><span class="nav-number">2.19.</span> <span class="nav-text">StableLM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8E%E9%A9%BChuatuo"><span class="nav-number">2.20.</span> <span class="nav-text">华驼(HuaTuo)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chatrwkvraven"><span class="nav-number">2.21.</span> <span class="nav-text">ChatRWKV(Raven)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-align%E5%92%8Cdromedary"><span class="nav-number">2.22.</span> <span class="nav-text">SELF-ALIGN和Dromedary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llava"><span class="nav-number">2.23.</span> <span class="nav-text">LLaVA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minigpt-4"><span class="nav-number">2.24.</span> <span class="nav-text">miniGPT-4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#instructblip"><span class="nav-number">2.25.</span> <span class="nav-text">InstructBLIP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#billa"><span class="nav-number">2.26.</span> <span class="nav-text">BiLLa</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ziya-llama-13b-v1"><span class="nav-number">2.27.</span> <span class="nav-text">Ziya-LLaMA-13B-v1</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AIGC大模型汇总 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AIGC大模型汇总
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-26 13:55:30" itemprop="dateCreated datePublished" datetime="2023-05-26T13:55:30+08:00">2023-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-19 15:53:21" itemprop="dateModified" datetime="2023-10-19T15:53:21+08:00">2023-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/26/AIGC大模型汇总/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转自<a target="_blank" rel="noopener" href="https://github.com/chenking2020/FindTheChatGPTer">https://github.com/chenking2020/FindTheChatGPTer</a>。 汇总开源AIGC大模型，持续更新。</p>
+<span id="more"></span>
+<h2 id="自主模型篇">自主模型篇</h2>
+<p>该类方法通过自主设计模型或者优化GPT、T5等模型，来实现大模型的预训练、监督微调以及强化学习过程。</p>
+<h3 id="chatyuan">ChatYuan</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/clue-ai/ChatYuan">https://github.com/clue-ai/ChatYuan</a></li>
+</ul>
+<p>ChatYuan（元语AI）是由元语智能开发团队开发和发布的，自称第一个国内最早的一个功能型对话大模型，可以写文章、写作业、写诗歌、做中英文间的翻译；一些法律等特定领域问题也可以提供相关信息，该模型目前只支持中文。从披露的技术细节看，底层采用7亿参数规模的T5模型，并基于PromptClue进行了监督微调形成了ChatYuan。该模型基本上是ChatGPT技术路线的三步的第一步，没有实现奖励模型训练和PPO强化学习训练。</p>
+<h3 id="colossal-ai">Colossal AI</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/hpcaitech/ColossalAI">https://github.com/hpcaitech/ColossalAI</a></li>
+</ul>
+<p>最近，ColossalAI开源了他们的ChatGPT实现。分享了他们的三步策略，完整实现了ChatGPT核心的技术路线。</p>
+<h3 id="chatglm">ChatGLM</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/THUDM/ChatGLM-6B">https://github.com/THUDM/ChatGLM-6B</a></li>
+</ul>
+<p>ChatGLM是清华技术成果转化的公司智谱AI开源的GLM系列的对话模型，支持中英两个语种，目前开源了其62亿参数量的模型。其继承了GLM之前的优势，在模型架构上进行了优化，从而使得部署和应用门槛变低，实现大模型在消费级显卡上的推理应用。</p>
+<p>从技术路线上看，其实现了ChatGPT强化学习人类对齐策略，使得生成效果更佳贴近人类价值，其目前能力域主要包括自我认知、提纲写作、文案写作、邮件写作助手、信息抽取、角色扮演、评论比较、旅游建议等，目前其已经开发了正在内测的1300亿的超大模型，算是目前开源平替里面参数规模较大的对话大模型。</p>
+<p>该团队近期开源了ChatGLM-6B的多模态版，支持图像、中文和英文的多模态对话。语言模型部分采用ChatGLM-6B，图像部分通过训练BLIP2-Qformer构建起视觉模型与语言模型的桥梁，整体模型共78亿参数。VisualGLM-6B依靠来自于CogView数据集的30M高质量中文图文对，与300M经过筛选的英文图文对进行预训练，中英文权重相同。该训练方式较好地将视觉信息对齐到ChatGLM的语义空间；之后的微调阶段，模型在长视觉问答数据上训练，以生成符合人类偏好的答案。</p>
+<p>VisualGLM-6B开源地址为：<a target="_blank" rel="noopener" href="https://github.com/THUDM/VisualGLM-6B">https://github.com/THUDM/VisualGLM-6B</a></p>
+<h3 id="palm-rlhf-pytorch">PaLM-rlhf-pytorch</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/lucidrains/PaLM-rlhf-pytorch">https://github.com/lucidrains/PaLM-rlhf-pytorch</a></li>
+</ul>
+<p>其号称首个开源ChatGPT平替项目，其基本思路是基于谷歌语言大模型PaLM架构，以及使用从人类反馈中强化学习的方法（RLHF）。PaLM是谷歌在今年4月发布的5400亿参数全能大模型，基于Pathways系统训练。其可以完成写代码、聊天、语言理解等任务，并且在大多数任务上具有强大的少样本学习性能。同时采用了ChatGPT一样的强化学习机制，能让AI的回答更加符合情景要求，降低模型毒性。</p>
+<h3 id="openflamingo">OpenFlamingo</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/mlfoundations/open_flamingo">https://github.com/mlfoundations/open_flamingo</a></li>
+</ul>
+<p>OpenFlamingo是一个对标GPT-4、支持大型多模态模型训练和评估的框架，由非盈利机构LAION重磅开源发布，其是对DeepMind的Flamingo模型的复现。目前开源的是其基于LLaMA的 OpenFlamingo-9B模型。Flamingo模型在包含交错文本和图像的大规模网络语料库上进行训练，具备上下文少样本学习能力。OpenFlamingo实现了原始Flamingo中提出的相同架构，在一个新的多模态C4数据集的5M样本和LAION-2B的10M样本上训练而来。</p>
+<h3 id="moss">MOSS</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/OpenLMLab/MOSS">https://github.com/OpenLMLab/MOSS</a></li>
+</ul>
+<p>今年2月21日，复旦大学发布了MOSS，并开放公测，在公测崩溃后引起一些争议。现在该项目迎来重要更新和开源。开源的MOSS支持中英两个语种，且支持插件化，如解方程、搜索等。参数量16B，在约七千亿中英文以及代码单词上预训练得到，后续经过对话指令微调、插件增强学习和人类偏好训练具备多轮对话能力及使用多种插件的能力。</p>
+<h3 id="mplug-owl">mPLUG-Owl</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/X-PLUG/mPLUG-Owl">https://github.com/X-PLUG/mPLUG-Owl</a></li>
+</ul>
+<p>与miniGPT-4、LLaVA类似，其是一个对标GPT-4的开源多模态大模型，其延续了mPLUG系列的模块化训练思想。其目前开源了7B参数量的模型，同时第一次针对视觉相关的指令理解提出一个全⾯的测试集 OwlEval，通过人工评测对比了已有模型，包括LLaVA、MiniGPT-4等工作，其展示出更优的多模态能力，尤其在多模态指令理解能力、多轮对话能力、知识推理能力等方⾯表现突出。目前遗憾的是跟其他图文大模型一样，仍然只支持英文，但中文版已在其待开源List中。</p>
+<h3 id="pandalm">PandaLM</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/WeOpenML/PandaLM">https://github.com/WeOpenML/PandaLM</a></li>
+</ul>
+<p>PandaLM是一个模型评估大模型，旨在对其他大模型生成内容的偏好进行自动评价，节省人工评估成本。PandaLM自带有Web界面进行分析，同时还支持Python代码调用，仅用三行代码即可对任意模型和数据生成的文本评估，使用很方便。</p>
+<h2 id="llama篇">LLaMA篇</h2>
+<p>该类方法主要以LLaMA模型为base，训练出新的模型。LLaMA是由Meta发布的全新人工智能大型语言模型，在生成文本、对话、总结书面材料、证明数学定理或预测蛋白质结构等任务上方面表现良好。LLaMA模型支持20种语言，包括拉丁语和西里尔字母语言，目前看原始模型并不支持中文。可以说LLaMA的史诗级泄露大力推进了类ChatGPT的开源发展。</p>
+<h3 id="stanford-alpaca">stanford-alpaca</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">https://github.com/tatsu-lab/stanford_alpaca</a></li>
+</ul>
+<p>斯坦福发布的alpaca（羊驼模型），是一个基于LLaMA-7B模型微调出一个新模型，其基本原理是让OpenAI的text-davinci-003模型以self-instruct方式生成52K指令样本，以此来微调LLaMA。该项目已将训练数据、生成训练数据的代码和超参数开源，模型文件尚未开源，以一天多达到5.6K星的关注度。该项工作由于成本低廉、数据易得，大受欢迎，也开启了低成本ChatGPT的效仿之路。</p>
+<h3 id="chatllama">ChatLLaMA</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/nebuly-ai/nebullvm/tree/main/apps/accelerate/chatllama">https://github.com/nebuly-ai/nebullvm/tree/main/apps/accelerate/chatllama</a></li>
+</ul>
+<p>是由Nebuly+AI推出的基于人类反馈强化学习的LLaMA+AI聊天机器人的开源实现，它的技术路线类似 ChatGPT，该项目上线刚刚 2 天，狂揽 5.2K 星。</p>
+<p>ChatLLaMA 训练过程算法实现主打比 ChatGPT 训练更快、更便宜，据说能快近15倍，主要特色有：</p>
+<ul>
+<li>完整的开源实现，允许用户基于预训练的 LLaMA 模型构建 ChatGPT 风格的服务；</li>
+<li>LLaMA 架构更小，使得训练过程和推理速度更快，成本更低；</li>
+<li>内置了对 DeepSpeed ZERO 的支持，以加速微调过程；</li>
+<li>支持各种尺寸的 LLaMA 模型架构，用户可以根据自身偏好对模型进行微调。</li>
+</ul>
+<h3 id="openchatkit">OpenChatKit</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/togethercomputer/OpenChatKit">https://github.com/togethercomputer/OpenChatKit</a></li>
+</ul>
+<p>OpenChatKit由前OpenAI研究员所在的Together团队，以及LAION、Ontocord.ai团队共同打造。OpenChatKit包含200亿个参数，用GPT-3的开源版本GPT-NoX-20B进行微调。同时，不同ChatGPT的强化学习，OpenChatKit采用一个60亿参数的审核模型，对不合适或者是有害的信息进行过滤，确保生成内容的安全和质量。</p>
+<h3 id="belle">BELLE</h3>
+<p>链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">https://github.com/LianjiaTech/BELLE</a></li>
+</ul>
+<p>基于 Stanford Alpaca ，实现基于Bloom、LLama的监督微调。Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，该开源项目是促进中文对话大模型开源社区的发展，针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。</p>
+<h3 id="alpaca-lora">alpaca-lora</h3>
+<p>alpaca-lora是斯坦福大学的另一个巨作，其使用LoRA（low-rank adaptation）技术复现了Alpaca的结果，用了一个更加低成本的方法，只在一块RTX 4090显卡上训练5个小时得到了一个Alpaca水平相当的模型。而且，该模型可以在树莓派上运行。在该项目中，其使用了Hugging Face的PEFT来实现廉价高效的微调。PEFT 是一个库（LoRA 是其支持的技术之一），可以让你使用各种基于 Transformer的语言模型并使用LoRA对其进行微调，从而使得在一般的硬件上廉价而有效地微调模型。该项目github地址是： <a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">https://github.com/tloen/alpaca-lora</a></p>
+<p>尽管 Alpaca和alpaca-lora取得了较大的提升，但其种子任务都是英语，缺乏对中文的支持。一方面除了以上提到Belle收集到了大量的中文语料，另一方面基于alpaca-lora等前人工作，来自华中师范大学等机构的三位个人开发者开源的中文语言模型骆驼 (Luotuo)，单卡就能完成训练部署。目前该项目释放了两个模型 luotuo-lora-7b-0.1、luotuo-lora-7b-0.3，还有一个模型在计划中。其github地址是： <a target="_blank" rel="noopener" href="https://github.com/LC1332/Chinese-alpaca-lora">https://github.com/LC1332/Chinese-alpaca-lora</a></p>
+<h3 id="dolly">Dolly</h3>
+<p>Dolly在Alpaca的启发下，用Alpaca数据集，在GPT-J-6B上实现微调，由于Dolly本身是一个模型的“克隆”，所以团队最终决定将其命名为“多莉”。这种克隆式在Alpaca启发下越来越多，总结起来大致采用Alpaca开源的数据获取方式，在6B或者7B规模大小的旧模型上进行指令微调，获得类似ChatGPT的的效果。这种思想很经济，也能迅速模仿出ChatGPT的韵味来，广受欢迎，一经推出star爆棚。该项目github地址是：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly">https://github.com/databrickslabs/dolly</a></p>
+<p>4月12日，Databricks发布了Dolly2.0，号称业内第一个开源、遵循指令的LLM，数据集由Databricks员工生成，并进行了开源且可用于商业目的。新提出的Dolly2.0是一个120亿参数的语言模型，基于开源EleutherAI pythia模型系列，针对小型开源指令记录语料库进行了微调。</p>
+<p>开源地址为： <a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly">https://github.com/databrickslabs/dolly</a><br>
+<a target="_blank" rel="noopener" href="https://huggingface.co/databricks/dolly-v2-12b">https://huggingface.co/databricks/dolly-v2-12b</a></p>
+<h3 id="vicuna和chinese-vicuna">Vicuna和Chinese-Vicuna</h3>
+<p>斯坦福学者继推出alpaca后，联手CMU、UC伯克利等，推出一个全新模型——130亿参数的Vicuna（俗称小羊驼、骆马）。仅需300美元就能实现ChatGPT 90%的性能。Vicuna是通过在ShareGPT收集的用户共享对话上对LLaMA进行微调训练而来，测试过程使用GPT-4作为评判标准，结果显示Vicuna-13B在超过90%的情况下实现了与ChatGPT和Bard相匹敌的能力。</p>
+<p>UC伯克利LMSys org近期又发布了70亿参数的Vicuna，不仅体积小、效率高、能力强，而且只需两行命令就能在M1/M2芯片的Mac上运行，还能开启GPU加速！ github开源地址为： <a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat/">https://github.com/lm-sys/FastChat/</a></p>
+<p>另一个中文版的进行了开源Chinese-Vicuna ，github地址为： <a target="_blank" rel="noopener" href="https://github.com/Facico/Chinese-Vicuna">https://github.com/Facico/Chinese-Vicuna</a></p>
+<h3 id="lmflow">LMFLOW</h3>
+<p>ChatGPT爆火后，都在寻找通往圣殿的快捷之路，一些类ChatGPT开始出现，尤其是低成本效仿ChatGPT成为一个热门途径。LMFlow就是在这种需求场景下诞生的产物，他使得在3090这样的普通显卡上也能炼大模型。该项目由香港科技大学统计和机器学习实验室团队发起，致力于建立一个全开放的大模型研究平台，支持有限机器资源下的各类实验，并且在平台上提升现有的数据利用方式和优化算法效率，让平台发展成一个比之前方法更高效的大模型训练系统。</p>
+<p>利用该项目，即便是有限的计算资源，也能让使用者针对专有领域支持个性化训练。例如LLaMA-7B，一张3090耗时 5 个小时即可完成训练，成本大幅降低。该项目还开放了网页端即刻体验问答服务 (lmflow.com)。LMFlow的出现和开源使得普通资源可以训练问答、陪伴、写作、翻译、专家领域咨询等各种任务。目前很多研究者们正在尝试用该项目训练650亿甚至更高参数量的大模型。</p>
+<p>该项目github地址为： <a target="_blank" rel="noopener" href="https://github.com/OptimalScale/LMFlow">https://github.com/OptimalScale/LMFlow</a></p>
+<h3 id="baize白泽">Baize白泽</h3>
+<p>该项目提出了一个自动收集 ChatGPT 对话的方法，让 ChatGPT 自我对话，批量生成高质量多轮对话数据集，分别收集了5万条左右Quora、StackOverflow和MedQA的高质量问答语料，并已经全部开源。同时其改进了LLama模型，效果还不错。白泽同样采用目前低成本的LoRA微调方案，获得白泽-7B、13B 和30B三种不同尺度，以及一个医疗垂直领域的模型。遗憾的是中文名字起的不错，但目前仍然不支持中文，中文的白泽模型据悉在计划中，未来发布。其开源github地址是： <a target="_blank" rel="noopener" href="https://github.com/project-baize/baize">https://github.com/project-baize/baize</a></p>
+<h3 id="koala考拉">Koala考拉</h3>
+<p>基于LLama的ChatGPT平替继续发酵，UC伯克利的伯克利发布了一个可以在消费级GPU上运行的对话模型Koala，参数达到13B。Koala 的训练数据集包括如下几个部分：ChatGPT数据和开源数据（Open Instruction Generalist (OIG)、斯坦福 Alpaca 模型使用的数据集、Anthropic HH、OpenAI WebGPT、OpenAI Summarization）。Koala模型在EasyLM中使用JAX/Flax实现，用了8 个A100 GPU，完成2轮迭代需要6个小时。评测效果优于Alpaca，达到ChatGPT 50%的性能。</p>
+<p>开源地址：<a target="_blank" rel="noopener" href="https://github.com/young-geng/EasyLM">https://github.com/young-geng/EasyLM</a></p>
+<h3 id="stackllama">StackLLaMA</h3>
+<p>随着斯坦福Alpaca的出现，一大堆基于LLama的羊驼家族和扩展动物家族开始出现，终于Hugging Face研究人员近期发布了一篇博客StackLLaMA：用RLHF训练LLaMA的实践指南。同时也发布了一个70亿参数的模型——StackLLaMA。这是一个通过人类反馈强化学习在LLaMA-7B微调而来的模型。详细见其博客地址： <a target="_blank" rel="noopener" href="https://huggingface.co/blog/stackllama">https://huggingface.co/blog/stackllama</a></p>
+<h3 id="chinese-llama-alpaca">Chinese-LLaMA-Alpaca</h3>
+<p>该项目针对中文对LLaMA进行了优化，并开源了其精调对话系统。该项目具体步骤包括：</p>
+<ol type="1">
+<li>词表扩充，采用sentencepiece在中文数据上进行了训练构建，并与LLaMA词表进行了合并；</li>
+<li>预训练，在新词表上，约20G左右的通用中文语料进行了训练，训练中运用了LoRA技术；</li>
+<li>利用Stanford Alpaca，在51k数据上进行了精调训练获得对话能力。</li>
+</ol>
+<p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">https://github.com/ymcui/Chinese-LLaMA-Alpaca</a></p>
+<h3 id="deep-speed-chat">Deep Speed Chat</h3>
+<p>该项目带来了全民ChatGPT的时代，训练成本再次大幅降低。项目是微软基于其Deep Speed优化库开发而成，具备强化推理、RLHF模块、RLHF系统三大核心功能，可将训练速度提升15倍以上，成本却大幅度降低。例如，一个130亿参数的类ChatGPT模型，只需1.25小时就能完成训练。 开源地址为：<a target="_blank" rel="noopener" href="https://github.com/microsoft/DeepSpeed">https://github.com/microsoft/DeepSpeed</a></p>
+<h3 id="wombat">Wombat</h3>
+<p>该项目采取了不同于RLHF的方式RRHF进行人类偏好对齐，RRHF相对于RLHF训练的模型量和超参数量远远降低。RRHF训练得到的Wombat-7B在性能上相比于Alpaca有显著的增加，和人类偏好对齐的更好。</p>
+<p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/GanjinZero/RRHF">https://github.com/GanjinZero/RRHF</a></p>
+<h3 id="guanaco">Guanaco</h3>
+<p>Guanaco是一个基于目前主流的LLaMA-7B模型训练的指令对齐语言模型，原始52K数据的基础上，额外添加了534K+条数据，涵盖英语、日语、德语、简体中文、繁体中文（台湾）、繁体中文（香港）以及各种语言和语法任务。丰富的数据助力模型的提升和优化，其在多语言环境中展示了出色的性能和潜力。</p>
+<p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/Guanaco-Model/Guanaco-Model.github.io">https://github.com/Guanaco-Model/Guanaco-Model.github.io</a></p>
+<h3 id="llmzoo凤凰phoenix和chimera">LLMZoo（凤凰Phoenix和Chimera）</h3>
+<p>LLMZoo，即LLM动物园开源项目维护了一系列开源大模型，其中包括了近期备受关注的来自香港中文大学（深圳）和深圳市大数据研究院的王本友教授团队开发的Phoenix（凤凰）和Chimera等开源大语言模型，其中文本效果号称接近百度文心一言，GPT-4评测号称达到了97%文心一言的水平，在人工评测中五成不输文心一言。</p>
+<p>Phoenix 模型有两点不同之处：在微调方面，指令式微调与对话式微调的进行了优化结合；支持四十余种全球化语言。</p>
+<p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/FreedomIntelligence/LLMZoo">https://github.com/FreedomIntelligence/LLMZoo</a></p>
+<h3 id="openassistant">OpenAssistant</h3>
+<p>OpenAssistant是一个开源聊天助手，其可以理解任务、与第三方系统交互、动态检索信息。据其说，其是第一个在人类数据上进行训练的完全开源的大规模指令微调模型。该模型主要创新在于一个较大的人类反馈数据集（详细说明见数据篇），公开测试显示效果在人类对齐和毒性方面做的不错，但是中文效果尚有不足。</p>
+<p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/LAION-AI/Open-Assistant">https://github.com/LAION-AI/Open-Assistant</a></p>
+<h3 id="huggingchat">HuggingChat</h3>
+<p>HuggingChat是Huggingface继OpenAssistant推出的对标ChatGPT的开源平替。其能力域基本与ChatGPT一致，在英文等语系上效果惊艳，被成为ChatGPT目前最强开源平替。但笔者尝试了中文，可谓一塌糊涂，中文能力还需要有较大的提升。HuggingChat的底座是oasst-sft-6-llama-30b，也是基于Meta的LLaMA-30B微调的语言模型。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor">https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor</a><br>
+在线体验地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/chat">https://huggingface.co/chat</a></p>
+<h3 id="stablelm">StableLM</h3>
+<p>StableVicuna是一个Vicuna-13B v0（LLaMA-13B上的微调）的RLHF的微调模型。</p>
+<p>StableLM-Alpha是以开源数据集the Pile（含有维基百科、Stack Exchange和PubMed等多个数据源）基础上训练所得，训练token量达1.5万亿。</p>
+<p>为了适应对话，其在Stanford Alpaca模式基础上，结合了Stanford's Alpaca, Nomic-AI's gpt4all, RyokoAI's ShareGPT52K datasets, Databricks labs' Dolly, and Anthropic's HH.等数据集，微调获得模型StableLM-Tuned-Alpha</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Stability-AI/StableLM">https://github.com/Stability-AI/StableLM</a></p>
+<h3 id="华驼huatuo">华驼(HuaTuo)</h3>
+<p>该模型垂直医学领域，经过中文医学指令精调/指令集对原始LLaMA-7B模型进行了微调，增强了医学领域上的对话能力。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese">https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese</a></p>
+<h3 id="chatrwkvraven">ChatRWKV(Raven)</h3>
+<p>该模型的底座采用了自主研发的RWKV语言模型，100% RNN，微调部分仍然是经典的Alpaca、CodeAlpaca、Guanaco、GPT4All、 ShareGPT等。其开源了1B5、3B、7B和14B的模型，目前支持中英两个语种，提供不同语种比例的模型文件。</p>
+<p>该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/BlinkDL/ChatRWKV">https://github.com/BlinkDL/ChatRWKV</a><br>
+<a target="_blank" rel="noopener" href="https://huggingface.co/BlinkDL/rwkv-4-raven">https://huggingface.co/BlinkDL/rwkv-4-raven</a></p>
+<h3 id="self-align和dromedary">SELF-ALIGN和Dromedary</h3>
+<p>目前大部分类ChatGPT基本都是采用人工对齐方式，如RLHF，Alpaca模式只是实现了ChatGPT的效仿式对齐，对齐能力受限于原始ChatGPT对齐能力。卡内基梅隆大学语言技术研究所、IBM 研究院MIT-IBM Watson AI Lab和马萨诸塞大学阿默斯特分校的研究者提出了一种全新的自对齐方法。其结合了原则驱动式推理和生成式大模型的生成能力，用极少的监督数据就能达到很好的效果。该项目工作成功应用在LLaMA-65b模型上，研发出了Dromedary（单峰骆驼）。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/IBM/Dromedary">https://github.com/IBM/Dromedary</a></p>
+<h3 id="llava">LLaVA</h3>
+<p>LLaVA是一个多模态的语言和视觉对话模型，类似GPT-4，其主要还是在多模态数据指令工程上做了大量工作，目前开源了其13B的模型文件。从性能上，据了解视觉聊天相对得分达到了GPT-4的85%；多模态推理任务的科学问答达到了SoTA的92.53%。该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/haotian-liu/LLaVA">https://github.com/haotian-liu/LLaVA</a></p>
+<h3 id="minigpt-4">miniGPT-4</h3>
+<p>从名字上看，该项目对标GPT-4的能力域，实现了一个缩略版。该项目来自来自沙特阿拉伯阿卜杜拉国王科技大学的研究团队。该模型利用两阶段的训练方法，先在大量对齐的图像-文本对上训练以获得视觉语言知识，然后用一个较小但高质量的图像-文本数据集和一个设计好的对话模板对预训练的模型进行微调，以提高模型生成的可靠性和可用性。该模型语言解码器使用Vicuna，视觉感知部分使用与BLIP-2相同的视觉编码器。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Vision-CAIR/MiniGPT-4">https://github.com/Vision-CAIR/MiniGPT-4</a></p>
+<h3 id="instructblip">InstructBLIP</h3>
+<p>该项目与上述MiniGPT-4底层具有很大相通的地方，文本部分都使用了Vicuna，视觉部分则是BLIP-2微调而来。在论文和评测中，该模型在看图理解、逻辑推理和对话描述方面具有强大的优势，甚至号称超过GPT-4。InstructBLIP强大性能主要体现在视觉-语言指令数据集构建和训练上，使得模型对未知的数据和任务具有零样本能力。在指令微调数据上为了保持多样性和可及性，研究人员一共收集了涵盖了11个任务类别和28个数据集，并将它们转化为指令微调格式。同时其提出了一种指令感知的视觉特征提取方法，充分利用了BLIP-2模型中的Q-Former架构，指令文本不仅作为输入给到LLM，同时也给到了QFormer。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/salesforce/LAVIS/tree/main/projects/instructblip">https://github.com/salesforce/LAVIS/tree/main/projects/instructblip</a></p>
+<h3 id="billa">BiLLa</h3>
+<p>BiLLa是开源的推理能力增强的中英双语LLaMA模型，该模型训练过程和Chinese-LLaMA-Alpaca有点类似，都是三阶段：词表扩充、预训练和指令精调。不同的是在增强预训练阶段，BiLLa加入了任务数据，且没有采用Lora技术，精调阶段用到的指令数据也丰富的多。该模型在逻辑推理方面进行了特别增强，主要体现在加入了更多的逻辑推理任务指令。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Neutralzz/BiLLa">https://github.com/Neutralzz/BiLLa</a></p>
+<h3 id="ziya-llama-13b-v1">Ziya-LLaMA-13B-v1</h3>
+<p>该项目是由IDEA开源，被成为"姜子牙"，是在LLaMA-13B基础上训练而得。该模型也采用了三阶段策略，一是重新构建中文词表；二是在千亿token量级数据规模基础上继续预训练，使模型具备原生中文能力；最后经过500万条多任务样本的有监督微调（SFT）和综合人类反馈训练（RM+PPO+HFFT+COHFT+RBRS），增强各种AI能力。其同时开源了一个评估集，包括常识类问答、推理、自然语言理解任务、数学、写作、代码、翻译、角色扮演、翻译9大类任务，32个子类，共计185个问题。</p>
+<p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1">https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1</a><br>
+评估集开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese">https://huggingface.co/datasets/IDEA-CCNL/Ziya-Eval-Chinese</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/" title="AIGC大模型汇总">https://fengyan-wby.github.io/2023/05/26/AIGC大模型汇总/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/AIGC/" rel="tag"><i class="fa fa-tag"></i> AIGC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/25/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Toolformer-Language-Models-Can-Teach-Themselves-to-Use-Tools/" rel="prev" title="【文献阅读】Toolformer: Language Models Can Teach Themselves to Use Tools">
+                  <i class="fa fa-angle-left"></i> 【文献阅读】Toolformer: Language Models Can Teach Themselves to Use Tools
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/06/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RoFormer-Enhanced-Transformer-with-Rotary-Position-Embedding/" rel="next" title="【文献阅读】RoFormer: Enhanced Transformer with Rotary Position Embedding">
+                  【文献阅读】RoFormer: Enhanced Transformer with Rotary Position Embedding <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">131k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

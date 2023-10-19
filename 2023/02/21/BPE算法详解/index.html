@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在NLP模型中，输入通常是一个句子，例如&quot;I went to New York last week&quot;，一句话中包含很多单词(token)。传统的做法是将这些单词以空格进行分隔，例如[&#39;i&#39;, &#39;went&#39;, &#39;to&#39;, &#39;New&#39;, &#39;York&#39;, &#39;last&#39;, &#39;week&#39;]。然而这种做法存在很多问题，例如模型无法通过old, older, oldest之间的关系学到smart, smarte">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BPE算法详解">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="在NLP模型中，输入通常是一个句子，例如&quot;I went to New York last week&quot;，一句话中包含很多单词(token)。传统的做法是将这些单词以空格进行分隔，例如[&#39;i&#39;, &#39;went&#39;, &#39;to&#39;, &#39;New&#39;, &#39;York&#39;, &#39;last&#39;, &#39;week&#39;]。然而这种做法存在很多问题，例如模型无法通过old, older, oldest之间的关系学到smart, smarte">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-21T03:36:21.000Z">
+<meta property="article:modified_time" content="2023-10-19T07:53:21.070Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="BPE">
+<meta property="article:tag" content="分词">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/","path":"2023/02/21/BPE算法详解/","title":"BPE算法详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>BPE算法详解 | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#bpebyte-pair-encoding"><span class="nav-number">1.</span> <span class="nav-text">BPE(Byte Pair Encoding)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">编码和解码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt1%E4%B8%AD%E7%9A%84bpe"><span class="nav-number">2.</span> <span class="nav-text">GPT1中的BPE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E8%A1%A8%E6%9E%84%E5%BB%BA"><span class="nav-number">2.1.</span> <span class="nav-text">词表构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpt2%E4%B8%AD%E7%9A%84bbpebyte-level-bpe"><span class="nav-number">3.</span> <span class="nav-text">GPT2中的BBPE(Byte-Level BPE)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="BPE算法详解 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BPE算法详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-21 11:36:21" itemprop="dateCreated datePublished" datetime="2023-02-21T11:36:21+08:00">2023-02-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-19 15:53:21" itemprop="dateModified" datetime="2023-10-19T15:53:21+08:00">2023-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/21/BPE算法详解/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在NLP模型中，输入通常是一个句子，例如<code>"I went to New York last week"</code>，一句话中包含很多单词(token)。传统的做法是将这些单词以空格进行分隔，例如<code>['i', 'went', 'to', 'New', 'York', 'last', 'week']</code>。然而这种做法存在很多问题，例如模型无法通过<code>old, older, oldest</code>之间的关系学到<code>smart, smarter, smartest</code>之间的关系。如果我们能使用将一个 token 分成多个 subtokens ，上面的问题就能很好的解决。本文将详述目前比较常用的subtokens算法——BPE（Byte-Pair Encoding）。 <span id="more"></span></p>
+<h2 id="bpebyte-pair-encoding">BPE(Byte Pair Encoding)</h2>
+<p>算法流程如下：</p>
+<ol type="1">
+<li>设定最大subwords个数V</li>
+<li>将所有单词拆分为单个字符，并在最后添加一个停止符<code>&lt;/w&gt;</code>，同时标记出该单词出现的次数。例如，<code>"low"</code>这个单词出现了 5 次，那么它将会被处理为<code>&#123;'l o w &lt;/w&gt;': 5&#125;</code></li>
+<li>统计每一个连续字节对的出现频率，选择最高频者合并成新的subword</li>
+<li>重复第3步直到达到第1步设定的subwords词表大小或下一个最高频的字节对出现频率为1</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;l o w &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;l o w e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w e s t &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d e s t &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>出现最频繁的字节对是<code>e</code>和<code>s</code>，共出现了 6+3=9 次，因此将它们合并</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;l o w &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;l o w e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w es t &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d es t &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>出现最频繁的字节对是<code>es</code>和<code>t</code>，共出现了 6+3=9 次，因此将它们合并</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;l o w &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;l o w e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w est &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d est &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>出现最频繁的字节对是<code>est</code>和<code>&lt;/w&gt;</code>，共出现了 6+3=9 次，因此将它们合并</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;l o w &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;l o w e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>出现最频繁的字节对是<code>l</code>和<code>o</code>，共出现了 5+2=7 次，因此将它们合并</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;lo w &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;lo w e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>出现最频繁的字节对是<code>lo</code>和<code>w</code>，共出现了 5+2=7 次，因此将它们合并</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>&#x27;low &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> &#x27;low e r &lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> &#x27;n e w est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> &#x27;w i d est&lt;/w&gt;&#x27;<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>...... 继续迭代直到达到预设的subwords词表大小或下一个最高频的字节对出现频率为1。这样我们就得到了更加合适的词表，这个词表可能会出现一些不是单词的组合，但是其本身有意义的一种形式。</p>
+<p>停止符<code>&lt;/w&gt;</code>的意义在于表示subword是词后缀。举例来说：<code>st</code>不加<code>&lt;/w&gt;</code>可以出现在词首，如<code>st ar</code>；加了<code>&lt;/w&gt;</code>表明改字词位于词尾，如<code>wide st&lt;/w&gt;</code>，二者意义截然不同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BPE词表构建代码实现</span></span><br><span class="line"><span class="keyword">import</span> re, collections</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_vocab</span>(<span class="params">filename</span>):</span><br><span class="line">    vocab = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> fhand:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> fhand:</span><br><span class="line">            words = line.strip().split()</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">                vocab[<span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(word)) + <span class="string">&#x27; &lt;/w&gt;&#x27;</span>] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> vocab</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_stats</span>(<span class="params">vocab</span>):</span><br><span class="line">    pairs = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">for</span> word, freq <span class="keyword">in</span> vocab.items():</span><br><span class="line">        symbols = word.split()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(symbols)-<span class="number">1</span>):</span><br><span class="line">            pairs[symbols[i],symbols[i+<span class="number">1</span>]] += freq</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">merge_vocab</span>(<span class="params">pair, v_in</span>):</span><br><span class="line">    v_out = &#123;&#125;</span><br><span class="line">    bigram = re.escape(<span class="string">&#x27; &#x27;</span>.join(pair))</span><br><span class="line">    p = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(?&lt;!\S)&#x27;</span> + bigram + <span class="string">r&#x27;(?!\S)&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> v_in:</span><br><span class="line">        w_out = p.sub(<span class="string">&#x27;&#x27;</span>.join(pair), word)</span><br><span class="line">        v_out[w_out] = v_in[word]</span><br><span class="line">    <span class="keyword">return</span> v_out</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_tokens</span>(<span class="params">vocab</span>):</span><br><span class="line">    tokens = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">for</span> word, freq <span class="keyword">in</span> vocab.items():</span><br><span class="line">        word_tokens = word.split()</span><br><span class="line">        <span class="keyword">for</span> token <span class="keyword">in</span> word_tokens:</span><br><span class="line">            tokens[token] += freq</span><br><span class="line">    <span class="keyword">return</span> tokens</span><br><span class="line"></span><br><span class="line">vocab = &#123;<span class="string">&#x27;l o w &lt;/w&gt;&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;l o w e r &lt;/w&gt;&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n e w e s t &lt;/w&gt;&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;w i d e s t &lt;/w&gt;&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get free book from Gutenberg</span></span><br><span class="line"><span class="comment"># wget http://www.gutenberg.org/cache/epub/16457/pg16457.txt</span></span><br><span class="line"><span class="comment"># vocab = get_vocab(&#x27;pg16457.txt&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Tokens Before BPE&#x27;</span>)</span><br><span class="line">tokens = get_tokens(vocab)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(tokens))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(tokens)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"></span><br><span class="line">num_merges = <span class="number">5</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_merges):</span><br><span class="line">    pairs = get_stats(vocab)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> pairs:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    best = <span class="built_in">max</span>(pairs, key=pairs.get)</span><br><span class="line">    vocab = merge_vocab(best, vocab)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Iter: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Best pair: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(best))</span><br><span class="line">    tokens = get_tokens(vocab)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(tokens))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Number of tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(tokens)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出如下</span></span><br><span class="line">==========</span><br><span class="line">Tokens Before BPE</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;l&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;o&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">17</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;s&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;t&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">11</span></span><br><span class="line">==========</span><br><span class="line">Iter: <span class="number">0</span></span><br><span class="line">Best pair: (<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;l&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;o&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;es&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;t&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">11</span></span><br><span class="line">==========</span><br><span class="line">Iter: <span class="number">1</span></span><br><span class="line">Best pair: (<span class="string">&#x27;es&#x27;</span>, <span class="string">&#x27;t&#x27;</span>)</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;l&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;o&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;est&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">10</span></span><br><span class="line">==========</span><br><span class="line">Iter: <span class="number">2</span></span><br><span class="line">Best pair: (<span class="string">&#x27;est&#x27;</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>)</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;l&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;o&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;est&lt;/w&gt;&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">10</span></span><br><span class="line">==========</span><br><span class="line">Iter: <span class="number">3</span></span><br><span class="line">Best pair: (<span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;lo&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">16</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;est&lt;/w&gt;&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">9</span></span><br><span class="line">==========</span><br><span class="line">Iter: <span class="number">4</span></span><br><span class="line">Best pair: (<span class="string">&#x27;lo&#x27;</span>, <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">Tokens: defaultdict(&lt;<span class="keyword">class</span> <span class="string">&#x27;int&#x27;</span>&gt;, &#123;<span class="string">&#x27;low&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;&lt;/w&gt;&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;r&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;n&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;w&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;est&lt;/w&gt;&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;i&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">3</span>&#125;)</span><br><span class="line">Number of tokens: <span class="number">9</span></span><br><span class="line">==========</span><br></pre></td></tr></table></figure>
+<h3 id="编码和解码">编码和解码</h3>
+<p><strong><em>编码</em></strong></p>
+<p>在之前的算法中，我们已经得到了 subword 的词表，对该词表按照字符个数由多到少排序。编码时，对于每个单词，遍历排好序的子词词表寻找是否有 token 是当前单词的子字符串，如果有，则该 token 是表示单词的 tokens 之一。</p>
+<p>我们从最长的 token 迭代到最短的 token，尝试将每个单词中的子字符串替换为 token。 最终，我们将迭代所有 tokens，并将所有子字符串替换为 tokens。 如果仍然有子字符串没被替换但所有 token 都已迭代完毕，则将剩余的子词替换为特殊 token，如<code>&lt;unk&gt;</code>。</p>
+<p>例如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 给定单词序列</span></span><br><span class="line">[<span class="string">&quot;the&lt;/w&gt;&quot;</span>, <span class="string">&quot;highest&lt;/w&gt;&quot;</span>, <span class="string">&quot;mountain&lt;/w&gt;&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 排好序的subword表</span></span><br><span class="line"><span class="comment"># 长度 6         5           4        4         4       4          2</span></span><br><span class="line">[<span class="string">&quot;errrr&lt;/w&gt;&quot;</span>, <span class="string">&quot;tain&lt;/w&gt;&quot;</span>, <span class="string">&quot;moun&quot;</span>, <span class="string">&quot;est&lt;/w&gt;&quot;</span>, <span class="string">&quot;high&quot;</span>, <span class="string">&quot;the&lt;/w&gt;&quot;</span>, <span class="string">&quot;a&lt;/w&gt;&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 迭代结果</span></span><br><span class="line"><span class="string">&quot;the&lt;/w&gt;&quot;</span> -&gt; [<span class="string">&quot;the&lt;/w&gt;&quot;</span>]</span><br><span class="line"><span class="string">&quot;highest&lt;/w&gt;&quot;</span> -&gt; [<span class="string">&quot;high&quot;</span>, <span class="string">&quot;est&lt;/w&gt;&quot;</span>]</span><br><span class="line"><span class="string">&quot;mountain&lt;/w&gt;&quot;</span> -&gt; [<span class="string">&quot;moun&quot;</span>, <span class="string">&quot;tain&lt;/w&gt;&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p><strong><em>解码</em></strong> 将所有的 tokens 拼在一起即可，例如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编码序列</span></span><br><span class="line">[<span class="string">&quot;the&lt;/w&gt;&quot;</span>, <span class="string">&quot;high&quot;</span>, <span class="string">&quot;est&lt;/w&gt;&quot;</span>, <span class="string">&quot;moun&quot;</span>, <span class="string">&quot;tain&lt;/w&gt;&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解码序列</span></span><br><span class="line"><span class="string">&quot;the&lt;/w&gt; highest&lt;/w&gt; mountain&lt;/w&gt;&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在构建词表代码中加入编码和解码过程的代码</span></span><br><span class="line"><span class="keyword">import</span> re, collections</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_vocab</span>(<span class="params">filename</span>):</span><br><span class="line">    vocab = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> fhand:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> fhand:</span><br><span class="line">            words = line.strip().split()</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">                vocab[<span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(word)) + <span class="string">&#x27; &lt;/w&gt;&#x27;</span>] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> vocab</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_stats</span>(<span class="params">vocab</span>):</span><br><span class="line">    pairs = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">for</span> word, freq <span class="keyword">in</span> vocab.items():</span><br><span class="line">        symbols = word.split()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(symbols)-<span class="number">1</span>):</span><br><span class="line">            pairs[symbols[i],symbols[i+<span class="number">1</span>]] += freq</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">merge_vocab</span>(<span class="params">pair, v_in</span>):</span><br><span class="line">    v_out = &#123;&#125;</span><br><span class="line">    bigram = re.escape(<span class="string">&#x27; &#x27;</span>.join(pair))</span><br><span class="line">    p = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(?&lt;!\S)&#x27;</span> + bigram + <span class="string">r&#x27;(?!\S)&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> v_in:</span><br><span class="line">        w_out = p.sub(<span class="string">&#x27;&#x27;</span>.join(pair), word)</span><br><span class="line">        v_out[w_out] = v_in[word]</span><br><span class="line">    <span class="keyword">return</span> v_out</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_tokens_from_vocab</span>(<span class="params">vocab</span>):</span><br><span class="line">    tokens_frequencies = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    vocab_tokenization = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> word, freq <span class="keyword">in</span> vocab.items():</span><br><span class="line">        word_tokens = word.split()</span><br><span class="line">        <span class="keyword">for</span> token <span class="keyword">in</span> word_tokens:</span><br><span class="line">            tokens_frequencies[token] += freq</span><br><span class="line">        vocab_tokenization[<span class="string">&#x27;&#x27;</span>.join(word_tokens)] = word_tokens</span><br><span class="line">    <span class="keyword">return</span> tokens_frequencies, vocab_tokenization</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">measure_token_length</span>(<span class="params">token</span>):</span><br><span class="line">    <span class="keyword">if</span> token[-<span class="number">4</span>:] == <span class="string">&#x27;&lt;/w&gt;&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(token[:-<span class="number">4</span>]) + <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(token)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tokenize_word</span>(<span class="params">string, sorted_tokens, unknown_token=<span class="string">&#x27;&lt;/u&gt;&#x27;</span></span>):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> string == <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    <span class="keyword">if</span> sorted_tokens == []:</span><br><span class="line">        <span class="keyword">return</span> [unknown_token]</span><br><span class="line"></span><br><span class="line">    string_tokens = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(sorted_tokens)):</span><br><span class="line">        token = sorted_tokens[i]</span><br><span class="line">        token_reg = re.escape(token.replace(<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;[.]&#x27;</span>))</span><br><span class="line"></span><br><span class="line">        matched_positions = [(m.start(<span class="number">0</span>), m.end(<span class="number">0</span>)) <span class="keyword">for</span> m <span class="keyword">in</span> re.finditer(token_reg, string)]</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(matched_positions) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        substring_end_positions = [matched_position[<span class="number">0</span>] <span class="keyword">for</span> matched_position <span class="keyword">in</span> matched_positions]</span><br><span class="line"></span><br><span class="line">        substring_start_position = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> substring_end_position <span class="keyword">in</span> substring_end_positions:</span><br><span class="line">            substring = string[substring_start_position:substring_end_position]</span><br><span class="line">            string_tokens += tokenize_word(string=substring, sorted_tokens=sorted_tokens[i+<span class="number">1</span>:], unknown_token=unknown_token)</span><br><span class="line">            string_tokens += [token]</span><br><span class="line">            substring_start_position = substring_end_position + <span class="built_in">len</span>(token)</span><br><span class="line">        remaining_substring = string[substring_start_position:]</span><br><span class="line">        string_tokens += tokenize_word(string=remaining_substring, sorted_tokens=sorted_tokens[i+<span class="number">1</span>:], unknown_token=unknown_token)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> string_tokens</span><br><span class="line"></span><br><span class="line"><span class="comment"># vocab = &#123;&#x27;l o w &lt;/w&gt;&#x27;: 5, &#x27;l o w e r &lt;/w&gt;&#x27;: 2, &#x27;n e w e s t &lt;/w&gt;&#x27;: 6, &#x27;w i d e s t &lt;/w&gt;&#x27;: 3&#125;</span></span><br><span class="line"></span><br><span class="line">vocab = get_vocab(<span class="string">&#x27;pg16457.txt&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Tokens Before BPE&#x27;</span>)</span><br><span class="line">tokens_frequencies, vocab_tokenization = get_tokens_from_vocab(vocab)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;All tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(tokens_frequencies.keys()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(tokens_frequencies.keys())))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"></span><br><span class="line">num_merges = <span class="number">10000</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_merges):</span><br><span class="line">    pairs = get_stats(vocab)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> pairs:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    best = <span class="built_in">max</span>(pairs, key=pairs.get)</span><br><span class="line">    vocab = merge_vocab(best, vocab)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Iter: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Best pair: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(best))</span><br><span class="line">    tokens_frequencies, vocab_tokenization = get_tokens_from_vocab(vocab)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;All tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(tokens_frequencies.keys()))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Number of tokens: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(tokens_frequencies.keys())))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;==========&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Let&#x27;s check how tokenization will be for a known word</span></span><br><span class="line">word_given_known = <span class="string">&#x27;mountains&lt;/w&gt;&#x27;</span></span><br><span class="line">word_given_unknown = <span class="string">&#x27;Ilikeeatingapples!&lt;/w&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">sorted_tokens_tuple = <span class="built_in">sorted</span>(tokens_frequencies.items(), key=<span class="keyword">lambda</span> item: (measure_token_length(item[<span class="number">0</span>]), item[<span class="number">1</span>]), reverse=<span class="literal">True</span>)</span><br><span class="line">sorted_tokens = [token <span class="keyword">for</span> (token, freq) <span class="keyword">in</span> sorted_tokens_tuple]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(sorted_tokens)</span><br><span class="line"></span><br><span class="line">word_given = word_given_known</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Tokenizing word: &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(word_given))</span><br><span class="line"><span class="keyword">if</span> word_given <span class="keyword">in</span> vocab_tokenization:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenization of the known word:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(vocab_tokenization[word_given])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenization treating the known word as unknown:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(tokenize_word(string=word_given, sorted_tokens=sorted_tokens, unknown_token=<span class="string">&#x27;&lt;/u&gt;&#x27;</span>))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenizating of the unknown word:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(tokenize_word(string=word_given, sorted_tokens=sorted_tokens, unknown_token=<span class="string">&#x27;&lt;/u&gt;&#x27;</span>))</span><br><span class="line"></span><br><span class="line">word_given = word_given_unknown </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Tokenizing word: &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(word_given))</span><br><span class="line"><span class="keyword">if</span> word_given <span class="keyword">in</span> vocab_tokenization:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenization of the known word:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(vocab_tokenization[word_given])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenization treating the known word as unknown:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(tokenize_word(string=word_given, sorted_tokens=sorted_tokens, unknown_token=<span class="string">&#x27;&lt;/u&gt;&#x27;</span>))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Tokenizating of the unknown word:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(tokenize_word(string=word_given, sorted_tokens=sorted_tokens, unknown_token=<span class="string">&#x27;&lt;/u&gt;&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出如下</span></span><br><span class="line">Tokenizing word: mountains&lt;/w&gt;...</span><br><span class="line">Tokenization of the known word:</span><br><span class="line">[<span class="string">&#x27;mountains&lt;/w&gt;&#x27;</span>]</span><br><span class="line">Tokenization treating the known word <span class="keyword">as</span> unknown:</span><br><span class="line">[<span class="string">&#x27;mountains&lt;/w&gt;&#x27;</span>]</span><br><span class="line">Tokenizing word: Ilikeeatingapples!&lt;/w&gt;...</span><br><span class="line">Tokenizating of the unknown word:</span><br><span class="line">[<span class="string">&#x27;I&#x27;</span>, <span class="string">&#x27;like&#x27;</span>, <span class="string">&#x27;ea&#x27;</span>, <span class="string">&#x27;ting&#x27;</span>, <span class="string">&#x27;app&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;es!&lt;/w&gt;&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="gpt1中的bpe">GPT1中的BPE</h2>
+<p>GPT中的BPE代码实现在编码部分和上述的有些不同，这里展示GPT1的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> ftfy</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> spacy</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_pairs</span>(<span class="params">word</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Return set of symbol pairs in a word.</span></span><br><span class="line"><span class="string">    word is represented as tuple of symbols (symbols being variable-length strings)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pairs = <span class="built_in">set</span>()</span><br><span class="line">    prev_char = word[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> word[<span class="number">1</span>:]:</span><br><span class="line">        pairs.add((prev_char, char))</span><br><span class="line">        prev_char = char</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_standardize</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    fixes some issues the spacy tokenizer had on books corpus</span></span><br><span class="line"><span class="string">    also does some whitespace standardization</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    text = text.replace(<span class="string">&#x27;—&#x27;</span>, <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">    text = text.replace(<span class="string">&#x27;–&#x27;</span>, <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">    text = text.replace(<span class="string">&#x27;―&#x27;</span>, <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">    text = text.replace(<span class="string">&#x27;…&#x27;</span>, <span class="string">&#x27;...&#x27;</span>)</span><br><span class="line">    text = text.replace(<span class="string">&#x27;´&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>)</span><br><span class="line">    text = re.sub(<span class="string">&#x27;&#x27;&#x27;(-+|~+|!+|&quot;+|;+|\?+|\++|,+|\)+|\(+|\\+|\/+|\*+|\[+|\]+|&#125;+|&#123;+|\|+|_+)&#x27;&#x27;&#x27;</span>, <span class="string">r&#x27; \1 &#x27;</span>, text)</span><br><span class="line">    text = re.sub(<span class="string">&#x27;\s*\n\s*&#x27;</span>, <span class="string">&#x27; \n &#x27;</span>, text)</span><br><span class="line">    text = re.sub(<span class="string">&#x27;[^\S\n]+&#x27;</span>, <span class="string">&#x27; &#x27;</span>, text)</span><br><span class="line">    <span class="keyword">return</span> text.strip()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TextEncoder</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    mostly a wrapper for a public python bpe tokenizer</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, encoder_path, bpe_path</span>):</span><br><span class="line">        self.nlp = spacy.load(<span class="string">&#x27;en&#x27;</span>, disable=[<span class="string">&#x27;parser&#x27;</span>, <span class="string">&#x27;tagger&#x27;</span>, <span class="string">&#x27;ner&#x27;</span>, <span class="string">&#x27;textcat&#x27;</span>])</span><br><span class="line">        self.encoder = json.load(<span class="built_in">open</span>(encoder_path))</span><br><span class="line">        self.decoder = &#123;v:k <span class="keyword">for</span> k,v <span class="keyword">in</span> self.encoder.items()&#125;</span><br><span class="line">        merges = <span class="built_in">open</span>(bpe_path).read().split(<span class="string">&#x27;\n&#x27;</span>)[<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">        merges = [<span class="built_in">tuple</span>(merge.split()) <span class="keyword">for</span> merge <span class="keyword">in</span> merges]</span><br><span class="line">        self.bpe_ranks = <span class="built_in">dict</span>(<span class="built_in">zip</span>(merges, <span class="built_in">range</span>(<span class="built_in">len</span>(merges))))</span><br><span class="line">        self.cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">bpe</span>(<span class="params">self, token</span>):</span><br><span class="line">        word = <span class="built_in">tuple</span>(token[:-<span class="number">1</span>]) + ( token[-<span class="number">1</span>] + <span class="string">&#x27;&lt;/w&gt;&#x27;</span>,)</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">in</span> self.cache:</span><br><span class="line">            <span class="keyword">return</span> self.cache[token]</span><br><span class="line">        pairs = get_pairs(word)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> pairs:</span><br><span class="line">            <span class="keyword">return</span> token+<span class="string">&#x27;&lt;/w&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            bigram = <span class="built_in">min</span>(pairs, key = <span class="keyword">lambda</span> pair: self.bpe_ranks.get(pair, <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)))</span><br><span class="line">            <span class="keyword">if</span> bigram <span class="keyword">not</span> <span class="keyword">in</span> self.bpe_ranks:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            first, second = bigram</span><br><span class="line">            new_word = []</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(word):</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    j = word.index(first, i)</span><br><span class="line">                    new_word.extend(word[i:j])</span><br><span class="line">                    i = j</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    new_word.extend(word[i:])</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> word[i] == first <span class="keyword">and</span> i &lt; <span class="built_in">len</span>(word)-<span class="number">1</span> <span class="keyword">and</span> word[i+<span class="number">1</span>] == second:</span><br><span class="line">                    new_word.append(first+second)</span><br><span class="line">                    i += <span class="number">2</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    new_word.append(word[i])</span><br><span class="line">                    i += <span class="number">1</span></span><br><span class="line">            new_word = <span class="built_in">tuple</span>(new_word)</span><br><span class="line">            word = new_word</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(word) == <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                pairs = get_pairs(word)</span><br><span class="line">        word = <span class="string">&#x27; &#x27;</span>.join(word)</span><br><span class="line">        <span class="keyword">if</span> word == <span class="string">&#x27;\n  &lt;/w&gt;&#x27;</span>:</span><br><span class="line">            word = <span class="string">&#x27;\n&lt;/w&gt;&#x27;</span></span><br><span class="line">        self.cache[token] = word</span><br><span class="line">        <span class="keyword">return</span> word</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, texts, verbose=<span class="literal">True</span></span>):</span><br><span class="line">        texts_tokens = []</span><br><span class="line">        <span class="keyword">if</span> verbose:</span><br><span class="line">            <span class="keyword">for</span> text <span class="keyword">in</span> tqdm(texts, ncols=<span class="number">80</span>, leave=<span class="literal">False</span>):</span><br><span class="line">                text = self.nlp(text_standardize(ftfy.fix_text(text)))</span><br><span class="line">                text_tokens = []</span><br><span class="line">                <span class="keyword">for</span> token <span class="keyword">in</span> text:</span><br><span class="line">                    text_tokens.extend([self.encoder.get(t, <span class="number">0</span>) <span class="keyword">for</span> t <span class="keyword">in</span> self.bpe(token.text.lower()).split(<span class="string">&#x27; &#x27;</span>)])</span><br><span class="line">                texts_tokens.append(text_tokens)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> text <span class="keyword">in</span> texts:</span><br><span class="line">                text = self.nlp(text_standardize(ftfy.fix_text(text)))</span><br><span class="line">                text_tokens = []</span><br><span class="line">                <span class="keyword">for</span> token <span class="keyword">in</span> text:</span><br><span class="line">                    text_tokens.extend([self.encoder.get(t, <span class="number">0</span>) <span class="keyword">for</span> t <span class="keyword">in</span> self.bpe(token.text.lower()).split(<span class="string">&#x27; &#x27;</span>)])</span><br><span class="line">                texts_tokens.append(text_tokens)</span><br><span class="line">        <span class="keyword">return</span> texts_tokens</span><br></pre></td></tr></table></figure>
+<p>一些细节上的区别：</p>
+<ol type="1">
+<li>最后一个字符和停止符<code>&lt;/w&gt;</code>之间不加空格。</li>
+</ol>
+<h3 id="词表构建">词表构建</h3>
+<p>可以看到代码中有两个文件，一个是<code>encoder_path</code>，一个是<code>bpe_path</code>。 其中<code>bpe_path</code>是上述步骤中的每次迭代的best pair，即每次迭代出现频率最高的字节对，其形式如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">t h</span><br><span class="line">i n</span><br><span class="line">e d&lt;/w&gt;</span><br><span class="line">a n</span><br><span class="line">th e&lt;/w&gt;</span><br><span class="line">o u</span><br><span class="line">e r&lt;/w&gt;</span><br><span class="line">in g&lt;/w&gt;</span><br><span class="line">t o&lt;/w&gt;</span><br><span class="line">e r</span><br><span class="line">h e&lt;/w&gt;</span><br><span class="line">an d&lt;/w&gt;</span><br><span class="line">a r</span><br><span class="line">h i</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>而<code>encoder_path</code>是最终得到的词表，形式如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;.&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span> <span class="attr">&quot;,&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> <span class="attr">&quot;t&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span> <span class="attr">&quot;h&quot;</span><span class="punctuation">:</span> <span class="number">4</span><span class="punctuation">,</span> <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span> <span class="attr">&quot;\&quot;&quot;</span><span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span> <span class="attr">&quot;o&quot;</span><span class="punctuation">:</span> <span class="number">7</span><span class="punctuation">,</span> <span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="number">8</span><span class="punctuation">,</span> <span class="attr">&quot;n&quot;</span><span class="punctuation">:</span> <span class="number">9</span><span class="punctuation">,</span> <span class="attr">&quot;d&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span> <span class="attr">&quot;i&quot;</span><span class="punctuation">:</span> <span class="number">11</span><span class="punctuation">,</span> <span class="attr">&quot;f&quot;</span><span class="punctuation">:</span> <span class="number">12</span><span class="punctuation">,</span> <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="number">13</span><span class="punctuation">,</span> <span class="attr">&quot;s&quot;</span><span class="punctuation">:</span> <span class="number">14</span><span class="punctuation">,</span> <span class="attr">&quot;y&quot;</span><span class="punctuation">:</span> <span class="number">15</span><span class="punctuation">,</span> <span class="attr">&quot;u&quot;</span><span class="punctuation">:</span> <span class="number">16</span><span class="punctuation">,</span> <span class="attr">&quot;r&quot;</span><span class="punctuation">:</span> <span class="number">17</span><span class="punctuation">,</span> <span class="attr">&quot;&#x27;&quot;</span><span class="punctuation">:</span> <span class="number">18</span><span class="punctuation">,</span> <span class="attr">&quot;?&quot;</span><span class="punctuation">:</span> <span class="number">19</span><span class="punctuation">,</span> <span class="attr">&quot;m&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span> ......<span class="punctuation">,</span> <span class="attr">&quot;bib&lt;/w&gt;&quot;</span><span class="punctuation">:</span> <span class="number">40474</span><span class="punctuation">,</span> <span class="attr">&quot;benteley&lt;/w&gt;&quot;</span><span class="punctuation">:</span> <span class="number">40475</span><span class="punctuation">,</span> <span class="attr">&quot;bachelorette&lt;/w&gt;&quot;</span><span class="punctuation">:</span> <span class="number">40476</span><span class="punctuation">,</span> <span class="attr">&quot;\n&lt;/w&gt;&quot;</span><span class="punctuation">:</span> <span class="number">40477</span><span class="punctuation">,</span> <span class="attr">&quot;&lt;unk&gt;&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="编码">编码</h3>
+<p>按照<code>bpe_path</code>中的pair顺序，将输入中的字符合并，无法合并后得到最终的输出。具体参考<code>bpe</code>和<code>encode</code>两个函数。</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 给定输入</span></span><br><span class="line">[<span class="string">&quot;the&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理成字符形式</span></span><br><span class="line">[<span class="string">&quot;t&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;e&lt;/w&gt;&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># bpe_path表</span></span><br><span class="line">&#123;(<span class="string">&quot;t&quot;</span>, <span class="string">&quot;h&quot;</span>): <span class="number">0</span>, (<span class="string">&quot;i&quot;</span>, <span class="string">&quot;n&quot;</span>): <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并(&quot;t&quot;, &quot;h&quot;)</span></span><br><span class="line">[<span class="string">&quot;th&quot;</span>, <span class="string">&quot;e&lt;/w&gt;&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 继续合并，直到无法合并，或者长度为1（没有pair）。</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h2 id="gpt2中的bbpebyte-level-bpe">GPT2中的BBPE(Byte-Level BPE)</h2>
+<p>从GPT2开始使用了Byte-Level BPE，包括以后得GPT3、ChatGPT等方法中都使用了这种tokenize方法。</p>
+<p>Byte-Level BPE的优点：</p>
+<ol type="1">
+<li>减小词表大小。</li>
+<li>统一所有语言的字符编码，不存在OOV的问题。</li>
+</ol>
+<p>Byte-level BPE和BPE的区别就是BPE最小词汇是字符级别，而BBPE是字节级别，其他实现步骤完全一致。</p>
+<p>下面展示GPT2的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Byte pair encoding utilities&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> regex <span class="keyword">as</span> re</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"></span><br><span class="line"><span class="meta">@lru_cache()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bytes_to_unicode</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Returns list of utf-8 byte and a corresponding list of unicode strings.</span></span><br><span class="line"><span class="string">    The reversible bpe codes work on unicode strings.</span></span><br><span class="line"><span class="string">    This means you need a large # of unicode characters in your vocab if you want to avoid UNKs.</span></span><br><span class="line"><span class="string">    When you&#x27;re at something like a 10B token dataset you end up needing around 5K for decent coverage.</span></span><br><span class="line"><span class="string">    This is a signficant percentage of your normal, say, 32K bpe vocab.</span></span><br><span class="line"><span class="string">    To avoid that, we want lookup tables between utf-8 bytes and unicode strings.</span></span><br><span class="line"><span class="string">    And avoids mapping to whitespace/control characters the bpe code barfs on.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    bs = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;!&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;~&quot;</span>)+<span class="number">1</span>))+<span class="built_in">list</span>(<span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;¡&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;¬&quot;</span>)+<span class="number">1</span>))+<span class="built_in">list</span>(<span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;®&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;ÿ&quot;</span>)+<span class="number">1</span>))</span><br><span class="line">    cs = bs[:]</span><br><span class="line">    n = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>**<span class="number">8</span>):</span><br><span class="line">        <span class="keyword">if</span> b <span class="keyword">not</span> <span class="keyword">in</span> bs:</span><br><span class="line">            bs.append(b)</span><br><span class="line">            cs.append(<span class="number">2</span>**<span class="number">8</span>+n)</span><br><span class="line">            n += <span class="number">1</span></span><br><span class="line">    cs = [<span class="built_in">chr</span>(n) <span class="keyword">for</span> n <span class="keyword">in</span> cs]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dict</span>(<span class="built_in">zip</span>(bs, cs))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_pairs</span>(<span class="params">word</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return set of symbol pairs in a word.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Word is represented as tuple of symbols (symbols being variable-length strings).</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pairs = <span class="built_in">set</span>()</span><br><span class="line">    prev_char = word[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> word[<span class="number">1</span>:]:</span><br><span class="line">        pairs.add((prev_char, char))</span><br><span class="line">        prev_char = char</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, encoder, bpe_merges, errors=<span class="string">&#x27;replace&#x27;</span></span>):</span><br><span class="line">        self.encoder = encoder</span><br><span class="line">        self.decoder = &#123;v:k <span class="keyword">for</span> k,v <span class="keyword">in</span> self.encoder.items()&#125;</span><br><span class="line">        self.errors = errors <span class="comment"># how to handle errors in decoding</span></span><br><span class="line">        self.byte_encoder = bytes_to_unicode()</span><br><span class="line">        self.byte_decoder = &#123;v:k <span class="keyword">for</span> k, v <span class="keyword">in</span> self.byte_encoder.items()&#125;</span><br><span class="line">        self.bpe_ranks = <span class="built_in">dict</span>(<span class="built_in">zip</span>(bpe_merges, <span class="built_in">range</span>(<span class="built_in">len</span>(bpe_merges))))</span><br><span class="line">        self.cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Should haved added re.IGNORECASE so BPE merges can happen for capitalized versions of contractions</span></span><br><span class="line">        self.pat = re.<span class="built_in">compile</span>(<span class="string">r&quot;&quot;&quot;&#x27;s|&#x27;t|&#x27;re|&#x27;ve|&#x27;m|&#x27;ll|&#x27;d| ?\p&#123;L&#125;+| ?\p&#123;N&#125;+| ?[^\s\p&#123;L&#125;\p&#123;N&#125;]+|\s+(?!\S)|\s+&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">bpe</span>(<span class="params">self, token</span>):</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">in</span> self.cache:</span><br><span class="line">            <span class="keyword">return</span> self.cache[token]</span><br><span class="line">        word = <span class="built_in">tuple</span>(token)</span><br><span class="line">        pairs = get_pairs(word)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> pairs:</span><br><span class="line">            <span class="keyword">return</span> token</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            bigram = <span class="built_in">min</span>(pairs, key = <span class="keyword">lambda</span> pair: self.bpe_ranks.get(pair, <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)))</span><br><span class="line">            <span class="keyword">if</span> bigram <span class="keyword">not</span> <span class="keyword">in</span> self.bpe_ranks:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            first, second = bigram</span><br><span class="line">            new_word = []</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(word):</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    j = word.index(first, i)</span><br><span class="line">                    new_word.extend(word[i:j])</span><br><span class="line">                    i = j</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    new_word.extend(word[i:])</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> word[i] == first <span class="keyword">and</span> i &lt; <span class="built_in">len</span>(word)-<span class="number">1</span> <span class="keyword">and</span> word[i+<span class="number">1</span>] == second:</span><br><span class="line">                    new_word.append(first+second)</span><br><span class="line">                    i += <span class="number">2</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    new_word.append(word[i])</span><br><span class="line">                    i += <span class="number">1</span></span><br><span class="line">            new_word = <span class="built_in">tuple</span>(new_word)</span><br><span class="line">            word = new_word</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(word) == <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                pairs = get_pairs(word)</span><br><span class="line">        word = <span class="string">&#x27; &#x27;</span>.join(word)</span><br><span class="line">        self.cache[token] = word</span><br><span class="line">        <span class="keyword">return</span> word</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, text</span>):</span><br><span class="line">        bpe_tokens = []</span><br><span class="line">        <span class="keyword">for</span> token <span class="keyword">in</span> re.findall(self.pat, text):</span><br><span class="line">            token = <span class="string">&#x27;&#x27;</span>.join(self.byte_encoder[b] <span class="keyword">for</span> b <span class="keyword">in</span> token.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">            bpe_tokens.extend(self.encoder[bpe_token] <span class="keyword">for</span> bpe_token <span class="keyword">in</span> self.bpe(token).split(<span class="string">&#x27; &#x27;</span>))</span><br><span class="line">        <span class="keyword">return</span> bpe_tokens</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, tokens</span>):</span><br><span class="line">        text = <span class="string">&#x27;&#x27;</span>.join([self.decoder[token] <span class="keyword">for</span> token <span class="keyword">in</span> tokens])</span><br><span class="line">        text = <span class="built_in">bytearray</span>([self.byte_decoder[c] <span class="keyword">for</span> c <span class="keyword">in</span> text]).decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=self.errors)</span><br><span class="line">        <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_encoder</span>(<span class="params">model_name, models_dir</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(models_dir, model_name, <span class="string">&#x27;encoder.json&#x27;</span>), <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        encoder = json.load(f)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(models_dir, model_name, <span class="string">&#x27;vocab.bpe&#x27;</span>), <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        bpe_data = f.read()</span><br><span class="line">    bpe_merges = [<span class="built_in">tuple</span>(merge_str.split()) <span class="keyword">for</span> merge_str <span class="keyword">in</span> bpe_data.split(<span class="string">&#x27;\n&#x27;</span>)[<span class="number">1</span>:-<span class="number">1</span>]]</span><br><span class="line">    <span class="keyword">return</span> Encoder(</span><br><span class="line">        encoder=encoder,</span><br><span class="line">        bpe_merges=bpe_merges,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="BPE算法详解">https://fengyan-wby.github.io/2023/02/21/BPE算法详解/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/BPE/" rel="tag"><i class="fa fa-tag"></i> BPE</a>
+              <a href="/tags/%E5%88%86%E8%AF%8D/" rel="tag"><i class="fa fa-tag"></i> 分词</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/14/Hexo-NexT%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95/" rel="prev" title="Hexo-NexT版本更新记录">
+                  <i class="fa fa-angle-left"></i> Hexo-NexT版本更新记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/" rel="next" title="Markdown语法">
+                  Markdown语法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">131k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

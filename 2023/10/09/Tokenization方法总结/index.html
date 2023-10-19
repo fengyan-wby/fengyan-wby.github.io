@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="对各种tokenization方法进行总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tokenization方法总结">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="对各种tokenization方法进行总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-09T09:16:50.000Z">
+<meta property="article:modified_time" content="2023-10-19T07:53:21.122Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="Tokenization">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/","path":"2023/10/09/Tokenization方法总结/","title":"Tokenization方法总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Tokenization方法总结 | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E7%B2%92%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">词粒度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E7%B2%92%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">字符粒度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%90%E8%AF%8D%E7%B2%92%E5%BA%A6subword"><span class="nav-number">3.</span> <span class="nav-text">子词粒度（subword）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#wordpiece"><span class="nav-number">3.1.</span> <span class="nav-text">WordPiece</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bpe"><span class="nav-number">3.2.</span> <span class="nav-text">BPE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#byte-level-bpe"><span class="nav-number">3.3.</span> <span class="nav-text">Byte-level BPE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unigram"><span class="nav-number">3.4.</span> <span class="nav-text">Unigram</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Tokenization方法总结 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tokenization方法总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-09 17:16:50" itemprop="dateCreated datePublished" datetime="2023-10-09T17:16:50+08:00">2023-10-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-19 15:53:21" itemprop="dateModified" datetime="2023-10-19T15:53:21+08:00">2023-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/10/09/Tokenization方法总结/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>对各种tokenization方法进行总结。</p>
+<span id="more"></span>
+<h2 id="词粒度">词粒度</h2>
+<p>将输入句子进行分词，对英文来说，直接o通过空格分隔即可，中文则需要一些分词工具（如jieba）。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">中文句子：我喜欢看电影和读书。</span><br><span class="line">分词结果：我 | 喜欢 | 看 | 电影 | 和 | 读书。</span><br><span class="line">英文句子：I enjoy watching movies and reading books.</span><br><span class="line">分词结果：I | enjoy | watching | movies | and | reading | books.</span><br></pre></td></tr></table></figure>
+<p>词粒度优点:</p>
+<ul>
+<li>语义明确：以词为单位进行分词可以更好的保留每个词的语义，使得文本在后续处理中能够更准确的表达含义。</li>
+<li>上下文理解：以词为粒度进行分词有助于保留词语之间的关联性和上下文信息，从而在语义分析和理解时能够更好的捕捉句子的意图。</li>
+</ul>
+<p>词粒度缺点：</p>
+<ul>
+<li>长尾效应和稀有词问题：词表可能变得巨大，包含很多不常见的词汇，增加储存和训练成本。而且稀有词的训练数据有限，难以获得u准确的表示。</li>
+<li>OOV(Out-of-Vocabulary)问题：由于词汇过多，词表无法覆盖所有的词汇，所以会出现词汇不在词表中的问题。此时只能用特殊符号<code>[UNK]</code>表示未知词汇。</li>
+<li>形态关系和词缀关系：无法捕捉同一词汇的不同形态，也无法学习词缀在不同词汇之间的共通性。比如<code>love</code>和<code>loves</code>是意思相同的词，但在词表中却用两个不同的id表示。并且<code>fast</code>、<code>faster</code>和<code>fastest</code>这种词缀之间的关系词粒度的分词也无法学习到。</li>
+</ul>
+<h2 id="字符粒度">字符粒度</h2>
+<p>以字符为单位进行分词，即将文本拆成单独的字符作为最小基本单元。这种字符粒度的分词方式适用于多种语言，无论是英文、中文还是其他不同语言，都能够一致地使用字符粒度进行处理。而且英文就26个字母以及其他的一些符号，中文常见字就6000个左右，所以可以用较小的词汇表表示所有字符。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">中文句子：我喜欢看电影和读书。</span><br><span class="line">分词结果：我 | 喜 | 欢 | 看 | 电 | 影 | 和 | 读 | 书 | 。</span><br><span class="line"></span><br><span class="line">英文句子：I enjoy watching movies and reading books.</span><br><span class="line">分词结果：I |   | e | n | j | o | y |   | w | a | t | c | h | i | n | g |   | m | o | v | i | e | s |   | a | n | d |   | r | e | a | d | i | n | g |   | b | o | o | k | s | .</span><br></pre></td></tr></table></figure>
+<p>字符粒度的优点：</p>
+<ul>
+<li>统一处理方式：字符粒度分词方法适用于不同语言，无需针对每种语言设计不同的分词规则或工具，具有通用性。</li>
+<li>由于字符粒度的词表可以覆盖所有字符，所以基本不会出现OOV的问题。</li>
+</ul>
+<p>字符粒度缺点：</p>
+<ul>
+<li>语义信息不明确：字符粒度分词无法直接表达词的语义。</li>
+<li>效率问题：由于输入文本被拆分成字符粒度，导致tokens长度很长，增加了后续处理的计算成本。</li>
+</ul>
+<h2 id="子词粒度subword">子词粒度（subword）</h2>
+<p>在BERT时代，WordPiece 分词方法被广泛应用，比如 BERT、DistilBERT等。</p>
+<p>在大语言模型时代，最常用的分词方法是BPE和Byte-level BPE。 * Byte-Pair Encoding (BPE)最初是一种文本压缩算法在15年被引入到NLP用于分词，在训练 GPT 时被 OpenAI 用于tokenization，后续如GPT，RoBERTa等都采用了这种分词方法。 * Byte-level BPE(BBPE)是于19年在BPE的基础上提出以Byte-level(字节)为粒度的分词方法，目前GPT2，BLOOM，Llama，Falcon等采用的是该分词方法。</p>
+<h3 id="wordpiece">WordPiece</h3>
+<p>WordPiece核心思想是将单词拆分成多个最小单元，再通过子词合并规则将最小单元合并为单词。例如对于单词"word"，拆分如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w ##o ##r ##d</span><br></pre></td></tr></table></figure>
+<p>下面是WordPiece的核心步骤：</p>
+<ol type="1">
+<li>计算初始词表：通过预训练语料获得初始词表（26个英文字母+中文字符+符号）。</li>
+<li>计算合并分数，在WordPiece中合并分数是互信息，即选择互信息最大的两个相邻子词进行合并。而BPE中是选择频数最高的相邻子词合并。<br>
+互信息计算公式：<br>
+<span class="math display">\[I=\frac{P(AB)}{P(A)P(B)}\]</span><br>
+<span class="math inline">\(\theta\)</span></li>
+<li>合并分数最高的子词对，并更新词表。</li>
+<li>重复合并步骤：不断重复步骤2和步骤3，直到达到预先设定的词表大小，或者无法获取有收益的合并。</li>
+<li>利用得到的词表进行分词。</li>
+</ol>
+<p>WordPiece例子如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 我们有以下的训练语料中的样例以及他们出现的频率</span></span><br><span class="line">(<span class="string">&quot;hug&quot;</span>, <span class="number">10</span>), (<span class="string">&quot;pug&quot;</span>, <span class="number">5</span>), (<span class="string">&quot;pun&quot;</span>, <span class="number">12</span>), (<span class="string">&quot;bun&quot;</span>, <span class="number">4</span>), (<span class="string">&quot;hugs&quot;</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将其进行拆分</span></span><br><span class="line">(<span class="string">&quot;h&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##g&quot;</span>, <span class="number">10</span>), (<span class="string">&quot;p&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##g&quot;</span>, <span class="number">5</span>), (<span class="string">&quot;p&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##n&quot;</span>, <span class="number">12</span>), (<span class="string">&quot;b&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##n&quot;</span>, <span class="number">4</span>), (<span class="string">&quot;h&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##g&quot;</span> <span class="string">&quot;##s&quot;</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始词表</span></span><br><span class="line">[<span class="string">&quot;b&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;##g&quot;</span>, <span class="string">&quot;##n&quot;</span>, <span class="string">&quot;##s&quot;</span>, <span class="string">&quot;##u&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算互信息，并取互信息最大的词对合并</span></span><br><span class="line"><span class="comment"># 这里互信息最大的为I(&quot;##g&quot;, &quot;##s&quot;)=5/(20*5)</span></span><br><span class="line"><span class="comment"># 得到如下新的频率以及新的词表</span></span><br><span class="line">(<span class="string">&quot;h&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##g&quot;</span>, <span class="number">10</span>), (<span class="string">&quot;p&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##g&quot;</span>, <span class="number">5</span>), (<span class="string">&quot;p&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##n&quot;</span>, <span class="number">12</span>), (<span class="string">&quot;b&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##n&quot;</span>, <span class="number">4</span>), (<span class="string">&quot;h&quot;</span> <span class="string">&quot;##u&quot;</span> <span class="string">&quot;##gs&quot;</span>, <span class="number">5</span>)</span><br><span class="line">[<span class="string">&quot;b&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;##g&quot;</span>, <span class="string">&quot;##n&quot;</span>, <span class="string">&quot;##u&quot;</span>, <span class="string">&quot;##gs&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重复上述操作，直到达到想要的词表大小</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<div class="note info"><p>上面的步骤中，<code>##g</code>和<code>##s</code>合并之后<code>##s</code>已经没有单独出现了，可以选择将<code>##s</code>保留在词表中(此时词表是会一直增大的)，也可以将<code>##s</code>从词表中删去（词表一般会先增大后减小）。</p>
+</div>
+<h3 id="bpe">BPE</h3>
+<p>BPE的详细解读可参考这篇文章：<br>
+<a href="https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3">https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3</a></p>
+<p>BPE的核心思想是逐步合并出现频率最高的子词对而不是像WordPiece合并最大互信息词对，下面是核心步骤：</p>
+<ol type="1">
+<li>计算初始词表：通过预训练语料获得初始词表（26个英文字母+中文字符+符号）。</li>
+<li>频率统计：统计所有子词对在文本中出现的频率。</li>
+<li>合并频率最高的子词对。</li>
+<li>重复合并步骤：不断重复步骤2和步骤3，直到达到预先设定的词表大小，或者无法获取有收益的合并。</li>
+<li>利用得到的词表进行分词。</li>
+</ol>
+<p>BPE理论上还是会出现OOV的，当词汇表的大小受限时，一些较少出现的子词和没有在训练过程中见过的子词，就会无法进入词汇表而出现OOV，但Byte-level BPE(BBPE)理论上是不会出现这个情况的。</p>
+<h3 id="byte-level-bpe">Byte-level BPE</h3>
+<p>Byte-level BPE(BBPE)和Byte-Pair Encoding (BPE)区别就是BPE是最小词汇是字符级别，而BBPE是字节级别的，通过UTF-8的编码将输入转为字节形式，后续再进行BPE的步骤。</p>
+<ol type="1">
+<li>计算初始词表：构建初始词表，包含一个字节的所有表示（共256个）。</li>
+<li>频率统计：统计所有子词对在文本中出现的频率。</li>
+<li>合并频率最高的子词对。</li>
+<li>重复合并步骤：不断重复步骤2和步骤3，直到达到预先设定的词表大小，或者无法获取有收益的合并。</li>
+<li>利用得到的词表进行分词。</li>
+</ol>
+<h3 id="unigram">Unigram</h3>
+<p>Unigram可参考<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1804.10959.pdf">https://arxiv.org/pdf/1804.10959.pdf</a>。</p>
+<p>Unigram与WordPiece和BPE的区别在于，BPE和Worpiece算法的词表都是一点一点增加，由小到大的。而Unigram则是先初始化一个非常巨大的词表，然后根据标准不断的丢弃，直到词表大小满足限定条件。</p>
+<p>我们来看看Unigram Language Model（ULM）是如何操作的。</p>
+<p>对于句子<span class="math inline">\(S\)</span>，<span class="math inline">\(\vec{x}=(x_1, x_2, ..., x_m)\)</span>为句子的一个分词结果，由<span class="math inline">\(m\)</span>个子词组成。所以，当前分词下句子<span class="math inline">\(S\)</span>的似然值可以表示为：<br>
+<span class="math display">\[P(\vec{x})=\prod_{i=1}^m P(x_i)\]</span></p>
+<p>选取似然值最大的作为分词结果，即：<br>
+<span class="math display">\[x^*=argmax_{x \in U(x)}P(\vec{x})\]</span></p>
+<p>这里<span class="math inline">\(U(x)\)</span>包含了句子的所有分词结果，在实际应用中，词汇数量有上万个，直接罗列所有可能得分词组合不具有操作性。针对这个问题，可通过维特比算法来得到<span class="math inline">\(x^*\)</span>。</p>
+<p>那么如何求解每个子词的概率<span class="math inline">\(P(x_i)\)</span>呢？ULM通过EM算法来估计。</p>
+<p>下面是Unigram算法的核心流程：</p>
+<ol type="1">
+<li>初始词表，建立一个足够大的词表。一般，可用语料中的所有字符加上常见 常见的子字符串初始化词表，也可以通过BPE算法初始化。</li>
+<li>针对当前词表，用EM算法求解每个子词在语料上的概率。</li>
+<li>对于每个子词，计算当该子词被从词表中移除时，总的loss降低了多少，记为该子词的loss。</li>
+<li>将子词按照loss大小进行排序，丢弃一定比例loss最小的子词(比如20%)，保留下来的子词生成新的词表。这里需要注意的是，单字符不能被丢弃，这是为了避免OOV情况。</li>
+<li>重复步骤2到4，直到词表大小减少到设定范围。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" title="Tokenization方法总结">https://fengyan-wby.github.io/2023/10/09/Tokenization方法总结/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Tokenization/" rel="tag"><i class="fa fa-tag"></i> Tokenization</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/08/Ubuntu%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90/" rel="prev" title="Ubuntu软件推荐">
+                  <i class="fa fa-angle-left"></i> Ubuntu软件推荐
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/12/Ubuntu%E5%AE%89%E8%A3%85%E5%BE%AE%E4%BF%A1%E6%95%99%E7%A8%8B/" rel="next" title="Ubuntu安装微信教程">
+                  Ubuntu安装微信教程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">131k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
