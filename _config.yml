@@ -172,6 +172,24 @@ theme_config:
   # Dark Mode
   darkmode: false
 
+  # Darkmode JS
+  # For more information: https://github.com/rqh656418510/hexo-next-darkmode, https://github.com/sandoche/Darkmode.js
+  darkmode_js:
+    enable: true
+    bottom: '32px' # default: '32px'
+    right: '32px' # default: '32px'
+    left: 'unset' # default: 'unset'
+    time: '0.3s' # default: '0.3s'
+    mixColor: 'transparent' # default: '#fff'
+    backgroundColor: 'transparent' # default: '#fff'
+    buttonColorDark: '#100f2c' # default: '#100f2c'
+    buttonColorLight: '#fff' # default: '#fff'
+    isActivated: false # default false
+    saveInCookies: true # default: true
+    label: '🌓' # default: ''
+    autoMatchOsTheme: true # default: true
+    libUrl: # Set custom library cdn url for Darkmode.js ['https://unpkg.com/darkmode-js@1.5.7/lib/darkmode-js.min.js', 'https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js']
+
 
   # ---------------------------------------------------------------
   # Site Information Settings
@@ -698,7 +716,7 @@ theme_config:
 
   # Easily enable fast Ajax navigation on your website.
   # For more information: https://github.com/next-theme/pjax
-  pjax: false
+  pjax: true
 
   # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
   # For more information: https://fancyapps.com/fancybox/
