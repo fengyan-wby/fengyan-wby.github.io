@@ -2,7 +2,7 @@
 title: Spring Boot使用教程
 date: 2023-02-28 10:15:07
 categories: 工程
-tags: ["Spring Boot"
+tags: ["Spring Boot"]
 ---
 
 Spring Boot让我们的Spring应用变的更轻量化。我们不必像以前那样繁琐的构建项目、打包应用、部署到Tomcat等应用服务器中来运行我们的业务服务。通过Spring Boot实现的服务，只需要依靠一个Java类，把它打包成jar，并通过java -jar命令就可以运行起来。这一切相较于传统Spring应用来说，已经变得非常的轻便、简单。
