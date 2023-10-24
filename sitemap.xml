@@ -502,20 +502,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/GPT/</loc>
-    <lastmod>2023-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/</loc>
-    <lastmod>2023-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/tags/BPE/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -530,7 +516,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/hexo/</loc>
+    <loc>https://fengyan-wby.github.io/tags/GPT/</loc>
+    <lastmod>2023-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -538,6 +531,20 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Hadoop/</loc>
+    <lastmod>2023-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/hexo/</loc>
+    <lastmod>2023-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/KMP/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -552,13 +559,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</loc>
-    <lastmod>2023-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/KMP/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -642,6 +642,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/Spring-Boot/</loc>
+    <lastmod>2023-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -657,13 +664,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/DALL%C2%B7E/</loc>
-    <lastmod>2023-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/Spring-Boot/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -812,14 +812,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2023-10-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
