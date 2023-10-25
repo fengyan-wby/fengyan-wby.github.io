@@ -1,3 +1,4 @@
+https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/2023/02/28/Spring-Boot%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/tags/index.html
@@ -97,6 +98,7 @@ https://fengyan-wby.github.io/tags/Prompt/
 https://fengyan-wby.github.io/tags/%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/tags/ONNX/
 https://fengyan-wby.github.io/tags/TensorRT/
+https://fengyan-wby.github.io/tags/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/
 https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/
 https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/
 https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/
