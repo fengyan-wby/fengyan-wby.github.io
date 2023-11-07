@@ -581,6 +581,42 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">context</span>):</span><br><span class="line">	run_daily(period, time=<span class="string">&#x27;every_bar&#x27;</span>)</span><br><span class="line">	<span class="comment"># 设定好要交易的股票数量</span></span><br><span class="line">	g.stocksnum = <span class="number">7</span></span><br><span class="line">	<span class="comment"># 设定交易周期</span></span><br><span class="line">	g.period = <span class="number">13</span></span><br><span class="line">	<span class="comment"># 记录策略进行天数</span></span><br><span class="line">	g.days = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">period</span>(<span class="params">context</span>):</span><br><span class="line">	<span class="comment"># 判断策略进行天数是否能被轮动频率整除余0</span></span><br><span class="line">	<span class="keyword">if</span> g.days % g.period == <span class="number">0</span>:</span><br><span class="line">		<span class="comment"># 代码：找出市值排名最小的前stocksnum只股票作为要买入的股票</span></span><br><span class="line">		<span class="comment"># 获取当天的股票列表</span></span><br><span class="line">		scu = get_all_securities(date=context.current_dt).index.tolist()</span><br><span class="line">		<span class="comment"># 选出在scu内的市值排名最小的前stocksnum只股票</span></span><br><span class="line">		q = query(valuation.code).<span class="built_in">filter</span>(valuation.code.in_(scu)).order_by(valuation.market_cap.asc()).limit(g.stocksnum)</span><br><span class="line">    	df = get_fundamentals(q)</span><br><span class="line">    	<span class="comment"># 选取股票代码并转为list</span></span><br><span class="line">    	buylist=<span class="built_in">list</span>(df[<span class="string">&#x27;code&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    	<span class="comment"># 代码：若已持有的股票的市值已经不够小而不在要买入的股票中，则卖出这些股票。</span></span><br><span class="line">	    <span class="comment"># 对于每个当下持有的股票进行判断：现在是否已经不在buylist里，如果是则卖出</span></span><br><span class="line">	    <span class="keyword">for</span> stock <span class="keyword">in</span> context.portfolio.positions:</span><br><span class="line">	    	<span class="keyword">if</span> stock <span class="keyword">not</span> <span class="keyword">in</span> buylist:  <span class="comment"># 如果stock不在buylist</span></span><br><span class="line">	    		order_target(stock, <span class="number">0</span>)  <span class="comment"># 调整stock的持仓为0，即卖出</span></span><br><span class="line"></span><br><span class="line">	    <span class="comment"># 代码：买入要买入的股票，买入金额为可用资金的stocksnum分之一</span></span><br><span class="line">	    <span class="comment"># 将资金分成g.stocksnum份</span></span><br><span class="line">	    position_per_stk = context.portfolio.cash / g.stocksnum</span><br><span class="line">	    <span class="keyword">for</span> stock <span class="keyword">in</span> buylist:</span><br><span class="line">	    	order_value(stock, position_per_stk)</span><br><span class="line">	<span class="comment"># 策略进行天数增加1</span></span><br><span class="line">	g.days = g.days + <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <h3 id="回测结果">回测结果</h3>
 <p>策略初步写完，把g.period设为13，g.stocksnum设为7，初始资金设为100000，频率为天，回测起止日期为20150101-20180627，然后进行回测，回测结果如下： <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/25.png"> 可见15年到16年该策略表现貌似不错，但随后17年至今则表现平平。</p>
+<h2 id="策略评价与建立模拟">策略评价与建立模拟</h2>
+<p>在学习了如何编写策略后，我们将介绍下评价策略回测的指标，如何建立模拟交易，以及除回测之外还有哪些需要关注的方面。</p>
+<h3 id="策略回测指标">策略回测指标</h3>
+<p>如下图，一个策略回测后会给出一些指标，可以在<a href="https://joinquant.com/help/api/help?name=api#%E9%A3%8E%E9%99%A9%E6%8C%87%E6%A0%87">API文档：风险指标</a>查看这些指标的公式及基本说明。下文将补充介绍下几个重要指标。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/26.png"></p>
+<ul>
+<li><code>策略收益</code>。这是最基础的指标，衡量回测期间策略收益率的。</li>
+<li><code>基准收益</code>。基准默认是沪深300指数，所以此指标是回测期间衡量基准收益率的。一般来说，基准收益代表市场整体的收益情况，所以如果策略收益长期低于基准收益，往往意味着策略是失败的。通过set_benchmark()这个API可以自定义基准。</li>
+<li><code>年化收益率</code>。年化收益率是一个衡量策略盈利能力的重要指标，越大越好。刚刚讲的策略收益这个指标是和回测时间长短强相关的，比如一个普通策略运行10年肯定比优秀的策略跑半年策略收益高，但这样就不利于比较策略的盈利能力。因此，通过数学方法，把策略收益统一互相化归为一年时间的收益率，比如10年的变为平均每年的收益率，半年的变为以这半年盈利能力运行一年的收益率，如此一来，让策略盈利能力在比较时有了一个大致等同的时间标准。</li>
+<li><code>最大回撤率</code>。最大回撤率是一个衡量策略风险的重要指标，越小越好。用人眼一般很容易找到是哪段，而且聚宽的回测图中也标出了，如下图。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/27.png"></li>
+<li>交易次数。交易次数其实是一个可以初步衡量策略回测结果是否可靠的指标，过少往往意味着回测结果不可靠。试想这样一种情况，别人给你推荐一个策略，策略进行了10年历史数据的回测，年化收益非常高，最大回撤非常小，你很高兴，但仔细一看，交易次数只有2次，此时，你愿意用真金白银去使用这个策略吗？你难免会想可能只是这2次操作运气好而已，这样的回测结果虽好但是不可信不可靠。其实这基于一个简单统计学思想，样本过少，则统计结果不可靠，所以足够多的交易次数才能让回测结果有说服力。目前，回测结果中不能直接看到交易次数了，可以通过回测结果页面的其他指标中的盈利次数与亏损次数相加得到，也可以通过回测结果图表下面的每日买卖大致看出，位置如下图。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/28.png"></li>
+<li><code>Alpha（阿尔法）与Beta（贝塔）</code>。在资本资产定价模型（CAPM）中，投资组合的收益被分为和市场系统风险相关与和市场系统风险无关的两部分，而Beta与Alpha这两个希腊字母则是该模型中的两个重要系数，分别代表这相关部分与无关部分。其实策略持有的股票可以看成一个投资组合，基准收益作为市场系统收益，Beta则是代表相关部分的策略收益相对市场波动的倍率，如Beta为2则代表市场涨1%，相关部分的策略收益波动涨大概2%（统计意义上并非实时精确），beta为负数代表与市场反向变动。而Alpha则代表独立于市场波动不受其影响的无关部分的策略收益，越大越好，所以如果策略年化收益为负但Alpha为正而且很大，说明策略有超过市场的盈利能力，不过策略整体盈利被与市场相关部分拉下来了。为了便于理解，Alpha与Beta的含义讲的很粗暴，建议数理基础不错的有志者有空去自学下Alpha与Beta的构造思路与过程。</li>
+<li>夏普比率（Sharpe Ratio）。代表所承担的单位风险所带来的收益，越大越好。夏普比率是在资本资产定价模型进一步发展得来的，不展开讲。</li>
+</ul>
+<h3 id="建立模拟交易">建立模拟交易</h3>
+<p>之前讲过回测是用历史数据模拟执行策略，模拟交易是用未来的的实际行情模拟执行策略，因此当策略完善的自以为差不多没什么问题时，建议建立一个模拟交易观察一段时间，当作进一步的检验。建立的模拟交易的方法很简单，点击回测结果界面，如下图，右上部红色模拟交易按钮，即可新建模拟交易。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/29.png"></p>
+<p>建立模拟交易成功后，点击聚宽导航栏我的交易，可以看到创建的模拟交易，如下图。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/30.png"></p>
+<p>点击右边的微信通知开关，将OFF调到ON，按照指示扫描二维码，绑定微信，就能微信接收交易信号了。当策略买卖操作，微信会收到信号提醒类似下图。自定义消息内容请看<a href="https://joinquant.com/help/api/help?name=api_old#%E5%8F%91%E9%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B6%88%E6%81%AF%E2%99%A0">API send_message</a>。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/31.png"></p>
+<h3 id="未来函数">未来函数</h3>
+<p>未来函数的前文讲过，即指策略利用了历史当时无法得到的信息，造成回测结果极大失真。未来函数排查方法一般是人工查看，重点看一切跟时间有关的地方，尤其注意各个API关于时间的默认处理方法。当然有时未来函数隐藏的很隐蔽，而更好但稍花时间的方法是用策略建立模拟交易，一般让模拟交易运行几天，多数未来函数问题都能被发现，因为模拟交易是不可能引入未来数据的，所以往往引入未来函数的策略无法成功运行模拟交易。</p>
+<h3 id="运行过慢">运行过慢</h3>
+<p>策略的运行效率也是需要关注的问题，尽管新手几乎不会遇到，但需要简单了解下，有个意识。有时策略比较复杂，计算量会很大，极端时可能会造成交易延迟，延误买股票的时机，分钟级策略尤其需要关注下耗时问题，而相关函数就是<a href="https://www.joinquant.com/help/api/help?name=api_old#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E2%99%A0">enable_profile()</a></p>
+<p>用法就是把enable_profile()这行代码复制粘贴放到策略代码的第一行。然后你成功回测后可以在回测详情页面查看性能分析的结果，如下图，从而可以查看哪行代码耗时比较多，从而有目的性的去改进。 <img src="/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/32.png"></p>
+<h3 id="过拟合">过拟合</h3>
+<p>过拟合（overfitting）常用于描述这样的情况。策略一般都有一些参数，如持股数量、交易频率等，选择不同的参数，固定的一份历史数据下，策略的回测结果好坏也不同，人们往往会选回测结果最好的参数作为策略的参数使用，但随后若换了一份历史数据（换一个时间段）做回测或随后用现实数据运行模拟或实盘，发现效果远不如之前的回测结果，此时很可能策略的参数过拟合了，或说之前选回测结果最好的参数这一行为使参数过拟合了。当参数多的时候，更容易发生。</p>
+<p>过拟合的核心思想是，过度细致的解读样本数据，从而没有认识到本质的规律，从而使策略或系统失去了普适性，对原样本数据表现极其优异，但对非原样本数据外情况的有效性大大降低。</p>
+<p>一个关于帮助理解过拟合的比喻是，老师拿一个试卷（样本数据）考学生（策略），学生成绩不理想，老师要教学生（调整参数），此时老师不是教学生学科原理，而是教学生背试卷的答案（过度拟合），当然结果会导致，当再考同一个试卷时学生肯定表现极度优异，但因为只背了答案而没理解原理，所以当换套题目或应用时学生就表现极差了。</p>
+<h3 id="策略失效">策略失效</h3>
+<p>策略一般是有时效的。当你的策略十分完善，并且模拟效果理想，实盘效果也很理想，不要以为策略就会像印钞机一样一直赚钱，策略可以失效的，比如当策略运行中出现历史上罕见的情形时往往就要警惕了，比如最大回撤创历史新高，策略收益率不再增加甚至减少等。如何判断策略是否失效以及找出失效的原因并无通法，但策略失效的原因可能有以下几种，可供参考。</p>
+<ul>
+<li>策略生效的逻辑基础不再成立。比如策略的有效性是建立在涨跌停制度下的、或是建立在某行业不断成长前提下的、或是建立在全球某资源持续稀缺前提下的等，当这些制度或前提不再成立，如制度调整、新政发布、科技进步等，那么策略自然也就失效了。因此，理解策略有效的逻辑是十分重要的。</li>
+<li>操作资金量过大。更大的操作资金，会导致更大的冲击成本，即使买入时价更高、卖出时价更低，而当操作资金过大使市场流动性不足承载时，冲击成本会极大的变高，大大降低利润，甚至导致亏损。所以策略是有资金容量的，建议逐步增大策略操作资金量。</li>
+<li>市场上运行的相似策略过多。同类相似的策略都想赚市场上的同一份钱，然而这份钱是有限的，所以这些策略彼此间会竞争，导致策略赚钱变难，甚至完全失效赚不到钱。具体的表现可能是要买的股票买不到、想卖的股票卖不到理想价位等。因此，交易行业是非常注意保密且不适合分享的行业，而有志者则要注重培养自学能力。</li>
+<li>市场出现了寄生策略。当你的策略被发现市场中的有心人发现并足够程度的监测时，他可以写出一个针对你策略的策略，从而寄生在你的策略上，比如在比你买之前买入，在你卖后拉升股价后卖。这种针对你策略的寄生策略，往往会压缩你策略的盈利空间，使策略失效。</li>
+</ul>
+<h3 id="收益与风险的取舍">收益与风险的取舍</h3>
+<p>往往策略的收益能力与抗风险能力是互相制约不能兼顾的，两者之间如何取舍建议是，达到基本的收益能力后，极力追求低风险，理由是盈利水平往往可以通过增加资金量来提高。具体的讲就是，策略a是一个年化收益率300%，最大回撤率50%的策略，策略b是一个年化收益率30%，最大回撤率5%的策略，只要给策略b提供相当于策略a的10倍的资金量，两者盈利能力就是一样的，但很难让策略a有像策略b一样的抗风险能力。</p>
 <h2 id="需要阅读的书籍和资料">需要阅读的书籍和资料</h2>
 <ul>
 <li>《打开量化投资的黑箱》</li>
