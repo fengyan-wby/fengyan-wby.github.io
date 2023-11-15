@@ -1,3 +1,5 @@
+https://fengyan-wby.github.io/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/
+https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/2023/02/28/Spring-Boot%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/10/16/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/
@@ -6,7 +8,6 @@ https://fengyan-wby.github.io/about/index.html
 https://fengyan-wby.github.io/archives/index.html
 https://fengyan-wby.github.io/categories/index.html
 https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/
-https://fengyan-wby.github.io/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/
 https://fengyan-wby.github.io/2023/09/05/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/
 https://fengyan-wby.github.io/2023/08/11/%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B%E6%8C%87%E5%8D%97/
 https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ViT-An-Image-is-Worth-16x16-Words-Transformers-for-Image-Recognition-at-Scale/

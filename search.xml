@@ -140,6 +140,59 @@
       </tags>
   </entry>
   <entry>
+    <title>总结字形特征的提取方法</title>
+    <url>/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>最近做了一些提取字符形状特征的工作，这里进行一下总结。</p>
+<span id="more"></span>
+<p>字形特征提取，即提取字符的形状特征，对于形状相似的字符，其字形特征在向量空间上应该接近，而形状不相似的字符特征在向量空间上应该远离。<br>
+如<code>木</code>和<code>本</code>，<code>治</code>和<code>冶</code>这些形近字应该接近，而<code>木</code>和<code>的</code>这种不相似的字则应远离。<br>
+字形特征的提取具体分为以下方法。</p>
+<h2 id="ocr">OCR</h2>
+<h3 id="数据构造">数据构造</h3>
+<p>OCR流程分为几个部分，分别为<code>文本检测</code>、<code>文本方向检测</code>和<code>文本识别</code>，这里由于我们只需要提取字形的特征，可以通过自行构造数据省略<code>文本检测</code>和<code>文本方向检测</code>两个步骤，即文本位置和文本方向都是给定的，我们只需要提取固定区域的字形特征就可以了。</p>
+<p>具体来说，对于字符<code>A</code>，我们可以通过字体文件（ttf、otf）将其转化为图片。 这里以<code>刀隶体</code>为例，转化的图片如下：<br>
+<img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/1.png"></p>
+<p>我们也可以多使用几种字体，增加模型的泛化性，如<code>像素体</code>的图片如下：<br>
+<img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/2.png"></p>
+<p>为了省略<code>文本检测</code>和<code>文本方向检测</code>的步骤，我们需要将字符按比例放在图片的正中央，且不要对字符进行旋转。在inference阶段提取字形特征时我们也要使用相同的设置。</p>
+<h3 id="模型结构">模型结构</h3>
+<p>模型这里使用了Res50，结构图如下：<br>
+<img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/3.png"></p>
+<p>最后将字符图片分类为对应的字符即可，是一个多分类问题。</p>
+<h2 id="对比学习">对比学习</h2>
+<p>先回忆一下对比学习的方法：</p>
+<h3 id="simclr">SimCLR</h3>
+<p>人类是可以通过对比来学习特征知识的，如下图所示：</p>
+<p><img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/1.png"><br>
+通过给定左边猫的图像，人类可以通过对比得到右边哪一张图像是猫，哪一些不是。那么是否可以让机器也学会对比，通过区分相似样本和不相似样本来得到图像、文本的特征——对比学习。</p>
+<p>SimCLR的流程如下所示，一张图像经过不同的数据增强得到两张不相同但具有相同语义的图像<span class="math inline">\(x_i\)</span>和<span class="math inline">\(x_j\)</span>。然后这两张图像通过一个Encoder得到中间向量表征<span class="math inline">\(h_i\)</span>和<span class="math inline">\(h_j\)</span>，之后中间向量表征再通过一个非线性层得到向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>。最后去最大化这两张具有相同语义信息的图像的向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>来优化模型。</p>
+<p><img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/2.png"></p>
+<p>但是上面只通过正样本进行学习是没有办法将模型训练起来的，这是因为只用正样本对会使模型学到一个捷径解，即不管输入什么，都输出相同的向量表示，这样就会造成模型坍塌。所以需要同时加入正样本对和负样本对，这里的负样本数据来自同一个<span class="math inline">\(batch\)</span>中不匹配的数据。这里以<span class="math inline">\(batch\_size=2\)</span>为例：</p>
+<p><img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/3.png"><br>
+这样就得到了<span class="math inline">\(2N=4\)</span>张图像，对每一个图像对算相似度得到相似度矩阵，需要最大化正样本对的相似度。</p>
+<p><img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/4.png"><img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/5.png"></p>
+<p>SimCLR的损失函数为InfoNCE： <span class="math display">\[l(i, j) = -log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i, k})}\]</span> <span class="math display">\[L = \frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k, 2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span></p>
+<p>首先计算图像i对图像j的损失： <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/6.png"> 然后交换位置，再算一次，保持对称性： <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/7.png"> 最后将所有对的损失求平均： <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/8.png"></p>
+<p>当SimCLR训练完成后，就可以将模型冻住，使用中间向量特征完成下游任务。 <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/9.png"></p>
+<h3 id="moco">MoCo</h3>
+<p>首先来看一下MoCo和SimCLR的区别：</p>
+<div data-align="center">
+<img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/10.jpg" alt width="500">
+</div>
+<p>可以看到，MoCo和SimCLR不同的地方主要有两个方面：</p>
+<ol type="1">
+<li>负样本并不是在同一个batch中取，而是通过一个队列进行存储，从而将负样本数量和batch size解耦。</li>
+<li>正负样本的编码器并没有共享参数，而是使用动量更新的方法来更新负样本编码器。</li>
+</ol>
+<p>MoCo通过使用队列将负样本存储起来，如下图所示。将最新得到的负样本特征加入队列，并将最早的负样本特征移出队列，从而去维护一个负样本队列。这样负样本的数量就是队列的大小，队列中的负样本可以来自多个batch。 <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/11.jpeg"></p>
+<p>但是使用队列存储负样本就会出现一个问题，每个不同batch的数据都是来自不同时刻的模型，如下图所示： <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/12.jpeg"> 如果像simCLR一样直接将<span class="math inline">\(\theta_q\)</span>的参数复制给<span class="math inline">\(\theta_k\)</span>，即<span class="math inline">\(\theta_k \leftarrow \theta_q\)</span>，则会出现负样本队列中数据特征不一致的问题。因为负样本队列中的数据来自不同的batch，而且<span class="math inline">\(\theta_q\)</span>是根据梯度在快速更新的，如果<span class="math inline">\(\theta_k\)</span>的参数也快速更新，则队列中<span class="math inline">\(\theta_{k-1}\)</span>、<span class="math inline">\(\theta_{k-2}\)</span>等模型得到的特征分布会和<span class="math inline">\(\theta_k\)</span>的得到的特征分布有很大的区别，这样模型就会学到一个捷径解，即根据特征分布的不同来区分正负样本，而不是理解样本的语义信息。 因此，MoCo在这里使用了动量更新来改变<span class="math inline">\(\theta_k\)</span>模型的参数： <span class="math display">\[\theta_k = m\theta_{k-1} + (1-m)\theta_q\]</span> 从而使<span class="math inline">\(\theta_k\)</span>模型缓慢更新，保证了队列中负样本队列中特征分布的一致性。在论文中，作者将<span class="math inline">\(m\)</span>设为了0.999。 <img src="/2023/11/15/%E6%80%BB%E7%BB%93%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95/14.png"></p>
+<h3 id="字形特征提取中的对比学习与方法改进">字形特征提取中的对比学习与方法改进</h3>
+<h4 id="方法">方法</h4>
+<h4 id="改进">改进</h4>
+<p>特征层选取</p>
+]]></content>
+  </entry>
+  <entry>
     <title>量化交易学习</title>
     <url>/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p>量化交易是指以先进的数学模型代替人为的主观判断，利用计算机技术，从庞大的历史数据中筛选出能带来超额收益的多种大概率事件以制定策略，极大地减少投资者情绪波动所带来的影响，避免在市场极度狂热或悲观的情况下做出非理性的投资决策的一种交易方式。其核心思想是通过系统性的方法捕捉市场中的价格和波动性变化，从而实现更稳定和可持续的投资回报。在量化交易中，交易决策通常基于大量的历史市场数据，利用计算机程序来自动执行交易。</p>
@@ -4030,11 +4083,13 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <li><a href="https://github.com/google-research/simclr">https://github.com/google-research/simclr</a></li>
 </ul>
 <p>人类是可以通过对比来学习特征知识的，如下图所示：</p>
-<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png"> 通过给定左边猫的图像，人类可以通过对比得到右边哪一张图像是猫，哪一些不是。那么是否可以让机器也学会对比，通过区分相似样本和不相似样本来得到图像、文本的特征——对比学习。</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/1.png"><br>
+通过给定左边猫的图像，人类可以通过对比得到右边哪一张图像是猫，哪一些不是。那么是否可以让机器也学会对比，通过区分相似样本和不相似样本来得到图像、文本的特征——对比学习。</p>
 <p>SimCLR的流程如下所示，一张图像经过不同的数据增强得到两张不相同但具有相同语义的图像<span class="math inline">\(x_i\)</span>和<span class="math inline">\(x_j\)</span>。然后这两张图像通过一个Encoder得到中间向量表征<span class="math inline">\(h_i\)</span>和<span class="math inline">\(h_j\)</span>，之后中间向量表征再通过一个非线性层得到向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>。最后去最大化这两张具有相同语义信息的图像的向量表征<span class="math inline">\(z_i\)</span>和<span class="math inline">\(z_j\)</span>来优化模型。</p>
 <p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/2.png"></p>
 <p>但是上面只通过正样本进行学习是没有办法将模型训练起来的，这是因为只用正样本对会使模型学到一个捷径解，即不管输入什么，都输出相同的向量表示，这样就会造成模型坍塌。所以需要同时加入正样本对和负样本对，这里的负样本数据来自同一个<span class="math inline">\(batch\)</span>中不匹配的数据。这里以<span class="math inline">\(batch\_size=2\)</span>为例：</p>
-<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/3.png"> 这样就得到了<span class="math inline">\(2N=4\)</span>张图像，对每一个图像对算相似度得到相似度矩阵，需要最大化正样本对的相似度。</p>
+<p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/3.png"><br>
+这样就得到了<span class="math inline">\(2N=4\)</span>张图像，对每一个图像对算相似度得到相似度矩阵，需要最大化正样本对的相似度。</p>
 <p><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/4.png"><img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/5.png"></p>
 <p>SimCLR的损失函数为InfoNCE： <span class="math display">\[l(i, j) = -log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i, k})}\]</span> <span class="math display">\[L = \frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k, 2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span></p>
 <p>首先计算图像i对图像j的损失： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/6.png"> 然后交换位置，再算一次，保持对称性： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/7.png"> 最后将所有对的损失求平均： <img src="/2023/03/09/%E6%B5%85%E8%B0%88%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0/8.png"></p>
