@@ -142,7 +142,9 @@
   <entry>
     <title>LoRA算法和其对应的一些变体</title>
     <url>/2023/11/20/LoRA%E7%AE%97%E6%B3%95%E5%92%8C%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8F%98%E4%BD%93/</url>
-    <content><![CDATA[<h2 id="lora">LoRA</h2>
+    <content><![CDATA[<p>对LoRA算法和其对应的一些变体（如QLoRA、AdaLoRA）进行总结。</p>
+<span id="more"></span>
+<h2 id="lora">LoRA</h2>
 <p>论文地址：</p>
 <ul>
 <li><a href="https://arxiv.org/abs/2106.09685">https://arxiv.org/abs/2106.09685</a></li>
@@ -177,6 +179,24 @@
 </div>
 <div class="note info"><p>在推理阶段，只需要将模型的改变和预训练模型相加并替换预训练模型的参数即可，<span class="math inline">\(W=W_0+BA\)</span>，不会带来任务额外的参数和推理延迟。</p>
 </div>
+<h2 id="qlora">QLoRA</h2>
+<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2305.14314">https://arxiv.org/abs/2305.14314</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/feihuamantian/qlora">https://github.com/feihuamantian/qlora</a></li>
+</ul>
+<h2 id="adalora">AdaLoRA</h2>
+<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2303.10512">https://arxiv.org/abs/2303.10512</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/QingruZhang/AdaLoRA">https://github.com/QingruZhang/AdaLoRA</a></li>
+</ul>
 <h2 id="peft代码实现">PEFT代码实现</h2>
 <p>使用<a href="https://github.com/huggingface/peft">Hugging Face封装代码</a>，目前支持的方法：</p>
 <ul>
@@ -187,8 +207,6 @@
 <li>AdaLoRA: Adaptive Budget Allocation for Parameter-Efficient Fine-Tuning</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSeq2SeqLM</span><br><span class="line"><span class="keyword">from</span> peft <span class="keyword">import</span> get_peft_config, get_peft_model, LoraConfig, TaskType</span><br><span class="line">model_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line">tokenizer_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line"></span><br><span class="line">peft_config = LoraConfig(</span><br><span class="line">    task_type=TaskType.SEQ_2_SEQ_LM, inference_mode=<span class="literal">False</span>, r=<span class="number">8</span>, lora_alpha=<span class="number">32</span>, lora_dropout=<span class="number">0.1</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)</span><br><span class="line">model = get_peft_model(model, peft_config)</span><br><span class="line">model.print_trainable_parameters()</span><br></pre></td></tr></table></figure>
-<h2 id="qlora">QLoRA</h2>
-<h2 id="adalora">AdaLoRA</h2>
 ]]></content>
       <categories>
         <category>算法</category>

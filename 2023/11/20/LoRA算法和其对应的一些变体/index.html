@@ -24,16 +24,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="LoRA 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2106.09685  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;LoRA  简介 自然语言处理目前存在一个重要范式：先在一般领域数据进行大规模预训练，然后再在特定的任务领域进行适应性微调（fine-tuning）。 但是随着预训练语言模型越来越大，这个范式存在以下问题：  当我们finetune大模">
+    <meta name="description" content="对LoRA算法和其对应的一些变体（如QLoRA、AdaLoRA）进行总结。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LoRA算法和其对应的一些变体">
 <meta property="og:url" content="https://fengyan-wby.github.io/2023/11/20/LoRA%E7%AE%97%E6%B3%95%E5%92%8C%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8F%98%E4%BD%93/index.html">
 <meta property="og:site_name" content="FengYan&#39;s Blog">
-<meta property="og:description" content="LoRA 论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2106.09685  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;LoRA  简介 自然语言处理目前存在一个重要范式：先在一般领域数据进行大规模预训练，然后再在特定的任务领域进行适应性微调（fine-tuning）。 但是随着预训练语言模型越来越大，这个范式存在以下问题：  当我们finetune大模">
+<meta property="og:description" content="对LoRA算法和其对应的一些变体（如QLoRA、AdaLoRA）进行总结。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/11/20/LoRA%E7%AE%97%E6%B3%95%E5%92%8C%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8F%98%E4%BD%93/1.png">
 <meta property="article:published_time" content="2023-11-20T11:29:36.000Z">
-<meta property="article:modified_time" content="2023-11-20T11:32:11.398Z">
+<meta property="article:modified_time" content="2023-11-20T11:42:12.918Z">
 <meta property="article:author" content="FengYan">
 <meta property="article:tag" content="LoRA">
 <meta name="twitter:card" content="summary">
@@ -147,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lora"><span class="nav-number">1.</span> <span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#peft%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">PEFT代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qlora"><span class="nav-number">3.</span> <span class="nav-text">QLoRA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adalora"><span class="nav-number">4.</span> <span class="nav-text">AdaLoRA</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lora"><span class="nav-number">1.</span> <span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qlora"><span class="nav-number">2.</span> <span class="nav-text">QLoRA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adalora"><span class="nav-number">3.</span> <span class="nav-text">AdaLoRA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#peft%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">PEFT代码实现</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -507,7 +507,7 @@ if(canvas.getContext){
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-11-20 19:29:36 / 修改时间：19:32:11" itemprop="dateCreated datePublished" datetime="2023-11-20T19:29:36+08:00">2023-11-20</time>
+      <time title="创建时间：2023-11-20 19:29:36 / 修改时间：19:42:12" itemprop="dateCreated datePublished" datetime="2023-11-20T19:29:36+08:00">2023-11-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -548,14 +548,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>934</span>
+      <span>987</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -565,7 +565,9 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="lora">LoRA</h2>
+    <div class="post-body" itemprop="articleBody"><p>对LoRA算法和其对应的一些变体（如QLoRA、AdaLoRA）进行总结。</p>
+<span id="more"></span>
+<h2 id="lora">LoRA</h2>
 <p>论文地址：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.09685">https://arxiv.org/abs/2106.09685</a></li>
@@ -600,6 +602,24 @@ if(canvas.getContext){
 </div>
 <div class="note info"><p>在推理阶段，只需要将模型的改变和预训练模型相加并替换预训练模型的参数即可，<span class="math inline">\(W=W_0+BA\)</span>，不会带来任务额外的参数和推理延迟。</p>
 </div>
+<h2 id="qlora">QLoRA</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.14314">https://arxiv.org/abs/2305.14314</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/feihuamantian/qlora">https://github.com/feihuamantian/qlora</a></li>
+</ul>
+<h2 id="adalora">AdaLoRA</h2>
+<p>论文地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.10512">https://arxiv.org/abs/2303.10512</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/QingruZhang/AdaLoRA">https://github.com/QingruZhang/AdaLoRA</a></li>
+</ul>
 <h2 id="peft代码实现">PEFT代码实现</h2>
 <p>使用<a target="_blank" rel="noopener" href="https://github.com/huggingface/peft">Hugging Face封装代码</a>，目前支持的方法：</p>
 <ul>
@@ -610,8 +630,6 @@ if(canvas.getContext){
 <li>AdaLoRA: Adaptive Budget Allocation for Parameter-Efficient Fine-Tuning</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSeq2SeqLM</span><br><span class="line"><span class="keyword">from</span> peft <span class="keyword">import</span> get_peft_config, get_peft_model, LoraConfig, TaskType</span><br><span class="line">model_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line">tokenizer_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line"></span><br><span class="line">peft_config = LoraConfig(</span><br><span class="line">    task_type=TaskType.SEQ_2_SEQ_LM, inference_mode=<span class="literal">False</span>, r=<span class="number">8</span>, lora_alpha=<span class="number">32</span>, lora_dropout=<span class="number">0.1</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)</span><br><span class="line">model = get_peft_model(model, peft_config)</span><br><span class="line">model.print_trainable_parameters()</span><br></pre></td></tr></table></figure>
-<h2 id="qlora">QLoRA</h2>
-<h2 id="adalora">AdaLoRA</h2>
 
     </div>
 
