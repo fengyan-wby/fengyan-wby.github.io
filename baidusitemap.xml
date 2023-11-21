@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2023-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2023-11-21</lastmod>
+  </url>
+  <url>
     <loc>https://fengyan-wby.github.io/2023/11/20/LoRA%E7%AE%97%E6%B3%95%E5%92%8C%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8F%98%E4%BD%93/</loc>
     <lastmod>2023-11-20</lastmod>
   </url>

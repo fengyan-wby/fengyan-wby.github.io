@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载自https:&#x2F;&#x2F;spaces.ac.cn&#x2F;archives&#x2F;6760。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VQ-VAE介绍">
+<meta property="og:url" content="https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="转载自https:&#x2F;&#x2F;spaces.ac.cn&#x2F;archives&#x2F;6760。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T03:26:16.000Z">
+<meta property="article:modified_time" content="2023-11-21T11:09:21.599Z">
+<meta property="article:author" content="FengYan">
+<meta property="article:tag" content="VQ-VAE">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/","path":"2023/11/21/VQ-VAE介绍/","title":"VQ-VAE介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VQ-VAE介绍 | FengYan's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">FengYan's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pixelcnn"><span class="nav-number">1.</span> <span class="nav-text">PixelCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vq-vae"><span class="nav-number">2.</span> <span class="nav-text">VQ-VAE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%8D%E7%BB%B4%E7%A6%BB%E6%95%A3%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">降维离散化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E8%BF%91%E9%82%BB%E9%87%8D%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">最近邻重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E8%A1%8C%E8%AE%BE%E8%AE%A1%E6%A2%AF%E5%BA%A6"><span class="nav-number">2.3.</span> <span class="nav-text">自行设计梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E6%8A%A4%E7%BC%96%E7%A0%81%E8%A1%A8"><span class="nav-number">2.4.</span> <span class="nav-text">维护编码表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%9F%E5%90%88%E7%BC%96%E7%A0%81%E5%88%86%E5%B8%83"><span class="nav-number">2.5.</span> <span class="nav-text">拟合编码分布</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FengYan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">FengYan</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="FengYan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="VQ-VAE介绍 | FengYan's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VQ-VAE介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-11-21 11:26:16 / 修改时间：19:09:21" itemprop="dateCreated datePublished" datetime="2023-11-21T11:26:16+08:00">2023-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/11/21/VQ-VAE介绍/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转载自<a target="_blank" rel="noopener" href="https://spaces.ac.cn/archives/6760">https://spaces.ac.cn/archives/6760</a>。</p>
+<span id="more"></span>
+<p>VQ-VAE(Vector Quantised Variational AutoEncoder)首先出现在论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.00937">《Neural Discrete Representation Learning》</a>中，出自Google团队。</p>
+<h2 id="pixelcnn">PixelCNN</h2>
+<p>要追溯VQ-VAE的思想，就不得不谈到自回归模型。可以说，VQ-VAE做生成模型的思路，源于<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1601.06759">PixelRNN</a>、<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1606.05328">PixelCNN</a>之类的自回归模型。这类模型在生成图像时，实际上是离散的而不是连续的。以cifar10为例，它是<span class="math inline">\(32 \times 32\)</span>大小的3通道图像，换言之它是一个<span class="math inline">\(32 \times 32 \times 3\)</span>的矩阵，矩阵的每个元素是0～255之间的任意整数。这样一来，我们可以将它看成是一个长度为<span class="math inline">\(32 \times 32 \times 3=3072\)</span>的句子，而词表大小是256,从而用语言模型的方法，来逐像素地、递归地生成一张图片（传入前面的所有像素，来预测下一个像素）。这就是所谓的自回归方法：<br>
+<span class="math display">\[p(x)=p(x_1)p(x_2|x_1)...p(x_{3072}|x_1,x_2,...,x_{3071})\]</span><br>
+其中<span class="math inline">\(p(x_1),p(x_2|x_1),...,p(x_{3072}|x_1,x_2,...,x_{3071})\)</span>每一个都是256分类问题，只不过依赖的条件有所不同。</p>
+<p>自回归的方法很稳妥，也能有效地做概率估计，但生成模型只能逐像素的生成，导致生成速度很慢。上面举例的cifar10已经算是很小的图像了，但展开也相当于生成3072长度的句子。目前做图像生成好歹也要做到<span class="math inline">\(128 \times 128 \times 3\)</span> 的才有说服力了吧，这总像素接近5万个（想想看要生成一个长度为5万的句子），真要逐像素生成会非常耗时。而且这么长的序列，不管是RNN还是CNN模型都无法很好地捕捉这么长的依赖。</p>
+<p>原始的自回归模型还有一个问题，就是割裂了类别之间的联系。虽然说因为每个像素是离散的，所以看成256分类问题也无妨，但事实上连续像素之间的差别是很小的，纯粹的分类问题无法捕捉到这种联系。假如目标像素值是100,如果预测成99,因为类别不同，就会带来一个很大的损失。但从视觉上来看，像素值是100还是99其实差别不大，不应该有这么大的损失。</p>
+<h2 id="vq-vae">VQ-VAE</h2>
+<p>针对自回归模型的固有毛病，VQ-VAE提出的解决方案是：先降维，然后再对编码向量用PixelCNN建模。如一张<span class="math inline">\(n \times n \times 3\)</span>的图像，可以降维到<span class="math inline">\(m \times m\)</span>的编码向量，其中<span class="math inline">\(m &lt;&lt; n\)</span>。这样用PixelCNN对编码向量建模时，生成长度就不会特别大。</p>
+<h3 id="降维离散化">降维离散化</h3>
+<p>看上去这个方案很自然，似乎没什么特别的，但事实上一点都不自然。</p>
+<p>因为PixelCNN生成的是离散序列，你想用PixelCNN建模编码向量，那就意味着编码向量也是离散的才行。而我们常见的降维手段，比如自编码器，生成的编码向量都是连续性变量，无法直接生成离散变量。同时，生成离散型变量往往还意味着存在梯度消失的问题（梯度无法反向传播）。还有，降维、重构这个过程，如何保证重构之后出现的图像不失真？如果失真得太严重，甚至还比不上普通的VAE的话，那么VQ-VAE也没什么存在价值了。</p>
+<p>幸运的是，VQ-VAE确实提供了有效的训练策略解决了这两个问题。</p>
+<h3 id="最近邻重构">最近邻重构</h3>
+<p>在VQ-VAE中，一张<span class="math inline">\(n \times n \times 3\)</span>的图片<span class="math inline">\(x\)</span>先被传入一个<code>encoder</code>中，得到连续的编码向量<span class="math inline">\(z \in R^{m \times m \times d}\)</span>：</p>
+<p><span class="math display">\[z = encoder(x)\]</span></p>
+<p>这里的<span class="math inline">\(z\)</span>是一个大小为<span class="math inline">\(m \times m \times d\)</span>的矩阵。另外，VQ-VAE还维护一个Embedding层，我们也可以称其为编码表，记为：</p>
+<p><span class="math display">\[E=[e_1,e_2,...,e_K]\]</span></p>
+<p>这里每个<span class="math inline">\(e_i\)</span>都是一个大小为<span class="math inline">\(d\)</span>的向量。接着，VQ-VAE通过最近邻搜索，将<span class="math inline">\(z\)</span>中每个位置的向量映射为这<span class="math inline">\(K\)</span>个向量之一：</p>
+<p><span class="math display">\[z_t \rightarrow e_k,k=argmin_j\|z_t-e_j\|\]</span></p>
+<p>我们可以将<span class="math inline">\(z\)</span>对应的编码表矩阵记为<span class="math inline">\(z_q\)</span>，我们认为<span class="math inline">\(z_q\)</span>才是最后的编码结果。最后将<span class="math inline">\(z_q\)</span>传入一个<code>decoder</code>，希望重构原图<span class="math inline">\(\hat{x}=decoder(z_q)\)</span>。</p>
+<p>整个流程是：</p>
+<p><span class="math display">\[x \stackrel{encoder}{\longrightarrow} z \stackrel{最近邻}{\longrightarrow} z_q \stackrel{decoder}{\longrightarrow} \hat{x}\]</span></p>
+<p>这样一来，因为<span class="math inline">\(z_q \in R^{m \times m \times d}\)</span>中每个位置的向量是编码表<span class="math inline">\(E\)</span>中的向量之一，所以它实际上就等价于<span class="math inline">\(1,2,...,K\)</span>这<span class="math inline">\(K\)</span>个整数组成的一个大小为<span class="math inline">\(m \times m\)</span>的整数矩阵，这样就完成了编码向量的离散化。</p>
+<h3 id="自行设计梯度">自行设计梯度</h3>
+<p>我们知道，如果是普通的自编码器，直接用下述loss进行训练即可：</p>
+<p><span class="math display">\[\|x-decoder(z)\|_2^2\]</span></p>
+<p>但是，在VQ-VAE中，我们用来重构的是<span class="math inline">\(z_q\)</span>而不是<span class="math inline">\(z\)</span>，那么似乎应该用这个loss才对：</p>
+<p><span class="math display">\[\|x-decoder(z_q)\|_2^2\]</span></p>
+<p>但问题是<span class="math inline">\(z_q\)</span>的构建过程包含了<span class="math inline">\(argmin\)</span>，这个操作是没有梯度的，所以如果用第二个loss的话，我们没法更新<code>encoder</code>。</p>
+<p>换言之，我们的目标其实是让<span class="math inline">\(\|x-decoder(z_q)\|_2^2\)</span>最小，但是却不好优化；而<span class="math inline">\(\|x-decoder(z_q)\|_2^2\)</span>容易优化，但却不是我们的优化目标。那怎么办呢？</p>
+<p>VQ-VAE使用了一个很精巧也很直接的方法，称为<code>Straight-Through Estimator</code>，它最早源于Benjio的论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1308.3432">《Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation》</a>，在VQ-VAE原论文中也是直接抛出这篇论文而没有做什么讲解。但事实上直接读这篇原始论文是一个很不友好的选择，还不如直接读源代码。</p>
+<p>事实上Straight-Through的思想很简单，就是前向传播的时候可以用想要的变量（哪怕不可导），而反向传播的时候，用你自己为它所设计的梯度。根据这个思想，我们设计的目标函数是：</p>
+<p><span class="math display">\[\|x-decoder(z+sg(z_q-z))\|\]</span></p>
+<p>其中<code>sg</code>表示stop gradient，即不需要它的梯度。这样一来，前向传播计算的时候，就直接等价于<span class="math inline">\(decoder(z+z_q-z)=decoder(z_q)\)</span>，然后反向传播的时候，由于<span class="math inline">\(z_q-z\)</span>不提供梯度，所以等价于<span class="math inline">\(decoder(z)\)</span>，这样就允许我们对<code>encoder</code>进行优化了。</p>
+<p>顺便说一下，基于这个思想，我们可以为很多函数自定义梯度。比如<span class="math inline">\(x+sg[relu(x) - x]\)</span>就是将<span class="math inline">\(relu(x)\)</span>的梯度定义为恒为1,但是在前向传播是又和<span class="math inline">\(relu(x)\)</span>完全等价。当然，用同样的方法我们可以随便指定一个函数的梯度，至于有没有实用价值，则要具体任务具体分析了。</p>
+<h3 id="维护编码表">维护编码表</h3>
+<p>要注意，根据VQ-VAE的最近邻搜索的设计，我们应该期望<span class="math inline">\(z_q\)</span>和<span class="math inline">\(z\)</span>是很接近的，但事实上未必如此，即使<span class="math inline">\(\|x-decoder(z)\|_2^2\)</span>和<span class="math inline">\(\|x-decoder(z_q)\|_2^2\)</span>都很小，也不意味着<span class="math inline">\(z_q\)</span>和<span class="math inline">\(z\)</span>差别很小（即<span class="math inline">\(f(z_1)=f(z_2)\)</span>不意味着<span class="math inline">\(z_1=z_2\)</span>）。</p>
+<p>所以，为了让<span class="math inline">\(z_q\)</span>和<span class="math inline">\(z\)</span>更接近，我们可以直接将<span class="math inline">\(\|z-z_q\|_2^2\)</span>加入到loss中：</p>
+<p><span class="math display">\[\|x-decoder(z+sg[z_q-z])\|_2^2 + \beta \|z-z_q\|_2^2\]</span></p>
+<p>除此之外，还可以做的更仔细一些。由于编码表<span class="math inline">\(z_q\)</span>相对是比较自由的，而<span class="math inline">\(z\)</span>要尽量保证重构效果，所以我们应当尽量<code>让$z_q$去靠近$z$</code>而不是<code>让$z$去靠近$z_q$</code>。而因为<span class="math inline">\(\|z-z_q\|_2^2\)</span>的梯度等于对<span class="math inline">\(z_q\)</span>的梯度加上对<span class="math inline">\(z\)</span>的梯度，所以我们将它等价地分解为：</p>
+<p><span class="math display">\[\|sg[z]-z_q\|_2^2 + \|z-sg[z_q]\|_2^2\]</span></p>
+<p>第一项等于固定<span class="math inline">\(z\)</span>，让<span class="math inline">\(z_q\)</span>靠近<span class="math inline">\(z\)</span>；第二项则反过来固定<span class="math inline">\(z_q\)</span>，让<span class="math inline">\(z\)</span>靠近<span class="math inline">\(z_q\)</span>。注意这个“等价”是对于反向传播（求梯度）来说的，对于前向传播（求loss）它是原来的两倍。根据我们刚才的讨论，我们希望<code>让$z_q$去靠近$z$</code>多于<code>让$z$去靠近$z_q$</code>，所以可以调一下最终的loss比例：</p>
+<p><span class="math display">\[\|x-decoder(z+sg[z_q-z])\|_2^2 + \beta \|sg[z]-z_q\|_2^2 + \gamma \|z-sg[z_q]\|_2^2\]</span></p>
+<p>其中<span class="math inline">\(\gamma &lt; \beta\)</span>，在原论文中使用的是<span class="math inline">\(\gamma = 0.25 \beta\)</span></p>
+<div class="note info"><p>注：还可以用滑动平均的方式更新编码表，详情请看原论文。</p>
+</div>
+<h3 id="拟合编码分布">拟合编码分布</h3>
+<p>经过上述设计之后，我们终于将图片编码为<span class="math inline">\(m \times m\)</span>的整数矩阵了，即编码矩阵。我们可以用自回归模型比如PixelCNN，来对编码矩阵进行拟合。通过PixelCNN得到编码分布后，就可以随机生成一个新的编码矩阵，然后通过编码表<span class="math inline">\(E\)</span>映射为浮点数矩阵<span class="math inline">\(z_q\)</span>，最后经过<code>decoder</code>得到一张图片。</p>
+<p>一般来说，现在的<span class="math inline">\(m \times m\)</span>比原来的<span class="math inline">\(n \times n \times 3\)</span>要小得多，所以用自回归模型对编码矩阵进行建模，要比直接对原始图片进行建模要容易得多。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>FengYan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/" title="VQ-VAE介绍">https://fengyan-wby.github.io/2023/11/21/VQ-VAE介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/VQ-VAE/" rel="tag"><i class="fa fa-tag"></i> VQ-VAE</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/" rel="prev" title="VAE介绍">
+                  <i class="fa fa-angle-left"></i> VAE介绍
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">FengYan</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">169k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:16</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
