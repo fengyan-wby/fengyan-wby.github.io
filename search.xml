@@ -192,7 +192,10 @@
 <div class="note info"><p>注：还可以用滑动平均的方式更新编码表，详情请看原论文。</p>
 </div>
 <h3 id="拟合编码分布">拟合编码分布</h3>
-<p>经过上述设计之后，我们终于将图片编码为<span class="math inline">\(m \times m\)</span>的整数离散矩阵了，即编码矩阵。我们可以用自回归模型比如PixelCNN，来对编码矩阵进行拟合。通过PixelCNN得到编码分布后，就可以随机生成一个新的编码矩阵，然后通过编码表<span class="math inline">\(E\)</span>映射为浮点数矩阵<span class="math inline">\(z_q\)</span>，最后经过<code>decoder</code>得到一张图片。</p>
+<p>经过上述设计之后，我们终于将图片编码为<span class="math inline">\(m \times m\)</span>的整数离散矩阵了，即编码矩阵。我们可以用自回归模型比如PixelCNN，来对编码矩阵进行拟合。</p>
+<div class="note info"><p>拟合过程为通过模型预测编码矩阵的分布，即直接通过模型预测输出一个<span class="math inline">\(m \times m\)</span>大小的整数矩阵。</p>
+</div>
+<p>通过PixelCNN得到编码分布后，就可以随机生成一个新的编码矩阵，然后通过编码表<span class="math inline">\(E\)</span>映射为浮点数矩阵<span class="math inline">\(z_q\)</span>，最后经过<code>decoder</code>得到一张图片。</p>
 <p>一般来说，现在的<span class="math inline">\(m \times m\)</span>比原来的<span class="math inline">\(n \times n \times 3\)</span>要小得多，所以用自回归模型对编码矩阵进行建模，要比直接对原始图片进行建模要容易得多。</p>
 ]]></content>
       <categories>
@@ -292,6 +295,207 @@
 <p>字形特征提取，即提取字符的形状特征，对于形状相似的字符，其字形特征在向量空间上应该接近，而形状不相似的字符特征在向量空间上应该远离。<br>
 如<code>木</code>、<code>本</code>，<code>治</code>、<code>冶</code>这些形近字应该接近，而<code>木</code>、<code>的</code>这种不相似的字则应远离。<br>
 字形特征的提取具体分为以下方法。</p>
+<h2 id="统计方法">统计方法</h2>
+<h3 id="数据处理">数据处理</h3>
+<p>汉语字符主要可以分为结构和笔划两个部分，其中结构包括上下结构，左右结构等。具体的结构划分如下表所示：</p>
+<table>
+<thead>
+<tr class="header">
+<th>编码</th>
+<th>字符</th>
+<th>意义</th>
+<th>例字</th>
+<th>序列</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U+2FF0</td>
+<td>⿰</td>
+<td>两部件由左至右组成</td>
+<td>相</td>
+<td><code>⿰木目</code></td>
+</tr>
+<tr class="even">
+<td>U+2FF1</td>
+<td>⿱</td>
+<td>两部件由上至下组成</td>
+<td>杏</td>
+<td><code>⿱木口</code></td>
+</tr>
+<tr class="odd">
+<td>U+2FF2</td>
+<td>⿲</td>
+<td>三部件由左至右组成</td>
+<td>衍</td>
+<td><code>⿲彳氵亍</code></td>
+</tr>
+<tr class="even">
+<td>U+2FF3</td>
+<td>⿳</td>
+<td>三部件由上至下组成</td>
+<td>京</td>
+<td><code>⿳亠口小</code></td>
+</tr>
+<tr class="odd">
+<td>U+2FF4</td>
+<td>⿴</td>
+<td>两部件由外而内组成</td>
+<td>回</td>
+<td><code>⿴囗口</code></td>
+</tr>
+<tr class="even">
+<td>U+2FF5</td>
+<td>⿵</td>
+<td>三面包围，下方开口</td>
+<td>凰</td>
+<td><code>⿵几皇</code></td>
+</tr>
+<tr class="odd">
+<td>U+2FF6</td>
+<td>⿶</td>
+<td>三面包围，上方开口</td>
+<td>凶</td>
+<td><code>⿶凵㐅</code></td>
+</tr>
+<tr class="even">
+<td>U+2FF7</td>
+<td>⿷</td>
+<td>三面包围，右方开口</td>
+<td>匠</td>
+<td><code>⿷匚斤</code></td>
+</tr>
+<tr class="odd">
+<td>U+2FF8</td>
+<td>⿸</td>
+<td>两面包围，两部件由左上至右下组成</td>
+<td>病</td>
+<td><code>⿸疒丙</code></td>
+</tr>
+<tr class="even">
+<td>U+2FF9</td>
+<td>⿹</td>
+<td>两面包围，两部件由右上至左下组成</td>
+<td>戒</td>
+<td><code>⿹戈廾</code></td>
+</tr>
+<tr class="odd">
+<td>U+2FFA</td>
+<td>⿺</td>
+<td>两面包围，两部件由左下至右上组成</td>
+<td>超</td>
+<td><code>⿺走召</code></td>
+</tr>
+<tr class="even">
+<td>U+2FFB</td>
+<td>⿻</td>
+<td>两部件重叠</td>
+<td>巫</td>
+<td><code>⿻工从</code></td>
+</tr>
+</tbody>
+</table>
+<p>对于笔划部分，我们可以先将字符拆分成偏旁和部首，如下所示：</p>
+<table>
+<thead>
+<tr class="header">
+<th>编码</th>
+<th>字符</th>
+<th>序列</th>
+<th>编码</th>
+<th>字符</th>
+<th>序列</th>
+<th>编码</th>
+<th>字符</th>
+<th>序列</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U+4F60</td>
+<td>你</td>
+<td><code>⿰亻尔</code></td>
+<td>U+6D4B</td>
+<td>测</td>
+<td><code>⿰氵则</code></td>
+<td>U+4E20</td>
+<td>丠</td>
+<td><code>⿱北一</code></td>
+</tr>
+<tr class="even">
+<td>U+662F</td>
+<td>是</td>
+<td><code>⿱日𤴓</code></td>
+<td>U+9010</td>
+<td>逐</td>
+<td><code>⿺辶豕</code></td>
+<td>U+4E58</td>
+<td>乘</td>
+<td><code>⿻禾北</code></td>
+</tr>
+<tr class="odd">
+<td>U+6A1F</td>
+<td>樟</td>
+<td><code>⿰木章</code></td>
+<td>U+98D3</td>
+<td>飓</td>
+<td><code>⿺风具</code></td>
+<td>U+4E6A</td>
+<td>乪</td>
+<td><code>⿺乙田</code></td>
+</tr>
+<tr class="even">
+<td>U+75C5</td>
+<td>病</td>
+<td><code>⿸疒丙</code></td>
+<td>U+4E03</td>
+<td>七</td>
+<td><code>⿻㇀乚</code></td>
+<td>U+4EC1</td>
+<td>仁</td>
+<td><code>⿰亻二</code></td>
+</tr>
+</tbody>
+</table>
+<p>然后我们可以通过递归的方法得到各个字符的笔划，如下所示：</p>
+<table>
+<thead>
+<tr class="header">
+<th>编码</th>
+<th>字符</th>
+<th>序列</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U+75C5</td>
+<td>病</td>
+<td><code>⿸⿰⿱丶㇀⿱丶⿰丿一⿱一⿻⿰丨𠃌⿰丿乀</code></td>
+</tr>
+<tr class="even">
+<td>U+6D4B</td>
+<td>测</td>
+<td><code>⿰⿳丶丶㇀⿰⿱⿰丨𠃍⿰丿乀⿰丨亅</code></td>
+</tr>
+<tr class="odd">
+<td>U+6A1F</td>
+<td>樟</td>
+<td><code>⿰⿻一⿲丿丨乀⿱⿱⿱⿱丶一⿰丶丿一⿱⿴⿵⿰丨𠃍一一⿻一丨</code></td>
+</tr>
+</tbody>
+</table>
+<div class="note info"><p>这里以<code>樟</code>为例，解释如果通过递归的方法由偏旁部首得到笔划。</p>
+<ol type="1">
+<li>首先<code>樟</code>由<code>⿰木章</code>组成，这样就得到了字符的三个组成部分<code>⿰</code>、<code>木</code>和<code>章</code>。</li>
+<li>对于结构<code>⿰</code>我们保持不变，对于<code>木</code>和<code>章</code>我们递归执行上述的拆分步骤，如<code>章</code>可进一步被拆分为<code>⿱立早</code>。</li>
+<li>继续递归执行上述拆分步骤，直到达到停止条件或者不可拆分为止。</li>
+</ol>
+<p>这样，我们就将字符拆分成结构和笔划组成的序列了。</p>
+</div>
+<h3 id="字符相似度计算">字符相似度计算</h3>
+<p>有了字符的结构和笔划的组成序列之后，我们就可以计算字符之间的相似度了。这里我使用了编辑距离来进行计算。</p>
+<p>如字符<code>木</code>的序列构成为<code>⿻一⿲丿丨乀</code>，字符<code>本</code>的序列构成为<code>⿻⿻一⿲丿丨乀一</code>，它们的编辑距离为2。则最终相似度计算如下：</p>
+<p><span class="math display">\[similarity(木, 本)=1 - \frac{dis(木, 本)}{max(len(木), len(本))}=1 - \frac{2}{max(6, 8)}=0.75\]</span></p>
 <h2 id="ocr">OCR</h2>
 <h3 id="数据构造">数据构造</h3>
 <p>OCR流程分为几个部分，分别为：</p>
