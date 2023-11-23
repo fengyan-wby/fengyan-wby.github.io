@@ -24,15 +24,23 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="article">
+    <meta name="description" content="转载自https:&#x2F;&#x2F;spaces.ac.cn&#x2F;archives&#x2F;5253。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="VAE介绍">
 <meta property="og:url" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:description" content="转载自https:&#x2F;&#x2F;spaces.ac.cn&#x2F;archives&#x2F;5253。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/3.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/4.png">
 <meta property="article:published_time" content="2023-11-21T03:26:05.000Z">
-<meta property="article:modified_time" content="2023-11-21T03:26:05.166Z">
+<meta property="article:modified_time" content="2023-11-23T12:06:56.095Z">
 <meta property="article:author" content="FengYan">
+<meta property="article:tag" content="VAE">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/1.png">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/">
@@ -129,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -142,6 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%8F%98%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">分布变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vae"><span class="nav-number">2.</span> <span class="nav-text">VAE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.1.</span> <span class="nav-text">经典回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vae%E5%88%9D%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">VAE初现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E6%A0%87%E5%87%86%E5%8C%96"><span class="nav-number">2.3.</span> <span class="nav-text">分布标准化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%8F%82%E6%95%B0%E6%8A%80%E5%B7%A7"><span class="nav-number">2.4.</span> <span class="nav-text">重参数技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">后续分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">3.1.</span> <span class="nav-text">本质是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83"><span class="nav-number">3.2.</span> <span class="nav-text">正态分布？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%88%86%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="nav-number">3.3.</span> <span class="nav-text">变分在哪里</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6vae"><span class="nav-number">3.4.</span> <span class="nav-text">条件VAE</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +176,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -502,6 +511,22 @@ if(canvas.getContext){
 
       <time title="创建时间：2023-11-21 11:26:05" itemprop="dateCreated datePublished" datetime="2023-11-21T11:26:05+08:00">2023-11-21</time>
     </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-23 20:06:56" itemprop="dateModified" datetime="2023-11-23T20:06:56+08:00">2023-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
 
   
     <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
@@ -532,14 +557,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>0</span>
+      <span>4.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -549,7 +574,69 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><p>转载自<a target="_blank" rel="noopener" href="https://spaces.ac.cn/archives/5253">https://spaces.ac.cn/archives/5253</a>。</p>
+<span id="more"></span>
+<h2 id="分布变换">分布变换</h2>
+<p>通常我们会拿VAE跟GAN比较，的确，它们两个的目标基本是一致的——希望构建一个从隐变量<span class="math inline">\(Z\)</span>生成目标数据<span class="math inline">\(X\)</span>的模型，但是实现上有所不同。更准确地讲，它们是假设了<span class="math inline">\(Z\)</span>服从某些常见的分布（比如正态分布或均匀分布），然后希望训练一个模型<span class="math inline">\(X=g(z)\)</span>，这个模型能够将原来的概率分布映射到训练集的概率分布，也就是说，它们的目的都是进行分布之间的变换。</p>
+<figure>
+<img src="/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/1.png" alt><figcaption>生成模型的难题就是判断生成分布与真实分布的相似度，因为我们只知道两者的采样结果，不知道它们的分布表达式</figcaption>
+</figure>
+<p>那现在假设<span class="math inline">\(Z\)</span>服从标准的正态分布，那么就可以从中采样得到若干个<span class="math inline">\(Z_1,Z_2,...,Z_n\)</span>，然后对它做变换得到<span class="math inline">\(\hat{X_1}=g(Z_1), \hat{X_2}=g(Z_2), ..., \hat{X_n}=g(Z_n)\)</span>，我们怎么判断这个通过<span class="math inline">\(g\)</span>构造出来的数据集，它的分布跟我们目标的数据集分布是不是一样的呢？有读者说不是有KL散度吗？当然不行，因为KL散度是根据两个概率分布的表达式来算它们的相似度的，然而目前我们并不知道它们的概率分布的表达式，我们只有一批从构造的分布采样而来的数据<span class="math inline">\(\hat{X_1}, \hat{X_2}, ..., \hat{X_n}\)</span>，还有一批从真实的分布采样而来的数据<span class="math inline">\(X_1, X_2, ..., X_n\)</span>。我们只有样本本身，没有分布表达式，当然也就没有方法算KL散度。</p>
+<p>虽然遇到困难，但还是要想办法解决的。GAN的思路很直接粗犷：既然没有合适的度量，那我干脆把这个度量也用神经网络训练出来吧。就这样，WGAN就诞生了。而VAE则使用了一个精致迂回的技巧。</p>
+<h2 id="vae">VAE</h2>
+<p>这一部分我们先回顾一般教程是怎么介绍VAE的，然后再探究有什么问题，接着就自然地发现了VAE真正的面目。</p>
+<h3 id="经典回顾">经典回顾</h3>
+<p>首先我们有一批数据样本<span class="math inline">\(X_1, X_2, ..., X_n\)</span>，其整体用<span class="math inline">\(X\)</span>来描述，我们本想根据<span class="math inline">\(X_1, X_2, ..., X_n\)</span>得到<span class="math inline">\(X\)</span>的分布<span class="math inline">\(p(X)\)</span>，如果能得到的话，那我直接根据<span class="math inline">\(p(X)\)</span>来采样，就可以得到所有可能的<span class="math inline">\(X\)</span>了（包括<span class="math inline">\(X_1, X_2, ..., X_n\)</span>以外的），这是一个终极理想的生成模型了。当然，这个理想很难实现，于是我们将分布改一改：</p>
+<p><span class="math display">\[p(X)=\sum_Z p(X|Z)p(Z)\]</span></p>
+<p>这里我们就不区分求和还是求积分了，意思对了就行。此时<span class="math inline">\(p(X|Z)\)</span>就描述了一个由<span class="math inline">\(Z\)</span>来生成<span class="math inline">\(X\)</span>的模型，而我们假设<span class="math inline">\(Z\)</span>服从标准正态分布，也就是<span class="math inline">\(p(Z)= \mathcal N(0, I)\)</span>。如果这个理想能实现，那么我们就可以先从标准正态分布中采样一个<span class="math inline">\(Z\)</span>，然后根据<span class="math inline">\(Z\)</span>来算一个<span class="math inline">\(X\)</span>，也是一个很棒的生成模型。接下来就是结合自编码器来实现重构，保证有效信息没有丢失，再加上一系列的推导，最后把模型实现。框架的示意图如下：</p>
+<figure>
+<img src="/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/2.png" alt><figcaption>vae的传统理解</figcaption>
+</figure>
+<p>看出了什么问题了吗？如果像这个图的话，我们其实完全不清楚：究竟经过重新采样出来的<span class="math inline">\(Z_k\)</span>，是不是还对应着原来的<span class="math inline">\(X_k\)</span>，所以我们如果直接最小化<span class="math inline">\(D(\hat{X_k}, X_k)^2\)</span>（这里<span class="math inline">\(D\)</span> 代表某种距离函数）是很不科学的，而事实上你看代码也会发现根本不是这样实现的。</p>
+<h3 id="vae初现">VAE初现</h3>
+<p>其实，在整个VAE模型中，我们并没有去使用<span class="math inline">\(p(Z)\)</span>（隐变量空间的分布）是正态分布的假设，我们用的是假设<span class="math inline">\(p(Z|X)\)</span>（后验分布）是正态分布！！</p>
+<p>具体来说，给定一个真实样本<span class="math inline">\(X_k\)</span>，我们假设存在一个专属于<span class="math inline">\(X_k\)</span>的分布<span class="math inline">\(p(Z|X_k)\)</span>，并进一步假设这个分布是正态分布。为什么要强调“专属”呢？因为我们后面要训练一个生成器<span class="math inline">\(X=g(Z)\)</span>，希望能够把从分布<span class="math inline">\(p(Z|X_k)\)</span>采样出来的一个<span class="math inline">\(Z_k\)</span>还原为<span class="math inline">\(X_k\)</span>。如果假设<span class="math inline">\(p(Z)\)</span>是正态分布，然后从<span class="math inline">\(p(Z)\)</span>中采样一个<span class="math inline">\(Z\)</span>，那么我们怎么知道这个<span class="math inline">\(Z\)</span>对应于哪个真实的<span class="math inline">\(X\)</span>呢？现在<span class="math inline">\(p(Z|X_k)\)</span>专属于<span class="math inline">\(X_k\)</span>，我们有理由说从这个分布采样出来的<span class="math inline">\(Z\)</span>应该要还原到<span class="math inline">\(X_k\)</span>中去。</p>
+<p>这时候每一个<span class="math inline">\(X_k\)</span>都配上了一个专属的正态分布，才方便后面的生成器做还原。但这样有多少个<span class="math inline">\(X\)</span>就有多少个正态分布了。我们知道正态分布有两组参数：均值<span class="math inline">\(\mu\)</span>和方差<span class="math inline">\(\sigma^2\)</span>（多元的话，它们都是向量），那我怎么找出专属于<span class="math inline">\(X_k\)</span>的正态分布<span class="math inline">\(p(Z|X_k)\)</span>的均值和方差呢？好像并没有什么直接的思路。那好吧，那我就用神经网络来拟合出来吧！这就是神经网络时代的哲学：难算的我们都用神经网络来拟合。</p>
+<p>于是我们构建两个神经网络<span class="math inline">\(\mu_k=f_1(X_k),log \sigma_k^2=f_2(X_k)\)</span>来算它们了。我们选择拟合<span class="math inline">\(log \sigma_k^2\)</span>而不是直接拟合<span class="math inline">\(\sigma_k^2\)</span>，是因为<span class="math inline">\(\sigma_k^2\)</span>总是非负的，需要加激活函数处理，而拟合<span class="math inline">\(log \sigma_k^2\)</span>不需要加激活函数，因为它可正可负。到这里，我能知道专属于<span class="math inline">\(X_k\)</span>的均值和方差了，也就知道它的正态分布长什么样了，然后从这个专属分布中采样一个<span class="math inline">\(Z_k\)</span>出来，然后经过一个生成器得到<span class="math inline">\(\hat{X_k}=g(Z_k)\)</span>，现在我们可以放心地最小化<span class="math inline">\(D(\hat{X_k}, X_k)^2\)</span>，因为<span class="math inline">\(Z_k\)</span>是从专属<span class="math inline">\(X_k\)</span>的分布中采样出来的，这个生成器应该要把开始的<span class="math inline">\(X_k\)</span>还原回来。于是可以画出VAE的示意图:</p>
+<figure>
+<img src="/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/3.png" alt><figcaption>事实上，vae是为每个样本构造专属的正态分布，然后采样来重构</figcaption>
+</figure>
+<h3 id="分布标准化">分布标准化</h3>
+<p>让我们来思考一下，根据上图的训练过程，最终会得到什么结果。</p>
+<p>首先，我们希望重构<span class="math inline">\(X\)</span>，也就是最小化<span class="math inline">\(D(\hat{X_k}, X_k)^2\)</span>，但是这个重构过程受到噪声的影响，因为<span class="math inline">\(Z_k\)</span></p>
+<p>是通过重新采样过的，不是直接由encoder算出来的。显然噪声会增加重构的难度，不过好在这个噪声强度（也就是方差）通过一个神经网络算出来的，所以最终模型为了重构得更好，肯定会想尽办法让方差为0。而方差为0的话，也就没有随机性了，所以不管怎么采样其实都只是得到确定的结果（也就是均值），只拟合一个当然比拟合多个要容易，而均值是通过另外一个神经网络算出来的。</p>
+<p>说白了，模型会慢慢退化成普通的AutoEncoder，噪声不再起作用。</p>
+<p>这样不就白费力气了吗？说好的生成模型呢？</p>
+<p>别急别急，其实VAE还让所有的<span class="math inline">\(p(Z|X)\)</span>都向标准正态分布看齐。</p>
+<ol type="1">
+<li>这样就防止了噪声为零(这样方差就不会为0，而是接近1)</li>
+<li>同时保证了模型具有生成能力。怎么理解“保证了生成能力”呢？如果所有的<span class="math inline">\(p(Z|X)\)</span>都很接近标准正态分布<span class="math inline">\(\mathcal N(0, I)\)</span>，那么根据定义:<br>
+<span class="math display">\[p(Z)=\sum_X p(Z|X)p(X)=\sum_X \mathcal N(0, I)p(X)=\mathcal N(0, I)\sum_Xp(X)=\mathcal N(0, I)\]</span><br>
+这样我们就能达到我们的先验假设：<span class="math inline">\(p(Z)\)</span>是标准正态分布。然后我们就可以放心地从<span class="math inline">\(\mathcal N(0, I)\)</span>中采样来生成图像了。</li>
+</ol>
+<figure>
+<img src="/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/4.png" alt><figcaption>为了使模型具有生成能力，vae要求每个p(Z_X)都向正态分布看齐</figcaption>
+</figure>
+<p>那怎么让所有的<span class="math inline">\(p(Z|X)\)</span>都向<span class="math inline">\(\mathcal N(0, I)\)</span>看齐呢？如果没有外部知识的话，其实最直接的方法应该是在重构误差的基础上中加入额外的loss：</p>
+<p><span class="math display">\[L_{\mu}=\|f_1(X_k)\|^2, L_{\sigma^2}=\|f_2(X_k)\|^2\]</span></p>
+<p>因为它们分别代表了均值<span class="math inline">\(\mu_k\)</span>和方差的对数<span class="math inline">\(log \sigma_k^2\)</span>，达到<span class="math inline">\(\mathcal N(0, I)\)</span>就是希望二者尽量接近于0了。不过，这又会面临着这两个损失的比例要怎么选取的问题，选取得不好，生成的图像会比较模糊。所以，原论文直接算了一般（各分量独立的）正态分布与标准正态分布的KL散度<span class="math inline">\(KL(\mathcal N(\mu, \sigma^2) \| \mathcal N(0, I))\)</span>作为这个额外的loss，计算结果为:</p>
+<p><span class="math display">\[L_{\mu,\sigma^2}=\frac{1}{2}\sum_{i=1}^{d}(\mu_{(i)}^2+\sigma_{(i)}^2-log \sigma_{(i)}^2-1)\]</span></p>
+<h3 id="重参数技巧">重参数技巧</h3>
+<p>最后是实现模型的一个技巧，英文名是reparameterization trick，我这里叫它做重参数吧。其实很简单，就是我们要从<span class="math inline">\(p(Z|X_k)\)</span>中采样一个<span class="math inline">\(Z_k\)</span>出来，尽管我们知道了<span class="math inline">\(p(Z|X_k)\)</span>是正态分布，但是均值方差都是靠模型算出来的，我们要靠这个过程反过来优化均值方差的模型，但是“采样”这个操作是不可导的，而采样的结果是可导的。我们利用</p>
+<p><span class="math display">\[
+  \begin{align}
+    &amp; \frac{1}{\sqrt{2 \pi \sigma^2}}exp(-\frac{(z - \mu)^2}{2 \sigma^2})dz \\
+     = &amp; \frac{1}{\sqrt{2 \pi}}exp(-\frac{1}{2}(\frac{z - \mu}{\sigma})^2)d(\frac{z - \mu}{\sigma}) \\  
+  \end{align}
+\]</span></p>
+<p>这说明<span class="math inline">\((z - \mu) / \sigma = \epsilon\)</span>是服从均值为0、方差为1的标准正态分布的，要同时把<span class="math inline">\(dz\)</span>考虑进去，是因为乘上<span class="math inline">\(dz\)</span>才算是概率，去掉<span class="math inline">\(dz\)</span>是概率密度而不是概率。这时候我们得到：<br>
+从<span class="math inline">\(\mathcal N(\mu, \sigma^2)\)</span>中采样一个<span class="math inline">\(Z\)</span>，相当于从<span class="math inline">\(\mathcal N(0, I)\)</span>中采样一个<span class="math inline">\(\epsilon\)</span>，然后让<span class="math inline">\(Z= \mu + \epsilon \times \sigma\)</span>。<br>
+于是，我们将从<span class="math inline">\(\mathcal N(\mu, \sigma^2)\)</span>采样变成了从<span class="math inline">\(\mathcal N(0, I)\)</span>中采样，然后通过参数变换得到从<span class="math inline">\(\mathcal N(\mu, \sigma^2)\)</span>中采样的结果。这样一来，“采样”这个操作就不用参与梯度下降了，改为采样的结果参与，使得整个模型可训练了。</p>
+<h2 id="后续分析">后续分析</h2>
+<h3 id="本质是什么">本质是什么</h3>
+<h3 id="正态分布">正态分布？</h3>
+<h3 id="变分在哪里">变分在哪里</h3>
+<h3 id="条件vae">条件VAE</h3>
 
     </div>
 
@@ -575,6 +662,9 @@ if(canvas.getContext){
 </ul>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/VAE/" rel="tag"><i class="fa fa-tag"></i> VAE</a>
+          </div>
 
         
 
@@ -624,14 +714,14 @@ if(canvas.getContext){
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">170k</span>
+    <span title="站点总字数">176k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">10:19</span>
+    <span title="站点阅读时长">2:40</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -707,7 +797,7 @@ if(canvas.getContext){
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
