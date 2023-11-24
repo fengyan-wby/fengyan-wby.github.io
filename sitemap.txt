@@ -1,4 +1,6 @@
+https://fengyan-wby.github.io/2023/11/24/%E9%87%91%E8%9E%8D%E8%82%A1%E7%A5%A8%E5%AD%A6%E4%B9%A0%E9%9C%80%E8%A6%81%E9%98%85%E8%AF%BB%E7%9A%84%E4%B9%A6%E7%B1%8D/
 https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/
+https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/
 https://fengyan-wby.github.io/2023/11/21/VAE%E4%BB%8B%E7%BB%8D/
 https://fengyan-wby.github.io/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/
 https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/
@@ -31,7 +33,6 @@ https://fengyan-wby.github.io/2023/02/13/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8
 https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/
 https://fengyan-wby.github.io/2023/04/13/TensorFlow%E6%95%99%E7%A8%8B/
 https://fengyan-wby.github.io/2023/10/12/Ubuntu%E5%AE%89%E8%A3%85%E5%BE%AE%E4%BF%A1%E6%95%99%E7%A8%8B/
-https://fengyan-wby.github.io/2023/10/09/Tokenization%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/
 https://fengyan-wby.github.io/2023/10/08/Ubuntu%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90/
 https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/
 https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/
@@ -106,6 +107,9 @@ https://fengyan-wby.github.io/tags/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/
 https://fengyan-wby.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/
 https://fengyan-wby.github.io/tags/VQ-VAE/
 https://fengyan-wby.github.io/tags/VAE/
+https://fengyan-wby.github.io/tags/%E9%87%91%E8%9E%8D/
+https://fengyan-wby.github.io/tags/%E8%82%A1%E7%A5%A8/
+https://fengyan-wby.github.io/tags/%E5%9F%BA%E9%87%91/
 https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/
 https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/
 https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/

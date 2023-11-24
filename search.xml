@@ -140,6 +140,55 @@
       </tags>
   </entry>
   <entry>
+    <title>金融股票学习需要阅读的书籍</title>
+    <url>/2023/11/24/%E9%87%91%E8%9E%8D%E8%82%A1%E7%A5%A8%E5%AD%A6%E4%B9%A0%E9%9C%80%E8%A6%81%E9%98%85%E8%AF%BB%E7%9A%84%E4%B9%A6%E7%B1%8D/</url>
+    <content><![CDATA[<p>记录金融股票学习需要阅读的书籍。</p>
+<span id="more"></span>
+<ul class="task-list">
+<li><input type="checkbox" disabled checked>
+《投资中最简单的事》</li>
+<li><input type="checkbox" disabled>
+《股票大作手回忆录》</li>
+<li><input type="checkbox" disabled>
+《海龟交易法则》</li>
+<li><input type="checkbox" disabled>
+《股票交易实战技法》</li>
+<li><input type="checkbox" disabled>
+《看盘方法与技巧》</li>
+<li><input type="checkbox" disabled>
+《新手炒股快速入门》</li>
+<li><input type="checkbox" disabled>
+《一本书读懂K线图》</li>
+<li><input type="checkbox" disabled>
+《财报就像一本故事书》</li>
+<li><input type="checkbox" disabled>
+《股市趋势技术分析》</li>
+<li><input type="checkbox" disabled>
+《日本蜡烛图技术》</li>
+<li><input type="checkbox" disabled>
+《聪明的投资者》</li>
+<li><input type="checkbox" disabled>
+《巴菲特致股东的信》</li>
+<li><input type="checkbox" disabled>
+《穷查理宝典》</li>
+<li><input type="checkbox" disabled>
+《滚雪球》</li>
+<li><input type="checkbox" disabled>
+《共同基金常识》</li>
+<li><input type="checkbox" disabled>
+《基金长青》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>金融</category>
+      </categories>
+      <tags>
+        <tag>金融</tag>
+        <tag>股票&quot;</tag>
+        <tag>基金</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>VQ-VAE介绍</title>
     <url>/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>转载自<a href="https://spaces.ac.cn/archives/6760">https://spaces.ac.cn/archives/6760</a>。</p>
@@ -1156,17 +1205,6 @@
 </ul>
 <h3 id="收益与风险的取舍">收益与风险的取舍</h3>
 <p>往往策略的收益能力与抗风险能力是互相制约不能兼顾的，两者之间如何取舍建议是，达到基本的收益能力后，极力追求低风险，理由是盈利水平往往可以通过增加资金量来提高。具体的讲就是，策略a是一个年化收益率300%，最大回撤率50%的策略，策略b是一个年化收益率30%，最大回撤率5%的策略，只要给策略b提供相当于策略a的10倍的资金量，两者盈利能力就是一样的，但很难让策略a有像策略b一样的抗风险能力。</p>
-<h2 id="需要阅读的书籍和资料">需要阅读的书籍和资料</h2>
-<ul>
-<li>《打开量化投资的黑箱》</li>
-<li>《海龟交易法则》</li>
-<li>《股票作手回忆录》</li>
-<li>《财报就像一本故事书》</li>
-<li>了解K线</li>
-<li>了解下移动平均线（MA，均线）的计算方法。</li>
-<li>了解下市价单、限价单的含义。</li>
-<li>复权方式</li>
-</ul>
 ]]></content>
       <categories>
         <category>金融</category>
@@ -1924,7 +1962,7 @@
 <li>计算合并分数，在WordPiece中合并分数是互信息，即选择互信息最大的两个相邻子词进行合并。而BPE中是选择频数最高的相邻子词合并。<br>
 互信息计算公式：<br>
 <span class="math display">\[I=\frac{P(AB)}{P(A)P(B)}\]</span><br>
-<span class="math inline">\(\theta\)</span></li>
+</li>
 <li>合并分数最高的子词对，并更新词表。</li>
 <li>重复合并步骤：不断重复步骤2和步骤3，直到达到预先设定的词表大小，或者无法获取有收益的合并。</li>
 <li>利用得到的词表进行分词。</li>
