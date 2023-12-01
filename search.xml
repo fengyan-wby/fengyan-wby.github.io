@@ -29,7 +29,7 @@
 <p>生成指定<code>shape</code>的矩阵，里面的元素的值根据正态分布随机生成，均值为<code>mean</code>，标准差为<code>stddev</code></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.random_normal([<span class="number">3</span>, <span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">0.01</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
 <h4 id="tf.truncated_normal">tf.truncated_normal</h4>
-<p>和<code>tf.random_normal</code>类似，不过只保留[mean - 2✖️stddev, mean + 2✖️stddev]范围内的随机数</p>
+<p>和<code>tf.random_normal</code>类似，不过只保留<span class="math inline">\([mean - 2 \times stddev, mean + 2 \times stddev]\)</span>范围内的随机数</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">0.01</span>, dtype=tf.float32)</span><br></pre></td></tr></table></figure>
 <h4 id="tf.random_uniform">tf.random_uniform</h4>
 <p>生成指定<code>shape</code>的矩阵，里面的元素的值根据均匀分布随机生成，最小值为<code>minval</code>，最大值为<code>maxval</code></p>
@@ -3567,6 +3567,14 @@ Results调用结果如下：</p>
 </table>
 <h2 id="算术运算">算术运算</h2>
 <table>
+<colgroup>
+<col style="width: 19%">
+<col style="width: 16%">
+<col style="width: 19%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 12%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>显示</th>
@@ -3631,8 +3639,24 @@ Results调用结果如下：</p>
 <td><code>\sum</code></td>
 <td><span class="math inline">\(\prod\)</span></td>
 <td><code>\prod</code></td>
-<td></td>
-<td></td>
+<td><span class="math inline">\(\int\)</span></td>
+<td><code>\int</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(arg\,\min_{c_k}\)</span></td>
+<td><code>arg\,\min_&#123;c_k&#125;</code></td>
+<td><span class="math inline">\(arg\,\max_{c_k}\)</span></td>
+<td><code>arg\,\max_&#123;c_k&#125;</code></td>
+<td><span class="math inline">\(\max_{c_k}\)</span></td>
+<td><code>\max_&#123;c_k&#125;</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathop {argmin}_{c_k}\)</span></td>
+<td><code>\mathop &#123;argmin&#125;_&#123;c_k&#125;</code></td>
+<td><span class="math inline">\(\mathop {argmax}_{c_k}\)</span></td>
+<td><code>\mathop &#123;argmax&#125;_&#123;c_k&#125;</code></td>
+<td><span class="math inline">\(\min_{c_k}\)</span></td>
+<td><code>\min_&#123;c_k&#125;</code></td>
 </tr>
 </tbody>
 </table>
@@ -3765,6 +3789,37 @@ Results调用结果如下：</p>
 </tr>
 </tbody>
 </table>
+<h2 id="箭头">箭头</h2>
+<table>
+<thead>
+<tr class="header">
+<th>显示</th>
+<th>符号</th>
+<th>显示</th>
+<th>符号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\to\)</span></td>
+<td><code>\to</code></td>
+<td><span class="math inline">\(\rightarrow\)</span></td>
+<td><code>\rightarrow</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\leftarrow\)</span></td>
+<td><code>\leftarrow</code></td>
+<td><span class="math inline">\(\mapsto\)</span></td>
+<td><code>\mapsto</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\Rightarrow\)</span></td>
+<td><code>\Rightarrow</code></td>
+<td><span class="math inline">\(\Leftarrow\)</span></td>
+<td><code>\Leftarrow</code></td>
+</tr>
+</tbody>
+</table>
 <h2 id="上下划线和上下括号">上、下划线和上、下括号</h2>
 <table>
 <thead>
@@ -3787,22 +3842,26 @@ Results调用结果如下：</p>
 <td><code>\overline&#123;h i j&#125;</code></td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\(\overrightarrow{h i j}\)</span></td>
+<td><code>\overrightarrow&#123;h i j&#125;</code></td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(\underline{h i j}\)</span></td>
 <td><code>\underline&#123;h i j&#125;</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\widehat{h i j}\)</span></td>
 <td><code>\widehat&#123;h i j&#125;</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\widetilde{h i j}\)</span></td>
 <td><code>\widetilde&#123;h i j&#125;</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\underbrace{a+b+\cdots+z}_{10}\)</span></td>
 <td><code>\underbrace&#123;a+b+\cdots+z&#125;_&#123;10&#125;</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\overbrace{a+b+\cdots+z}^{10}\)</span></td>
 <td><code>\overbrace&#123;a+b+\cdots+z&#125;^&#123;10&#125;</code></td>
 </tr>
@@ -3839,6 +3898,7 @@ Results调用结果如下：</p>
 <li><code>Bmatrix</code>: { }</li>
 <li><code>vmatrix</code>: | |</li>
 <li><code>Vmatrix</code>: ‖ ‖</li>
+<li>使用<code>\left(</code>或<code>\right)</code>使符号大小与邻近的公式相适应: <span class="math inline">\(( \frac{x}{y} ) \to \left( \frac{x}{y} \right)\)</span></li>
 </ul>
 <p><strong><em>添加省略号：</em></strong></p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">$$</span><br><span class="line">  \begin&#123;pmatrix&#125;</span><br><span class="line"><span class="code">    1 &amp; a_1^2 &amp; a_1^2 &amp; \cdots &amp; a_1^2 \\</span></span><br><span class="line"><span class="code">    1 &amp; a_2^2 &amp; a_2^2 &amp; \cdots &amp; a_2^2 \\</span></span><br><span class="line"><span class="code">    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span></span><br><span class="line"><span class="code">    1 &amp; a_n^2 &amp; a_n^2 &amp; \cdots &amp; a_n^2 \\</span></span><br><span class="line"><span class="code">  \end&#123;pmatrix&#125;</span></span><br><span class="line"><span class="code">$$</span></span><br></pre></td></tr></table></figure>
