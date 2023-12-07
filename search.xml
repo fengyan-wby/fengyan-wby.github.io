@@ -59,6 +59,8 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init_vars = tf.train.list_variables(init_checkpoint_name)</span><br><span class="line">assignment_map = collections.OrderedDict()</span><br><span class="line"><span class="keyword">for</span> (name, var) <span class="keyword">in</span> init_vars:</span><br><span class="line">    assignment_map[name] = name</span><br><span class="line"></span><br><span class="line">tf.train.init_from_checkpoint(init_checkpoint_name, assignment_map)</span><br></pre></td></tr></table></figure>
 <h4 id="载入pb">载入pb</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line"><span class="keyword">with</span> tf.gfile.FastGFile(<span class="string">&quot;model.pb&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    graph_def = tf.GraphDef()</span><br><span class="line">    graph_def.ParseFromString(f.read())</span><br><span class="line">    sess.graph.as_default()</span><br><span class="line">    output = tf.import_graph_def(</span><br><span class="line">        graph_def,</span><br><span class="line">        input_map=&#123;<span class="string">&quot;input_ids:0&quot;</span>: input_ids&#125;,</span><br><span class="line">        return_elements=[<span class="string">&quot;probs:0&quot;</span>]</span><br><span class="line">    )</span><br><span class="line">sess.run(ouput, feed_dict=feed_dict)</span><br></pre></td></tr></table></figure>
+<h3 id="单机多卡">单机多卡</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;CUDA_VISIBLE_DEVICES&#x27;</span>]=<span class="string">&#x27;0,1,2&#x27;</span> <span class="comment">#视情况更改</span></span><br><span class="line">gpus=[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 来自官方代码，github各开源repo基本都会出现</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">average_gradients</span>(<span class="params">tower_grads</span>):</span><br><span class="line">    average_grads = []</span><br><span class="line">    <span class="comment">##grad_and_vars：((grad0_gpu0, var0_gpu0), ... , (grad0_gpuN, var0_gpuN))</span></span><br><span class="line">    <span class="keyword">for</span> grad_and_vars <span class="keyword">in</span> <span class="built_in">zip</span>(*tower_grads):</span><br><span class="line">        grads = []</span><br><span class="line">        <span class="keyword">for</span> g, _ <span class="keyword">in</span> grad_and_vars:</span><br><span class="line">            expanded_g = tf.expand_dims(g, <span class="number">0</span>)</span><br><span class="line">            grads.append(expanded_g)</span><br><span class="line">        <span class="comment"># Average over the &#x27;tower&#x27; dimension.</span></span><br><span class="line">        grad = tf.concat(axis=<span class="number">0</span>, values=grads)</span><br><span class="line">        grad = tf.reduce_mean(grad, <span class="number">0</span>)</span><br><span class="line">        <span class="comment"># the Variable.</span></span><br><span class="line">        v = grad_and_vars[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">        grad_and_var = (grad, v)</span><br><span class="line">        average_grads.append(grad_and_var)</span><br><span class="line">    <span class="keyword">return</span> average_grads</span><br><span class="line"></span><br><span class="line"><span class="comment">#核心代码</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train_mult</span>():</span><br><span class="line">    <span class="comment"># 假定输入是224</span></span><br><span class="line">    input_image_size = <span class="number">224</span> </span><br><span class="line">    <span class="comment">#定义输入占位符</span></span><br><span class="line">    inputs = tf.placeholder(shape=[<span class="literal">None</span>, input_image_size, input_image_size, <span class="number">3</span>], dtype=tf.float32, name=<span class="string">&#x27;inputs&#x27;</span>)</span><br><span class="line">    <span class="comment">#定义shape以及color的标签占位符</span></span><br><span class="line">    shape_label = tf.placeholder(shape=[<span class="literal">None</span>], dtype=tf.int64, name=<span class="string">&#x27;shape_label&#x27;</span>)</span><br><span class="line">    color_label = tf.placeholder(shape=[<span class="literal">None</span>], dtype=tf.int64, name=<span class="string">&#x27;color_label&#x27;</span>)</span><br><span class="line">    <span class="comment">#定义一个非可训练变量作为global_step</span></span><br><span class="line">    global_step = tf.Variable(<span class="number">0</span>, name=<span class="string">&#x27;global_step&#x27;</span>, trainable=<span class="literal">False</span>)</span><br><span class="line">    <span class="comment">#定义优化器</span></span><br><span class="line">    optimizer = tf.train.AdamOptimizer(learning_rate=<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line">    tower_grads = [] <span class="comment">#汇总各gpu上的grads</span></span><br><span class="line">    tower_loss = []  <span class="comment">#汇总各gpu上的total loss</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">#由于是采用的模型并行训练，所以这里需要拆分数据为gpu_num</span></span><br><span class="line">    images_splits = tf.split(inputs, num_or_size_splits=<span class="built_in">len</span>(gpus), axis=<span class="number">0</span>)</span><br><span class="line">    color_label_splits = tf.split(color_label, num_or_size_splits=<span class="built_in">len</span>(gpus), axis=<span class="number">0</span>)</span><br><span class="line">    shape_label_splits = tf.split(shape_label, num_or_size_splits=<span class="built_in">len</span>(gpus), axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(gpus)):<span class="comment">#循环gpu_num次，在每块gpu上构建net，var共享</span></span><br><span class="line">        <span class="keyword">with</span> tf.device(<span class="string">&#x27;/gpu:%d&#x27;</span> % i):<span class="comment">#指定gpu</span></span><br><span class="line">            <span class="comment"># 创建一个全局的variable_scope，reuse=tf.AUTO_REUSE代表在该scope下，如果var不存在则新建var，如果存在，则复用共享。</span></span><br><span class="line">            <span class="keyword">with</span> tf.variable_scope(<span class="string">&#x27;my_net&#x27;</span>, reuse=tf.AUTO_REUSE):</span><br><span class="line">                <span class="comment">#定义你自己的model net，我这里返回两个logits</span></span><br><span class="line">                logits_shape, logits_color= my_net(images_splits[i])</span><br><span class="line"></span><br><span class="line">                <span class="comment">#计算两个分类任务的loss，计算loss的函数可自己定义，也可采用tf已有的函数接口</span></span><br><span class="line">                color_loss = compute_color_loss(logits_color, color_label_splits[i])</span><br><span class="line">                tf.summary.scalar(<span class="string">&#x27;color_loss_gpu%d&#x27;</span> % i, color_loss)<span class="comment">#将每个gpu的loss写入到tensorboard，视自己情况来定</span></span><br><span class="line">                shape_loss = compute_shape_loss(logits_shape, shape_label_splits[i])</span><br><span class="line">                tf.summary.scalar(<span class="string">&#x27;shape_loss_gpu%d&#x27;</span> % i, shape_loss)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># multi task，所以loss求和</span></span><br><span class="line">                sum_loss = color_loss + shape_loss </span><br><span class="line">                tf.summary.scalar(<span class="string">&#x27;sum_loss_gpu%d&#x27;</span> % i, sum_loss)</span><br><span class="line"></span><br><span class="line">                <span class="comment">#每个gpu上compute_gradients</span></span><br><span class="line">                grads = optimizer.compute_gradients(sum_loss, var_list=tf.trainable_variables())</span><br><span class="line">                <span class="comment">#汇总grads，由于返回的grad可能存在None的情况，需要剔除，否则无法计算average_gradients，除非在average_gradients函数中再剔除</span></span><br><span class="line">                tower_grads.append([x <span class="keyword">for</span> x <span class="keyword">in</span> grads <span class="keyword">if</span> x[<span class="number">0</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>])</span><br><span class="line"></span><br><span class="line">                <span class="comment">#将每块gpu上的loss汇总</span></span><br><span class="line">                tower_loss.append(sum_loss)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#求average total loss</span></span><br><span class="line">    avg_tower_loss = tf.reduce_mean(tower_loss, axis=<span class="number">0</span>)</span><br><span class="line">    tf.summary.scalar(<span class="string">&#x27;avg_tower_loss&#x27;</span>, avg_tower_loss)</span><br><span class="line"> </span><br><span class="line">    <span class="comment">#求平均梯度</span></span><br><span class="line">    grads_avg = average_gradients(tower_grads)</span><br><span class="line"></span><br><span class="line">    merged_summay = tf.summary.merge_all()</span><br><span class="line">    update = tf.get_collection(tf.GraphKeys.UPDATE_OPS)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#应用梯度</span></span><br><span class="line">    <span class="keyword">with</span> tf.control_dependencies(update):</span><br><span class="line">        train_op = optimizer.apply_gradients(grads_avg, global_step)</span><br></pre></td></tr></table></figure>
 <h2 id="tensorflow2.x">Tensorflow2.x</h2>
 ]]></content>
       <categories>
@@ -145,6 +147,12 @@
       <tags>
         <tag>PyTorch</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>从零开始训练大模型</title>
+    <url>/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[
+]]></content>
   </entry>
   <entry>
     <title>Hexo配置私有仓库</title>
@@ -3688,6 +3696,45 @@ Results调用结果如下：</p>
 </tr>
 </tbody>
 </table>
+<h2 id="逻辑运算">逻辑运算</h2>
+<table>
+<thead>
+<tr class="header">
+<th>显示</th>
+<th>符号</th>
+<th>显示</th>
+<th>符号</th>
+<th>显示</th>
+<th>符号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\land\)</span></td>
+<td><code>\land或\wedge</code></td>
+<td><span class="math inline">\(\lor\)</span></td>
+<td><code>\lor或\vee</code></td>
+<td><span class="math inline">\(\lnot\)</span></td>
+<td><code>\lnot或\neg</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\forall\)</span></td>
+<td><code>\forall</code></td>
+<td><span class="math inline">\(\exists\)</span></td>
+<td><code>\exists</code></td>
+<td><span class="math inline">\(\top\)</span></td>
+<td><code>\top</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\vdash\)</span></td>
+<td><code>\vdash</code></td>
+<td><span class="math inline">\(\vDash\)</span></td>
+<td><code>\vDash</code></td>
+<td><span class="math inline">\(\bot\)</span></td>
+<td><code>\bot</code></td>
+</tr>
+</tbody>
+</table>
 <h2 id="集合">集合</h2>
 <table>
 <thead>
@@ -3735,45 +3782,6 @@ Results调用结果如下：</p>
 </tr>
 </tbody>
 </table>
-<h2 id="逻辑运算">逻辑运算</h2>
-<table>
-<thead>
-<tr class="header">
-<th>显示</th>
-<th>符号</th>
-<th>显示</th>
-<th>符号</th>
-<th>显示</th>
-<th>符号</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\land\)</span></td>
-<td><code>\land或\wedge</code></td>
-<td><span class="math inline">\(\lor\)</span></td>
-<td><code>\lor或\vee</code></td>
-<td><span class="math inline">\(\lnot\)</span></td>
-<td><code>\lnot或\neg</code></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\forall\)</span></td>
-<td><code>\forall</code></td>
-<td><span class="math inline">\(\exists\)</span></td>
-<td><code>\exists</code></td>
-<td><span class="math inline">\(\top\)</span></td>
-<td><code>\top</code></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\vdash\)</span></td>
-<td><code>\vdash</code></td>
-<td><span class="math inline">\(\vDash\)</span></td>
-<td><code>\vDash</code></td>
-<td><span class="math inline">\(\bot\)</span></td>
-<td><code>\bot</code></td>
-</tr>
-</tbody>
-</table>
 <h2 id="音调">音调</h2>
 <table>
 <thead>
@@ -3817,8 +3825,53 @@ Results调用结果如下：</p>
 </tr>
 </tbody>
 </table>
+<h2 id="括号">括号</h2>
+<table>
+<thead>
+<tr class="header">
+<th>显示</th>
+<th>符号</th>
+<th>显示</th>
+<th>符号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\((x)\)</span></td>
+<td><code>(x)</code></td>
+<td><span class="math inline">\([x]\)</span></td>
+<td><code>[x]</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lbrace x \rbrace\)</span></td>
+<td><code>\lbrace x \rbrace</code></td>
+<td><span class="math inline">\(\vert x \vert\)</span></td>
+<td><code>\vert x \vert</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\Vert x \Vert\)</span></td>
+<td><code>\Vert x \Vert</code></td>
+<td><span class="math inline">\(\langle x \rangle\)</span></td>
+<td><code>\langle x \rangle</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lceil x \rceil\)</span></td>
+<td><code>\lceil x \rceil</code></td>
+<td><span class="math inline">\(\lfloor x \rfloor\)</span></td>
+<td><code>\lfloor x \rfloor</code></td>
+</tr>
+</tbody>
+</table>
+<div class="note info"><p>使用<code>\left(</code>或<code>\right)</code>可以使符号大小与邻近的公式相适应: <span class="math inline">\(( \frac{x}{y} ) \to \left( \frac{x}{y} \right)\)</span></p>
+</div>
 <h2 id="箭头">箭头</h2>
 <table>
+<colgroup>
+<col style="width: 27%">
+<col style="width: 22%">
+<col style="width: 27%">
+<col style="width: 22%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>显示</th>
@@ -3845,6 +3898,72 @@ Results调用结果如下：</p>
 <td><code>\Rightarrow</code></td>
 <td><span class="math inline">\(\Leftarrow\)</span></td>
 <td><code>\Leftarrow</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\implies\)</span></td>
+<td><code>\implies</code></td>
+<td><span class="math inline">\(\impliedby\)</span></td>
+<td><code>\impliedby</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\Leftrightarrow\)</span></td>
+<td><code>\Leftrightarrow</code></td>
+<td><span class="math inline">\(\leftrightarrow\)</span></td>
+<td><code>\leftrightarrow</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\nLeftarrow\)</span></td>
+<td><code>\nLeftarrow</code></td>
+<td><span class="math inline">\(\nRightarrow\)</span></td>
+<td><code>\nRightarrow</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\searrow\)</span></td>
+<td><code>\searrow</code></td>
+<td><span class="math inline">\(\nearrow\)</span></td>
+<td><code>\nearrow</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\nwarrow\)</span></td>
+<td><code>\nwarrow</code></td>
+<td><span class="math inline">\(\swarrow\)</span></td>
+<td><code>\swarrow</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\downarrow\)</span></td>
+<td><code>\downarrow</code></td>
+<td><span class="math inline">\(\uparrow\)</span></td>
+<td><code>\uparrow</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\Uparrow\)</span></td>
+<td><code>\Uparrow</code></td>
+<td><span class="math inline">\(\Downarrow\)</span></td>
+<td><code>\Downarrow</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\curvearrowleft\)</span></td>
+<td><code>\curvearrowleft</code></td>
+<td><span class="math inline">\(\curvearrowright\)</span></td>
+<td><code>\curvearrowright</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\rightleftarrows\)</span></td>
+<td><code>\rightleftarrows</code></td>
+<td><span class="math inline">\(\leftrightarrows\)</span></td>
+<td><code>\leftrightarrows</code></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\circlearrowleft\)</span></td>
+<td><code>\circlearrowleft</code></td>
+<td><span class="math inline">\(\circlearrowright\)</span></td>
+<td><code>\circlearrowright</code></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\xrightarrow[y&gt;0]{x+y}\)</span></td>
+<td><code>\xrightarrow[y&gt;0]&#123;x+y&#125;</code></td>
+<td><span class="math inline">\(\xleftarrow{x+y}\)</span></td>
+<td><code>\xleftarrow&#123;x+y&#125;</code></td>
 </tr>
 </tbody>
 </table>
@@ -3926,7 +4045,6 @@ Results调用结果如下：</p>
 <li><code>Bmatrix</code>: { }</li>
 <li><code>vmatrix</code>: | |</li>
 <li><code>Vmatrix</code>: ‖ ‖</li>
-<li>使用<code>\left(</code>或<code>\right)</code>使符号大小与邻近的公式相适应: <span class="math inline">\(( \frac{x}{y} ) \to \left( \frac{x}{y} \right)\)</span></li>
 </ul>
 <p><strong><em>添加省略号：</em></strong></p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">$$</span><br><span class="line">  \begin&#123;pmatrix&#125;</span><br><span class="line"><span class="code">    1 &amp; a_1^2 &amp; a_1^2 &amp; \cdots &amp; a_1^2 \\</span></span><br><span class="line"><span class="code">    1 &amp; a_2^2 &amp; a_2^2 &amp; \cdots &amp; a_2^2 \\</span></span><br><span class="line"><span class="code">    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span></span><br><span class="line"><span class="code">    1 &amp; a_n^2 &amp; a_n^2 &amp; \cdots &amp; a_n^2 \\</span></span><br><span class="line"><span class="code">  \end&#123;pmatrix&#125;</span></span><br><span class="line"><span class="code">$$</span></span><br></pre></td></tr></table></figure>
