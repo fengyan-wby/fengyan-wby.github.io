@@ -169,9 +169,9 @@
 </ol>
 <table>
 <colgroup>
-<col style="width: 55%">
-<col style="width: 27%">
-<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 40%">
+<col style="width: 40%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -197,6 +197,28 @@
 <li><code>专业知识不足</code>：当我们需要一个专业领域的LLM时，预训练模型中的知识就尤为重要。由于大多数预训练模型都是在通用语料上进行学习，对于一些特殊领域（金融、法律等）中的概念和名词无法具备很好的理解。我们通常需要在训练语料中加入一些领域数据，以帮助模型在指定领域内获得更好的效果。如<a href="https://arxiv.org/pdf/2305.12002.pdf">xuanyuan模型</a>。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/1.jpg"></li>
 </ol>
 <p>基于上述原因，我们在进行 SFT 步骤之前，先来看看预训练任务是如何做的。</p>
+<h3 id="tokenizer-training">Tokenizer Training</h3>
+<p>在进行预训练之前，我们需要先选择一个预训练的模型基座，然后在此基础上二次预训练。</p>
+<p>一个较为普遍的问题是：大部分优秀的语言模型都没有进行充分的中文预训练，因此许多工作都尝试将在英语上表现比较优秀的模型用中文语料进行二次预训练，期望能够将模型在英语上的优秀能力迁移到中文任务中来。如<a href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">Chinese-LLaMA-Alpaca</a>。</p>
+<p>但在进行正式的训练之前，我们还有一步很重要的事情去做：词表扩充。</p>
+<p>因为在英文训练集上建立的词表不一定完全适用于中文，可能有些不该被拆分的词也被拆分了，所以要对原先的词表进行修改。</p>
+<p>为了降低模型的训练难度，通常会在原来的词表上进行词表扩充，也就是将一些常见的汉字添加到原来的词表之后，最后再在中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
+<div class="note info"><p>如在<a href="https://arxiv.org/pdf/2304.07854.pdf">BELLE</a>大模型中，作者在 120w 行中文文本上训练出一个 5w 规模的 token 集合，并将这部分 token 集合与原来的 LLaMA 词表做合并，最后再在 3.2B 的中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
+</div>
+<h3 id="language-model-pretraining">Language Model PreTraining</h3>
+<p>在扩充完词表之后，我们就可以开始正式进行模型的预训练步骤了。</p>
+<h4 id="预训练任务">预训练任务</h4>
+<p>预训练任务就是让模型做Next Token Prediction任务，即预测输入文本的下一个token。如输入为“我想吃苹”，那么下一个token大概率为“果”。</p>
+<h4 id="数据源采样">数据源采样</h4>
+<p>在<a href="https://arxiv.org/pdf/2005.14165.pdf">GPT3</a>中提到，对不同的数据源会选择不同的采样比例：</p>
+<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/2.jpg"></p>
+<p>从上图可以看到，训练300B tokens时，通过不同的采样比例，相对较大的数据集（Common Crawl）相当于训练了0.44个epochs，而较小的数据集（Wikipedia）则相当与训练了3.4个epochs。</p>
+<p>这样一来就能使得模型不会太偏向于规模较大的数据集，从而失去对规模小但作用大的数据集上的学习信息。</p>
+<h4 id="数据预处理">数据预处理</h4>
+<h4 id="模型结构">模型结构</h4>
+<h4 id="参数设置">参数设置</h4>
+<h3 id="数据集清理">数据集清理</h3>
+<h3 id="模型效果评测">模型效果评测</h3>
 <h2 id="指令微调阶段">指令微调阶段</h2>
 <h2 id="奖励模型">奖励模型</h2>
 <h2 id="强化学习">强化学习</h2>
