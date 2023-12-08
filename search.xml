@@ -153,10 +153,10 @@
     <url>/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p>梳理一个完整的LLM训练流程，包括：</p>
 <ol type="1">
-<li>模型预训练（Pretrain）。</li>
-<li>指令微调（Instruction Tuning）。</li>
-<li>奖励模型（Reward Model）。</li>
-<li>强化学习（RLHF）。</li>
+<li>模型预训练（Pretrain）</li>
+<li>指令微调（Instruction Tuning）</li>
+<li>奖励模型（Reward Model）</li>
+<li>强化学习（RLHF）</li>
 </ol>
 <span id="more"></span>
 <h2 id="预训练">预训练</h2>
@@ -229,7 +229,7 @@
 <div class="note info"><p>如输入为“我想吃苹”，那么下一个token大概率为“果”。 预训练任务就是最大化<span class="math inline">\(p(果|我想吃苹)\)</span>的概率。</p>
 </div>
 <h4 id="模型结构">模型结构</h4>
-<p>为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。</p>
+<p>目前的大模型使用的基本上都是Transformer结构，为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。</p>
 <p>目前大部分加速 tricks 都集中在 Attention 计算上，如：</p>
 <ul>
 <li><a href="https://arxiv.org/abs/1911.02150">MQA(Multi Query Attention)</a></li>
@@ -361,6 +361,49 @@
 </table></li>
 </ul>
 <h2 id="指令微调">指令微调</h2>
+<p>在完成语言模型的预训练之后，就可以开始进行指令微调了。</p>
+<p>由于预训练任务的本质在于续写，而续写的方式并不一定能够很好的回答用户的问题。例如：</p>
+<table>
+<thead>
+<tr class="header">
+<th>用户问题</th>
+<th>用户预期回答</th>
+<th>模型续写结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>《无间道》的主演有哪些？</td>
+<td>刘德华、梁朝伟</td>
+<td>《无间道》的主演有哪些？不少观众期待看到阵容公告，今天小编...</td>
+</tr>
+</tbody>
+</table>
+<p>因为训练数据大多来自互联网中的数据，我们无法保证数据中只存在规范的一问一答形式的文本，这就会造成预训练模型通常无法按照预期的形式给出人们想要的答案。</p>
+<p>但是，模型中并不是没有相关的知识，其实模型是知道相关答案的，只是模型的输出形式没有和人类的规定对齐。如这样询问就可以引导出答案：</p>
+<table>
+<thead>
+<tr class="header">
+<th>用户问题</th>
+<th>用户预期回答</th>
+<th>模型续写结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>《无间道》的主演有</td>
+<td>刘德华、梁朝伟</td>
+<td>《无间道》的主演有刘德华、梁朝伟和黄秋生,而这部电影也是香港警匪片的代表作之一。</td>
+</tr>
+</tbody>
+</table>
+<p>不过，这种需要用户精心设计从而去套答案的方式，显然没有那么优雅。既然模型知道这些知识，只是不符合我们人类的对话习惯，那么我们只要再去教会模型如何对话就好了。这就是Instruction Tuning要做的事情，即指令对齐。</p>
+<p>通过指令微调对齐之后，GPT-3就可以变为InstructGPT或ChatGPT这种对话模型： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/5.png"></p>
+<h3 id="数据集">数据集</h3>
+<ul>
+<li>Alpaca <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/6.png"></li>
+<li><a href="https://github.com/LianjiaTech/BELLE">BELLE</a> <a href="https://huggingface.co/datasets/BelleGroup/train_1M_CN">train_1M_CN</a> <a href="https://huggingface.co/datasets/BelleGroup/train_2M_CN">train_2M_CN</a> <a href="https://huggingface.co/datasets/BelleGroup/train_3.5M_CN">train_3.5M_CN</a></li>
+</ul>
 <h2 id="奖励模型">奖励模型</h2>
 <h2 id="强化学习">强化学习</h2>
 ]]></content>
