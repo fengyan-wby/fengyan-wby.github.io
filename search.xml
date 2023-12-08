@@ -151,8 +151,7 @@
   <entry>
     <title>从零开始训练大模型</title>
     <url>/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>转载自<a href="https://zhuanlan.zhihu.com/p/636270877">https://zhuanlan.zhihu.com/p/636270877</a></p>
-<p>梳理一个完整的LLM训练流程，包括：</p>
+    <content><![CDATA[<p>梳理一个完整的LLM训练流程，包括：</p>
 <ol type="1">
 <li>模型预训练（Pretrain）。</li>
 <li>指令微调（Instruction Tuning）。</li>
@@ -160,7 +159,7 @@
 <li>强化学习（RLHF）。</li>
 </ol>
 <span id="more"></span>
-<h2 id="预训练阶段">预训练阶段</h2>
+<h2 id="预训练">预训练</h2>
 <p>当前，不少工作选择在一个较强的基座模型上进行微调，且通常效果不错（如<a href="https://github.com/tatsu-lab/stanford_alpaca">alpaca</a>、<a href="https://lmsys.org/blog/2023-03-30-vicuna/">vicuna</a>等）。</p>
 <p>这种成功的前提在于：预训练模型中通常已经包含微调任务中所需要的知识。如将LLaMA微调为alpaca和vicuna的例子中，LLaMA中已经包含了对应知识，微调只是将模型变得更符合人类的行为。</p>
 <p>但在实际情况中，我们通常会遇到一些问题，使得我们无法直接使用一些开源基座模型进行微调：</p>
@@ -197,7 +196,25 @@
 <li><code>专业知识不足</code>：当我们需要一个专业领域的LLM时，预训练模型中的知识就尤为重要。由于大多数预训练模型都是在通用语料上进行学习，对于一些特殊领域（金融、法律等）中的概念和名词无法具备很好的理解。我们通常需要在训练语料中加入一些领域数据，以帮助模型在指定领域内获得更好的效果。如<a href="https://arxiv.org/pdf/2305.12002.pdf">xuanyuan模型</a>。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/1.jpg"></li>
 </ol>
 <p>基于上述原因，我们在进行 SFT 步骤之前，先来看看预训练任务是如何做的。</p>
-<h3 id="tokenizer-training">Tokenizer Training</h3>
+<h3 id="数据处理">数据处理</h3>
+<h4 id="数据集清洗">数据集清洗</h4>
+<p>中文预训练可以选择如下数据集：</p>
+<ul>
+<li><a href="https://data.baai.ac.cn/details/WuDaoCorporaText">悟道</a></li>
+<li><a href="https://www.luge.ai/#/">千言</a></li>
+</ul>
+<p>公开数据集的数据质量不一定很高，需要进一步对数据进行清洗，如在<a href="https://arxiv.org/pdf/2306.01116.pdf">Falcon</a>这篇论文中提到了一些已有的数据集和它们的处理方法：</p>
+<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/3.png"></p>
+<h4 id="数据预处理">数据预处理</h4>
+<p>通常来讲，目前的大模型使用的基本上都是Transformer结构，由于Attention机制在时间和空间上的复杂度，输入模型的文本不会特别的长（如2048）。</p>
+<p>这时需要将文本截断，但以书籍数据为例，一本书的内容肯定远远超过2048个token，直接采用头部截断的方式太过浪费训练数据（每本书永远只能够学习到开头的 2048 tokens 的内容，连序章都不一定能看完）。</p>
+<p>因此，最好的方式是将长文章按照 seq_len（2048）作分割，将切割后的文本喂给模型做训练。</p>
+<h4 id="数据源采样">数据源采样</h4>
+<p>在<a href="https://arxiv.org/pdf/2005.14165.pdf">GPT3</a>中提到，对不同的数据源会选择不同的采样比例：</p>
+<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/2.jpg"></p>
+<p>从上图可以看到，训练300B tokens时，通过不同的采样比例，相对较大的数据集（Common Crawl）相当于训练了0.44个epochs，而较小的数据集（Wikipedia）则相当与训练了3.4个epochs。</p>
+<p>这样一来就能使得模型不会太偏向于规模较大的数据集，从而失去对规模小但作用大的数据集上的学习信息。</p>
+<h3 id="词表扩充">词表扩充</h3>
 <p>在进行预训练之前，我们需要先选择一个预训练的模型基座，然后在此基础上二次预训练。</p>
 <p>一个较为普遍的问题是：大部分优秀的语言模型都没有进行充分的中文预训练，因此许多工作都尝试将在英语上表现比较优秀的模型用中文语料进行二次预训练，期望能够将模型在英语上的优秀能力迁移到中文任务中来。如<a href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">Chinese-LLaMA-Alpaca</a>。</p>
 <p>但在进行正式的训练之前，我们还有一步很重要的事情去做：词表扩充。</p>
@@ -205,21 +222,145 @@
 <p>为了降低模型的训练难度，通常会在原来的词表上进行词表扩充，也就是将一些常见的汉字添加到原来的词表之后，最后再在中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
 <div class="note info"><p>如在<a href="https://arxiv.org/pdf/2304.07854.pdf">BELLE</a>大模型中，作者在 120w 行中文文本上训练出一个 5w 规模的 token 集合，并将这部分 token 集合与原来的 LLaMA 词表做合并，最后再在 3.2B 的中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
 </div>
-<h3 id="language-model-pretraining">Language Model PreTraining</h3>
+<h3 id="语言模型预训练">语言模型预训练</h3>
 <p>在扩充完词表之后，我们就可以开始正式进行模型的预训练步骤了。</p>
 <h4 id="预训练任务">预训练任务</h4>
-<p>预训练任务就是让模型做Next Token Prediction任务，即预测输入文本的下一个token。如输入为“我想吃苹”，那么下一个token大概率为“果”。</p>
-<h4 id="数据源采样">数据源采样</h4>
-<p>在<a href="https://arxiv.org/pdf/2005.14165.pdf">GPT3</a>中提到，对不同的数据源会选择不同的采样比例：</p>
-<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/2.jpg"></p>
-<p>从上图可以看到，训练300B tokens时，通过不同的采样比例，相对较大的数据集（Common Crawl）相当于训练了0.44个epochs，而较小的数据集（Wikipedia）则相当与训练了3.4个epochs。</p>
-<p>这样一来就能使得模型不会太偏向于规模较大的数据集，从而失去对规模小但作用大的数据集上的学习信息。</p>
-<h4 id="数据预处理">数据预处理</h4>
+<p>预训练任务就是让模型做Next Token Prediction任务，即预测输入文本的下一个token。</p>
+<div class="note info"><p>如输入为“我想吃苹”，那么下一个token大概率为“果”。 预训练任务就是最大化<span class="math inline">\(p(果|我想吃苹)\)</span>的概率。</p>
+</div>
 <h4 id="模型结构">模型结构</h4>
+<p>为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。</p>
+<p>目前大部分加速 tricks 都集中在 Attention 计算上，如：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1911.02150">MQA(Multi Query Attention)</a></li>
+<li><a href="https://arxiv.org/pdf/2305.13245.pdf">GQA(Grouped Query Attention)</a></li>
+<li><a href="https://arxiv.org/pdf/2205.14135.pdf">Flash Attention</a></li>
+</ul>
+<p>此外，为了让模型能够在不同长度的样本上都具备较好的推理能力，通常也会在Position Embedding上进行一些处理，如：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2108.12409">AliBi</a>，模型<a href="https://huggingface.co/bigscience/bloom-7b1">Bloom</a>中使用了该方法。</li>
+<li><a href="https://arxiv.org/pdf/2104.09864.pdf">RoPE</a>，模型<a href="GLM-130B">GLM-130B</a>中使用了该方法。</li>
+</ul>
 <h4 id="参数设置">参数设置</h4>
-<h3 id="数据集清理">数据集清理</h3>
+<p>在继续预训练中，我们通常会使用 warmup 策略，此时我们按照 2 种不同情况划分：</p>
+<ol type="1">
+<li>当训练资源充足时，应尽可能选择较大的学习率以更好的适配下游任务。</li>
+<li>当资源不充足时，更小的学习率和更长的预热步数或许是个更好的选择。</li>
+</ol>
 <h3 id="模型效果评测">模型效果评测</h3>
-<h2 id="指令微调阶段">指令微调阶段</h2>
+<p>大模型评测数据集如下：</p>
+<ul>
+<li><p><a href="https://github.com/hkust-nlp/ceval">C-Eval</a>：一个很好的中文知识能力测试数据集，涵盖1.4w 道选择题，共 52 个学科。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/4.png"> 由于是选择题的形式，我们可以通过将题目写进prompt 中，并让模型续写 1 个 token，判断这个续写 token 的答案是不是正确答案即可。</p>
+<p>但大部分没有精调过的预训练模型可能无法续写出「A B C D」这样的选项答案，因此，官方推荐使用 5-shot 的方式来让模型知道如何输出答案：</p>
+<p><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">以下是中国关于&#123;科目&#125;考试的单项选择题，请选出其中的正确答案。</span><br><span class="line"></span><br><span class="line">&#123;题目1&#125;</span><br><span class="line">A. &#123;选项A&#125;</span><br><span class="line">B. &#123;选项B&#125;</span><br><span class="line">C. &#123;选项C&#125;</span><br><span class="line">D. &#123;选项D&#125;</span><br><span class="line">答案：A</span><br><span class="line"></span><br><span class="line">[k-shot demo, note that k is 0 in the zero-shot case]</span><br><span class="line"></span><br><span class="line">&#123;测试题目&#125;</span><br><span class="line">A. &#123;选项A&#125;</span><br><span class="line">B. &#123;选项B&#125;</span><br><span class="line">C. &#123;选项C&#125;</span><br><span class="line">D. &#123;选项D&#125;</span><br><span class="line">答案：</span><br></pre></td></tr></table></figure></p>
+<p>通过前面的样例后，模型能够知道在「答案：」后面应该输出选项字母。</p>
+<p>于是，我们获得模型续写后的第一个 token 的概率分布（logits），并取出[A B C D]这 4 个字母的概率，通过 softmax 进行归一化：</p>
+<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">probs = (</span><br><span class="line">   	torch.nn.functional.softmax(</span><br><span class="line">       	torch.tensor(</span><br><span class="line">           	[</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;A&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;B&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;C&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;D&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">           	]</span><br><span class="line">       	),</span><br><span class="line">       	dim=<span class="number">0</span>,</span><br><span class="line">   	).detach().cpu().numpy()</span><br><span class="line">)</span><br><span class="line">pred = &#123;<span class="number">0</span>: <span class="string">&quot;A&quot;</span>, <span class="number">1</span>: <span class="string">&quot;B&quot;</span>, <span class="number">2</span>: <span class="string">&quot;C&quot;</span>, <span class="number">3</span>: <span class="string">&quot;D&quot;</span>&#125;[np.argmax(probs)]           <span class="comment"># 将概率最大的选项作为模型输出的答案</span></span><br></pre></td></tr></table></figure></p>
+<p>C-Eval官网上的5-shot结果如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th>Model</th>
+<th style="text-align: center;">STEM</th>
+<th style="text-align: center;">Social Science</th>
+<th style="text-align: center;">Humanities</th>
+<th style="text-align: center;">Other</th>
+<th style="text-align: center;">Average</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPT-4</td>
+<td style="text-align: center;">67.1</td>
+<td style="text-align: center;">77.6</td>
+<td style="text-align: center;">64.5</td>
+<td style="text-align: center;">67.8</td>
+<td style="text-align: center;">68.7</td>
+</tr>
+<tr class="even">
+<td>ChatGPT</td>
+<td style="text-align: center;">52.9</td>
+<td style="text-align: center;">61.8</td>
+<td style="text-align: center;">50.9</td>
+<td style="text-align: center;">53.6</td>
+<td style="text-align: center;">54.4</td>
+</tr>
+<tr class="odd">
+<td>Claude-v1.3</td>
+<td style="text-align: center;">51.9</td>
+<td style="text-align: center;">61.7</td>
+<td style="text-align: center;">52.1</td>
+<td style="text-align: center;">53.7</td>
+<td style="text-align: center;">54.2</td>
+</tr>
+<tr class="even">
+<td>Claude-instant-v1.0</td>
+<td style="text-align: center;">43.1</td>
+<td style="text-align: center;">53.8</td>
+<td style="text-align: center;">44.2</td>
+<td style="text-align: center;">45.4</td>
+<td style="text-align: center;">45.9</td>
+</tr>
+<tr class="odd">
+<td>GLM-130B</td>
+<td style="text-align: center;">34.8</td>
+<td style="text-align: center;">48.7</td>
+<td style="text-align: center;">43.3</td>
+<td style="text-align: center;">39.8</td>
+<td style="text-align: center;">40.3</td>
+</tr>
+<tr class="even">
+<td>Bloomz-mt-176B</td>
+<td style="text-align: center;">35.3</td>
+<td style="text-align: center;">45.1</td>
+<td style="text-align: center;">40.5</td>
+<td style="text-align: center;">38.5</td>
+<td style="text-align: center;">39.0</td>
+</tr>
+<tr class="odd">
+<td>LLaMA-65B</td>
+<td style="text-align: center;">37.8</td>
+<td style="text-align: center;">45.6</td>
+<td style="text-align: center;">36.1</td>
+<td style="text-align: center;">37.1</td>
+<td style="text-align: center;">38.8</td>
+</tr>
+<tr class="even">
+<td>ChatGLM-6B</td>
+<td style="text-align: center;">30.4</td>
+<td style="text-align: center;">39.6</td>
+<td style="text-align: center;">37.4</td>
+<td style="text-align: center;">34.5</td>
+<td style="text-align: center;">34.5</td>
+</tr>
+<tr class="odd">
+<td>Chinese LLaMA-13B</td>
+<td style="text-align: center;">31.6</td>
+<td style="text-align: center;">37.2</td>
+<td style="text-align: center;">33.6</td>
+<td style="text-align: center;">32.8</td>
+<td style="text-align: center;">33.3</td>
+</tr>
+<tr class="even">
+<td>MOSS</td>
+<td style="text-align: center;">28.6</td>
+<td style="text-align: center;">36.8</td>
+<td style="text-align: center;">31.0</td>
+<td style="text-align: center;">30.3</td>
+<td style="text-align: center;">31.1</td>
+</tr>
+<tr class="odd">
+<td>Chinese Alpaca-13B</td>
+<td style="text-align: center;">26.0</td>
+<td style="text-align: center;">27.2</td>
+<td style="text-align: center;">27.8</td>
+<td style="text-align: center;">26.4</td>
+<td style="text-align: center;">26.7</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h2 id="指令微调">指令微调</h2>
 <h2 id="奖励模型">奖励模型</h2>
 <h2 id="强化学习">强化学习</h2>
 ]]></content>
