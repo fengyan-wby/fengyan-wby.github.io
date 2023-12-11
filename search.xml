@@ -159,6 +159,7 @@
 <li>强化学习（RLHF）</li>
 </ol>
 <span id="more"></span>
+<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/8.png"></p>
 <h2 id="预训练">预训练</h2>
 <p>当前，不少工作选择在一个较强的基座模型上进行微调，且通常效果不错（如<a href="https://github.com/tatsu-lab/stanford_alpaca">alpaca</a>、<a href="https://lmsys.org/blog/2023-03-30-vicuna/">vicuna</a>等）。</p>
 <p>这种成功的前提在于：预训练模型中通常已经包含微调任务中所需要的知识。如将LLaMA微调为alpaca和vicuna的例子中，LLaMA中已经包含了对应知识，微调只是将模型变得更符合人类的行为。</p>
@@ -361,7 +362,7 @@
 </table></li>
 </ul>
 <h2 id="指令微调">指令微调</h2>
-<p>在完成语言模型的预训练之后，就可以开始进行指令微调了。</p>
+<p>在完成语言模型的预训练之后，就可以开始进行指令微调了，这一步也被称为SFT(Supervised Fine-tuning)。</p>
 <p>由于预训练任务的本质在于续写，而续写的方式并不一定能够很好的回答用户的问题。例如：</p>
 <table>
 <thead>
@@ -399,13 +400,56 @@
 </table>
 <p>不过，这种需要用户精心设计从而去套答案的方式，显然没有那么优雅。既然模型知道这些知识，只是不符合我们人类的对话习惯，那么我们只要再去教会模型如何对话就好了。这就是Instruction Tuning要做的事情，即指令对齐。</p>
 <p>通过指令微调对齐之后，GPT-3就可以变为InstructGPT或ChatGPT这种对话模型： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/5.png"></p>
-<h3 id="数据集">数据集</h3>
+<h3 id="self-instruction">Self Instruction</h3>
+<p>既然需要教会模型说人话，那么我们就需要去精心编写各式各样的问题和答案，让模型学会人类的对话方式。</p>
+<p>在 <a href="https://arxiv.org/pdf/2203.02155.pdf">InstructGPT Paper</a> 中，使用了1.3w的数据来对 GPT-3.5 进行监督学习： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
+<p>这种规模的人工标注问答数据较难获取，所以<a href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a>里提出可以通过已有的对话模型ChatGPT来获取问答数据，这种获取对话数据的方式就是Self Instruction。</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你被要求提供10个多样化的任务指令。这些任务指令将被提供给GPT模型，我们将评估GPT模型完成指令的能力。</span><br><span class="line">以下是你提供指令需要满足的要求：</span><br><span class="line">1.尽量不要在每个指令中重复动词，要最大化指令的多样性。</span><br><span class="line">2.使用指令的语气也应该多样化。例如，将问题与祈使句结合起来。</span><br><span class="line">3.指令类型应该是多样化的，包括各种类型的任务，类别种类例如：brainstorming，open QA，closed QA，rewrite，extract，generation，classification，chat，summarization。</span><br><span class="line">4.GPT语言模型应该能够完成这些指令。例如，不要要求助手创建任何视觉或音频输出。例如，不要要求助手在下午5点叫醒你或设置提醒，因为它无法执行任何操作。例如，指令不应该和音频、视频、图片、链接相关，因为GPT模型无法执行这个操作。</span><br><span class="line">5.指令用中文书写，指令应该是1到2个句子，允许使用祈使句或问句。</span><br><span class="line">6.你应该给指令生成适当的输入，输入字段应包含为指令提供的具体示例，它应该涉及现实数据，不应包含简单的占位符。输入应提供充实的内容，使指令具有挑战性。</span><br><span class="line">7.并非所有指令都需要输入。例如，当指令询问一些常识信息，比如“世界上最高的山峰是什么”，不需要提供具体的上下文。在这种情况下，我们只需在输入字段中放置“&lt;无输入&gt;”。当输入需要提供一些文本素材（例如文章，文章链接）时，就在输入部分直接提供一些样例。当输入需要提供音频、图片、视频或者链接时，则不是满足要求的指令。</span><br><span class="line">8.输出应该是针对指令和输入的恰当回答。 </span><br><span class="line">下面是10个任务指令的列表：</span><br><span class="line">###</span><br><span class="line">1. 指令: 在面试中如何回答这个问题？</span><br><span class="line">1. 输入:当你在车里独处时，你会想些什么？</span><br><span class="line">1. 输出:如果是在晚上，我通常会考虑我今天所取得的进步，如果是在早上，我会思考如何做到最好。我也会尝试练习感恩和活在当下的状态，以避免分心驾驶。</span><br><span class="line">###</span><br><span class="line">2. 指令: 按人口对这些国家进行排名。</span><br><span class="line">2. 输入:巴西，中国，美国，日本，加拿大，澳大利亚</span><br><span class="line">2. 输出:中国，美国，巴西，日本，加拿大，澳大利亚</span><br><span class="line">###</span><br><span class="line">3. 指令:</span><br></pre></td></tr></table></figure>
+<h3 id="开源数据集">开源数据集</h3>
+<p>除了使用Self Instruction方法获取微调数据，我们还可以使用开源数据对模型进行微调。</p>
 <ul>
-<li>Alpaca <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/6.png"></li>
-<li><a href="https://github.com/LianjiaTech/BELLE">BELLE</a> <a href="https://huggingface.co/datasets/BelleGroup/train_1M_CN">train_1M_CN</a> <a href="https://huggingface.co/datasets/BelleGroup/train_2M_CN">train_2M_CN</a> <a href="https://huggingface.co/datasets/BelleGroup/train_3.5M_CN">train_3.5M_CN</a></li>
+<li><a href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a> stanford_alpaca采用Self Instruction方法收集了5200条指令微调数据集，数据样例如下： <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;Arrange the words in the given sentence to form a grammatically correct sentence.&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;quickly the brown fox jumped&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;The quick brown fox jumped quickly.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 其中，instruction 代表要求模型做的任务，input 代表用户输入， output 代表喂给模型的 label。<br>
+Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/6.png"></li>
+<li><a href="https://github.com/LianjiaTech/BELLE">BELLE</a>
+<ul>
+<li><a href="https://huggingface.co/datasets/BelleGroup/train_1M_CN">train_1M_CN</a></li>
+<li><a href="https://huggingface.co/datasets/BelleGroup/train_2M_CN">train_2M_CN</a></li>
+<li><a href="https://huggingface.co/datasets/BelleGroup/train_3.5M_CN">train_3.5M_CN</a></li>
+</ul>
+训练数据集样例如下： <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;判断给定的文章是否符合语法规则。如果不符合，请提供修改建议。 下面是一篇文章的开头: ‘为了探讨这个主题，本文将提供一系列数据和实例，以证明这一观点。’&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;这个开头符合语法规则。&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="模型评测方法">模型评测方法</h3>
+<ul>
+<li><a href="https://github.com/WeOpenML/PandaLM">PandaLM</a></li>
+<li><a href="https://github.com/hkust-nlp/ceval">C-Eval</a></li>
+<li><a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">open_llm_leaderboard</a></li>
 </ul>
 <h2 id="奖励模型">奖励模型</h2>
+<p>在完成SFT之后，我们大概率已经能够得到一个还不错的模型了。但在SFT阶段，我们一直都在告诉模型什么是好的数据，却没有给出不好的数据。SFT的目的更多是将Pretrained Model中的知识给引导出来，而奖励模型和强化学习阶段更多是解决模型的有害和幻觉问题，让模型不要输出不该输出的内容，这就需要告诉模型什么是不好的数据。</p>
+<p>为了让大模型知道什么是好的数据，什么是不好的数据，就需要一个奖励模型，给数据进行打分。好的数据会得到更高的得分，而不好的数据会得到较低的得分。</p>
+<h3 id="使用偏序对训练奖励模型">使用偏序对训练奖励模型</h3>
+<p>直接给数据打分较为困难，而且难以统一，所以可以不为每一个样本直接打分，而是标注这些样本的好坏顺序。如下两种方法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">直接打分：A句子（5分），B句子（3分）</span><br><span class="line">偏序对标注：A &gt; B</span><br></pre></td></tr></table></figure>
+<p>偏序对的方式更容易统一，且标注困难度大大减少。</p>
+<p>因为使用了偏序对，所以损失函数不可以使用原先的Cross Entropy或者MSE，在InstructGPT论文中使用了pair wise ranking loss训练奖励模型：</p>
+<p><span class="math display">\[loss(\theta)=-\frac{1}{K\choose2}E_{(x,y_w,y_l)～D}[log(\sigma(r_\theta(x,y_w)-r_\theta(x,y_l)))]\]</span></p>
+<p>这里我们假设<span class="math inline">\(y_w\)</span>的排序比<span class="math inline">\(y_l\)</span>高，其中<span class="math inline">\(r_\theta(x,y)\)</span>是RM模型对于prompt <span class="math inline">\(x\)</span>生成回答<span class="math inline">\(y\)</span>的打分。<span class="math inline">\(D\)</span>是标注人员对于当前prompt以及模型生成答案的排序结果。</p>
+<h3 id="训练rm的数据量">训练RM的数据量</h3>
+<p>奖励模型的训练数据量取决于具体的任务，可以参考InstructGPT中的数量和比例：</p>
+<p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
+<h3 id="rm的大小">RM的大小</h3>
+<p>Reward Model的大小没有明确的限制，不过，一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了 6B 的 RM，175B 的 LM。</p>
 <h2 id="强化学习">强化学习</h2>
+<h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy Optimization）</h3>
+<h4 id="训练过程不稳定">训练过程不稳定</h4>
+<p>由于 PPO 对超参非常敏感，不合理的超参搭配很有可能使得模型训练过程中 Reward 剧烈抖动。存在几个因素与此有关：</p>
+<ul>
+<li><code>KL Penalty</code>：适当调大 KL可以帮助稳定训练（可使用动态调整 KL 系数策略）。</li>
+<li><code>Reward Model</code>：使用一个更稳定的 RM 能够有效缓解这种问题。</li>
+<li><code>Reward Scaling</code>：reward 的归一化对训练稳定有着很重要的作用。</li>
+<li><code>Batch Size</code>：适当增大 batch_size 有助于训练稳定。</li>
+</ul>
+<h4 id="训练结果不稳定">训练结果不稳定</h4>
 ]]></content>
       <categories>
         <category>算法</category>
