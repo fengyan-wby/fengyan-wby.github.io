@@ -151,7 +151,9 @@
   <entry>
     <title>从零开始训练大模型</title>
     <url>/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>梳理一个完整的LLM训练流程，包括：</p>
+    <content><![CDATA[<p>转载自：<br>
+<a href="https://zhuanlan.zhihu.com/p/636270877">https://zhuanlan.zhihu.com/p/636270877</a></p>
+<p>梳理一个完整的LLM训练流程，包括：</p>
 <ol type="1">
 <li>模型预训练（Pretrain）</li>
 <li>指令微调（Instruction Tuning）</li>
