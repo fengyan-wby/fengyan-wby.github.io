@@ -452,6 +452,12 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><code>Batch Size</code>：适当增大 batch_size 有助于训练稳定。</li>
 </ul>
 <h4 id="训练结果不稳定">训练结果不稳定</h4>
+<p>因为 reward 的提升并不代表模型真的表现的更好，可能是RM模型对某些数据有不正确的打分。</p>
+<div class="note info"><p>这种通过找到 shortcut 形成 reward 提升的现象又称为 reward hacking。</p>
+</div>
+<p>对于这种情况，除了提升 RM 本身的能力以外，我们还可以通过 Combine 多个 RM 以防止这种情况出现。</p>
+<div class="note info"><p>如 Llama 2 中同时使用了 2 个 RM（Safety + Helpful）来进行打分，不过论文中给出的理由是 Safety 和 Helpful 这两个任务目标之间可能存在冲突，但使用多个 RM 来综合打分同时也能较好的防止模型训到天上去。</p>
+</div>
 ]]></content>
       <categories>
         <category>算法</category>
