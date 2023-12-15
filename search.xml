@@ -442,6 +442,9 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <h3 id="rm的大小">RM的大小</h3>
 <p>Reward Model的大小没有明确的限制，不过，一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了 6B 的 RM，175B 的 LM。</p>
 <h2 id="强化学习">强化学习</h2>
+<h3 id="bonbest-of-n">BON（Best-of-N）</h3>
+<p>BON 也叫 reject sampling，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
+<p>在<a href="https://arxiv.org/pdf/2307.09288.pdf">Llama2</a>中使用了这种方法，论文中指出：在进行 SFT 时，应当使用之前所有策略下的 Good Samples（而非仅是最近一次策略模型 Sample 出的样本），以提高模型的泛化性。</p>
 <h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy Optimization）</h3>
 <p>PPO算法可以参考<a href="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">这篇文章</a>。</p>
 <p>PPO有三个网络参数（这也是 RL 非常耗卡的一个重要原因）：</p>
