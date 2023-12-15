@@ -443,6 +443,13 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <p>Reward Model的大小没有明确的限制，不过，一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了 6B 的 RM，175B 的 LM。</p>
 <h2 id="强化学习">强化学习</h2>
 <h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy Optimization）</h3>
+<p>PPO算法可以参考<a href="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">这篇文章</a>。</p>
+<p>PPO有三个网络参数（这也是 RL 非常耗卡的一个重要原因）：</p>
+<ol type="1">
+<li><span class="math inline">\(\theta\)</span>：训练网络，每次都会被更新。</li>
+<li><span class="math inline">\(\theta&#39;\)</span>：训练网络副本，负责与环境交互采样数据。</li>
+<li><span class="math inline">\(\phi\)</span>：奖励模型，拟合折扣奖励。</li>
+</ol>
 <h4 id="训练过程不稳定">训练过程不稳定</h4>
 <p>由于 PPO 对超参非常敏感，不合理的超参搭配很有可能使得模型训练过程中 Reward 剧烈抖动。存在几个因素与此有关：</p>
 <ul>
