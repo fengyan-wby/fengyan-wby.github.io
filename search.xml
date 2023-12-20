@@ -437,15 +437,14 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <h3 id="使用偏序对训练奖励模型">使用偏序对训练奖励模型</h3>
 <p>直接给数据打分较为困难，需要的人工标注成本很高，而且难以统一，所以可以不为每一个样本直接打分，而是标注这些样本的好坏顺序。如下两种方法：</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">直接打分：A句子（5分），B句子（3分）</span><br><span class="line">偏序对标注：A &gt; B</span><br></pre></td></tr></table></figure>
-<p>偏序对的方式更容易统一，且标注困难度大大减少。</p>
-<p>因为使用了偏序对，所以损失函数不可以使用原先的Cross Entropy或者MSE，在InstructGPT论文中使用了pair wise ranking loss训练奖励模型：</p>
+<p>偏序对的方式更容易统一，且标注困难度大大减少。 因为使用了偏序对，所以损失函数不可以使用原先的Cross Entropy或者MSE，在InstructGPT论文中使用了pair wise ranking loss训练奖励模型：</p>
 <p><span class="math display">\[loss(\theta)=-\frac{1}{K\choose2}E_{(x,y_w,y_l)～D}[log(\sigma(r_\theta(x,y_w)-r_\theta(x,y_l)))]\]</span></p>
-<p>这里我们假设<span class="math inline">\(y_w\)</span>的排序比<span class="math inline">\(y_l\)</span>高，其中<span class="math inline">\(r_\theta(x,y)\)</span>是RM模型对于prompt <span class="math inline">\(x\)</span>生成回答<span class="math inline">\(y\)</span>的打分。<span class="math inline">\(D\)</span>是标注人员对于当前prompt以及模型生成答案的排序结果。</p>
+<p>这里我们假设<span class="math inline">\(y_w\)</span>的排序比<span class="math inline">\(y_l\)</span>高，其中<span class="math inline">\(r_\theta(x,y)\)</span>是RM模型对于prompt <span class="math inline">\(x\)</span>生成回答<span class="math inline">\(y\)</span>的打分。<span class="math inline">\(D\)</span>是标注人员对于当前prompt以及模型生成答案的排序结果。 这样就可以让排在前面的问答对分数高于排在后面的问答对分数。</p>
 <h3 id="训练rm的数据量">训练RM的数据量</h3>
 <p>奖励模型的训练数据量取决于具体的任务，可以参考InstructGPT中的数量和比例：</p>
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
 <h3 id="rm的大小">RM的大小</h3>
-<p>Reward Model的大小没有明确的限制，不过，一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了 6B 的 RM，175B 的 LM。</p>
+<p>Reward Model的大小没有明确的限制，不过一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了6B的RM，175B的LM。</p>
 <h2 id="强化学习">强化学习</h2>
 <p>奖励模型训练好了之后，就可以用强化学习方法对大模型进行更进一步的训练，减少模型生成有害文本和幻觉信息。</p>
 <h3 id="bonbest-of-n">BON（Best-of-N）</h3>
