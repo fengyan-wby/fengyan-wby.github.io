@@ -165,7 +165,7 @@
 <p><img src="/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA/1.png"></p>
 <p>首先是原始的MHA(Multi Head Attention)，QKV三部分有相同数量的头，且一一对应。每次做Attention，每个头的QKV只需要做好自己部分运算就可以了，输出时各个头concat起来就行了。</p>
 <p>MQA(Multi Query Attention)是让Q保持原来的头数，但K和V变成只有一个，即所有头的Q共享一组K和V。但这种方法稍微会带来一些性能降低。 当然相对它能带来的收益，性能的些微降低是可以接受的。实验发现一般能提高 30%-40% 的吞吐。</p>
-<p>GQA(Grouped Query Attention)，是MHA和MQA的折中方案，既想获得MQA的MQA带来的加速效果，又不想损失太多性能。具体思想是，不是所有Q共享一组KV，而是有多组KV，多个Q共享一组KV，如图中就是两个Q共享一组KV。</p>
+<p>GQA(Grouped Query Attention)，是MHA和MQA的折中方案，既想获得MQA的MQA带来的加速效果，又不想损失太多性能。 具体思想是，Q仍然保持原来的头数，KV的头数减少为g个。多个头的Q共享一组KV，如图中就是两个Q共享一组KV。</p>
 <p><a href="https://arxiv.org/abs/2307.09288">LLAMA2</a>中给出了效果对比，如下：</p>
 <p><img src="/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA/2.png"></p>
 <p>但是从上面的图来看，MQA和GQA的运算量和MHA其实是一样的，那么为什么会带来加速效果呢？这就要说到冯诺依曼架构和Memory Wall。</p>
