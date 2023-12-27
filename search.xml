@@ -289,8 +289,8 @@
 <div class="note info"><p>如输入为“我想吃苹”，那么下一个token大概率为“果”。 预训练任务就是最大化<span class="math inline">\(p(果|我想吃苹)\)</span>的概率。</p>
 </div>
 <h4 id="模型结构">模型结构</h4>
-<p>上面说过，目前的大模型使用的基本上都是Transformer结构，为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。</p>
-<p>目前大部分加速 tricks 都集中在 Attention 计算上，如：</p>
+<p>上面说过，目前的大模型使用的基本上都是Transformer结构。</p>
+<p>为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。 目前大部分加速 tricks 都集中在 Attention 计算上，如：</p>
 <ul>
 <li><a href="https://arxiv.org/abs/1911.02150">MQA(Multi Query Attention)</a></li>
 <li><a href="https://arxiv.org/pdf/2305.13245.pdf">GQA(Grouped Query Attention)</a></li>
@@ -301,6 +301,9 @@
 <li><a href="https://arxiv.org/abs/2108.12409">AliBi</a>，模型<a href="https://huggingface.co/bigscience/bloom-7b1">Bloom</a>中使用了该方法。</li>
 <li><a href="https://arxiv.org/pdf/2104.09864.pdf">RoPE</a>，模型<a href="GLM-130B">GLM-130B</a>中使用了该方法。</li>
 </ul>
+<p>此外，还会有一些细节上的更改。比如在<a href="https://arxiv.org/pdf/2307.09288.pdf">LLaMA2</a>中： 1. 使用了RMSNorm替换了LayerNorm并前置了其位置。 2. 使用了SwiGLU激活函数替换ReLU。</p>
+<div class="note info"><p><a href="https://arxiv.org/pdf/1910.07467.pdf">RMSNorm(root mean square)</a>发现LayerNorm的中心偏移没什么用(减去均值等操作)。将其去掉之后，效果几乎不变，但是速度提升了40%。</p>
+</div>
 <h4 id="参数设置">参数设置</h4>
 <p>在继续预训练中，我们通常会使用 warmup 策略，此时我们按照 2 种不同情况划分：</p>
 <ol type="1">
@@ -477,12 +480,13 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><a href="https://huggingface.co/datasets/BelleGroup/train_3.5M_CN">train_3.5M_CN</a></li>
 </ul>
 训练数据集样例如下： <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;判断给定的文章是否符合语法规则。如果不符合，请提供修改建议。 下面是一篇文章的开头: ‘为了探讨这个主题，本文将提供一系列数据和实例，以证明这一观点。’&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;这个开头符合语法规则。&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><a href="https://github.com/lm-sys/FastChat">Vicuna</a></li>
+<li><a href="https://github.com/project-baize/baize-chatbot">BAIZE</a></li>
 </ul>
 <h3 id="指令微调模型训练">指令微调模型训练</h3>
 <p>通过SFT(Supervised Fine-tuning)这个名字就可以知道，指令微调的训练过程是一个有监督的训练过程，通过上面数据收集步骤得到的数据对模型进行有监督的微调。训练任务仍然是让模型做Next Token Prediction任务，即预测输入文本的下一个token。</p>
 <h3 id="模型评测方法">模型评测方法</h3>
 <ul>
-<li><a href="https://github.com/WeOpenML/PandaLM">PandaLM</a></li>
 <li><a href="https://github.com/hkust-nlp/ceval">C-Eval</a></li>
 <li><a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">open_llm_leaderboard</a></li>
 </ul>
