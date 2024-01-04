@@ -2705,6 +2705,12 @@ header.header {
     padding: 10px 12px;
   }
 }
+.site-brand-container {
+  background-image: url("/images/background.jpg");
+  background-size: 100% 100%;
+  opacity: 0.9;
+  border-radius: 0px;
+}
 body {
   background: url("/images/rain.gif");
   background-repeat: no-repeat;
