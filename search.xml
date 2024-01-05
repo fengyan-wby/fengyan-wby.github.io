@@ -151,8 +151,60 @@
   <entry>
     <title>Git教程</title>
     <url>/2024/01/05/Git%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[
+    <content><![CDATA[<p>对日常Git的使用进行归纳和总结。</p>
+<span id="more"></span>
+<h2 id="安装git">安装Git</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install git</span><br></pre></td></tr></table></figure>
+<p>如果需要用Git管理大文件，则需安装git-lfs：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash</span><br><span class="line">sudo apt-get install git-lfs</span><br><span class="line">git lfs install</span><br></pre></td></tr></table></figure>
+<h2 id="创建仓库repository">创建仓库（repository）</h2>
+<p>通过<code>git init</code>命令就可以把一个目录变成Git管理的仓库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下面命令执行完成后会生成一个.git文件夹</span></span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>添加文件到Git仓库分为三步：</p>
+<ol type="1">
+<li>使用命令<code>git add &lt;file&gt;</code>将文件从工作区添加到暂存区。</li>
+<li>使用命令<code>git commit -m &lt;message&gt;</code>将文件从暂存区提交到本地仓库。</li>
+<li>使用命令<code>git push</code>将文件从本地仓库推送到远程仓库。</li>
+</ol>
+<div class="note info"><p><code>git pull</code>可拉取最新的远程仓库。 如果<code>git pull</code>提示<code>no tracking information</code>，则说明本地分支和远程分支的链接关系没有创建，用命令<code>git branch --set-upstream-to &lt;branch-name&gt; origin/&lt;branch-name&gt;</code>。</p>
+</div>
+<h2 id="查看仓库">查看仓库</h2>
+<ol type="1">
+<li>使用<code>git status</code>命令可以查看当前仓库的状态。</li>
+<li>使用<code>git diff &lt;file&gt;</code>可以查看文件内容的修改。</li>
+<li>使用<code>git log</code>查看历史修改记录和<code>commit id</code>。</li>
+<li>使用<code>git reglog</code>查看命令记录。</li>
+<li>使用<code>git remote -v</code>可以查看远程仓库的信息。</li>
+</ol>
+<h2 id="版本回退">版本回退</h2>
+<p>在Git中，用<code>HEAD</code>表示当前的版本，上一个版本是<code>HEAD^</code>，上上个版本是<code>HEAD^^</code>，往上100个版本是<code>HEAD~100</code>。 当然，也可以用<code>commit id</code>来表示版本。</p>
+<p>我们要把当前版本回退到上一个版本，就可以使用git reset命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+<p>或者使用<code>commit id</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard &lt;commit <span class="built_in">id</span>&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="撤销修改">撤销修改</h2>
+<h3 id="工作区内容的修改">工作区内容的修改</h3>
+<p>当修改了工作区的内容，但还没有使用<code>git add</code>提交时，可以使用<code>git restore &lt;文件&gt;</code>丢弃工作区的改动。</p>
+<h3 id="暂存区内容的修改">暂存区内容的修改</h3>
+<p>当修改了工作区的内容，且使用<code>git add</code>将修改提交到暂存区后，可以使用<code>git restore --staged &lt;文件&gt;</code>以取消暂存，将修改回退到工作区。</p>
+<h3 id="本地仓库的修改">本地仓库的修改</h3>
+<p>当修改了工作区的内容，且使用<code>git add</code>和<code>git commit</code>将修改提交到本地仓库之后，可以使用<code>版本回退</code>中的方法回到修改之前。</p>
+<h2 id="分支管理">分支管理</h2>
+<h3 id="查看分支">查看分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+<h3 id="创建分支">创建分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建dev分支，并切换到该分支</span></span><br><span class="line">git branch dev</span><br><span class="line">git checkout dev</span><br></pre></td></tr></table></figure>
+<h3 id="合并分支">合并分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将dev分支合并到当前分支</span></span><br><span class="line">git merge dev</span><br></pre></td></tr></table></figure>
+<h3 id="删除分支">删除分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -d dev</span><br></pre></td></tr></table></figure>
 ]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
   </entry>
   <entry>
     <title>【文献阅读】MQA和GQA</title>
