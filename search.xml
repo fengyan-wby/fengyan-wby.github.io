@@ -149,6 +149,12 @@
       </tags>
   </entry>
   <entry>
+    <title>Git教程</title>
+    <url>/2024/01/05/Git%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[
+]]></content>
+  </entry>
+  <entry>
     <title>【文献阅读】MQA和GQA</title>
     <url>/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA/</url>
     <content><![CDATA[<p>MQA(Multi Query Attention)和GQA(Grouped Query Attention)是在Attention上加速大模型计算的tricks，可以缩短模型训练周期和加快推理速度。</p>
