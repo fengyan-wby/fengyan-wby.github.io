@@ -566,9 +566,6 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <p>Reward Model的大小没有明确的限制，不过一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了6B的RM，175B的LM。</p>
 <h2 id="强化学习">强化学习</h2>
 <p>奖励模型训练好了之后，就可以用强化学习方法对大模型进行更进一步的训练，减少模型生成有害文本和幻觉信息。</p>
-<h3 id="bonbest-of-n">BON（Best-of-N）</h3>
-<p>BON 也叫 reject sampling，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
-<p>在<a href="https://arxiv.org/pdf/2307.09288.pdf">Llama2</a>中使用了这种方法，论文中指出：在进行 SFT 时，应当使用之前所有策略下的 Good Samples（而非仅是最近一次策略模型 Sample 出的样本），以提高模型的泛化性。</p>
 <h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy Optimization）</h3>
 <p>PPO算法可以参考<a href="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">这篇文章</a>。</p>
 <p>PPO有四个网络参数（这也是 RL 非常耗卡的一个重要原因）：</p>
@@ -595,6 +592,13 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <p>对于这种情况，除了提升 RM 本身的能力以外，我们还可以通过 Combine 多个 RM 以防止这种情况出现。</p>
 <div class="note info"><p>如 Llama 2 中同时使用了 2 个 RM（Safety + Helpful）来进行打分，不过论文中给出的理由是 Safety 和 Helpful 这两个任务目标之间可能存在冲突，但使用多个 RM 来综合打分同时也能较好的防止模型训到天上去。</p>
 </div>
+<h3 id="dpodirect-preference-optimization">DPO（Direct Preference Optimization）</h3>
+<p><a href="https://arxiv.org/pdf/2305.18290v2.pdf">DPO</a>使用如下Loss进行训练：</p>
+<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{reg})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{reg}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
+<p>由于只使用了两个模型（actor model和ref model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
+<h3 id="bonbest-of-n">BON（Best-of-N）</h3>
+<p>BON 也叫 reject sampling，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
+<p>在<a href="https://arxiv.org/pdf/2307.09288.pdf">Llama2</a>中使用了这种方法，论文中指出：在进行 SFT 时，应当使用之前所有策略下的 Good Samples（而非仅是最近一次策略模型 Sample 出的样本），以提高模型的泛化性。</p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -2509,6 +2513,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 </ol>
 <div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
 </div>
+<p><img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/ppo_trainer.png"></p>
 <p>打个比喻来说，PPO的思路是： 0点时，我与环境进行互动，收集了很多数据。然后利用数据更新我的策略，此时我成为1点的我。当我被更新后，理论上，1点的我再次与环境互动，收集数据，然后把我更新到2点，然后这样往复迭代。</p>
 <p>但是如果我仍然想继续0点的我收集的数据来进行更新。因为这些数据是0点的我（而不是1点的我）所收集的。所以，我要对这些数据做一些重要性重采样，让这些数据看起来像是1点的我所收集的。当然这里仅仅是看起来像而已，所以我们要对这个“不像”的程度加以更新时的惩罚（KL）。</p>
 <p>其中，更新的方式是：我收集到的每个数据序列，对序列中每个（s, a）的优势程度做评估，评估越好的动作，将来就又在s状态时，让a出现的概率加大。这里评估优势程度的方法，可以用数据后面的总折扣奖励来表示。另外，考虑引入基线的Tip，我们就又引入一个评价者小明，让他跟我们一起学习，他只学习每个状态的期望折扣奖励的平均期望。这样，我们评估（s, a）时，我们就可以吧小明对 s 的评估结果就是 s 状态后续能获得的折扣期望，也就是我们的基线。注意哈：优势函数中，前一半是实际数据中的折扣期望，后一半是估计的折扣期望（小明心中认为s应该得到的分数，即小明对s的期望奖励），如果你选取的动作得到的实际奖励比这个小明心中的奖励高，那小明为你打正分，认为可以提高这个动作的出现概率；如果选取的动作的实际得到的奖励比小明心中的期望还低，那小明为这个动作打负分，你应该减小这个动作的出现概率。这样，小明就成为了一个评判官。</p>
