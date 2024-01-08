@@ -149,6 +149,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Hugging Face上传自己的文件</title>
+    <url>/2024/01/08/Hugging-Face%E4%B8%8A%E4%BC%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>在Hugging Face上传自己的模型和文件。</p>
+<span id="more"></span>
+<h2 id="环境准备">环境准备</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># You already have it if you installed transformers or datasets</span></span><br><span class="line">pip install huggingface_hub</span><br><span class="line"></span><br><span class="line"><span class="comment"># Log in using a token from huggingface.co/settings/tokens</span></span><br><span class="line">huggingface-cli login</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create a model or dataset repo from the CLI if needed</span></span><br><span class="line">huggingface-cli repo create repo_name --<span class="built_in">type</span> &#123;model, dataset, space&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Make sure you have git-lfs installed</span></span><br><span class="line"><span class="comment"># (https://git-lfs.github.com)</span></span><br><span class="line">git lfs install</span><br><span class="line">git <span class="built_in">clone</span> https://huggingface.co/username/repo_name</span><br></pre></td></tr></table></figure>
+<h2 id="上传文件">上传文件</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;commit from <span class="variable">$USER</span>&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Hugging Face</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git教程</title>
     <url>/2024/01/05/Git%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>对日常Git的使用进行归纳和总结。</p>
