@@ -612,7 +612,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 </div>
 <h3 id="dpodirect-preference-optimization">DPO（Direct Preference Optimization）</h3>
 <p><a href="https://arxiv.org/pdf/2305.18290v2.pdf">DPO</a>使用如下Loss进行训练：</p>
-<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{reg})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{reg}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
+<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{reg})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
 <p>由于只使用了两个模型（actor model和ref model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
 <h3 id="bonbest-of-n">BON（Best-of-N）</h3>
 <p>BON 也叫 reject sampling，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
