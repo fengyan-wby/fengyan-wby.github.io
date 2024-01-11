@@ -2718,13 +2718,11 @@ body {
   background-size: cover;
   background-position: 50% 50%;
 }
-.post-body p a {
+.post-body a:not(.btn) {
   color: #0593d3;
   border-bottom: none;
-  border-bottom: 1px solid #0593d3;
 }
-.post-body p a:hover {
+.post-body a:not(.btn):hover {
   color: #fc6423;
-  border-bottom: none;
-  border-bottom: 1px solid #fc6423;
+  text-decoration: underline;
 }
