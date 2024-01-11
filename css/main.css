@@ -2719,7 +2719,7 @@ body {
   background-position: 50% 50%;
 }
 .post-body a:not(.btn) {
-  color: #0593d3;
+  color: #428bca;
   border-bottom: none;
 }
 .post-body a:not(.btn):hover {
