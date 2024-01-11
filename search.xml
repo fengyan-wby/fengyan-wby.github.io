@@ -534,6 +534,10 @@
 </tr>
 </tbody>
 </table></li>
+<li><p><a href="https://github.com/CLUEbenchmark/SuperCLUE">SuperCLUE</a></p></li>
+<li><p><a href="https://arxiv.org/pdf/2304.06364.pdf">AGIEval</a></p></li>
+<li><p><a href="https://arxiv.org/abs/2009.03300">MMLU</a></p></li>
+<li><p><a href="https://github.com/openai/human-eval">HumanEval</a></p></li>
 </ul>
 <h2 id="指令微调">指令微调</h2>
 <p>在完成语言模型的预训练之后，就可以开始进行指令微调了，这一步也被称为SFT(Supervised Fine-tuning)。</p>
