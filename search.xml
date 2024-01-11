@@ -149,6 +149,38 @@
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】ALiBi: Attention With Linear Biases位置编码</title>
+    <url>/2024/01/11/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ALiBi-Attention-With-Linear-Biases%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2108.12409">https://arxiv.org/abs/2108.12409</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/ofirpress/attention_with_linear_biases">https://github.com/ofirpress/attention_with_linear_biases</a></li>
+</ul>
+<span id="more"></span>
+<p>该方法通过不同的方式引入相对位置编码，具体来说：不添加position embedding，而是添加一个静态的不学习的bias。</p>
+<p><img src="/2024/01/11/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ALiBi-Attention-With-Linear-Biases%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/1.png"></p>
+<p>如上图所示，就是在query和key做矩阵点乘的基础上，加上一个常数负值，比如距离当前位置前1位为-1，前两位为-2，两个token距离越远这个负数就越大，代表他们的相互贡献越低。这些常数要乘上权重m，并且每个attention head的m的取值不一样。</p>
+<p>如果是8个头，则取值如下：<span class="math inline">\(\frac{1}{2^{1}},\frac{1}{2^{2}},...,\frac{1}{2^{8}}\)</span>。<br>
+如果是16个头，则取值如下：<span class="math inline">\(\frac{1}{2^{0.5}},\frac{1}{2^{1}},\frac{1}{2^{1.5}},...,\frac{1}{2^{8}}\)</span>。<br>
+如果是n个头，则是以<span class="math inline">\(2^{\frac{-8}{n}}\)</span>为首项，以<span class="math inline">\(2^{\frac{-8}{n}}\)</span>为比率的等比数列。</p>
+<p>从实验结果来看ALiBi有几个优点：</p>
+<ol type="1">
+<li>减少了需要训练的embedding，可以稍微加快训练速度，减小模型参数。</li>
+<li>在512上训练，到更长的token上推理时，表现相比于之前的方法更稳定。</li>
+<li>像<a href="https://huggingface.co/mosaicml">MosaicLM</a>用了这种技术可以直接拿来写小说，生成特别长的文本内容。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hugging Face上传自己的文件</title>
     <url>/2024/01/08/Hugging-Face%E4%B8%8A%E4%BC%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>在Hugging Face上传自己的模型和文件。</p>
