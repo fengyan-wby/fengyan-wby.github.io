@@ -377,7 +377,11 @@
 <li><a href="https://arxiv.org/abs/2108.12409">AliBi</a>，模型<a href="https://huggingface.co/bigscience/bloom-7b1">Bloom</a>中使用了该方法。</li>
 <li><a href="https://arxiv.org/pdf/2104.09864.pdf">RoPE</a>，模型<a href="GLM-130B">GLM-130B</a>中使用了该方法。</li>
 </ul>
-<p>此外，还会有一些细节上的更改。比如在<a href="https://arxiv.org/pdf/2307.09288.pdf">LLaMA2</a>中： 1. 使用了RMSNorm替换了LayerNorm并前置了其位置。 2. 使用了SwiGLU激活函数替换ReLU。</p>
+<p>此外，还会有一些细节上的更改。比如在<a href="https://arxiv.org/pdf/2307.09288.pdf">LLaMA2</a>中：</p>
+<ol type="1">
+<li>使用了RMSNorm替换了LayerNorm并前置了其位置。</li>
+<li>使用了SwiGLU激活函数替换ReLU。</li>
+</ol>
 <div class="note info"><p><a href="https://arxiv.org/pdf/1910.07467.pdf">RMSNorm(root mean square)</a>发现LayerNorm的中心偏移没什么用(减去均值等操作)。将其去掉之后，效果几乎不变，但是速度提升了40%。</p>
 </div>
 <h4 id="参数设置">参数设置</h4>
@@ -547,7 +551,8 @@
 <h4 id="开源数据集">开源数据集</h4>
 <p>除了使用Self Instruction方法获取微调数据，我们还可以使用开源数据对模型进行微调。</p>
 <ul>
-<li><a href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a> stanford_alpaca采用Self Instruction方法收集了5200条指令微调数据集，数据样例如下： <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;Arrange the words in the given sentence to form a grammatically correct sentence.&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;quickly the brown fox jumped&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;The quick brown fox jumped quickly.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 其中，instruction 代表要求模型做的任务，input 代表用户输入， output 代表喂给模型的 label。<br>
+<li><a href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a><br>
+stanford_alpaca采用Self Instruction方法收集了5200条指令微调数据集，数据样例如下： <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;Arrange the words in the given sentence to form a grammatically correct sentence.&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;quickly the brown fox jumped&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;The quick brown fox jumped quickly.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 其中，instruction 代表要求模型做的任务，input 代表用户输入， output 代表喂给模型的 label。<br>
 Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/6.png"></li>
 <li><a href="https://github.com/LianjiaTech/BELLE">BELLE</a>
 <ul>
@@ -591,7 +596,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><span class="math inline">\(\theta\)</span>：训练网络，每次都会被更新。(也就是大家说的actor模型)</li>
 <li><span class="math inline">\(\theta&#39;\)</span>：训练网络副本，负责与环境交互采样数据。（也就是大家说的ref模型）</li>
 <li><span class="math inline">\(\phi\)</span>：奖励模型，拟合折扣奖励。（也就是大家说的critic模型，获取每个位置的奖励）</li>
-<li><span class="math inline">\(reward model\)</span>: 奖励模型，获取一整句话的奖励。</li>
+<li><span class="math inline">\(RM\)</span>: 奖励模型，获取一整句话的奖励。</li>
 </ol>
 <div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
 </div>
@@ -612,7 +617,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 </div>
 <h3 id="dpodirect-preference-optimization">DPO（Direct Preference Optimization）</h3>
 <p><a href="https://arxiv.org/pdf/2305.18290v2.pdf">DPO</a>使用如下Loss进行训练：</p>
-<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{reg})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
+<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{ref})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
 <p>由于只使用了两个模型（actor model和ref model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
 <h3 id="bonbest-of-n">BON（Best-of-N）</h3>
 <p>BON 也叫 reject sampling，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
