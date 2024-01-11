@@ -28,7 +28,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="简述PEFT方法">
 <meta property="og:url" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/index.html">
-<meta property="og:site_name" content="FengYan&#39;s Blog">
+<meta property="og:site_name" content="丰言的博客">
 <meta property="og:description" content="最近，深度学习的研究中出现了许多大型预训练模型，例如GPT-3、BERT等，这些模型可以在多种自然语言处理任务中取得优异的性能表现。而其中，ChatGPT模型因为在对话生成方面的表现而备受瞩目，成为了自然语言处理领域的热门研究方向。 然而，这些大型预训练模型的训练成本非常高昂，需要庞大的计算资源和大量的数据，一般人难以承受。这也导致了一些研究人员难以重复和验证先前的研究成果。为了解决这个问题，研究">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/1.png">
@@ -48,8 +48,8 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/15.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/16.png">
 <meta property="article:published_time" content="2023-04-25T14:59:24.000Z">
-<meta property="article:modified_time" content="2024-01-11T06:39:08.520Z">
-<meta property="article:author" content="FengYan">
+<meta property="article:modified_time" content="2024-01-11T07:34:41.695Z">
+<meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="PEFT">
 <meta name="twitter:card" content="summary">
@@ -63,7 +63,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/","path":"2023/04/25/简述PEFT方法/","title":"简述PEFT方法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>简述PEFT方法 | FengYan's Blog</title>
+<title>简述PEFT方法 | 丰言的博客</title>
   
 
 
@@ -96,7 +96,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">FengYan's Blog</p>
+      <p class="site-title">丰言的博客</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
@@ -169,9 +169,9 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="FengYan"
+    <img class="site-author-image" itemprop="image" alt="丰言"
       src="/images/avatar.png">
-  <p class="site-author-name" itemprop="name">FengYan</p>
+  <p class="site-author-name" itemprop="name">丰言</p>
   <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
 </div>
 <div class="site-state-wrap animated">
@@ -497,16 +497,16 @@ if(canvas.getContext){
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="FengYan">
+      <meta itemprop="name" content="丰言">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="FengYan's Blog">
+      <meta itemprop="name" content="丰言的博客">
       <meta itemprop="description" content="行到水穷处，坐看云起时">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="简述PEFT方法 | FengYan's Blog">
+      <meta itemprop="name" content="简述PEFT方法 | 丰言的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -529,7 +529,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-01-11 06:39:08" itemprop="dateModified" datetime="2024-01-11T06:39:08+00:00">2024-01-11</time>
+      <time title="修改时间：2024-01-11 07:34:41" itemprop="dateModified" datetime="2024-01-11T07:34:41+00:00">2024-01-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -800,7 +800,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>本文作者： </strong>FengYan
+      <strong>本文作者： </strong>丰言
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
@@ -857,7 +857,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">FengYan</span>
+    <span class="author" itemprop="copyrightHolder">丰言</span>
   </div>
 <div class="wordcount">
   <span class="post-meta-item">
