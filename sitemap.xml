@@ -110,6 +110,15 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -191,6 +200,15 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -219,15 +237,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/25/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LoRA-Low-Rank-Adaptation-of-Large-Language-Models/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
     
     <lastmod>2024-01-15</lastmod>
     
@@ -272,33 +281,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91BERT-Pre-training-of-Deep-Bidirectional-Transformers-for-Language-Understanding/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2024/01/11/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ALiBi-Attention-With-Linear-Biases%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -317,7 +299,34 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91BERT-Pre-training-of-Deep-Bidirectional-Transformers-for-Language-Understanding/</loc>
     
     <lastmod>2024-01-15</lastmod>
     
@@ -425,42 +434,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/03/01/NLP%E4%B8%AD%E7%9A%84%E8%87%AA%E7%9B%91%E7%9D%A3%E4%BB%BB%E5%8A%A1/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2024/01/08/Hugging-Face%E4%B8%8A%E4%BC%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%87%E4%BB%B6/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -488,6 +461,15 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/03/14/Hadoop%E5%B8%B8%E7%94%A8%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -498,6 +480,33 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/03/07/Hexo%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/03/01/NLP%E4%B8%AD%E7%9A%84%E8%87%AA%E7%9B%91%E7%9D%A3%E4%BB%BB%E5%8A%A1/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/</loc>
     
     <lastmod>2024-01-15</lastmod>
     
@@ -551,6 +560,15 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2023/02/27/AC%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
     
     <lastmod>2024-01-15</lastmod>
@@ -561,15 +579,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/</loc>
-    
-    <lastmod>2024-01-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/27/AC%E7%AE%97%E6%B3%95/</loc>
     
     <lastmod>2024-01-15</lastmod>
     
@@ -910,6 +919,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/AI/</loc>
     <lastmod>2024-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

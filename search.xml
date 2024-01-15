@@ -149,6 +149,209 @@
       </tags>
   </entry>
   <entry>
+    <title>回顾2023,那些令AI圈大地震的瞬间</title>
+    <url>/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/</url>
+    <content><![CDATA[<p>原文链接在<a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247571919&amp;idx=1&amp;sn=affe1f50b17335c461008836cc97b4ae&amp;scene=21#wechat_redirect">这里</a>。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/1.png"></p>
+<span id="more"></span>
+<h2 id="年11月30日chatgpt问世">22年11月30日，ChatGPT问世</h2>
+<p>ChatGPT 问世虽然不是23年的事件，但它却是23年这一切大事件的开端。ChatGPT 已经超出了科技圈，真正改变了世界。站在今天，已经很难想象没有 ChatGPT 的世界。</p>
+<p>而实际上，ChatGPT 的问世并没有举行什么隆重的发布会，OpenAI只是简单的在官网上更新了一篇博客上。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/2.png"></p>
+<p>ChatGPT的发布取得了巨大成功，上线仅5天后已有100万用户，上线两个月后已有上亿用户。</p>
+<h2 id="年2月1日chatgpt-plus-版本上线">23年2月1日，ChatGPT plus 版本上线</h2>
+<p>当地时间2月1日，OpenAI官方发文推出ChatGPT付费订阅计划ChatGPT Plus，定价每月20美元。付费版的ChatGPT提供的增值服务包括：高峰时段免排队、快速响应以及优先获得新功能和改进。</p>
+<p>事实上每月20美元的ChatGPT Plus是OpenAI今年面向C端唯一的收入，而之后ChatGPT的一系列最先进更新如GPT-4、Dall.E 3、GPTs等确实只能在付费ChatGPT Plus中使用。</p>
+<h2 id="年2月7日微软宣布并发布集成chatgpt功能的new-bing">23年2月7日，微软宣布并发布集成ChatGPT功能的New Bing</h2>
+<p>微软于这天正式推出了新一代 AI 驱动搜索引擎 New Bing，把基于 ChatGPT 技术的生成模型和 Bing 集成在一起。微软副总裁 Yusuf Mehdi 进行了一次完美的演示，当日微软市值暴涨 800 亿美元。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/3.jpeg"></p>
+<h2 id="年2月7日谷歌bard首秀demo并翻车">23年2月7日，谷歌Bard首秀Demo并翻车</h2>
+<p>在微软更新 ChatGPT 加持的New Bing之后，大家都极为关注谷歌 Bard 的首秀。然而Bard首秀翻车了，导致股票一夜之间暴跌 7000 亿人民币。</p>
+<p>谷歌在演示Bard的一个Demo显示，在回答问题“关于詹姆斯韦伯太空望远镜（JWST）有哪些新发现，我可以告诉我 9 岁孩子哪些内容？”Bard 提供了三个要点，其中一个指出”该望远镜拍摄了太阳系外行星的第一张照片。“</p>
+<p>然而有天文学家指出这是不正确的，第一张系外行星图像是在 2004 年拍摄的。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/4.png"></p>
+<h2 id="年2月24日meta发布llama-并开源">23年2月24日，Meta发布LLaMa 并开源</h2>
+<p>ChatGPT 表现太好了，但却是闭源的，如果23年只有闭源的ChatGPT，那AI圈也不会热闹起来。</p>
+<p>而Meta于这天一次性发布四种尺寸的大语言模型LLaMA：7B、13B、33B和65B，且效果好过GPT，更重要的是所有尺寸均开源，但是需要申请之后才可下载。</p>
+<p>所有人都要感谢 Meta发布并开源LLaMa，LLaMa的开源打破了ChatGPT 的垄断，也带动了大模型开源浪潮，让AI社区的更多玩家都可以参与其中。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/5.png"></p>
+<h2 id="年3月1日openai推出chatgpt-api供开发者集成">23年3月1日，OpenAI推出ChatGPT API，供开发者集成</h2>
+<p>OpenAI在这天放出了真正的ChatGPT API，不是GPT-3.5模型，而是ChatGPT的本体模型GPT-3.5 turbo。ChatGPT API价格为1k tokens/$0.002，等于每输出100万个单词，价格约18元人民币，比已有的GPT-3.5模型便宜10倍。</p>
+<p>ChatGPT API的开放将大大降低开发人员将ChatGPT集成到自家应用和服务的门槛，构建属于自己的AI聊天机器人。可以说，国内外的绝大部分创业者都离不开 ChatGPT API。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/6.png"></p>
+<h2 id="年3月14日-openai发布gpt-4并在chatgpt和bing中支持">23年3月14日 OpenAI发布GPT-4,并在ChatGPT和Bing中支持</h2>
+<p>这一天，万众期待的GPT-4终于发布了！</p>
+<p>Sam Altman介绍，这是OpenAI 迄今为止功能最强大的多模态大模型。</p>
+<p>事实上，GPT-4发布以来，国内外众多科技巨头都竞相追逐，但是都只能不断接近，但无法超越，GPT-4到目前为止，仍然是市面上能接触到的功能最强大的大模型。有意思的是，GPT-4 是 OpenAI 2022年就训练出来的模型。</p>
+<p>OpenAI发布GPT-4的同时还更新了集成GPT-4的ChatGPT Plus，发布GPT-4的API，以及公布GPT-4技术报告（没有详细技术细节，只有技术报告，OpenAI算是开了一个坏头）。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/7.png"></p>
+<h2 id="年3月16日百度发布文心一言">23年3月16日，百度发布文心一言</h2>
+<p>这一天，百度创始人、董事长兼CEO李彦宏正式发布预训练生成式大语言模型文心一言。</p>
+<p>这是国内第一家科技大厂发布的对标ChatGPT的产品。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/8.png"></p>
+<h2 id="年上半年国内百模大战开启">23年上半年，国内百模大战开启</h2>
+<p>在文心一言之后，国内其他厂商在今年也不断发布自家的大模型，国内开启了百模大战。</p>
+<p>这其中的代表有阿里通义千问、科大讯飞星火、智谱ChatGLM、百川智能大模型等等。</p>
+<p>关于百模大战的空前盛况，网络上一度流传的一张图可以形象的说明：</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/9.jpeg"></p>
+<h2 id="年3月14日斯坦福发布alpaca">2023年3月14日，斯坦福发布Alpaca</h2>
+<p>Meta 的LLaMA模型开源，让大语言模型迎来了Stable Diffustion时刻。今天，斯坦福发布了一个由LLaMA 7B微调的大模型Alpaca，仅用了52k数据，在8个80GB A100上训练了3个小时，不到100美元，性能比肩GPT-3.5。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/10.png"></p>
+<h2 id="年3月17日微软gpt-4-office全家桶发布">23年3月17日，微软GPT-4 Office全家桶发布</h2>
+<p>这天，微软宣布把GPT-4全面接入Office，新功能名叫 Microsoft 365 Copilot，微软Office全家桶 Word、Excel、PPT都“AI”起来了！</p>
+<p>微软CEO纳德拉在发布会上表示：今天，进入人机交互的新时代，重新发明生产力。</p>
+<p>值得一提的是，Microsoft 365 Copilot的能力不仅限于传统Office这几个软件，而是整个微软办公生态全部打通。邮件、联系人、在线会议、日历、工作群聊……所有数据全部接入大语言模型，构成新的Copilot系统。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/11.png"></p>
+<h2 id="年3月21日midjourney-v5版本画出100逼真情侣">23年3月21日，Midjourney v5版本画出100%逼真情侣</h2>
+<p>一天之间，一张情侣照在网上转疯了：</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/12.png"></p>
+<p>然而这二位并不是真人，而是由AI一键生成的。</p>
+<p>站在当下的视角，大家估计都对AI生成如此逼真的图像已经习以为常了。</p>
+<p>但在今年的3月份，这样的生成效果无疑是炸裂的，这是出自Midjourney V5版本之手，就连当时AI绘画最被诟病的手指问题，也都解决了。</p>
+<p>Midjourney 也成为了23年最成功的文生图付费公司。</p>
+<h2 id="年3月22日runway-重磅发布gen-2文生视频里程碑">23年3月22日，Runway 重磅发布Gen-2，文生视频里程碑</h2>
+<p>Midjourney生成的完美情侣刚刚刷爆网络，堪称文生图最强玩家。</p>
+<p>而这一天，文生视频的的最强玩家Runway重磅发布了Gen-2。</p>
+<p>有了Runway Gen-2，你就能用任意的图像、视频或文本，生成一段大片。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/13.gif"></p>
+<h2 id="年3月24日chatgpt可以联网添加插件">23年3月24日，ChatGPT可以联网、添加插件</h2>
+<p>自ChatGPT 上线以来已被无数人使用，人们一直要求以各种形式让这个大语言模型接入更多数据，3月24日，OpenAI 终于宣布部分解除了 ChatGPT 无法联网的限制。</p>
+<p>OpenAI 的解决方案是用第三方插件作为桥梁，让 AI 在较安全的环境下「看」外界数据，OpenAI 开放了第一批 ChatGPT 插件名单。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/14.png"></p>
+<p>除此之外，OpenAI 还自己提供了两种插件，包括一个网络浏览器和一个代码解释器，并开源了一个知识库检索插件的代码。现在，任何开发人员都可以自行构建插件，用来增强 ChatGPT 的信息库了。</p>
+<h2 id="年3月29日千名大佬发联名信叫停gpt-5超强大模型">23年3月29日，千名大佬发联名信，叫停GPT-5超强大模型</h2>
+<p>这天，网络上一封公开的联名信爆火，该信呼吁所有的 AI 实验立即暂停研究比 GPT-4 更先进的 AI 模型，暂停时间至少 6 个月，为的就是把这些可怕的幻想扼杀在摇篮之中。</p>
+<p>AI 的进步速度实在过于惊人，但相关的监管、审计手段却迟迟没有跟上，这也意味着没有人能够保证 AI 工具以及使用 AI 工具的过程中的安全性。</p>
+<p>该联名信已经获得了包括图灵奖得主 Yoshua Bengio、马斯克、苹果联合创始人史蒂夫 · 沃兹尼亚克、Skype 联合创始人、Pinterest 联合创始人、Stability AI CEO 等多位知名人士的签名支持，截稿前联名人数已经达到 1125 人。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/15.png"></p>
+<h2 id="年3月31日意大利暂时禁止chatgpt使用">23年3月31日，意大利暂时禁止ChatGPT使用</h2>
+<p>当地时间3月31日，意大利个人数据保护局宣布，从即日起禁止使用ChatGPT，并限制OpenAI 处理意大利用户信息，同时个人数据保护局开始立案调查。</p>
+<p>意大利监管机构认为，3月20日ChatGPT平台出现了用户对话数据和付款服务支付信息丢失情况。此外平台没有就收集处理用户信息进行告知，缺乏大量收集和存储个人信息的法律依据。</p>
+<p>意大利个人数据保护局称：“没有任何法律依据表明，为了‘训练’平台运营背后的算法而大规模收集和存储个人数据是正当的。”</p>
+<p>据悉，OpenAI公司必须在20天内通过其在欧洲的代表，向意大利个人数据保护局通报公司执行保护局要求而采取的措施，否则将被处以最高2000万欧元或公司全球年营业额4%的罚款。</p>
+<p>好在后来，意大利于4月28日恢复了ChatGPT服务。</p>
+<h2 id="年4月6日meta发布可以分割一切的segment-anything">23年4月6日，Meta发布可以分割一切的Segment Anything</h2>
+<p>Meta 于这天发布了可以分割一切的新模型Segment Anything Model (SAM) 。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/16.png"></p>
+<p>Meta在博客中介绍，SAM 已经学会了关于物体的一般概念，并且它可以为任何图像或视频中的任何物体生成 mask，甚至包括在训练过程中没有遇到过的物体和图像类型。SAM 足够通用，可以涵盖广泛的用例，并且无需额外的训练就可以在新的图像领域上即开即用。</p>
+<h2 id="年4月20日google-brain与deepmind-合并成立-google-deepmind">23年4月20日，Google Brain与DeepMind 合并成立 Google DeepMind</h2>
+<p>4月20日，谷歌母公司 Alphabet 首席执行官桑达尔·皮查伊宣布，谷歌将合并旗下最大的两个 AI 研究机构——地处伦敦 DeepMind 与位于硅谷的 Google Brain，成立全新的部门 Google DeepMind。</p>
+<p>新部门 Google DeepMind 首席执行官继续由 DeepMind 联合创始人 Demis Hassabis 担任，而其首席科学家一职则由曾领导 Google Brain 的 Jeff Dean 担任。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/17.png"></p>
+<p>桑达尔·皮查伊表示，这项合并将整合两个研究团队的优势，更加充分的利用谷歌的计算资源，为迈进人工智能研究新时代做出准备。</p>
+<h2 id="年5月5日微软bingchat全面开放">23年5月5日，微软BingChat全面开放</h2>
+<p>这天，微软官宣全面开放BingChat：无需任何等待，只需注册一个账户，首页即可体验。</p>
+<p>微软表示，这是进入下一代AI驱动的搜索。通过极大的扩展和功能更新来改变世界上最大软件类别——搜索。</p>
+<p>官方介绍这次的更新主要体现在四方面：从纯文本搜索聊天转为多模态回答；Bing Image Creator支持多种语言；增加聊天历史记录功能；支持插件。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/18.png"></p>
+<h2 id="年5月15日openai发布chatgpt的ios应用">23年5月15日，OpenAI发布ChatGPT的iOS应用</h2>
+<p>OpenAI 宣布首个 ChatGPT iOS 应用 “ChatGPT”正快步登陆移动平台。允许用户在手机端随时随地访问ChatGPT，且向用户免费开放，不设广告且支持语音输入，但发布初期仅面向美国用户。</p>
+<p>App Store上充斥似是而非的山寨ChatGPT的局面。</p>
+<p>随后不久，该 App 便冲上 App Store 免费榜第二名，效率榜第一名。</p>
+<p>在两个月后，ChatGPT还推出了Android平台上的应用程序。</p>
+<h2 id="年5月18日特斯拉人形机器人进化">2023年5月18日，特斯拉人形机器人进化</h2>
+<p>在5月18日当天的特斯拉股东日，马斯克的人形机器人——特斯拉Optimus进化了，价格还“比车更低”。成群结队的Optimus学会了像人一样缓慢前行：</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/19.png"></p>
+<p>相比最早的发布，特斯拉人形机器人在能力上确实有了进步。而且跟前一阵特斯拉AI Day中也有所不同，不再是PPT般的宣传片质感，但机器人都没有出现在现场，总是令人有所质疑。</p>
+<p>而就在前不久的12月13日，特斯拉人形机器人Optimus第二代来了。相比上一代有了很大改进：行走速度提高 30%、重量减轻 10公斤、速度更快的11个自由度的全新双手。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/20.gif"></p>
+<p>马斯克大胆地预测说： 如果Optimus成熟可用了，届时很多人都希望能够拥有一台或多台，那么它们的数量可能将达到100亿甚至200亿！</p>
+<h2 id="年5月30日谷歌宣布开放生成式搜索平台">23年5月30日，谷歌宣布开放「生成式搜索平台」</h2>
+<p>Google 终于要迎来它 25 年来最大的改变，谷歌于这天宣布了开始内测开放【生成式搜索平台（Search Generative Experience，SGE）】，并逐步舍弃那些甚至是臭名昭著的十条蓝色链接（10 Blue Links）。</p>
+<p>陪伴了我们 25 年的我们熟悉的一整套搜索流程将会被革新，在未来当我们输入了问题，比如如果我问“如果我家有三个小孩并且带着一条宠物狗，布赖斯峡谷与拱门国家公园公园哪个更适合我们进行家庭旅行？”，答案将不再是一条语焉不详的“比较布赖斯峡谷与拱门国家公园公园”的旅游笔记链接，而是直接告诉我们“虽然这两个公园都禁止宠物狗在未铺设好的小径上活动，但布莱斯峡谷有两条铺设好的小径，允许宠物狗进入。”</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/21.png"></p>
+<p>与此同时，SGE 改变的不仅仅只是单纯的搜索、依托于搜索的电商、广告等等都将迎来一场革命。</p>
+<h2 id="年6月14日chatgpt-大更新api能力升级还降价">23年6月14日，ChatGPT 大更新，API能力升级还降价</h2>
+<p>ChatGPT 又一次大更新。</p>
+<p>最核心的是API新增函数调用（Function calling）能力，与网页版的插件类似，API也能使用外部工具了。这个能力被交到开发者手上，ChatGPT API原本不具备的能力也都能靠各种第三方服务解决了。有人认为，这是一个杀手级特性，也是自ChatGPT API发布以来最重要的更新。</p>
+<p>另外这次ChatGPT API的更新不仅能力加量，价格还更低了，且GPT-4 API大规模开放，直到清空排队列表为止；</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/22.png"></p>
+<p>到了一个月之后，GPT-4 API 全面对外开放使用。</p>
+<h2 id="年7月13日马斯克高调官宣成立xai">23年7月13日，马斯克高调官宣成立xAI</h2>
+<p>马斯克官宣成立新公司xAI，其终极目标是为了探索宇宙本质。新公司团队阵容十分豪华，几乎都是来自OpenAI、谷歌、DeepMind、微软等知名研究员,其中1/3是华人。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/23.png"></p>
+<p>随后在今年的9月份，马斯克终于推出了第一款AI模型——Grōk，—Grōk和X（推特）绑定使用，每月收费16美元。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/24.png"></p>
+<h2 id="年7月19日llama-2开源可商用">23年7月19日，Llama 2开源可商用</h2>
+<p>今日，Meta 终于发布了大家期待已久的免费可商用版本 Llama 2。</p>
+<p>此次 Meta 发布的 Llama 2 模型系列包含 70 亿、130 亿和 700 亿三种参数。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/25.png"></p>
+<p>Llama 2 在 2 万亿的 token 上进行预训练，精调Chat模型是在 100 万人类标记数据上训练的。</p>
+<p>Llama 2 的开源并免费商用可谓是改变了大模型竞争的格局，也给众多创业公司带来了福利。</p>
+<h2 id="年-8月10日斯坦福虚拟小镇开源引爆智能体研究">23年 8月10日，斯坦福「虚拟小镇」开源，引爆智能体研究</h2>
+<p>此前在整个AI社区爆火的斯坦福智能体小镇在今天开源了。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/26.png"></p>
+<p>在这个小镇上，有25个AI Agent生活，通过使用一种“记忆—计划—反思”驱动的智能体形态，以“社会事件”为动力源使得 25个AI Agent 间相互互动，直至模拟整个社会的分工体系。他们有工作，会八卦，能结交新朋友，甚至举办情人节派对，每个“小镇居民”都有独特的个性和背景故事。</p>
+<p>今年，Agent 这一概念可谓火出天际，从 AutoGPT 一周 6 万 star 刷新 Github 涨星速度记录开始，AI Agent 项目如雨后春笋开始在各大技术平台涌现。</p>
+<p>而斯坦福虚拟小镇可谓是今年AI智能体研究的一个标志性事件，它让世人看到了 用 LLMs 作为 AI Agent 中的 Agent 成为一条极其有希望成功实现“自主智能体”的技术路径。</p>
+<h2 id="年8月23日-gpt-3.5-turbo正式开放微调功能">23年8月23日 GPT-3.5 Turbo正式开放微调功能</h2>
+<p>这天OpenAI正式发布了GPT-3.5 Turbo的微调和API更新，为开发者提供了更多的个性化选择，开发者和企业能够自定义模型，为用户创造独特的体验。</p>
+<p>初步测试显示，经过微调的GPT-3.5 Turbo甚至可以在某些特定任务上匹敌，甚至超越GPT-4的基础能力。且所有通过微调API发送的数据都归客户所有，OpenAI或任何其他组织都不会使用这些数据来训练其他模型。</p>
+<h2 id="年8月29日openai发布企业版chatgpt没有限制更快更强更安全的gpt-4">23年8月29日，OpenAI发布企业版ChatGPT：没有限制、更快、更强、更安全的GPT-4</h2>
+<p>OpenAI宣布推出了针对企业的没有限制、更快、更强的ChatGPT Enterprise版。</p>
+<p>ChatGPT Enterprise由GPT-4驱动，包含了所有ChatGPT的基础功能，如撰写邮件、起草文章和coding，并新增了 "企业级" 的安全隐私和强大的数据分析能力，可以更高的模型性能和定制需求。</p>
+<h2 id="年9月21日openai推出dalle-3并将原生集成至chatgpt中">23年9月21日，OpenAI推出DALL·E 3，并将原生集成至ChatGPT中</h2>
+<p>OpenAI宣布DALL·E升级至DALL·E 3，并将原生集成至ChatGPT中。</p>
+<p>和DALL·E 2相比，在提示词相同的情况下，DALL·E 3对文字的理解程度及生成的图像质量显著提升。被诟病的“无法在图像上生成文字”的问题也得到了解决。</p>
+<p>DALL·E 2（左）与DALL·E 3（右）生成图像对比： <img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/27.png"> <img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/28.png"></p>
+<h2 id="年10月17日文心大模型4.0发布">23年10月17日，文心大模型4.0发布</h2>
+<p>百度世界大会官宣文心大模型4.0发布，综合水平与GPT-4相比已经毫不逊色。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/29.png"></p>
+<p>另外值得一提的是，到了23年底，文心一言用户规模已突破1亿，这也是国内第一家用户规模超过1亿用户的大模型产品。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/30.png"></p>
+<h2 id="年10月20日chatgpt全球宕机api崩溃">23年10月20日，ChatGPT全球宕机，API崩溃</h2>
+<p>这一天，ChatGPT全球宕机，许多人发现无论是 ChatGPT 或是 ChatGPT PLUS 都不能正常工作了。还连带了全球数以万计的依赖ChatGPT API的热门AI应用也纷纷崩溃。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/31.png"></p>
+<h2 id="年10月29日完全版gpt-4智能体图像生成插件代码运行器文件上传">23年10月29日，完全版GPT-4智能体:图像生成+插件+代码运行器+文件上传</h2>
+<p>OpenAI 发布了一个“整合了几乎所有可用工具”的完全版 GPT-4 智能体版本。将之前版本相互独立各自分离的 Agent 功能统一了起来。之前 GPT-4 的工作模式是四个独立的功能（一个对话窗口内只能使用其中一个特性）：</p>
+<ul>
+<li>图像上传 + GPT-4；</li>
+<li>插件 + GPT-4；</li>
+<li>代码运行器 + 文件上传 + GPT-4；</li>
+<li>图像生成 + GPT-4；</li>
+</ul>
+<p>这次更新使其变成了：</p>
+<ul>
+<li>GPT-4 + 图像上传 + 插件 + 代码运行器 + 文件上传 + 图像生成；</li>
+</ul>
+<h2 id="年11月7日openal首届开发者日官宣gpts商店推出更强版gpt-4-turbo">23年11月7日，OpenAl首届开发者日官宣GPTs商店，推出更强版GPT-4 turbo</h2>
+<p>OpenAI 在首届开发者日上，正式公布GPTs，每个人都能定制GPT，OpenAI 还将上线“GPT商店”，但实际推迟到了24年。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/32.png"></p>
+<p>另外GPT-4也更新了新版本GPT-4 Turbo，支持128k上下文，知识截止更新到2023年4月，视觉能力、DALL·E3，文字转语音TTS等等全都开放API，API价格还打了3～5折。</p>
+<h2 id="年11月15日奥特曼被openai董事会开除系列事件">23年11月15日，奥特曼被OpenAI董事会开除系列事件</h2>
+<p>要说，今年最后两个月AI圈最热闹的事情，当属奥特曼被OpenAI董事会开除系列事件，OpenAI 持续了一周的政权斗争。</p>
+<h2 id="年11月29日-文生视频产品pika-1.0正式发布">23年11月29日 文生视频产品Pika 1.0正式发布</h2>
+<p>众多网友期待的爆火文生视频 Pika 1.0 于今天正式发布。</p>
+<p>Pika由两位斯坦福华人女博士CEO郭文景和 CTO Chenlin Meng 退学创业6个月打造，当前4人团队估值超2亿美元。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/34.png"></p>
+<h2 id="年12月6日谷歌deepmind发布gemini系列模型">23年12月6日，谷歌DeepMind发布Gemini系列模型</h2>
+<p>谷歌DeepMind 重磅推出了传闻已久的Gemini大模型，号称是谷歌史上功能最强大、最通用的多模态模型，在很多领先的基准测试中都实现了最先进的性能（SOTA）。Gemini 1.0共有Gemini Ultra, Gemini Pro, Gemini Nano三个不同版本。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/35.png"></p>
+<p>然而，仅仅不到一天，谷歌Gemini就翻车了——谷歌宣布评测效果时，Gemini用了很多小动作，存在刻意刷榜、夸大性能的嫌疑，demo演示视频也被扒出是“合成造假”，谷歌也已经承认Gemini视频是“剪出来”的。</p>
+<h2 id="年12月10日最新开源模型mixtral-超越llama2和gpt-3.5">23年12月10日，最新开源模型Mixtral 超越LLama2和GPT-3.5</h2>
+<p>这两天，法国初创公司Mistral AI开源的一个Mixtral 8x7B MoE模型引爆了AI社区。</p>
+<p>一是因为它的性能击败了LLama2和GPT-3.5。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/36.png"></p>
+<p>二是因为，Mixtral是一个专家混合模型（Mixture-of-Experts model，MoE），使用了传闻中 OpenAI 用于GPT-4的架构，但是参数相比GPT-4要小很多，堪称是缩小版“GPT-4”。</p>
+<p>而且这个模型还开源了，Mistral AI甚至直接通过torrent链接将其甩在推特上发布。</p>
+<p>huggingface下载链接：<a href="https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1">https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1</a></p>
+<h2 id="年12月14日谷歌官宣开放gemini-api奥特曼宣布chatgpt-plus恢复订阅">23年12月14日，谷歌官宣开放Gemini API，奥特曼宣布ChatGPT Plus恢复订阅</h2>
+<p>今日Sam Altman宣布重新启用ChatGPT Plus 订阅；一个月之前，Sam Altman称，由于OpenAI开发日后ChatGPT使用量的激增超出了OpenAI的承受能力，暂停ChatGPT Plus 新用户注册。</p>
+<p>而在同一天，谷歌DeepMind也宣布开放Gemini Pro API给开发者使用。但这次开放API的是对标ChatGPT的Gemini Pro，而不是对标GPT-4的Gemini Utral。</p>
+<p>Gemini Pro API可以在一定限度内免费使用。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/37.png"></p>
+<h2 id="年12月21日midjounery-v6-发布">23年12月21日，MidJounery V6 发布</h2>
+<p>在今年3月，Midjourney v5就已发布，在等待了9个月之后，Midjourney v6终于来了。相比，Midjourney v5.2,Midjourney v6在生成质量和细节方面有了进一步提升。</p>
+<p><img src="/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/38.png"></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【文献阅读】ALiBi: Attention With Linear Biases位置编码</title>
     <url>/2024/01/11/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91ALiBi-Attention-With-Linear-Biases%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</url>
     <content><![CDATA[<p>论文地址：</p>
