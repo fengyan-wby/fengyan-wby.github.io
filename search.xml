@@ -741,6 +741,7 @@
 <li><p><a href="https://arxiv.org/pdf/2304.06364.pdf">AGIEval</a></p></li>
 <li><p><a href="https://arxiv.org/abs/2009.03300">MMLU</a></p></li>
 <li><p><a href="https://github.com/openai/human-eval">HumanEval</a></p></li>
+<li><p><a href="https://github.com/openai/grade-school-math">GSM</a></p></li>
 </ul>
 <h2 id="指令微调">指令微调</h2>
 <p>在完成语言模型的预训练之后，就可以开始进行指令微调了，这一步也被称为SFT(Supervised Fine-tuning)。</p>
@@ -808,6 +809,11 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <h3 id="模型评测方法">模型评测方法</h3>
 <ul>
 <li><a href="https://github.com/hkust-nlp/ceval">C-Eval</a></li>
+<li><a href="https://github.com/CLUEbenchmark/SuperCLUE">SuperCLUE</a></li>
+<li><a href="https://arxiv.org/pdf/2304.06364.pdf">AGIEval</a></li>
+<li><a href="https://arxiv.org/abs/2009.03300">MMLU</a></li>
+<li><a href="https://github.com/openai/human-eval">HumanEval</a></li>
+<li><a href="https://github.com/openai/grade-school-math">GSM</a></li>
 <li><a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">open_llm_leaderboard</a></li>
 </ul>
 <h2 id="奖励模型">奖励模型</h2>
