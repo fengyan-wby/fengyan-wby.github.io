@@ -180,7 +180,33 @@
 <span id="more"></span>
 <p>Mixtral of Experts这篇论文介绍的是<code>Mixtral 8x7B</code>，而<code>Mixtral 8x7B</code>和<code>Mistral 7B</code>的结构基本是一样的。所以在介绍<code>Mixtral 8x7B</code>之前，首先来看看<code>Mistral 7B</code>。</p>
 <h2 id="mistral-7b">Mistral 7B</h2>
+<p>Mistral 7B基于transformer架构，具体参数如下。</p>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/1.png"></p>
+<p>在此基础上，使用了下面的一些优化手段。</p>
+<h3 id="gqa">GQA</h3>
+<p><a href="https://fengyan-wby.fun/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA">GQA</a>可参考这里。</p>
+<h3 id="sliding-window-attention">Sliding Window Attention</h3>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/2.png"></p>
+<h3 id="rolling-buffer-cache">Rolling Buffer Cache</h3>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/3.png"></p>
+<h3 id="pre-fill-and-chunking">Pre-fill and Chunking</h3>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/4.png"></p>
 <h2 id="mixtral-8x7b">Mixtral 8x7B</h2>
+<p>Mixtral 8x7B 并不是有8个Mistral 7B模型，名字中的8代表8个专家，所以Mixtral 8x7B 是一种稀疏专家混合模型 (SMoE)。</p>
+<p>Mixtral 8x7B同样基于transformer架构(细节参考Mixtral 7B)，然后将Feed Forward Network(FFN)替换为Mixture of Expert Layer(MoE)就得到了Mixtral 8x7B。具体参数如下：</p>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/5.png"></p>
+<h3 id="sparse-mixture-of-experts">Sparse Mixture of Experts</h3>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/6.png"></p>
+<p>给定n个专家网络<span class="math inline">\({E_0, E_1,...,E_{n-1}}\)</span>，则MoE的输出可以用如下公式表示：</p>
+<p><span class="math display">\[\sum_{i=0}^{n-1}G(x)_i \cdot E_i(x)\]</span></p>
+<p>其中，<span class="math inline">\(G(x)_i\)</span>表示第<span class="math inline">\(i\)</span>个专家网络的门控，<span class="math inline">\(E_i(x)\)</span>表示第i个专家网络的输出。</p>
+<p>论文中使用了如下方法来实现门控网络：</p>
+<p><span class="math display">\[G(x)=Softmax(TopK(x \cdot W_g))\]</span></p>
+<p>然后使用<code>SwiGLU</code>来实现专家网络：</p>
+<p><span class="math display">\[E_i(x)=SwiGLU_i(x)\]</span></p>
+<p>最终，MoE网络的输出就可以表示为如下式子：</p>
+<p><span class="math display">\[y=\sum_{i=0}^{n-1}Softmax(TopK(x \cdot W_g))_i \cdot SwiGLU_i(x)\]</span></p>
+<p>其中K是可以设置的超参数，表示每个step选取多少个专家网络的结果参与计算。</p>
 ]]></content>
       <categories>
         <category>算法</category>
