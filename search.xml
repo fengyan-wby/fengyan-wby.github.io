@@ -207,6 +207,8 @@
 <p>最终，MoE网络的输出就可以表示为如下式子：</p>
 <p><span class="math display">\[y=\sum_{i=0}^{n-1}Softmax(TopK(x \cdot W_g))_i \cdot SwiGLU_i(x)\]</span></p>
 <p>其中K是可以设置的超参数，表示每个step选取多少个专家网络的结果参与计算。</p>
+<p>Mixtral 8x7B总体流程如下：</p>
+<p><img src="/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/7.png"></p>
 ]]></content>
       <categories>
         <category>算法</category>
