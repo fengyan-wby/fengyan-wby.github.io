@@ -149,6 +149,30 @@
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】Mixtral of Experts</title>
+    <url>/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2401.04088.pdf">https://arxiv.org/pdf/2401.04088.pdf</a></li>
+</ul>
+<p>论文代码:</p>
+<ul>
+<li><a href="https://github.com/mistralai/mistral-src">https://github.com/mistralai/mistral-src</a></li>
+</ul>
+<p>论文主页：</p>
+<ul>
+<li><a href="https://mistral.ai/news/mixtral-of-experts/">https://mistral.ai/news/mixtral-of-experts/</a></li>
+</ul>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>回顾2023,那些令AI圈大地震的瞬间</title>
     <url>/2024/01/15/%E5%9B%9E%E9%A1%BE2023-%E9%82%A3%E4%BA%9B%E4%BB%A4AI%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%E7%9A%84%E7%9E%AC%E9%97%B4/</url>
     <content><![CDATA[<p>原文链接在<a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247571919&amp;idx=1&amp;sn=affe1f50b17335c461008836cc97b4ae&amp;scene=21#wechat_redirect">这里</a>。</p>
