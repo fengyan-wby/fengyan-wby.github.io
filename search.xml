@@ -151,7 +151,21 @@
   <entry>
     <title>【文献阅读】Mixtral of Experts</title>
     <url>/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/</url>
-    <content><![CDATA[<p>论文地址：</p>
+    <content><![CDATA[<p><code>Mistral 7B</code></p>
+<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2310.06825">https://arxiv.org/abs/2310.06825</a></li>
+</ul>
+<p>论文代码:</p>
+<ul>
+<li><a href="https://github.com/mistralai/mistral-src">https://github.com/mistralai/mistral-src</a></li>
+</ul>
+<p>论文主页：</p>
+<ul>
+<li><a href="https://mistral.ai/news/announcing-mistral-7b/">https://mistral.ai/news/announcing-mistral-7b/</a></li>
+</ul>
+<p><code>Mixtral 8x7B</code></p>
+<p>论文地址：</p>
 <ul>
 <li><a href="https://arxiv.org/pdf/2401.04088.pdf">https://arxiv.org/pdf/2401.04088.pdf</a></li>
 </ul>
@@ -164,6 +178,9 @@
 <li><a href="https://mistral.ai/news/mixtral-of-experts/">https://mistral.ai/news/mixtral-of-experts/</a></li>
 </ul>
 <span id="more"></span>
+<p>Mixtral of Experts这篇论文介绍的是<code>Mixtral 8x7B</code>，而<code>Mixtral 8x7B</code>和<code>Mistral 7B</code>的结构基本是一样的。所以在介绍<code>Mixtral 8x7B</code>之前，首先来看看<code>Mistral 7B</code>。</p>
+<h2 id="mistral-7b">Mistral 7B</h2>
+<h2 id="mixtral-8x7b">Mixtral 8x7B</h2>
 ]]></content>
       <categories>
         <category>算法</category>
