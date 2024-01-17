@@ -932,6 +932,14 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <h3 id="dpodirect-preference-optimization">DPO（Direct Preference Optimization）</h3>
 <p><a href="https://arxiv.org/pdf/2305.18290v2.pdf">DPO</a>使用如下Loss进行训练：</p>
 <p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{ref})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(y_w\)</span>表示偏序对中好的回答</li>
+<li><span class="math inline">\(y_l\)</span>表示偏序对中差的回答</li>
+<li><span class="math inline">\(\pi_{\theta}(y_w|x)\)</span>表示给定输入<span class="math inline">\(x\)</span>，当前policy model生成<span class="math inline">\(y_w\)</span>的累积概率（即每个token的概率求和）</li>
+<li><span class="math inline">\(\pi_{ref}(y_w|x)\)</span>表示给定输入<span class="math inline">\(x\)</span>，当前reference model生成<span class="math inline">\(y_w\)</span>的累计概率</li>
+<li><span class="math inline">\(\pi_{\theta}(y_l|x)\)</span>和<span class="math inline">\(\pi_{ref}(y_l|x)\)</span>原理同上</li>
+</ul>
 <p>由于只使用了两个模型（actor model和ref model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
 <div class="note info"><p><a href="https://huggingface.co/HuggingFaceH4/zephyr-7b-beta">Zephyr-7B</a> 基于 <a href="https://huggingface.co/mistralai/Mistral-7B-v0.1">Mistral-7B</a> 使用了 DPO 进行微调，而 Zephyr-7B 的实验表明，使用 DPO 后它优于同期所有同尺寸的其他模型。</p>
 </div>
