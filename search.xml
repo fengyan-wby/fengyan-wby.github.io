@@ -180,7 +180,7 @@
 </ul>
 <p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答，例如“The middle ear includes the tympanic cavity and the three ossicles.”</p>
 <h2 id="方法">方法</h2>
-<p>输入序列用<span class="math inline">\(x\)</span>表示，文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>，生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token <span class="math inline">\(y_{1:i-1}\)</span>，预测当前token，直至生成完整的回答。</p>
+<p>输入序列用<span class="math inline">\(x\)</span>表示，文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>，生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token（<span class="math inline">\(y_{1:i-1}\)</span>），预测当前token，直至生成完整的回答。</p>
 <h3 id="模型">模型</h3>
 <p>论文采用端到端的方式对检索器和生成器进行联合训练，并且采用两种模型。</p>
 <ul>
@@ -191,7 +191,7 @@
 </ul>
 <h3 id="检索器">检索器</h3>
 <p>检索器可用如下公式表示：</p>
-<p><span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x)),d(z)=BERT_d(z),q(x)=BERT_q(x)\]</span></p>
+<p><span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x)) \qquad d(z)=BERT_d(z) \qquad q(x)=BERT_q(x)\]</span></p>
 <p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用FASIS构建文档向量索引，并使用了HNSW算法对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
 <div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
 </div>
