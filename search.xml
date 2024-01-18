@@ -149,6 +149,65 @@
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</title>
+    <url>/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2005.11401v4">https://arxiv.org/abs/2005.11401v4</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/huggingface/transformers/blob/master/examples/rag/">https://github.com/huggingface/transformers/blob/master/examples/rag/</a></li>
+</ul>
+<span id="more"></span>
+<p>RAG将问题求解划分为检索和生成两阶段：</p>
+<ol type="1">
+<li>先通过检索，查找与问题相关的文档。</li>
+<li>将文档和问题一并输入生成模型，由模型推理给出最终的答案，从而解决模型无法扩展知识和产生“幻觉”的问题。</li>
+</ol>
+<h2 id="介绍">介绍</h2>
+<p>预训练语言模型可以从数据中学习知识，在不访问外部知识库的情况下，直接作为参数化的隐式知识库，但其也存在以下缺点：</p>
+<ol type="1">
+<li>模型无法扩展或修改知识，比如用某天前的数据预训练的模型无法直接回答该天后发生的事实。</li>
+<li>模型可能产生“幻觉”，比如给出和事实不一致的问答。</li>
+</ol>
+<p>因此，Facebook在2020年提出了RAG（Retrieval-Augmented Generation，检索增强生成）架构，该架构包含生成器与检索器两部分。</p>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/1.png"></p>
+<p>对于问答，例如回答“Define 'middle ear'”这一问题，RAG架构首先将问题输入检索器。检索器包含两个子部分：</p>
+<ul>
+<li><code>查询编码器（Query Encoder）</code>：用<span class="math inline">\(q\)</span>表示，其将问题进行向量化。</li>
+<li><code>文档索引（Document Index）</code>：用<span class="math inline">\(d\)</span>表示，其将文档进行向量化，并构建文档向量索引。</li>
+</ul>
+<p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答，例如“The middle ear includes the tympanic cavity and the three ossicles.”</p>
+<h2 id="方法">方法</h2>
+<p>输入序列用<span class="math inline">\(x\)</span>表示，文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>，生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token <span class="math inline">\(y_{1:i-1}\)</span>，预测当前token，直至生成完整的回答。</p>
+<h3 id="模型">模型</h3>
+<p>论文采用端到端的方式对检索器和生成器进行联合训练，并且采用两种模型。</p>
+<ul>
+<li><code>RAG-Sequence Model</code><br>
+<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<li><code>RAG-Token Model</code><br>
+<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+</ul>
+<h3 id="检索器">检索器</h3>
+<p>检索器可用如下公式表示：</p>
+<p><span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x)),d(z)=BERT_d(z),q(x)=BERT_q(x)\]</span></p>
+<p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用FASIS构建文档向量索引，并使用了HNSW算法对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
+<div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
+</div>
+<h3 id="生成器">生成器</h3>
+<p>生成器使用了Facebook发布的大语言模型<a href="https://arxiv.org/pdf/1910.13461.pdf">BART</a>，其采用编码器+解码器架构，共有4亿个参数。论文直接将问题和检索器返回的相关文档拼接在一起作为生成器的输入。</p>
+<h3 id="训练">训练</h3>
+<p>在训练过程中，使用端到端的方式同时训练检索器和生成器。输入数据为文本对<span class="math inline">\((x_j,y_j)\)</span>，损失函数采用负对数似然函数<span class="math inline">\(\sum_j-logp(y_j|x_j)\)</span>，优化器使用Adam。 论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。 因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用&amp;BERT_q$模型和生成器所使用BART模型的参数进行更新。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【文献阅读】Mixtral of Experts</title>
     <url>/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/</url>
     <content><![CDATA[<p><code>Mistral 7B</code></p>
