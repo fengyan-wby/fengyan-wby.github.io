@@ -191,7 +191,7 @@
 </ul>
 <h3 id="检索器">检索器</h3>
 <p>检索器可用如下公式表示：</p>
-<p><span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x)) \qquad d(z)=BERT_d(z) \qquad q(x)=BERT_q(x)\]</span></p>
+<p><span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x)) \qquad d(z)=BERT_d(z), \quad q(x)=BERT_q(x)\]</span></p>
 <p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用FASIS构建文档向量索引，并使用了HNSW算法对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
 <div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
 </div>
