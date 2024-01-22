@@ -149,6 +149,32 @@
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】LST: Ladder Side-Tuning for Parameter and Memory Efficient Transfer Learning</title>
+    <url>/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2206.06522">https://arxiv.org/abs/2206.06522</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/ylsung/Ladder-Side-Tuning">https://github.com/ylsung/Ladder-Side-Tuning</a></li>
+</ul>
+<span id="more"></span>
+<p>如<a href="https://arxiv.org/abs/1902.00751">Adapter Tuning</a>、<a href="https://arxiv.org/abs/2103.10385">P-Tuning</a>、<a href="https://arxiv.org/abs/2104.08691">Prompt Tuning</a>、<a href="https://arxiv.org/abs/2101.00190">Prefix Tuning</a>、<a href="https://arxiv.org/abs/2106.09685">LoRA</a>之类的方法，能够通过只微调很少的参数来达到或接近全量参数微调的效果。然而，这些技巧通常只是“参数高效”而并非“训练高效”，因为它们依旧需要在整个模型中反向传播来获得少部分可训练参数的梯度，说白了，就是可训练的参数确实是少了很多，但是训练速度并没有明显提升。</p>
+<p>而LST这篇论文，通过特殊的模型构建方式，使得模型的训练速度也可以的到提升。</p>
+<p><img src="/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/1.png"></p>
+<p>LST在原有大模型的基础上搭建了一个“旁支”（梯子），将大模型的部分层输出作为旁枝模型的输入，所有的训练参数尽在旁枝模型中。由于大模型仅提供输入，因此反向传播不会经过大模型，这样反向传播的复杂度取决于旁枝模型的规模，从而提高了训练的效率。</p>
+<p>LST不仅可以在BERT这样的Encoder-only结构中使用，同样也可以在Encoder-Decoder结构中使用，如下图所示：</p>
+<p><img src="/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/2.png"></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【文献阅读】RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</title>
     <url>/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</url>
     <content><![CDATA[<p>论文地址：</p>
