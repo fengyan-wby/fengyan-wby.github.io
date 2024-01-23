@@ -24,25 +24,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="行到水穷处，坐看云起时">
-<meta property="og:type" content="website">
-<meta property="og:title" content="丰言的博客">
-<meta property="og:url" content="https://fengyan-wby.github.io/tags/Prompt/index.html">
+    <meta name="description" content="介绍测地线距离在语义向量相似度中的应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语义向量相似度之测地线距离">
+<meta property="og:url" content="https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/index.html">
 <meta property="og:site_name" content="丰言的博客">
-<meta property="og:description" content="行到水穷处，坐看云起时">
+<meta property="og:description" content="介绍测地线距离在语义向量相似度中的应用。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-23T14:51:22.000Z">
+<meta property="article:modified_time" content="2024-01-23T07:29:03.920Z">
 <meta property="article:author" content="丰言">
+<meta property="article:tag" content="测地线距离">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://fengyan-wby.github.io/tags/Prompt/">
+<link rel="canonical" href="https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/Prompt/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/","path":"2024/01/23/语义向量相似度之测地线距离/","title":"语义向量相似度之测地线距离"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: Prompt | 丰言的博客</title>
+<title>语义向量相似度之测地线距离 | 丰言的博客</title>
   
 
 
@@ -485,51 +488,168 @@ if(canvas.getContext){
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">Prompt
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="丰言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰言的博客">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="语义向量相似度之测地线距离 | 丰言的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          语义向量相似度之测地线距离
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="创建时间：2024-01-23 14:51:22 / 修改时间：07:29:03" itemprop="dateCreated datePublished" datetime="2024-01-23T14:51:22+00:00">2024-01-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/01/23/语义向量相似度之测地线距离/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>788</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>介绍测地线距离在语义向量相似度中的应用。</p>
+<span id="more"></span>
+<p>训练语义向量时，一种方法是使用对比学习。以对比学习方案来说，一般会使用正样本对和负样本对。正样本对就是两个语义基本相同的句子，我们可以认为它们的相似度很高，或者距离很小。负样本对是语义不相同的句子，我们可以认为他们相似度很低，或者距离很大。</p>
+<p>正样本好说，两个句子距离很小，标签为1。但对于负样本来说，不管距离是大、很大还是非常大，对应的标签都是0，这样对于负样本来说，我们无法区分不同的程度。</p>
+<p>举例来说，对于距离为1的样本对ab和距离为10的样本对ac，我们可以说ab之间更接近。但是对于距离为10的样本对ac和距离为15的样本对ad，我们没法说ac之间更接近，因为距离大了，都属于负样本，其绝对数值就不准了。</p>
+<p>测地线距离，简单来说就是两点之间的最短距离，由于流形未必是平直的，因此该距离未必是两点之间的直线距离（欧式距离），经典例子就是从地球的南极走到北极，我们没法穿过地心走直线，只能沿着地球表面先走到赤道然后再走到南极，走了一条曲线（半圆）距离。</p>
+<p>在局部范围内（此时距离比较小），地球还是平的，所以欧式距离还是可用的，但是放到“南极-北极”、“南极-赤道”这样的大距离就不够准确了，这就跟刚才的语义相似度场景很相似了——已知的距离（比如欧式距离）在近距离内比较准确，在远距离不准确，本质上就是因为流形不是平直的。</p>
+<p>幸运的是，有局部距离就够了，我们将其转化为一个图的问题，可以利用“最短路径”的算法估算出近似的测地线距离。具体来说，我们可以用现有的距离函数算出每个点与剩余点的距离，然后只保留距离最近的k个点（也可以按阈值截断，看具体情况），在它们之间连一条边并标记上距离，这样一来所有点和边构成了一个加权图（我们称之为“k邻近图”），我们就可以用Dijkstra算法来搜索出图上任意两点的最短路径，并计算出它的长度，这就是测地线距离的近似结果。</p>
+<p>总的来说，在“相近点的距离比较准、较远点的距离比较不准”的假设下，我们可以用k邻近图加最短路径的方法，估算较远点的测地线距离来作为替代品。由于测地线距离考虑了向量空间的流形状况，所以有可能取得比较好的效果。</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-08-11T15:14:09+00:00"
-              content="2023-08-11">
-          08-11
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-        <a class="post-title-link" href="/2023/08/11/%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B%E6%8C%87%E5%8D%97/" itemprop="url">
-          <span itemprop="name">提示工程指南</span>
-        </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>丰言
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/" title="语义向量相似度之测地线距离">https://fengyan-wby.github.io/2024/01/23/语义向量相似度之测地线距离/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/" rel="tag"><i class="fa fa-tag"></i> 测地线距离</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/" rel="prev" title="【文献阅读】LST: Ladder Side-Tuning for Parameter and Memory Efficient Transfer Learning">
+                  <i class="fa fa-angle-left"></i> 【文献阅读】LST: Ladder Side-Tuning for Parameter and Memory Efficient Transfer Learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-  
-  
-
 </div>
   </main>
 
