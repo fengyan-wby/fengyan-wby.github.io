@@ -530,6 +530,7 @@
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>AIGC</category>
       </categories>
       <tags>
         <tag>AI</tag>
@@ -1072,6 +1073,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>AIGC</category>
       </categories>
       <tags>
         <tag>AIGC</tag>
@@ -2915,6 +2917,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>Tokenization</category>
       </categories>
       <tags>
         <tag>Tokenization</tag>
@@ -2941,71 +2944,6 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
       </categories>
       <tags>
         <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PPO算法原理</title>
-    <url>/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<p>参考:</p>
-<ul>
-<li><a href="https://www.jianshu.com/p/9f113adc0c50">https://www.jianshu.com/p/9f113adc0c50</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/468828804">https://zhuanlan.zhihu.com/p/468828804</a></li>
-<li><a href="https://www.bilibili.com/video/av24724071/?p=4">https://www.bilibili.com/video/av24724071/?p=4</a></li>
-</ul>
-<span id="more"></span>
-<h2 id="pgpolicy-gradient算法">PG（Policy Gradient）算法</h2>
-<p>强化学习中，有一个Agent作为我们的智能体，它根据策略<span class="math inline">\(\pi\)</span>在不同的环境状态<span class="math inline">\(s\)</span>下选择相应的动作来执行，环境根据Agent的动作，反馈新的状态以及奖励，Agent又根据新的状态选择新的动作，这样不断循环，直到游戏结束，便完成了eposide。在深度强化学习中，策略<span class="math inline">\(\pi\)</span>是由神经网络构成，神经网络参数为<span class="math inline">\(\theta\)</span>，表示成<span class="math inline">\(\pi_{\theta}\)</span>。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/1.jpg"> 一个完整的eposide序列，用<span class="math inline">\(\tau\)</span>表示。而一个特定的<span class="math inline">\(\tau\)</span>序列发生的概率为： <span class="math display">\[
-\begin{align}
-    p_{\theta}(\tau)  \\
-    &amp; =p(s_1)p_{\theta}(a_1|s_1)p(s_2|s_1,a_1)p_{\theta}(a_2|s_2)p(s_3|s_2,a_2)...  \\
-    &amp; =p(s_1)\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t+1}|s_t,a_t)
-\end{align}
-\]</span></p>
-<div class="note info"><p>如果是固定的开局方式，上式中的<span class="math inline">\(p(s_1)\)</span>可以省略掉。</p>
-</div>
-<p>对于一个完整的<span class="math inline">\(\tau\)</span>序列，其在整个游戏期间获得的总奖励用<span class="math inline">\(R(\tau)\)</span>表示。对于给定参数<span class="math inline">\(\theta\)</span>的策略，其奖励期望为： <span class="math display">\[\bar{R}_{\theta}=\sum_{\tau}R(\tau)p_{\theta}(\tau)=E_{\tau \sim p_{\theta}(\tau)}[R(\tau)]\]</span></p>
-<p>对于一个游戏，我们自然希望通过调整策略参数<span class="math inline">\(\theta\)</span>，得到的<span class="math inline">\(\bar{R}_{\theta}\)</span>越大越好。所以就可以使用下面梯度下降的方式来求解，将<span class="math inline">\(\bar{R}_{\theta}\)</span>对<span class="math inline">\(\theta\)</span>求导： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2.jpg"></p>
-<p>上面的过程中，我们首先利用log函数求导的特点进行转化，随后用N次采样的平均值来近似期望，最后将<span class="math inline">\(p_{\theta}\)</span>展开，将与<span class="math inline">\(\theta\)</span>无关的项去掉，即得到了最终的结果。</p>
-<p>形象的解释上面的式子：每一条采样到的数据序列都希望<span class="math inline">\(\theta\)</span>向着自己的方向进行更新。而在总体上，我们希望<span class="math inline">\(\theta\)</span>向着奖励比较大的那条序列，因此用每条序列的奖励来加权平均他们的更新方向。</p>
-<div class="note info"><p>假设第三条数据的奖励很大，通过上述式子的更新策略，使得<span class="math inline">\(p_{\theta}(a_t^3|s_t^3)\)</span>发生的概率更大，以后再遇到<span class="math inline">\(s_t^3\)</span>这个状态的时候，我们就更倾向于采取<span class="math inline">\(a_t^3\)</span>这个动作。</p>
-</div>
-<p>所以，一个PG方法的完整过程如下： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/3.jpg"> 我们首先采集数据，然后基于前面得到的梯度更新公式更新参数，随后再根据更新后的策略再次采集数据，再更新参数，如此循环进行。注意到图中<code>only used once</code>，因为在更新参数后，我们的策略已经变了，而先前的数据是基于更新前的策略得到的。</p>
-<h3 id="增加一个基线">增加一个基线</h3>
-<p>通过上面的介绍可以发现，PG方法在更新策略时，基本思想就是增加reward大的动作出现的概率，减小reward小的策略出现的概率。假设现在有一种情况，我们的reward无论何时都是正的，对于没有采样到的动作，它的reward是0.因此，如果一个比较好的动作没有被采样到，而采样到的不好的动作得到了一个比较小的正reward，那么没有被采样到的好动作的出现概率会越来越小，这显然是不合适的。因此我们需要增加一个奖励的基线，让reward有正有负。一般增加的基线是所获得奖励的平均值。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/4.jpg"></p>
-<h3 id="增加折扣因子">增加折扣因子</h3>
-<p>类似买股票，未来1块钱的价值要小于当前1块钱的价值，因此未来1块钱变成现在的价值，需要进行一定的折扣。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/6.jpg"></p>
-<h3 id="使用优势函数">使用优势函数</h3>
-<p>我们之前介绍的PG方法，对于同一个eposide中的所有数据，使用的奖励都是一样的。这样的做法不够细致，可以将奖励替换成关于<span class="math inline">\(s_t,a_t\)</span>的函数，我们把这个函数叫做优势函数: <span class="math display">\[A^{\theta}(s_t, a_t)=Q_{\pi}(s_t,a_t)-V_{\pi}(s_t)=\sum_{t&#39;&gt;t}\gamma^{t&#39;-t}r_{t&#39;}-V_{\phi}(s_t)\]</span> 其中前半部分表示实际的折扣奖励，后半部分<span class="math inline">\(V_{\phi}(s_t)\)</span>是拟合的折扣奖励，通过critic来计算得到，它由一个结构与策略网络相同但参数不同的神经网络构成，主要是来拟合从<span class="math inline">\(s_t\)</span>到终局的折扣奖励。</p>
-<p><span class="math inline">\(A^{\theta}(s_t, a_t)\)</span>表示在<span class="math inline">\(s_t\)</span>状态下采用动作<span class="math inline">\(a_t\)</span>时，实际得到的折扣奖励相对于模拟折扣奖励的优势。模拟的折扣奖励是在<span class="math inline">\(s_t\)</span>状态下所有采样过动作的折扣奖励的拟合（通过critic模型拟合），因此优势函数代表了采用动作<span class="math inline">\(a_t\)</span>相对于这些动作的平均优势。</p>
-<h2 id="ppo算法">PPO算法</h2>
-<p>接着上面的讲，PG方法一个很大的缺点就是参数更新慢，因为我们每更新一次参数都需要进行重新采样，这其实是<code>on-policy</code>的策略，即我们想要训练的agent和与环境进行交互的agent是同一个agent。与之对应的是<code>off-policy</code>策略，即想要训练的agent和与环境交互的agent不是同一个agent。</p>
-<p>那么为了提升我们的训练速度，让采样到的数据可以重复使用，我们可以将<code>on-policy</code>的方式转换为<code>off-policy</code>的方式。即我们训练的模型是一个actor，与环境交互采样数据的模型使用另一个actor。 <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/7.jpg"> 通过这种方式，我们的<span class="math inline">\(p(x)\)</span>和<span class="math inline">\(q(x)\)</span>的分布不能差别太大。<br>
-那么此时我们想要期望奖励最大化，则变为： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/9.jpg"> 最后一项因为假设两个分布不能差太远，所以认为它们是相等的，为了求解方便，直接划掉。此时似然函数变为： <span class="math display">\[J^{\theta&#39;}(\theta)=E_{(s_t,a_t)\sim\pi_{\theta&#39;}}\bigg[\frac{p_{\theta}(a_t|s_t)}{p_{\theta&#39;}(a_t|s_t)}A^{\theta&#39;}(s_t,a_t)\bigg]\]</span></p>
-<p>前面介绍了，我们希望<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>不要差太远。我们可以用KL散度来计算，将其加入PPO模型的似然函数中，变为： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/10.jpg"></p>
-<p>在实际中，我们会动态改变对<span class="math inline">\(\theta\)</span>和<span class="math inline">\(\theta&#39;\)</span>分布差异的惩罚，如果KL散度太大，则增加这一部分的惩罚；如果小到一定的值，就减小这一部分的惩罚。基于此，我们得到了PPO算法的过程： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/11.jpg"></p>
-<p>PPO算法还有另一种实现方式，不将KL散度直接放入似然函数中，而是进行一定程度的裁剪： <img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/12.jpg"> 上图中，绿色的线代表min中的第一项，即不做任何处理。蓝色的线为第二项，如果两个分布差距太大，则进行一定程度的裁剪。最后这两项取min，防止<span class="math inline">\(\theta\)</span>更新太快。</p>
-<p>通过上述介绍，我们可以看到PPO有四个网络参数：</p>
-<ol type="1">
-<li><span class="math inline">\(\theta\)</span>：训练网络，每次都会被更新。(也就是大家说的actor模型)</li>
-<li><span class="math inline">\(\theta&#39;\)</span>：训练网络副本，负责与环境交互采样数据。（也就是大家说的ref模型）</li>
-<li><span class="math inline">\(\phi\)</span>：奖励模型，拟合折扣奖励。（也就是大家说的critic模型，获取每个位置的奖励）</li>
-<li><span class="math inline">\(reward model\)</span>: 奖励模型，获取一整句话的奖励。</li>
-</ol>
-<div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
-</div>
-<p><img src="/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/ppo_trainer.png"></p>
-<p>打个比喻来说，PPO的思路是： 0点时，我与环境进行互动，收集了很多数据。然后利用数据更新我的策略，此时我成为1点的我。当我被更新后，理论上，1点的我再次与环境互动，收集数据，然后把我更新到2点，然后这样往复迭代。</p>
-<p>但是如果我仍然想继续0点的我收集的数据来进行更新。因为这些数据是0点的我（而不是1点的我）所收集的。所以，我要对这些数据做一些重要性重采样，让这些数据看起来像是1点的我所收集的。当然这里仅仅是看起来像而已，所以我们要对这个“不像”的程度加以更新时的惩罚（KL）。</p>
-<p>其中，更新的方式是：我收集到的每个数据序列，对序列中每个（s, a）的优势程度做评估，评估越好的动作，将来就又在s状态时，让a出现的概率加大。这里评估优势程度的方法，可以用数据后面的总折扣奖励来表示。另外，考虑引入基线的Tip，我们就又引入一个评价者小明，让他跟我们一起学习，他只学习每个状态的期望折扣奖励的平均期望。这样，我们评估（s, a）时，我们就可以吧小明对 s 的评估结果就是 s 状态后续能获得的折扣期望，也就是我们的基线。注意哈：优势函数中，前一半是实际数据中的折扣期望，后一半是估计的折扣期望（小明心中认为s应该得到的分数，即小明对s的期望奖励），如果你选取的动作得到的实际奖励比这个小明心中的奖励高，那小明为你打正分，认为可以提高这个动作的出现概率；如果选取的动作的实际得到的奖励比小明心中的期望还低，那小明为这个动作打负分，你应该减小这个动作的出现概率。这样，小明就成为了一个评判官。</p>
-<p>当然，作为评判官，小明自身也要提高自己的知识文化水平，也要在数据中不断的学习打分技巧，这就是对<span class="math inline">\(\phi\)</span>的更新了。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>PPO</tag>
-        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
@@ -3255,6 +3193,7 @@ I_{w_i}=
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>AIGC</category>
       </categories>
       <tags>
         <tag>Attention</tag>
@@ -4247,6 +4186,7 @@ Results调用结果如下：</p>
       <categories>
         <category>算法</category>
         <category>文献阅读</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -4302,6 +4242,7 @@ Results调用结果如下：</p>
       <categories>
         <category>算法</category>
         <category>文献阅读</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5282,6 +5223,8 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>AIGC</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5331,6 +5274,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
       <categories>
         <category>算法</category>
         <category>文献阅读</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5380,6 +5324,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
       <categories>
         <category>算法</category>
         <category>文献阅读</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5419,6 +5364,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
       <categories>
         <category>算法</category>
         <category>文献阅读</category>
+        <category>PEFT</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -7698,6 +7644,7 @@ I heard the echo, <mark class="label default">from the valleys and the heart</ma
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>Tokenization</category>
       </categories>
       <tags>
         <tag>BPE</tag>
@@ -7950,6 +7897,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
       <categories>
         <category>算法</category>
         <category>学习</category>
+        <category>AIGC</category>
       </categories>
       <tags>
         <tag>GPT</tag>
