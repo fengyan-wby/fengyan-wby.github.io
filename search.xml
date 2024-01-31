@@ -189,9 +189,11 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
+        <tag>LST</tag>
       </tags>
   </entry>
   <entry>
@@ -248,9 +250,11 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
+        <tag>RAG</tag>
       </tags>
   </entry>
   <entry>
@@ -317,6 +321,7 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -553,9 +558,11 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
+        <tag>ALiBi</tag>
       </tags>
   </entry>
   <entry>
@@ -685,8 +692,10 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
+        <tag>文献阅读</tag>
         <tag>MQA</tag>
         <tag>GQA</tag>
       </tags>
@@ -3261,8 +3270,10 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
+        <tag>文献阅读</tag>
         <tag>Big Bird</tag>
       </tags>
   </entry>
@@ -3301,8 +3312,10 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
+        <tag>文献阅读</tag>
         <tag>Longformer</tag>
       </tags>
   </entry>
@@ -3364,9 +3377,11 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
-        <tag>Sparse Transformers&quot;</tag>
+        <tag>文献阅读</tag>
+        <tag>Sparse Transformers</tag>
       </tags>
   </entry>
   <entry>
@@ -3876,6 +3891,7 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -4156,6 +4172,7 @@ Results调用结果如下：</p>
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -4207,6 +4224,7 @@ Results调用结果如下：</p>
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -4261,6 +4279,7 @@ Results调用结果如下：</p>
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -4288,6 +4307,7 @@ Results调用结果如下：</p>
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5286,6 +5306,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5334,6 +5355,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5372,6 +5394,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5466,6 +5489,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5502,6 +5526,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5531,6 +5556,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5583,6 +5609,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>GPT</tag>
@@ -5871,6 +5898,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -6054,6 +6082,7 @@ Decoder：
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -7102,6 +7131,7 @@ Decoder：
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -7193,6 +7223,7 @@ The pairwise cosine similarity between each augmented image in a batch is calcul
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -7802,6 +7833,7 @@ GPT使用Transformer的Decoder结构，并对Transformer Decoder进行了一些�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>文献阅读</category>
       </categories>
       <tags>
         <tag>GPT</tag>
