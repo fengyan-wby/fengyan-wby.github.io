@@ -64,7 +64,8 @@
 <h2 id="tensorflow2.x">Tensorflow2.x</h2>
 ]]></content>
       <categories>
-        <category>算法</category>
+        <category>工具</category>
+        <category>TensorFlow</category>
       </categories>
       <tags>
         <tag>TensorFlow</tag>
@@ -142,7 +143,8 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torchvision.models</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    resnet18_modify = torchvision.models.resnet18(pretrained=<span class="literal">True</span>)</span><br><span class="line">    modules = <span class="built_in">list</span>(resnet18_modify.children())[:-<span class="number">1</span>]</span><br><span class="line">    resnet18_modify = nn.Sequential(*modules)</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>算法</category>
+        <category>工具</category>
+        <category>PyTorch</category>
       </categories>
       <tags>
         <tag>PyTorch</tag>
@@ -163,6 +165,7 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>测地线距离</tag>
@@ -526,6 +529,7 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>AI</tag>
@@ -578,6 +582,7 @@
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>Hugging Face</category>
       </categories>
       <tags>
         <tag>Hugging Face</tag>
@@ -636,6 +641,7 @@
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>Git</category>
       </categories>
       <tags>
         <tag>Git</tag>
@@ -1065,6 +1071,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>AIGC</tag>
@@ -1092,6 +1099,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Hexo</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -1141,6 +1149,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>金融</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>金融</tag>
@@ -1211,6 +1220,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>VQ-VAE</tag>
@@ -1302,6 +1312,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>VAE</tag>
@@ -1607,6 +1618,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>特征提取</tag>
@@ -2094,6 +2106,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>金融</category>
+        <category>量化交易</category>
       </categories>
       <tags>
         <tag>量化交易</tag>
@@ -2725,6 +2738,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>ONNX</tag>
@@ -2799,6 +2813,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>Ubuntu</category>
       </categories>
       <tags>
         <tag>Ubuntu</tag>
@@ -2899,6 +2914,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>Tokenization</tag>
@@ -2921,6 +2937,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>Ubuntu</category>
       </categories>
       <tags>
         <tag>Ubuntu</tag>
@@ -2984,6 +3001,7 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>PPO</tag>
@@ -3092,6 +3110,7 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>文本对抗</tag>
@@ -3235,6 +3254,7 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>Attention</tag>
@@ -3783,6 +3803,7 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>Prompt</tag>
@@ -4073,6 +4094,7 @@ I_{w_i}=
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>AIGC</tag>
@@ -5047,6 +5069,7 @@ Results调用结果如下：</p>
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Markdown</category>
       </categories>
       <tags>
         <tag>Markdown</tag>
@@ -5258,6 +5281,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5662,6 +5686,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>工程</category>
+        <category>Hadoop</category>
       </categories>
       <tags>
         <tag>Hadoop</tag>
@@ -5858,6 +5883,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>文献阅读</tag>
@@ -5939,6 +5965,7 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Hexo</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -6121,6 +6148,7 @@ Decoder：
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
   </entry>
   <entry>
@@ -7051,6 +7079,7 @@ Decoder：
 ]]></content>
       <categories>
         <category>工程</category>
+        <category>Spring Boot</category>
       </categories>
       <tags>
         <tag>Spring Boot</tag>
@@ -7163,6 +7192,7 @@ Decoder：
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>AC</tag>
@@ -7472,6 +7502,7 @@ q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}\textcolor{green}{R_{i,
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>Transformer</tag>
@@ -7519,6 +7550,7 @@ q_ik_j^\top=x_iW_QW_K^{\top}x_j^{\top} + x_iW_QW_K^{\top}\textcolor{green}{R_{i,
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>KMP</tag>
@@ -7594,6 +7626,7 @@ I heard the echo, <mark class="label default">from the valleys and the heart</ma
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Markdown</category>
       </categories>
       <tags>
         <tag>Markdown</tag>
@@ -7664,6 +7697,7 @@ I heard the echo, <mark class="label default">from the valleys and the heart</ma
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>BPE</tag>
@@ -7700,6 +7734,7 @@ I heard the echo, <mark class="label default">from the valleys and the heart</ma
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Hexo</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -7914,6 +7949,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>学习</category>
       </categories>
       <tags>
         <tag>GPT</tag>
@@ -7957,6 +7993,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>Ubuntu</category>
       </categories>
       <tags>
         <tag>Ubuntu</tag>
@@ -8073,6 +8110,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
 ]]></content>
       <categories>
         <category>工程</category>
+        <category>Java</category>
       </categories>
       <tags>
         <tag>Java</tag>
@@ -8127,6 +8165,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Hexo</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -8159,6 +8198,7 @@ objective(\phi)=E_{(x,y)～D_{\pi_{\phi}^{RL}}}[r_{\theta}(x,y)-\beta log(\pi_{\
 ]]></content>
       <categories>
         <category>博客</category>
+        <category>Hexo</category>
       </categories>
       <tags>
         <tag>hexo</tag>
