@@ -151,6 +151,71 @@
       </tags>
   </entry>
   <entry>
+    <title>Google搜索技巧</title>
+    <url>/2024/02/01/Google%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<p>Google搜索的一些技巧。</p>
+<span id="more"></span>
+<h2 id="基本语法">基本语法</h2>
+<h3 id="and">AND</h3>
+<p>Google搜索默认的是AND逻辑，即输入<code>BERT GPT</code>之后，会搜出包含<code>BERT</code>和<code>GPT</code>的文件内容。</p>
+<h3 id="or">OR</h3>
+<p>如果想使用OR逻辑，则需要使用关键词OR。输入<code>BERT OR GPT</code>之后就会搜出包含<code>BERT</code>或者<code>GPT</code>的文件内容。</p>
+<div class="note info"><p>注意：OR 是大写的，小写是不起作用的，而且，每一个关键词与 OR 之间是有一个空格的。</p>
+</div>
+<h3 id="短语搜索">短语搜索</h3>
+<p>如果你希望搜索<code>BERT GPT</code>的内容，而不希望这两个单词之间有任何其他的内容，那么就要使用双引号把搜索的内容组成一个词组来达到目的。</p>
+<h3 id="去除搜索">去除搜索</h3>
+<p>如果我们只想看到<code>BERT</code>的内容，而不希望看到<code>GPT</code>的内容，就可以把<code>-</code>应用到搜索当中去，语法为<code>BERT -GPT</code>。</p>
+<div class="note info"><p>注意：<code>-</code>之前是有一个空格的，而其后却是和下一个关键词是紧紧相连的。</p>
+</div>
+<h2 id="高级语法">高级语法</h2>
+<h3 id="intitle">intitle</h3>
+<p>这个语法的作用是将搜索的范围局限在标题上。在关键词前面加上这个，就会只对网页的标题进行搜索并且配对，最后将结果返回给用户。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">intitle:GPT</span><br></pre></td></tr></table></figure>
+<h3 id="intext">intext</h3>
+<p>这个语法是用来搜索网页正文内容的，这样就可以忽略网页中的超文本链接、URL 和题目。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">intext:GPT</span><br></pre></td></tr></table></figure>
+<h3 id="inanchor">inanchor</h3>
+<p>这个语法的意思是在页面的链接锚点进行搜索。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">inanchor:GPT</span><br></pre></td></tr></table></figure>
+<div class="note info"><p>链接锚点指的是一个链接的描述文本，如这样的一段 HTML 代码：<code>&lt;a href=https://www.baidu.com&gt;百度&lt;/a&gt;</code>，链接的锚点就是 “百度” 了。</p>
+</div>
+<h3 id="inurl">inurl</h3>
+<p>这个语法会将搜索的范围限制在 URL 或者网站的页面上。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">inurl:GPT</span><br></pre></td></tr></table></figure>
+<h3 id="site">site</h3>
+<p>这个语法是把搜索限制在站点域名之内。例如我们搜索 <code>GPT site:google.com</code>，这样搜索的结果就会是包括所有含有 google.com 域名的有关内容。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">GPT site:google.com</span><br></pre></td></tr></table></figure>
+<h3 id="cache">cache</h3>
+<p>这个语法可以帮助我们查找到 google 索引过的页面副本，即使源文件界面不存在了，或者变成了其它的内容，我们依然可以搜索的到。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">cache:www.baidu.com</span><br></pre></td></tr></table></figure>
+<h3 id="filetype">filetype</h3>
+<p>这个语法可以搜索指定后缀的文件。</p>
+<p>用法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">filetype:pdf</span><br></pre></td></tr></table></figure>
+<h3 id="特定时间">特定时间</h3>
+<p>为了将查询结果限制在一个特定的时间段内，可以采用以下语法：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">avengers endgame before:2019</span><br><span class="line">avengers endgame after:2019-04-01</span><br><span class="line">avengers endgame after:2019-03-01 before:2019-03-05</span><br></pre></td></tr></table></figure>
+<h2 id="数学运算">数学运算</h2>
+<p>当我们需要简单数学运算时，无需费力的点开计算机，只需要直接在 Google 中输入数学算式即可，算式可以包含 <code>+</code>、<code>-</code>、<code>*</code>、<code>/</code> 和括号这些基本的算术功能。例如：<code>(4*8)/2+18-1</code>。</p>
+<h2 id="单位换算">单位换算</h2>
+<p>方便的单位换算，只需要输入你想要换算的两种单位即可，例如：<code>100磅=?公斤</code></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>Google</category>
+      </categories>
+      <tags>
+        <tag>Google</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>语义向量相似度之测地线距离</title>
     <url>/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</url>
     <content><![CDATA[<p>介绍测地线距离在语义向量相似度中的应用。</p>
