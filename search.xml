@@ -162,7 +162,7 @@
 <li><a href="https://github.com/dropreg/R-Drop">https://github.com/dropreg/R-Drop</a></li>
 </ul>
 <span id="more"></span>
-<p>R-Drop示意图如下，即同一条文本输入同样的模型两次，通过dropout得到同一条文本不一样的表示（和SimCSE一样）。然后在计算交叉上损失的同时也计算两个不同表示的KL散度，来使得样本在不同的dropout下也可以得到一致的向量表示，从而提升分类任务的准确性。</p>
+<p>R-Drop示意图如下，即同一条文本输入同样的模型两次，通过dropout得到同一条文本不一样的表示（和SimCSE一样）。然后在计算交叉熵损失的同时也计算两个不同表示的KL散度，来使得样本在不同的dropout下也可以得到一致的向量表示，从而提升分类任务的准确性。</p>
 <p><img src="/2024/02/02/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91R-Drop-Regularized-Dropout-for-Neural-Networks/1.png"></p>
 <div class="note info"><p>Dropout是典型的训练和预测不一致的方法。具体来说，训练时使用了dropout让某些元素随机为0，预测时将dropout关闭，两者未必等价，这就是Dropout的训练预测不一致问题。<br>
 R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使得不同的Dropout下模型的输出基本一致，因此能降低这种不一致性。</p>
