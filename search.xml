@@ -151,6 +151,28 @@
       </tags>
   </entry>
   <entry>
+    <title>LLM训练资源</title>
+    <url>/2024/04/11/LLM%E8%AE%AD%E7%BB%83%E8%B5%84%E6%BA%90/</url>
+    <content><![CDATA[<p>整理收集大模型训练资源。</p>
+<span id="more"></span>
+<h2 id="sft">SFT</h2>
+<ul>
+<li><a href="https://github.com/chaoswork/sft_datasets/tree/master">https://github.com/chaoswork/sft_datasets/tree/master</a></li>
+</ul>
+<h2 id="rlhf">RLHF</h2>
+<ul>
+<li><a href="https://github.com/X-PLUG/CValues">https://github.com/X-PLUG/CValues</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>资源</category>
+      </categories>
+      <tags>
+        <tag>AIGC</tag>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【文献阅读】R-Drop: Regularized Dropout for Neural Networks</title>
     <url>/2024/02/02/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91R-Drop-Regularized-Dropout-for-Neural-Networks/</url>
     <content><![CDATA[<p>论文地址：</p>
