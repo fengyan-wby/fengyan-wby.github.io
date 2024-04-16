@@ -153,13 +153,366 @@
   <entry>
     <title>LLM训练资源</title>
     <url>/2024/04/11/LLM%E8%AE%AD%E7%BB%83%E8%B5%84%E6%BA%90/</url>
-    <content><![CDATA[<p>整理收集大模型训练资源。</p>
+    <content><![CDATA[<p>整理收集大模型中文训练资源。</p>
 <span id="more"></span>
 <h2 id="sft">SFT</h2>
+<table>
+<colgroup>
+<col style="width: 24%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 22%">
+<col style="width: 12%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">数据集</th>
+<th style="text-align: left;">数目</th>
+<th style="text-align: left;">Lang</th>
+<th style="text-align: left;">Task</th>
+<th style="text-align: left;">Gen</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">来源</th>
+<th style="text-align: left;">链接</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/google-research/FLAN">Chain of Thought</a></td>
+<td style="text-align: left;">74771</td>
+<td style="text-align: left;">EN/CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">HG</td>
+<td style="text-align: left;">CoT相关任务</td>
+<td style="text-align: left;">人在现有数据集上标注CoT</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/Chain-of-Thought">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/nomic-ai/gpt4all">GPT4all</a></td>
+<td style="text-align: left;">806199</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">代码，故事，对话</td>
+<td style="text-align: left;">GPT-3.5-turbo 蒸馏</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/GPT4all">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/teknium1/GPTeacher">GPTeacher</a></td>
+<td style="text-align: left;">29013</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">通用，角色扮演，工具指令</td>
+<td style="text-align: left;">GPT-4 &amp; toolformer</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/GPTeacher">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/JosephusCheung/GuanacoDataset">Guanaco</a></td>
+<td style="text-align: left;">534610</td>
+<td style="text-align: left;">ML</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">多种nlp任务</td>
+<td style="text-align: left;">text-davinci-003</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/Guanaco">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/Hello-SimpleAI/HC3">HC3</a></td>
+<td style="text-align: left;">37175</td>
+<td style="text-align: left;">EN/CN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">MIX</td>
+<td style="text-align: left;">对话评估</td>
+<td style="text-align: left;">gpt-3.5 或 人工</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/HC3">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/tatsu-lab/stanford_alpaca">alpaca</a></td>
+<td style="text-align: left;">52002</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">通用指令</td>
+<td style="text-align: left;">text-davinci-003</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/alpaca">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/allenai/natural-instructions">Natural Instructions</a></td>
+<td style="text-align: left;">5040134</td>
+<td style="text-align: left;">ML</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">多种nlp任务</td>
+<td style="text-align: left;">人工标注的数据集的收集</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/Natural-Instructions">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/BelleGroup">belle_cn</a></td>
+<td style="text-align: left;">1079517</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">TS/MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">通用指令，数学推理，对话</td>
+<td style="text-align: left;">text-davunci-003</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/belle_cn">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/XueFuzhao/InstructionWild">instinwild</a></td>
+<td style="text-align: left;">52191</td>
+<td style="text-align: left;">EN/CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">生成，开放域问答，头脑风暴</td>
+<td style="text-align: left;">text-davunci-003</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/instinwild">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/allenai/prosocial-dialog">prosocial dialog</a></td>
+<td style="text-align: left;">165681</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">MIX</td>
+<td style="text-align: left;">对话</td>
+<td style="text-align: left;">GPT-3改写问题，人工回复</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/prosocial-dialog">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/gbharti/finance-alpaca">finance_en</a></td>
+<td style="text-align: left;">68912</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">金融领域问答</td>
+<td style="text-align: left;">GPT3.5</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/bigscience/xP3">xP3</a></td>
+<td style="text-align: left;">78883588</td>
+<td style="text-align: left;">ML</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">多种nlp任务</td>
+<td style="text-align: left;">人工标注的数据集的收集</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/xP3">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/yangjianxin1/Firefly">firefly</a></td>
+<td style="text-align: left;">1649398</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">23种nlp任务</td>
+<td style="text-align: left;">收集中文数据集，人工书写指令模板</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/firefly">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/swype/instruct">instruct</a></td>
+<td style="text-align: left;">888969</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">GPT4All，Alpaca和开源数据集的增强</td>
+<td style="text-align: left;">使用AllenAI提供的nlp增强工具</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/instruct">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/sahil280114/codealpaca">Code Alpaca</a></td>
+<td style="text-align: left;">20022</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">代码生成，编辑，优化</td>
+<td style="text-align: left;">text-davinci-003</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/CodeAlpaca">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM">Alpaca_GPT4</a></td>
+<td style="text-align: left;">52002</td>
+<td style="text-align: left;">EN/CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">通用指令</td>
+<td style="text-align: left;">GPT-4 生成的Alpaca数据</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/alpacaGPT4">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/openai/webgpt_comparisons">webGPT</a></td>
+<td style="text-align: left;">18994</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">MIX</td>
+<td style="text-align: left;">信息检索问答</td>
+<td style="text-align: left;">fine-tuned GPT-3 + 人工评估</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/webGPT">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/databrickslabs/dolly">dolly 2.0</a></td>
+<td style="text-align: left;">15015</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">HG</td>
+<td style="text-align: left;">公开、封闭式问答、信息抽取、摘要生成、开放式构思、分类以及创意写作七类任务</td>
+<td style="text-align: left;">人工标注</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/dolly">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/project-baize/baize-chatbot">baize</a></td>
+<td style="text-align: left;">653699</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">Alpaca和多种问答任务</td>
+<td style="text-align: left;">人工标注的数据集的收集</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/baize">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/anthropics/hh-rlhf">hh-rlhf</a></td>
+<td style="text-align: left;">284517</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">TS</td>
+<td style="text-align: left;">MIX</td>
+<td style="text-align: left;">对话</td>
+<td style="text-align: left;">RLHF models</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/hh-rlhf">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://laion.ai/blog/oig-dataset/">OIG(part)</a></td>
+<td style="text-align: left;">49237</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">多种nlp任务</td>
+<td style="text-align: left;">人工标注的数据集的收集和数据增强</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/OIG">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/OpenLMLab/GAOKAO-Bench">GAOKAO</a></td>
+<td style="text-align: left;">2785</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">高考中的多选，填空等问题</td>
+<td style="text-align: left;">人工标注的数据集的收集</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/GAOKAO">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/lightaime/camel">camel</a></td>
+<td style="text-align: left;">760620</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">物理生物化学编程，数学，社会等领域的角色扮演对话人工标注的数据集的收集</td>
+<td style="text-align: left;">gpt-3.5-turbo 生成</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/camel">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/Muennighoff/flan">FLAN-Muffin</a></td>
+<td style="text-align: left;">1764800</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">60种nlp任务</td>
+<td style="text-align: left;">人工标注的数据集的收集</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/FLAN-Muffin">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/BAAI/COIG">COIG</a></td>
+<td style="text-align: left;">298428</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">COL</td>
+<td style="text-align: left;">考试，翻译，价值观指令数据集搜集，基于知识图谱的反事实对话</td>
+<td style="text-align: left;">自动化工具+人工验证</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/COIG">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/StevenGrove/GPT4Tools">GPT4Tools</a></td>
+<td style="text-align: left;">71446</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;">a collection of tool-related instructions</td>
+<td style="text-align: left;">gpt-3.5-turbo</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/gpt4tools">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/RyokoAI/ShareGPT52K">ShareChat</a></td>
+<td style="text-align: left;">1663241</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;">MT</td>
+<td style="text-align: left;">MIX</td>
+<td style="text-align: left;">general instruct</td>
+<td style="text-align: left;">收集ShareGPT</td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/ShareGPT">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/amazon-science/auto-cot">Auto CoT</a></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/Auto-CoT">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://github.com/OpenLMLab/MOSS">MOSS</a></td>
+<td style="text-align: left;">1583595</td>
+<td style="text-align: left;">EN/CN</td>
+<td style="text-align: left;">SI</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/MOSS">下载</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://github.com/thunlp/UltraChat">ultrachat</a></td>
+<td style="text-align: left;">28247446</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/ultrachat">下载</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://huggingface.co/datasets/lvwerra/stack-exchange-paired">StackLLaMA</a></td>
+<td style="text-align: left;">todo</td>
+<td style="text-align: left;">EN</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>(Lang)Lingual-Tags:</p>
 <ul>
-<li><a href="https://github.com/chaoswork/sft_datasets/tree/master">https://github.com/chaoswork/sft_datasets/tree/master</a></li>
+<li>EN: Instruction datasets in English</li>
+<li>CN: Instruction datasets in Chinese</li>
+<li>ML: [Multi-lingual] Instruction datasets in multiple languages</li>
 </ul>
-<h2 id="rlhf">RLHF</h2>
+<p>(Task)Task-Tags:</p>
+<ul>
+<li>MT: [Multi-task] Datasets containing multiple tasks</li>
+<li>TS: [Task-specific] Datasets tailored for specific tasks</li>
+</ul>
+<p>(Gen)Generation-method:</p>
+<ul>
+<li>HG: [Human Generated Dataset] Datasets created by humans</li>
+<li>SI: [Self-Instruct] Datasets generated using self-instruct methods</li>
+<li>MIX: [Mixed Dataset] Dataset contains both human and machine generated data</li>
+<li>COL: [Collection of Dataset] Dataset made from a collection of other datasets</li>
+</ul>
+<p>来源：<br>
+* <a href="https://github.com/PhoebusSi/Alpaca-CoT/blob/main/CN_README.md">https://github.com/PhoebusSi/Alpaca-CoT/blob/main/CN_README.md</a></p>
+<h2 id="rm-dpo">RM &amp; DPO</h2>
 <ul>
 <li><a href="https://github.com/X-PLUG/CValues">https://github.com/X-PLUG/CValues</a></li>
 </ul>
