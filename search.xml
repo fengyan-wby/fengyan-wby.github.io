@@ -155,6 +155,21 @@
     <url>/2024/04/11/LLM%E8%AE%AD%E7%BB%83%E8%B5%84%E6%BA%90/</url>
     <content><![CDATA[<p>整理收集大模型中文训练资源。</p>
 <span id="more"></span>
+<h2 id="pretrain">Pretrain</h2>
+<table>
+<thead>
+<tr class="header">
+<th>数据集</th>
+<th>数据总量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://data.baai.ac.cn/details/WuDaoCorporaText">WuDaoCorpora Text</a></td>
+<td>5TB</td>
+</tr>
+</tbody>
+</table>
 <h2 id="sft">SFT</h2>
 <table>
 <colgroup>
@@ -512,10 +527,25 @@
 </ul>
 <p>来源：<br>
 * <a href="https://github.com/PhoebusSi/Alpaca-CoT/blob/main/CN_README.md">https://github.com/PhoebusSi/Alpaca-CoT/blob/main/CN_README.md</a></p>
-<h2 id="rm-dpo">RM &amp; DPO</h2>
-<ul>
-<li><a href="https://github.com/X-PLUG/CValues">https://github.com/X-PLUG/CValues</a></li>
-</ul>
+<h2 id="rlhf">RLHF</h2>
+<table>
+<thead>
+<tr class="header">
+<th>数据集</th>
+<th>数据总量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/X-PLUG/CValues">CValues</a></td>
+<td>145000</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/thu-coai/Safety-Prompts">Safety-Prompts</a></td>
+<td>100000</td>
+</tr>
+</tbody>
+</table>
 ]]></content>
       <categories>
         <category>资源</category>
