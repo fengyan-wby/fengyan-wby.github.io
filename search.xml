@@ -160,13 +160,14 @@
 <thead>
 <tr class="header">
 <th>数据集</th>
-<th>数据总量</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><a href="https://data.baai.ac.cn/details/WuDaoCorporaText">WuDaoCorpora Text</a></td>
-<td>5TB</td>
+</tr>
+<tr class="even">
+<td><a href="https://huggingface.co/datasets/Skywork/SkyPile-150B">Skywork/Skypile-150B</a></td>
 </tr>
 </tbody>
 </table>
@@ -1181,7 +1182,7 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <p>当然上述问题也有优化手段，如使用KV Cache。</p>
 <p>Decoder的每次前向过程中，当前timestep之前的KV值都是计算过的，只是之前每次前向完成后计算结果都被丢掉了，只保留了最后的输出结果。于是一个很自然的想法就是Cache，每次前向完，将KV都保留下来，用于之后计算。代码如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#q、k、v 当前 timestep 的 query，key，value</span></span><br><span class="line"><span class="comment"># K_prev,V_prev 之前所有 timestep 的 key 和 value</span></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(time_step):</span><br><span class="line">    ...</span><br><span class="line">    K = torch.cat([K_prev, k], dim=-<span class="number">2</span>) <span class="comment">#[b, h, n, d]</span></span><br><span class="line">    V = torch.cat([V_prev, v], dim=-<span class="number">2</span>) <span class="comment">#[b, h, n, d]</span></span><br><span class="line"></span><br><span class="line">    logits = torch.einsum(<span class="string">&quot;bhd,bhnd-&gt;bhn&quot;</span>, q, K)</span><br><span class="line">    weights = torch.softmax(logits/math.sqrt(d), dim=-<span class="number">1</span>)</span><br><span class="line">    outs = torch.einsum(<span class="string">&quot;bhn,bhnd-&gt;bhd&quot;</span>, weights, V)</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    K_prev, V_prev = K, V</span><br></pre></td></tr></table></figure>
-<p>但在大模型时代，上述办法存在缺陷。比如LLaMa 7B模型，hidden_size是4096，那么每个timestep需缓存参数量为4096<em>2</em>32=262144，假设半精度保存就是512KB，1024长度那就要512MB。而现在英伟达最好的卡H100的SRAM缓存大概是 50MB，而A100则是40MB，KV计算值完全存不进缓存。</p>
+<p>但在大模型时代，上述办法存在缺陷。比如LLaMa 7B模型，hidden_size是4096，那么每个timestep需缓存参数量为<span class="math inline">\(4096 \times 2 \times 32=262144\)</span>，假设半精度保存就是512KB，1024长度那就要512MB。而现在英伟达最好的卡H100的SRAM缓存大概是 50MB，而A100则是40MB，KV计算值完全存不进缓存。</p>
 <p>而且目前SRAM太贵了，我们没有办法直接做大SRAM内存呢，所以这条路现在是不太行的。于是退一步，放不进缓存可以放DRAM上去，而DRAM内存也就是我们常说的GPU显存。 但DRAM读取到计算芯片和SRAM读取到计算芯片的速度，差了一个量级，这会让计算芯片一直在等待数据读取。</p>
 <p>现在我们遇到了当今芯片领域，冯诺依曼架构下最大的一个问题，也就是：Memory Wall（内存墙）。</p>
 <h3 id="加速原理">加速原理</h3>
