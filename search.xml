@@ -720,7 +720,9 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <li>先通过检索，查找与问题相关的文档。</li>
 <li>将文档和问题一并输入生成模型，由模型推理给出最终的答案，从而解决模型无法扩展知识和产生“幻觉”的问题。</li>
 </ol>
-<p>如问题<code>美国现任总统是谁？</code>： 当使用不带有RAG的大模型时，输入输出为：<code>Input:美国现任总统是谁？ Output:截至我的知识库更新时间2020年，美国现任总统是唐纳德·特朗普。</code> 当使用带有RAG的大模型时，输入输出为：<code>Doc:美国现任（第46任）的总统为民主党籍的乔·拜登，于2021年1月20日上任，其搭档的副总统为同党的卡玛拉·哈里斯。 Input:美国现任总统是谁？ Output:乔·拜登。</code></p>
+<p>如问题<code>美国现任总统是谁？</code>：<br>
+当使用不带有RAG的大模型时，输入输出为：<code>Input:美国现任总统是谁？ Output:截至我的知识库更新时间2020年，美国现任总统是唐纳德·特朗普。</code><br>
+当使用带有RAG的大模型时，输入输出为：<code>Doc:美国现任（第46任）的总统为民主党籍的乔·拜登，于2021年1月20日上任，其搭档的副总统为同党的卡玛拉·哈里斯。 Input:美国现任总统是谁？ Output:乔·拜登。</code></p>
 <h2 id="介绍">介绍</h2>
 <p>预训练语言模型可以从数据中学习知识，在不访问外部知识库的情况下，直接作为参数化的隐式知识库，但其也存在以下缺点：</p>
 <ol type="1">
@@ -757,6 +759,7 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <p>在训练过程中，使用端到端的方式同时训练检索器和生成器。输入数据为文本对<span class="math inline">\((x_j,y_j)\)</span>，损失函数采用负对数似然函数<span class="math inline">\(\sum_j-logp(y_j|x_j)\)</span>，优化器使用Adam。</p>
 <p>论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。 因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用<span class="math inline">\(BERT_q\)</span>模型和生成器所使用BART模型的参数进行更新。</p>
 <h2 id="扩展">扩展</h2>
+<p>对于构建一个RAG模型，我们可以将流程分为两步，分别为<code>Database的构建</code>和<code>LLM的生成</code>。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/2.png"></p>
 <h3 id="database的构建">Database的构建</h3>
 <h4 id="faiss">Faiss</h4>
