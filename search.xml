@@ -720,20 +720,21 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <li>先通过检索，查找与问题相关的文档。</li>
 <li>将文档和问题一并输入生成模型，由模型推理给出最终的答案，从而解决模型无法扩展知识和产生“幻觉”的问题。</li>
 </ol>
+<p>如问题<code>美国现任总统是谁？</code>： 当使用不带有RAG的大模型时，输入输出为：<code>Input:美国现任总统是谁？ Output:截至我的知识库更新时间2020年，美国现任总统是唐纳德·特朗普。</code> 当使用带有RAG的大模型时，输入输出为：<code>Doc:美国现任（第46任）的总统为民主党籍的乔·拜登，于2021年1月20日上任，其搭档的副总统为同党的卡玛拉·哈里斯。 Input:美国现任总统是谁？ Output:乔·拜登。</code></p>
 <h2 id="介绍">介绍</h2>
 <p>预训练语言模型可以从数据中学习知识，在不访问外部知识库的情况下，直接作为参数化的隐式知识库，但其也存在以下缺点：</p>
 <ol type="1">
 <li>模型无法扩展或修改知识，比如用某天前的数据预训练的模型无法直接回答该天后发生的事实。</li>
-<li>模型可能产生“幻觉”，比如给出和事实不一致的问答。</li>
+<li>模型可能产生“幻觉”，所有的AI模型的底层原理都是基于数学概率，其模型输出实质上是一系列数值运算，大模型也不例外，所以它有时候会一本正经地胡说八道，尤其是在大模型自身不具备某一方面的知识或不擅长的场景。而这种幻觉问题的区分是比较困难的，因为它要求使用者自身具备相应领域的知识。</li>
 </ol>
 <p>因此，Facebook在2020年提出了RAG（Retrieval-Augmented Generation，检索增强生成）架构，该架构包含生成器与检索器两部分。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/1.png"></p>
-<p>对于问答，例如回答“Define 'middle ear'”这一问题，RAG架构首先将问题输入检索器。检索器包含两个子部分：</p>
+<p>对于问答，例如回答<code>美国现任总统是谁？</code>这一问题，RAG架构首先将问题输入检索器。检索器包含两个子部分：</p>
 <ul>
 <li><code>查询编码器（Query Encoder）</code>：用<span class="math inline">\(q\)</span>表示，其将问题进行向量化。</li>
 <li><code>文档索引（Document Index）</code>：用<span class="math inline">\(d\)</span>表示，其将文档进行向量化，并构建文档向量索引。</li>
 </ul>
-<p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答，例如“The middle ear includes the tympanic cavity and the three ossicles.”</p>
+<p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答，例如<code>乔·拜登</code>。</p>
 <h2 id="方法">方法</h2>
 <p>输入序列用<span class="math inline">\(x\)</span>表示，文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>，生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token（<span class="math inline">\(y_{1:i-1}\)</span>），预测当前token，直至生成完整的回答。</p>
 <h3 id="模型">模型</h3>
@@ -747,7 +748,7 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <h3 id="检索器">检索器</h3>
 <p>检索器可用如下公式表示：</p>
 <p><span class="math display">\[d(z)=BERT_d(z)\]</span> <span class="math display">\[q(x)=BERT_q(x)\]</span> <span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x))\]</span></p>
-<p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用FASIS构建文档向量索引，并使用了HNSW算法对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
+<p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用<code>Faiss</code>构建文档向量索引，并使用了<code>HNSW算法</code>对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
 <div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
 </div>
 <h3 id="生成器">生成器</h3>
@@ -755,6 +756,16 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <h3 id="训练">训练</h3>
 <p>在训练过程中，使用端到端的方式同时训练检索器和生成器。输入数据为文本对<span class="math inline">\((x_j,y_j)\)</span>，损失函数采用负对数似然函数<span class="math inline">\(\sum_j-logp(y_j|x_j)\)</span>，优化器使用Adam。</p>
 <p>论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。 因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用<span class="math inline">\(BERT_q\)</span>模型和生成器所使用BART模型的参数进行更新。</p>
+<h2 id="扩展">扩展</h2>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/2.png"></p>
+<h3 id="database的构建">Database的构建</h3>
+<h4 id="faiss">Faiss</h4>
+<p><a href="https://github.com/facebookresearch/faiss">faiss</a>是一个Facebook AI团队开源的库，全称为Facebook AI Similarity Search，该开源库针对高维空间中的海量数据（稠密向量），提供了高效且可靠的相似性聚类和检索方法，可支持十亿级别向量的搜索，是目前最为成熟的近似近邻搜索库。</p>
+<h4 id="hnsw算法">HNSW算法</h4>
+<p>TODO....</p>
+<h3 id="llm的生成">LLM的生成</h3>
+<p>在RAG中，大模型可以重新训练（针对特殊的输入格式进行微调）也可以不重新训练（通过prompt进行调整）。这里以不重新训练大模型为例，prompt如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">question_answering</span>(<span class="params">context, query</span>):</span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                Give the answer to the user query delimited by triple backticks ```<span class="subst">&#123;query&#125;</span>```\</span></span><br><span class="line"><span class="string">                using the information given in context delimited by triple backticks ```<span class="subst">&#123;context&#125;</span>```.\</span></span><br><span class="line"><span class="string">                If there is no relevant information in the provided context, try to answer yourself, </span></span><br><span class="line"><span class="string">                but tell user that you did not have any relevant context to base your answer on.</span></span><br><span class="line"><span class="string">                Be concise and output the answer of size less than 80 tokens.</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    response = get_completion(instruction, prompt, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line">    answer = response.choices[<span class="number">0</span>].message[<span class="string">&quot;content&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>算法</category>
