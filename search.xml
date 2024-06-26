@@ -721,7 +721,7 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <li>将文档和问题一并输入生成模型，由模型推理给出最终的答案，从而解决模型无法扩展知识和产生“幻觉”的问题。</li>
 </ol>
 <p>如问题：<br>
-<code>美国现任总统是谁？</code>：<br>
+<code>美国现任总统是谁？</code><br>
 当使用不带有RAG的大模型时，输入输出为：<br>
 <code>Input:美国现任总统是谁？ Output:截至我的知识库更新时间2020年，美国现任总统是唐纳德·特朗普。</code><br>
 当使用带有RAG的大模型时，输入输出为：<br>
@@ -766,11 +766,52 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/2.png"></p>
 <h3 id="database的构建">Database的构建</h3>
 <h4 id="faiss">Faiss</h4>
-<p><a href="https://github.com/facebookresearch/faiss">faiss</a>是一个Facebook AI团队开源的库，全称为Facebook AI Similarity Search，该开源库针对高维空间中的海量数据（稠密向量），提供了高效且可靠的相似性聚类和检索方法，可支持十亿级别向量的搜索，是目前最为成熟的近似近邻搜索库。</p>
-<h4 id="hnsw算法">HNSW算法</h4>
-<p>TODO....</p>
+<p><a href="https://github.com/facebookresearch/faiss">Faiss</a>是一个Facebook AI团队开源的库，全称为Facebook AI Similarity Search，该开源库针对高维空间中的海量数据（稠密向量），提供了高效且可靠的相似性聚类和检索方法，可支持十亿级别向量的搜索，是目前最为成熟的近似近邻搜索库。</p>
+<h4 id="hnswhierarchcal-navigable-small-world-graphs算法">HNSW（Hierarchcal Navigable Small World graphs）算法</h4>
+<p>在浩渺的数据长河中做高效率相似性查找一直以来都是让人头疼的问题。比如，我在搜狗app上阅读了一篇文章，推荐系统就应当为我推送与这篇文章最相近的文章，数据库中所有文章是用向量表示的，所以我们要解决的问题就是“找到与这篇文章的向量最相近的几个向量”，然后把这些向量对应的文章推送出去。数据库中的文章千千万，所有用户每秒的请求也是千千万，我们需要又快又准又相对节约资源的办法来解决这个问题。</p>
+<h5 id="朴素法">朴素法</h5>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/3.png"></p>
+<p>请大家把目光投向上面这张图。假设我们现在有13个2维数据向量，我们把这些向量放在了一个平面直角坐标系内，隐去坐标系刻度，它们的位置关系如上图所示。</p>
+<p>朴素查找法：不少人脑子里都冒出过这样的朴素想法，把某些点和点之间连上线，构成一个查找图，存下来备用；当我想查找与粉色点最近的一点时，我从任意一个黑色点出发，计算它和粉色点的距离，与这个任意黑色点有连接关系的点我们称之为“友点”，然后我要计算这个黑色点的所有“友点”与粉色点的距离，从所有“友点”中选出与粉色点最近的一个点，把这个点作为下一个进入点，继续按照上面的步骤查找下去。如果当前黑色点对粉色点的距离比所有“友点”都近，终止查找，这个黑色点就是我们要找的离粉色点最近的点。</p>
+<p>如果你没看懂上面的文字描述，我们来举个例子。目标：我们要查找与粉色点最近的点。步骤：从任意一个黑色点出发，这里我们随便选个C点吧，计算一下C点和粉色点的距离，存下来备用，再计算C点的所有友点（A，I，B）与粉色点的距离（计算距离和度量的方式有多种，这里我们采用欧氏距离，就是二维物理空间上的“近和远”），我们计算得出B与粉色点的距离最近，而且B点距离粉色点的距离比C点距离粉色点的距离（前面算过）更近，所以我们下面用B点继续查找。B点距离粉色点的距离保存下来，B点的友点是E，A，C，I，H，分别计算它们与粉色点的距离，得到E点与粉色点距离最近，且E点比B点距离粉色点还要近，所以我们选择E点作为下一个查找点。E点的友点是J，B，D，G，这时我们发现J点的与粉色点的距离最近，但是由于J点的距离粉色点的距离比E点还要远，所以满足了终止查找的条件，因此我们返回E点。</p>
+<p>朴素想法之所以叫朴素想法就是因为它的缺点非常多。首先，我们发现图中的K点是无法被查询到的，因为K点没有友点，怎么办？。其次，如果我们要查找距离粉色点最近的两个点，而这两个近点之间如果没有连线，那么将大大影响效率（比如L和E点，如果L和E有连线，那么我们可以轻易用上述方法查出距离粉色点最近的两个点），怎么办？。最后一个大问题，D点真的需要这么多“友点”吗？谁是谁的友点应该怎么确定呢？</p>
+<p>关于K点的问题，我们规定在构图时所有数据向量节点都必须有友点。<br>
+关于L和E的问题，我们规定在构图时所有距离相近（相似）到一定程度的向量必须互为友点。<br>
+关于D点问题，权衡构造这张图的时间复杂度，我们规定尽量减少每个节点的“友点”数量。</p>
+<h5 id="nsw算法">NSW算法</h5>
+<p>在图论中有一个很好的剖分法则专门解决上一节中提到的朴素想法的缺陷问题------德劳内（Delaunay）三角剖分算法，这个算法可以达成如下要求：</p>
+<ol type="1">
+<li>图中每个点都有“友点”。</li>
+<li>相近的点都互为“友点”。</li>
+<li>图中所有连接（线段）的数量最少。效果如下图。</li>
+</ol>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/4.png"></p>
+<p>但NSW没有采用德劳内三角剖分法来构成德劳内三角网图，原因之一是德劳内三角剖分构图算法时间复杂度太高，换句话说，构图太耗时。原因之二是德劳内三角形的查找效率并不一定最高，如果初始点和查找点距离很远的话我们需要进行多次跳转才能查到其临近点，需要“高速公路”机制（Expressway mechanism, 这里指部分远点之间拥有线段连接，以便于快速查找）。在理想状态下，我们的算法不仅要满足上面三条需求，还要算法复杂度低，同时配有高速公路机制的构图法。</p>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/5.png"></p>
+<p>NSW论文中配了这样一张图，黑色是近邻点的连线，红色线就是“高速公路机制”了。我们从enter point点进入查找，查找绿色点临近节点的时候，就可以用过红色连线“高速公路机制”快速查找到结果。</p>
+<p>NSW朴素构图算法在这里：向图中逐个插入点，插图一个全新点时，通过朴素想法中的朴素查找法（通过计算“友点”和待插入点的距离来判断下一个进入点是哪个点）查找到与这个全新点最近的m个点（m由用户设置），连接全新点到m个点的连线。完了。</p>
+<p>在上面这个戛然而止的算法描述中有些读者肯定会问，就这么简单？对，就这么简单。我们来理智地分析一下这个算法。首先，我们的构图算法是逐点随机插入的，这就意味着在图构建的早期，很有可能构建出“高速公路”。假设我们现在要构成10000个点组成的图，设置m=4（每个点至少有4个“友点”），这10000个点中有两个点，p和q，他们俩坐标完全一样。假设在插入过程中我们分别在第10次插入p，在第9999次插入q，请问p和q谁更容易具有“高速公路”？答：因为在第10次插入时，只见过前9个点，故只能在前9个点中选出距离最近的4个点（m=4）作为“友点”，而q的选择就多了，前9998个点都能选，所以q的“友点”更接近q，p的早期“友点”不一定接近p，所以p更容易具有“高速公路”。结论：一个点，越早插入就越容易形成与之相关的“高速公路”连接，越晚插入就越难形成与之相关的“高速公路”连接。所以这个算法设计的妙处就在于扔掉德劳内三角构图法，改用“无脑添加”（NSW朴素插入算法），降低了构图算法时间复杂度的同时还带来了数量有限的“高速公路”，加速了查找。</p>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/6.png"></p>
+<p>继续举个例子来说明。我们对7个二维点进行构图，用户设置m=3（每个点在插入时找3个紧邻友点）。首先初始点是A点（随机出来的），A点插入图中只有它自己，所以无法挑选“友点”。然后是B点，B点只有A点可选，所以连接BA，此为第1次构造。然后插入F点，F只有A和B可以选，所以连接FA，FB，此为第2此构造。然后插入了C点，同样地，C点只有A，B，F可选，连接CA，CB，CF，此为第3次构造。重点来了，然后插入了E点，E点在A，B，F，C中只能选择3个点（m=3）作为“友点”，根据我们前面讲规则，要选最近的三个，怎么确定最近呢？朴素查找！从A，B，C，F任意一点出发，计算出发点与E的距离和出发点的所有“友点”和E的距离，选出最近的一点作为新的出发点，如果选出的点就是出发点本身，那么看我们的m等于几，如果不够数，就继续找第二近的点或者第三近的点，本着不找重复点的原则，直到找到3个近点为止。由此，我们找到了E的三个近点，连接EA，EC，EF，此为第四次构造。第5次构造和第6次与E点的插入一模一样，都是在“现成”的图中查找到3个最近的节点作为“友点”，并做连接。</p>
+<p>图画完了，请关注E点和A点的连线，如果我再这个图的基础上再插入6个点，这6个点有3个和E很近，有3个和A很近，那么距离E最近的3个点中没有A，距离A最近的3个点中也没有E，但因为A和E是构图早期添加的点，A和E有了连线，我们管这种连线叫“高速公路”，在查找时可以提高查找效率（当进入点为E，待查找距离A很近时，我们可以通过AE连线从E直接到达A，而不是一小步一小步分多次跳转到A）。</p>
+<h5 id="hnsw算法">HNSW算法</h5>
+<p>HNSW算法就是<code>跳表结构</code>+<code>NSW算法</code>。</p>
+<p>首先来看跳表结构。设有有序链表，名叫sorted_link，里面有n个节点，每个节点是一个整数。我们从表头开始查找，查找第t个节点需要跳转几次？答：t-1次。把n个节点分成n次查找的需求，都查找一遍，需要跳转几次？答： （0+1+2+3+.....+（n-1））次。如果我这链表长成下图这样呢？</p>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/7.png"></p>
+<p>这已经不是一个有序链表了，这是三个有序链表+分层连接指针构成的跳表了。看这张示意图就能明白它的查找过程，先查第一层，然后查第二层，然后查第三层，然后找到结果。如果把上段所描述的名字叫sorted_link的链表建立成这样的跳表，那么把sorted_link中的所有元素都查一遍还需要花费（0+1+2+3+.....+（n-1））次吗？当然不需要。</p>
+<p>跳表怎么构建呢？三个字，抛硬币。对于sorted_link链表中的每个节点进行抛硬币，如抛正，则该节点进入上一层有序链 表，每个sorted_link中的节点有50%的概率进入上一层有序链表。将上一层有序链表中和sorted_link链表中相同的元素做一一对应的指针链接。再从sorted_link上一层链表中再抛硬币，sorted_link上一层链表中的节点有50%的可能进入最表层，相当于sorted_link中的每个节点有25%的概率进入最表层。以此类推。</p>
+<p>这样就保证了表层是“高速通道”，底层是精细查找，这个思想被应用到了NSW算法中，变成了其升级版-----HNSW。</p>
+<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/8.png"></p>
 <h3 id="llm的生成">LLM的生成</h3>
-<p>在RAG中，大模型可以重新训练（针对特殊的输入格式进行微调）也可以不重新训练（通过prompt进行调整）。这里以不重新训练大模型为例，prompt如下：</p>
+<p>在RAG中，大模型可以重新训练（针对特殊的输入格式进行微调）也可以不重新训练（通过prompt进行调整）。</p>
+<p><strong>重新训练（针对特殊的输入格式进行微调）</strong></p>
+<ul>
+<li><code>RAG-Sequence Model</code><br>
+<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<li><code>RAG-Token Model</code><br>
+<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+</ul>
+<p><strong>不重新训练（通过prompt进行调整）</strong></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">question_answering</span>(<span class="params">context, query</span>):</span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                Give the answer to the user query delimited by triple backticks ```<span class="subst">&#123;query&#125;</span>```\</span></span><br><span class="line"><span class="string">                using the information given in context delimited by triple backticks ```<span class="subst">&#123;context&#125;</span>```.\</span></span><br><span class="line"><span class="string">                If there is no relevant information in the provided context, try to answer yourself, </span></span><br><span class="line"><span class="string">                but tell user that you did not have any relevant context to base your answer on.</span></span><br><span class="line"><span class="string">                Be concise and output the answer of size less than 80 tokens.</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    response = get_completion(instruction, prompt, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line">    answer = response.choices[<span class="number">0</span>].message[<span class="string">&quot;content&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
