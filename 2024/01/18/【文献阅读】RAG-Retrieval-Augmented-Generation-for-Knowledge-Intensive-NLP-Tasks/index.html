@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/7.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/8.png">
 <meta property="article:published_time" content="2024-01-18T14:49:54.000Z">
-<meta property="article:modified_time" content="2024-06-27T02:43:07.865Z">
+<meta property="article:modified_time" content="2024-06-27T02:56:30.417Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="RAG">
@@ -546,7 +546,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-06-27 02:43:07" itemprop="dateModified" datetime="2024-06-27T02:43:07+00:00">2024-06-27</time>
+      <time title="修改时间：2024-06-27 02:56:30" itemprop="dateModified" datetime="2024-06-27T02:56:30+00:00">2024-06-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -591,7 +591,7 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>4.7k</span>
+      <span>4.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -682,13 +682,14 @@ if(canvas.getContext){
 <li>继续按照上面的步骤查找下去。如果当前黑色点对粉色点的距离比所有“友点”都近，终止查找，这个黑色点就是我们要找的离粉色点最近的点。</li>
 </ol>
 <p>整个思想就是找出当前点及其邻近点与目标点之间的最近的那个点，然后把它当作当前点，再次循环。举个例子。</p>
-<p>目标：我们要查找与粉色点最近的点。 步骤：</p>
+<div class="note default"><p>目标：我们要查找与粉色点最近的点。 步骤：</p>
 <ol type="1">
 <li>从任意一个黑色点出发，这里我们随便选个C点吧，计算一下C点和粉色点的距离，存下来备用;</li>
 <li>再计算C点的所有友点（A，I，B）与粉色点的距离（计算距离和度量的方式有多种，这里我们采用欧氏距离，就是二维物理空间上的“近和远”），我们计算得出B与粉色点的距离最近，而且B点距离粉色点的距离比C点距离粉色点的距离（前面算过）更近；</li>
 <li>所以我们下面用B点继续查找。B点距离粉色点的距离保存下来，B点的友点是E，A，C，I，H，分别计算它们与粉色点的距离，得到E点与粉色点距离最近，且E点比B点距离粉色点还要近，所以我们选择E点作为下一个查找点。</li>
 <li>E点的友点是J，B，D，G，这时我们发现J点的与粉色点的距离最近，但是由于J点的距离粉色点的距离比E点还要远，所以满足了终止查找的条件，因此我们返回E点。</li>
 </ol>
+</div>
 <p>朴素想法之所以叫朴素想法就是因为它的缺点非常多。</p>
 <ol type="1">
 <li>首先，我们发现图中的K点是无法被查询到的，因为K点没有友点。</li>
@@ -711,14 +712,14 @@ if(canvas.getContext){
 <li>图中所有连接（线段）的数量最少。效果如下图。</li>
 </ol>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/4.png"></p>
-<p>但NSW没有采用德劳内三角剖分法来构成德劳内三角网图，原因之一是：</p>
+<p>但NSW没有采用德劳内三角剖分法来构成德劳内三角网图，原因是：</p>
 <ul>
 <li>德劳内三角剖分构图算法时间复杂度太高，换句话说，构图太耗时。</li>
 <li>德劳内三角形的查找效率并不一定最高，如果初始点和查找点距离很远的话我们需要进行多次跳转才能查到其临近点，需要“高速公路”机制（Expressway mechanism, 这里指部分远点之间拥有线段连接，以便于快速查找）。</li>
 </ul>
 <p>在理想状态下，我们的算法不仅要满足上面三条需求，还要算法复杂度低，同时配有高速公路机制的构图法。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/5.png"></p>
-<p>NSW论文中配了这样一张图，黑色是近邻点的连线，红色线就是“高速公路机制”了。我们从enter point点进入查找，查找绿色点临近节点的时候，就可以用过红色连线“高速公路机制”快速查找到结果。</p>
+<p>如上图所示，这是NSW论文中给出的一张满足条件的网络图，可以发现黑色是近邻点的连线，红色线就是“高速公路机制”了。我们从enter point点进入查找，查找绿色点临近节点的时候，就可以用过红色连线“高速公路机制”快速查找到结果。</p>
 <p>NSW朴素构图算法：</p>
 <ol type="1">
 <li>向图中逐个插入点，点的选取上随机的；</li>
@@ -726,7 +727,7 @@ if(canvas.getContext){
 <li>连接全新点到m个点的连线。</li>
 </ol>
 <p>仔细分析这个简单的构图方法，其中有一个精妙之处就是构图算法是逐点随机插入的，这就意味着在图构建的早期，很有可能构建出“高速公路”。假设我们现在要构成10000个点组成的图，设置m=4（每个点至少有4个“友点”），这10000个点中有两个点，p和q，他们俩坐标完全一样。假设在插入过程中我们分别在第10次插入p，在第9999次插入q，请问p和q谁更容易具有“高速公路”？答：因为在第10次插入时，只见过前9个点，故只能在前9个点中选出距离最近的4个点（m=4）作为“友点”，而q的选择就多了，前9998个点都能选，所以q的“友点”更接近q，p的早期“友点”不一定接近p，所以p更容易具有“高速公路”。结论：一个点，越早插入就越容易形成与之相关的“高速公路”连接，越晚插入就越难形成与之相关的“高速公路”连接。所以这个算法设计的妙处就在于扔掉德劳内三角构图法，改用“无脑添加”（NSW朴素插入算法），降低了构图算法时间复杂度的同时还带来了数量有限的“高速公路”，加速了查找。</p>
-<p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/6.png"></p>
+<div class="note default"><p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/6.png"></p>
 <p>如上图所示就是一个构建好的NSW网络图，我们说明一下过程：</p>
 <ol type="1">
 <li>我们对7个二维点进行构图，用户设置m=3（每个点在插入时找3个紧邻友点）。</li>
@@ -738,6 +739,7 @@ if(canvas.getContext){
 <li>第5次构造和第6次与E点的插入一模一样，都是在“现成”的图中查找到3个最近的节点作为“友点”，并做连接。</li>
 </ol>
 <p>图画完了，请关注E点和A点的连线，如果我再这个图的基础上再插入6个点，这6个点有3个和E很近，有3个和A很近，那么距离E最近的3个点中没有A，距离A最近的3个点中也没有E，但因为A和E是构图早期添加的点，A和E有了连线，我们管这种连线叫“高速公路”，在查找时可以提高查找效率（当进入点为E，待查找距离A很近时，我们可以通过AE连线从E直接到达A，而不是一小步一小步分多次跳转到A）。</p>
+</div>
 <h5 id="hnsw算法">HNSW算法</h5>
 <p>HNSW算法就是<code>跳表结构</code>+<code>NSW算法</code>。</p>
 <p>首先来看跳表结构。设有有序链表，名叫sorted_link，里面有n个节点，每个节点是一个整数。我们从表头开始查找，查找第t个节点需要跳转几次？答：t-1次。把n个节点分成n次查找的需求，都查找一遍，需要跳转几次？答： （0+1+2+3+.....+（n-1））次。如果我这链表长成下图这样呢？</p>
@@ -843,7 +845,7 @@ if(canvas.getContext){
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:56</span>
+    <span title="站点阅读时长">11:57</span>
   </span>
 </div>
 <div class="busuanzi-count">

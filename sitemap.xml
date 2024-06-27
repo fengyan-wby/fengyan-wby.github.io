@@ -182,15 +182,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</loc>
-    
-    <lastmod>2024-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2023/06/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RoFormer-Enhanced-Transformer-with-Rotary-Position-Embedding/</loc>
     
     <lastmod>2024-06-27</lastmod>
@@ -218,6 +209,15 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</loc>
+    
+    <lastmod>2024-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/05/05/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Prompt-Tuning-The-Power-of-Scale-for-Parameter-Efficient-Prompt-Tuning/</loc>
     
     <lastmod>2024-06-27</lastmod>
@@ -236,7 +236,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
+    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -245,7 +245,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
+    <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -263,7 +263,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA/</loc>
+    <loc>https://fengyan-wby.github.io/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -272,7 +272,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/01/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91LST-Ladder-Side-Tuning-for-Parameter-and-Memory-Efficient-Transfer-Learning/</loc>
+    <loc>https://fengyan-wby.github.io/2023/12/21/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91MQA%E5%92%8CGQA/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -299,7 +299,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/03/15/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91KOSMOS-1-Language-Is-Not-All-You-Need-Aligning-Perception-with-Language-Models/</loc>
+    <loc>https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -308,7 +308,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/</loc>
+    <loc>https://fengyan-wby.github.io/2023/03/15/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91KOSMOS-1-Language-Is-Not-All-You-Need-Aligning-Perception-with-Language-Models/</loc>
     
     <lastmod>2024-06-27</lastmod>
     
@@ -696,13 +696,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/hexo/</loc>
-    <lastmod>2024-06-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/tags/GPT/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -711,6 +704,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/hexo/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -808,6 +808,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/Spring-Boot/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/TensorFlow/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -823,13 +830,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/Transformer/</loc>
-    <lastmod>2024-06-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/Spring-Boot/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1167,6 +1167,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/AIGC/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%8D%9A%E5%AE%A2/Hexo/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -1175,13 +1182,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E8%B5%84%E6%BA%90/</loc>
-    <lastmod>2024-06-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/AIGC/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1216,7 +1216,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/TensorFlow/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Spring-Boot/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1230,7 +1230,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Spring-Boot/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/TensorFlow/</loc>
     <lastmod>2024-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
