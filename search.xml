@@ -727,10 +727,10 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 当使用带有RAG的大模型时，输入输出为：<br>
 <code>Doc:美国现任（第46任）的总统为民主党籍的乔·拜登，于2021年1月20日上任，其搭档的副总统为同党的卡玛拉·哈里斯。 Input:美国现任总统是谁？ Output:乔·拜登。</code></p>
 <h2 id="介绍">介绍</h2>
-<p>预训练语言模型可以从数据中学习知识，在不访问外部知识库的情况下，直接作为参数化的隐式知识库，但其也存在以下缺点：</p>
+<p>预训练语言模型可以从数据中学习知识，在不访问外部知识库的情况下，直接使用参数化的隐式知识库，但其存在以下缺点：</p>
 <ol type="1">
-<li>模型无法扩展或修改知识，比如用某天前的数据预训练的模型无法直接回答该天后发生的事实。</li>
-<li>模型可能产生“幻觉”，所有的AI模型的底层原理都是基于数学概率，其模型输出实质上是一系列数值运算，大模型也不例外，所以它有时候会一本正经地胡说八道，尤其是在大模型自身不具备某一方面的知识或不擅长的场景。而这种幻觉问题的区分是比较困难的，因为它要求使用者自身具备相应领域的知识。</li>
+<li>模型无法扩展或修改知识，比如用某天前的数据预训练的模型无法直接回答该天后发生的事。</li>
+<li>模型可能产生“幻觉”，所有的AI模型的底层原理都是基于数学概率，其模型输出实质上是一系列数值运算，大模型也不例外，所以它有时候会一本正经地胡说八道，尤其是在大模型自身不具备某一方面的知识时或在不擅长的场景上更容易出错。而这种幻觉问题的区分是比较困难的，因为它要求使用者自身具备相应领域的知识。</li>
 </ol>
 <p>因此，Facebook在2020年提出了RAG（Retrieval-Augmented Generation，检索增强生成）架构，该架构包含生成器与检索器两部分。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/1.png"></p>
@@ -741,15 +741,11 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 </ul>
 <p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答。</p>
 <h2 id="方法">方法</h2>
-<p>输入序列用<span class="math inline">\(x\)</span>表示，文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>，生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token（<span class="math inline">\(y_{1:i-1}\)</span>），预测当前token，直至生成完整的回答。</p>
-<h3 id="模型">模型</h3>
-<p>论文采用端到端的方式对检索器和生成器进行联合训练，并且采用两种模型。</p>
-<ul>
-<li><code>RAG-Sequence Model</code><br>
-<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
-<li><code>RAG-Token Model</code><br>
-<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
-</ul>
+<ol type="1">
+<li>输入序列用<span class="math inline">\(x\)</span>表示。</li>
+<li>文档检索器为<span class="math inline">\(p_{\eta}(z|x)\)</span>，其根据<span class="math inline">\(x\)</span>返回最相关的K个文档<span class="math inline">\(z\)</span>。</li>
+<li>生成器为<span class="math inline">\(p_{\theta}(y_i|x,z,y_{1:i-1})\)</span>，其通过自回归的方式，根据<span class="math inline">\(x\)</span>和<span class="math inline">\(z\)</span>，以及前<span class="math inline">\(i-1\)</span>个生成的token（<span class="math inline">\(y_{1:i-1}\)</span>），预测当前token，直至生成完整的回答。</li>
+</ol>
 <h3 id="检索器">检索器</h3>
 <p>检索器可用如下公式表示：</p>
 <p><span class="math display">\[d(z)=BERT_d(z)\]</span> <span class="math display">\[q(x)=BERT_q(x)\]</span> <span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x))\]</span></p>
@@ -757,9 +753,16 @@ R-Drop通过增加一个正则项，来强化模型对Dropout的鲁棒性，使�
 <div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
 </div>
 <h3 id="生成器">生成器</h3>
-<p>生成器使用了Facebook发布的大语言模型<a href="https://arxiv.org/pdf/1910.13461.pdf">BART-Large</a>，其采用编码器+解码器架构，共有4亿个参数。论文直接将问题和检索器返回的相关文档拼接在一起作为生成器的输入。</p>
+<p>生成器使用了Facebook发布的大语言模型<a href="https://arxiv.org/pdf/1910.13461.pdf">BART-Large</a>，其采用编码器+解码器架构，共有4亿个参数。<br>
+论文直接将问题和检索器返回的相关文档拼接在一起作为生成器的输入。</p>
 <h3 id="训练">训练</h3>
-<p>在训练过程中，使用端到端的方式同时训练检索器和生成器。输入数据为文本对<span class="math inline">\((x_j,y_j)\)</span>，损失函数采用负对数似然函数<span class="math inline">\(\sum_j-logp(y_j|x_j)\)</span>，优化器使用Adam。</p>
+<p>论文采用端到端的方式对检索器和生成器进行联合训练，输入数据为文本对<span class="math inline">\((x,y)\)</span>。</p>
+<ul>
+<li><code>RAG-Sequence Model</code><br>
+<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<li><code>RAG-Token Model</code><br>
+<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+</ul>
 <p>论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。 因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用<span class="math inline">\(BERT_q\)</span>模型和生成器所使用BART模型的参数进行更新。</p>
 <h2 id="扩展">扩展</h2>
 <p>对于构建一个RAG模型，我们可以将流程分为两步，分别为<code>Database的构建</code>和<code>LLM的生成</code>。</p>
