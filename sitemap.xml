@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/</loc>
+    <loc>https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</loc>
+    <loc>https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -182,24 +182,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/06/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RoFormer-Enhanced-Transformer-with-Rotary-Position-Embedding/</loc>
-    
-    <lastmod>2024-07-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91SimCLR-A-Simple-Framework-for-Contrastive-Learning-of-Visual-Representations/</loc>
-    
-    <lastmod>2024-07-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2024/02/02/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91R-Drop-Regularized-Dropout-for-Neural-Networks/</loc>
     
     <lastmod>2024-07-01</lastmod>
@@ -210,6 +192,24 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</loc>
+    
+    <lastmod>2024-07-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/06/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RoFormer-Enhanced-Transformer-with-Rotary-Position-Embedding/</loc>
+    
+    <lastmod>2024-07-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91SimCLR-A-Simple-Framework-for-Contrastive-Learning-of-Visual-Representations/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -236,15 +236,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
-    
-    <lastmod>2024-07-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2023/04/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-tuning-GPT-Understands-Too/</loc>
     
     <lastmod>2024-07-01</lastmod>
@@ -255,6 +246,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/</loc>
+    
+    <lastmod>2024-07-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91P-Tuning-v2-Prompt-Tuning-Can-Be-Comparable-to-Fine-tuning-Universally-Across-Scales-and-Tasks/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -299,7 +299,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/</loc>
+    <loc>https://fengyan-wby.github.io/2023/03/15/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91KOSMOS-1-Language-Is-Not-All-You-Need-Aligning-Perception-with-Language-Models/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -308,7 +308,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/03/15/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91KOSMOS-1-Language-Is-Not-All-You-Need-Aligning-Perception-with-Language-Models/</loc>
+    <loc>https://fengyan-wby.github.io/2023/08/22/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Generating-Long-Sequences-with-Sparse-Transformers/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -327,15 +327,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/03/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91GLM-General-Language-Model-Pretraining-with-Autoregressive-Blank-Infilling/</loc>
-    
-    <lastmod>2024-07-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
@@ -372,6 +363,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/</loc>
+    
+    <lastmod>2024-07-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/03/30/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91DALL%C2%B7E-2-Hierarchical-Text-Conditional-Image-Generation-with-CLIP-Latents/</loc>
     
     <lastmod>2024-07-01</lastmod>
     
