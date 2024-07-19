@@ -11,6 +11,24 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/categories/index.html</loc>
+    
+    <lastmod>2024-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/ghchart/index.html</loc>
+    
+    <lastmod>2024-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/2023/11/24/%E9%87%91%E8%9E%8D%E8%82%A1%E7%A5%A8%E5%AD%A6%E4%B9%A0%E9%9C%80%E8%A6%81%E9%98%85%E8%AF%BB%E7%9A%84%E4%B9%A6%E7%B1%8D/</loc>
     
     <lastmod>2024-07-19</lastmod>
@@ -30,24 +48,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/archives/index.html</loc>
-    
-    <lastmod>2024-07-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/categories/index.html</loc>
-    
-    <lastmod>2024-07-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/ghchart/index.html</loc>
     
     <lastmod>2024-07-19</lastmod>
     
@@ -632,24 +632,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/</loc>
-    
-    <lastmod>2024-07-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/27/AC%E7%AE%97%E6%B3%95/</loc>
-    
-    <lastmod>2024-07-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
     
     <lastmod>2024-07-19</lastmod>
@@ -660,6 +642,24 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/</loc>
+    
+    <lastmod>2024-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/05/26/AIGC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B1%87%E6%80%BB/</loc>
+    
+    <lastmod>2024-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/27/AC%E7%AE%97%E6%B3%95/</loc>
     
     <lastmod>2024-07-19</lastmod>
     
@@ -1232,13 +1232,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Spring-Boot/</loc>
-    <lastmod>2024-07-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/TensorFlow/</loc>
     <lastmod>2024-07-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -1247,6 +1240,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/Ubuntu/</loc>
+    <lastmod>2024-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Spring-Boot/</loc>
     <lastmod>2024-07-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
