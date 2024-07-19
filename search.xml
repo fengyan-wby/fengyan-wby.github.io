@@ -151,6 +151,32 @@
       </tags>
   </entry>
   <entry>
+    <title>Resource注解</title>
+    <url>/2024/07/19/Resource%E6%B3%A8%E8%A7%A3/</url>
+    <content><![CDATA[<p>介绍@Resource的配置。</p>
+<span id="more"></span>
+<h2 id="指定了nametype的情况">指定了name/type的情况</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 如果制定了name或者type，则直接通过name或者type去进行匹配</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// beanName和beanType一样则匹配成功</span></span><br><span class="line"><span class="meta">@Resource(name=&quot;beanName&quot;, type=beanType.class)</span></span><br><span class="line"><span class="keyword">private</span> XXX xxx;</span><br><span class="line"></span><br><span class="line"><span class="comment">// beanName一样则匹配成功</span></span><br><span class="line"><span class="meta">@Resource(name=&quot;beanName&quot;)</span></span><br><span class="line"><span class="keyword">private</span> XXX xxx;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// beanType一样则匹配成功</span></span><br><span class="line"><span class="meta">@Resource(type=beanType.class)</span></span><br><span class="line"><span class="keyword">private</span> XXX xxx;</span><br></pre></td></tr></table></figure>
+<p>具体例子 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// bean的id注册为ps</span></span><br><span class="line"><span class="meta">@Component(value=&quot;ps&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 名字匹配上注册的id了，匹配成功</span></span><br><span class="line"><span class="meta">@Resource(name=&quot;ps&quot;)</span></span><br><span class="line"><span class="keyword">private</span> Person person;</span><br></pre></td></tr></table></figure></p>
+<h2 id="未指定nametype的情况">未指定name/type的情况</h2>
+<ol type="1">
+<li>先匹配变量名</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 变量名ps和bean id ps匹配上了，匹配成功</span></span><br><span class="line"><span class="meta">@Resource</span></span><br><span class="line"><span class="keyword">private</span> Person ps;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>再匹配类型</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 变量名person和bean id ps匹配不上，转而匹配类型</span></span><br><span class="line"><span class="comment">// person变量属性的类型为Person类，容器中的id为ps的bean的类型也为Person类型，因此此种情况下也可以匹配</span></span><br><span class="line"><span class="meta">@Resource</span></span><br><span class="line"><span class="keyword">private</span> Person person;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工程</category>
+        <category>Spring Boot</category>
+      </categories>
+      <tags>
+        <tag>Spring Boot</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LLM训练资源</title>
     <url>/2024/04/11/LLM%E8%AE%AD%E7%BB%83%E8%B5%84%E6%BA%90/</url>
     <content><![CDATA[<p>整理收集大模型中文训练资源。</p>
