@@ -151,6 +151,34 @@
       </tags>
   </entry>
   <entry>
+    <title>Git仓库清理</title>
+    <url>/2024/07/23/Git%E4%BB%93%E5%BA%93%E6%B8%85%E7%90%86/</url>
+    <content><![CDATA[<p>如何清理过大的Git仓库。</p>
+<span id="more"></span>
+<h2 id="彻底清理">彻底清理</h2>
+<p>这种方式是清理掉仓库的所有提交记录，比较彻底，但会丢失一些东西。</p>
+<ol type="1">
+<li>首先使用 --orphan 命令创建一个全新的分支new-branch，这个新建的分支和其他分支没有任何关系，它不会包含任何先前的提交记录或者历史记录。相当于新建了一个干净的空分支，并让该分支指向一个全新的根节点。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout --orphan &lt;new-branch-name&gt;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>然后 commit 全部的项目文件到这个分支，暂不需要推到远程仓库。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add -A</span><br><span class="line">git commit -am <span class="string">&quot;Initial commit&quot;</span></span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>接着删除旧的分支，并把新建的分支名改成旧分支名称，推到远程仓库就行了。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -D &lt;old-branch-name&gt;</span><br><span class="line">git branch -m &lt;old-branch-name&gt;</span><br><span class="line">git push -f origin &lt;old-branch-name&gt;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Resource注解</title>
     <url>/2024/07/19/Resource%E6%B3%A8%E8%A7%A3/</url>
     <content><![CDATA[<p>介绍@Resource的配置。</p>
