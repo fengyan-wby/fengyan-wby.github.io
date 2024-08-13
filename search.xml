@@ -326,20 +326,77 @@
 </div>
 <p>经过随机打乱后，两个集合的最小哈希值相等的概率=两集合的Jaccard的相似度证明如下：</p>
 <ol type="1">
-<li>S1与S2的交集元素个数为X，并集个数为X+Y，所以Jaccard(S1,S2)=X/(X+Y)。</li>
-<li>随机打乱后h(S1)=h(S2)的概率等于从上往下扫描，在遇到Y行之前遇到X行的概率（Z行没有影响），或者说把X个黑球和Y个白球放入一个袋子中，首次拿到黑球的概率，即h(S1)=h(S2)的概率为X/(X+Y)。</li>
+<li><span class="math inline">\(S_1\)</span>与<span class="math inline">\(S_2\)</span>的交集元素个数为X，并集个数为X+Y，所以Jaccard(<span class="math inline">\(S_1\)</span>,<span class="math inline">\(S_2\)</span>)=X/(X+Y)。</li>
+<li>随机打乱后h(<span class="math inline">\(S_1\)</span>)=h(<span class="math inline">\(S_2\)</span>)的概率等于从上往下扫描，在遇到Y行之前遇到X行的概率（Z行没有影响），或者说把X个黑球和Y个白球放入一个袋子中，首次拿到黑球的概率，即h(<span class="math inline">\(S_1\)</span>)=h(<span class="math inline">\(S_2\)</span>)的概率为X/(X+Y)。</li>
 </ol>
 <div class="note info"><p>当特征矩阵很大时，对其进行打乱非常耗时，而且要进行多次打乱，所以在实际使用中，通过多个随机哈希函数来模拟打乱的效果。具体的步骤如下：</p>
 <ol type="1">
 <li>定义n个随机哈希函数<span class="math inline">\(h_1, h_2, ..., h_n\)</span>，例如<span class="math inline">\(h_1(x) = (x+1)%m（m是行数）\)</span>。</li>
 <li>计算<span class="math inline">\(h_1(r), h_2(r), ..., h_n(r)\)</span>对应下图中的<span class="math inline">\(Permutation \pi\)</span>。</li>
-<li>对第i个哈希函数<span class="math inline">\(h_i\)</span>，在集合<span class="math inline">\(S_j\)</span>上更新签名矩阵，<span class="math inline">\(sig(i, j)=min(sig(i, j), h_i(r)),if 特征值为1\)</span>。其中<span class="math inline">\(r=0,1,...,m(m为特征数)\)</span>。</li>
+<li>对第i个哈希函数<span class="math inline">\(h_i\)</span>，在集合<span class="math inline">\(S_j\)</span>上更新签名矩阵，<span class="math inline">\(sig(i, j)=min(sig(i, j), h_i(r)),if 特征值为1，r=0,1,...,m(m为特征数)\)</span>。</li>
 </ol>
-<p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/1.png"></p>
+<p><code>注：下图中Permutation下标从1开始。</code> <img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/1.png"></p>
 </div>
 <h2 id="lshlocality-sensitive-hashing">LSH（Locality Sensitive Hashing）</h2>
 <p><code>MinHash</code>降低了两个高维向量之间的计算复杂性，但还有一个需要考虑的问题是，我们需要对大量的向量之间进行两两比较，如果每个都直接比较，复杂度是<span class="math inline">\(O(N^2)\)</span>（N是向量个数），是否有一种方法，将潜在的可能相似度高的向量聚在一起，将相似度低的向量分开？</p>
-<p><code>LSH(Locality Sensitive Hashing)</code>做的就是这个事情，其基本思想为：我们不需要去比对所有的文档，将所有的文档(columns) hash到许多桶中，形成候选匹配对，只有同一个桶中的signature会进行匹配</p>
+<p><code>LSH(Locality Sensitive Hashing)</code>做的就是这个事情，其基本思想为：我们不需要去比对所有的文档，将所有的文档(columns) hash到许多桶中，形成候选匹配对，只有同一个桶中的signature会进行匹配。</p>
+<p><code>LSH</code>将原signature matrix按行划分成多个band，每个band的宽度是r，显然有<code>b*r=num of hash function for MinHash</code>，然后对band内每个signature段hash，形成多个桶，如下图:</p>
+<p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/2.png"></p>
+<p>两个文档作为候选匹配的充要条件是至少有一个band的hash在同一个桶中。</p>
+<p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/3.png"></p>
+<p>但hash分桶的时候仍然存在可能分错桶的情况，分别是：</p>
+<ul>
+<li>本应认定不相似的分到了一个桶中：因为有小部分MinHash会相同的概率。</li>
+<li>本应认定相似的没分到一个桶中：每个band Hash的结果刚好都不一样。</li>
+</ul>
+<p>设s代表两个文档相似度（对应MinHash相同的概率），那么有：</p>
+<ul>
+<li>一个band内所有行都相等的概率：<span class="math inline">\(s^r\)</span></li>
+<li>一个band内至少有一行(一个MinHash)不相等的概率：<span class="math inline">\(1-s^r\)</span></li>
+<li>所有band都不相等的概率：<span class="math inline">\((1-s^r)^b\)</span></li>
+<li>至少有一个band相等的概率：<span class="math inline">\(1-(1-s^r)^b\)</span></li>
+</ul>
+<p>其中，至少有一个band相等的概率<span class="math inline">\(1-(1-s^r)^b\)</span>实际上就对应文档被划分到一个桶中的概率。两个文档相似度不同时，其对应概率的变化如下表(取r=5,b=20)：</p>
+<table>
+<thead>
+<tr class="header">
+<th>s</th>
+<th><span class="math inline">\(1-(1-s^r)^b\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.2</td>
+<td>0.006</td>
+</tr>
+<tr class="even">
+<td>0.3</td>
+<td>0.047</td>
+</tr>
+<tr class="odd">
+<td>0.4</td>
+<td>0.186</td>
+</tr>
+<tr class="even">
+<td>0.5</td>
+<td>0.470</td>
+</tr>
+<tr class="odd">
+<td>0.6</td>
+<td>0.802</td>
+</tr>
+<tr class="even">
+<td>0.7</td>
+<td>0.975</td>
+</tr>
+<tr class="odd">
+<td>0.8</td>
+<td>0.9996</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出，相似度越大，越容易被hash到同一个桶中。通过设置合适的<span class="math inline">\(r,b\)</span>超参数，我们可以将相似的文档尽可能分到同一个桶中，而不相似文档尽可能不在相同的桶中，如下图所示。</p>
+<p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/4.png"></p>
 ]]></content>
       <categories>
         <category>算法</category>
