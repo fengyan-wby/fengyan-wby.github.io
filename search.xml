@@ -176,7 +176,7 @@
 <h3 id="minhash降维">MinHash降维</h3>
 <p>海量文本直接求Jaccard相似度复杂度太高，两个文档需要逐个词比较（此时词的维度可能是几百万维甚至更高），为降低复杂度，我们使用两个文档的最小哈希值相等的概率来等价于两个文档的Jaccard相似度，并可以证明两者是相等的。</p>
 <hr>
-<p>首先说明一下如何求一个集合的最小哈希值，假设现在有4个集合，分别为<span class="math inline">\(S_1, S_2, S_3, S_4\)</span>；其中，<span class="math inline">\(S_1=\{a, d\}\)</span>，<span class="math inline">\(S_2=\{c\}\)</span>，<span class="math inline">\(S_3=\{b, d, e\}\)</span>，<span class="math inline">\(S_1=\{a, c, d\}\)</span>，所以全集<span class="math inline">\(\cup = \{a, b, c, d, e\}\)</span>。我们可以构造如下0-1矩阵：</p>
+<p>首先说明一下如何求一个集合的最小哈希值，假设现在有4个集合，分别为<span class="math inline">\(S_1, S_2, S_3, S_4\)</span>；其中，<span class="math inline">\(S_1=\{a, d\}\)</span>，<span class="math inline">\(S_2=\{c\}\)</span>，<span class="math inline">\(S_3=\{b, d, e\}\)</span>，<span class="math inline">\(S_4=\{a, c, d\}\)</span>，所以全集<span class="math inline">\(\cup = \{a, b, c, d, e\}\)</span>。我们可以构造如下0-1矩阵：</p>
 <table>
 <thead>
 <tr class="header">
