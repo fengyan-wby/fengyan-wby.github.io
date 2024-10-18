@@ -156,7 +156,7 @@
     <content><![CDATA[<p>对OpenAI o1可能用到的技术进行整理。</p>
 <span id="more"></span>
 <h2 id="如何让模型学会自我思考">如何让模型学会自我思考</h2>
-<p>主要是如下两篇文章中的内容：</p>
+<p>主要是如下两篇论文中的内容：</p>
 <ul>
 <li><a href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a></li>
 <li><a href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters</a></li>
@@ -191,7 +191,10 @@
 <li><p><code>Process-supervision Reward Model（PRM）</code><br>
 该方式将每一个推理步骤的正确与否作为反馈信号，将思维链每一个步骤正确与否作为label训练奖励模型。这些步骤是无法自动获取到标注结果的，所以需要人工参与标注。标注示例如下所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/3.jpg"></p>
-<p><div class="note info"><p>在数据标注过程中，作者还使用了Active Learning的技巧。由于人工标注成本较高，如果标注一些低价值的数据是十分浪费的，所以作者倾向与让人工标注一些高价值数据。这里的高价值指的是PRM模型判断得分很高，但最终答案却错了的数据。这些数据对训练PRM可以起到更为关键的作用。同时，在标注的过程中，PRM是会实时用最新的数据重新训练得到更新的，这样人工标注的数据就一直是训练PRM的高价值数据。</p>
+<p><div class="note info"><p>在数据标注过程中，作者还使用了Active Learning的技巧。<br>
+由于人工标注成本较高，如果标注一些低价值的数据是十分浪费的，所以作者倾向与让人工标注一些高价值数据。<br>
+这里的高价值指的是PRM模型判断得分很高，但最终答案却错了的数据。这些数据对训练PRM可以起到更为关键的作用。<br>
+同时，在标注的过程中，PRM是会实时用最新的数据重新训练得到更新的，这样人工标注的数据就一直是训练PRM的高价值数据。</p>
 </div></p>
 <p>通过上图中的方法，OpenAI获取并公开了<a href="https://github.com/openai/prm800k">PRM800K数据集</a>，其中包含了12,000个数学问题的75,000个解决方案，共计800,000个步骤级别的标签。</p>
 <p>最终得到的Process-supervision Reward Model可对思维链中每个步骤进行打分，如下所示：</p>
