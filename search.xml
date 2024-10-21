@@ -212,14 +212,16 @@
 <li><p>一种方案是通过SFT训练，改变生成模型的输出分布，使模型生成即符合格式要求，又符合质量需求的数据。问题在于如何才能使用最少的成本，生成高质量的涵盖中间思考步骤的sft数据？</p>
 <ol type="1">
 <li>先对模型做格式微调，使其能够产出“中间结果 + 答案”。这一步只负责格式，不负责质量。</li>
-<li>由于每个attempt中都包含了答案，答案是有标签的，所以我们可以知道哪些attempt给出了正确答案。我们说这些attempt是正确，反之是错误的。</li>
+<li>由于每个attempt中都包含了答案，答案是有标签的，所以我们可以知道哪些attempt给出了正确答案。</li>
 <li>我们希望为每个正确attempt匹配上若干错误attempt，作为一条训练数据。也就是我们的训练数据是“问题 + 若干错误attempt+正确attempt”的形式，这一步是让模型模拟人类思考的模式，从步步错误的attempt中推出正确的attemp。</li>
 </ol>
 <p>最终得到的数据如下图：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/8.jpg"></p>
 <p><div class="note info"><p>在构造attemp链训练数据时，论文中也有一些细节。<br>
-如要对一个正确回答匹配<span class="math inline">\(x\)</span>个错误回答时，会先从所有的错误回答中，根据编辑距离，找到和这个正确回答最相似的错误回答。<br>
-然后再从剩下的不正确的回答中，随机采样<span class="math inline">\(x-1\)</span>条。 最终构造的训练数据为<span class="math inline">\(问题 \rightarrow 随机不正确的x-1条回答 \rightarrow 最相似的不正确回答 \rightarrow 正确回答\)</span>，这样模型可以学得更好。</p>
+如要对一个正确回答匹配<span class="math inline">\(x\)</span>个错误回答时，会根据编辑距离先从所有的错误回答中找到和正确回答最相似的错误回答。<br>
+然后再从剩下的不正确的回答中，随机采样<span class="math inline">\(x-1\)</span>条。 最终构造的训练数据为：<br>
+<span class="math inline">\(问题 \rightarrow 随机不正确的x-1条回答 \rightarrow 最相似的不正确回答 \rightarrow 正确回答\)</span>。<br>
+这样模型可以学得更好。</p>
 </div></p>
 <p><div class="note info"><p>只通过答案判断attemp的正确与否不够准确，为了取得更好的效果，实际上论文中依然会配合PRM和ORM对中间步骤再做评估，更有利于选择尽可能正确的attempt。如下图所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/7.jpg"></p>
@@ -234,7 +236,7 @@
 <li>一个能对中间思考步骤进行评估的奖励模型PRM。</li>
 </ul></li>
 </ol>
-<p>而现在我们想做的事情是：如何在不对生成模型继续做任何训练的情况下，使用PRM来引导生成模型搜索出最佳的“steps + answer”。论文中给出了3种常用的搜索方案，如下图所示：</p>
+<p>而现在我们想做的事情是：如何在不对generator继续做任何训练的情况下，使用PRM来引导generator搜索出最佳的“steps + answer”。论文中给出了3种常用的搜索方案，如下图所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/9.jpg"></p>
 <p>其中：</p>
 <ul>
