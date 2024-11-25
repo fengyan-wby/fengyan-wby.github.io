@@ -174,9 +174,17 @@
 <p>STaR结果如下所示：</p>
 <p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/1-3.png"></p>
 <h2 id="quiet-star">Quiet-STaR</h2>
-<p>在Quiet-STaR中，语言模型学习在每个token生成时生成思考步骤(thoughts)，以解释未来文本，从而改善其预测。</p>
+<p>在Quiet-STaR中，语言模型学习在每个token生成时生成思考步骤(thoughts)，以解释未来文本，从而改善其预测。如下图所示：</p>
 <p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-1.png"></p>
-<p>Quiet-STaR通过在生成每个token后生成思考(thoughts)来解释未来文本，将带有和不带有思考步骤的未来文本预测结合，然后利用REINFORCE来优化模型。</p>
+<p>Quiet-STaR模型有三个主要步骤:</p>
+<p><strong>并行思考步骤生成</strong><br>
+对于输入序列中的<span class="math inline">\(n\)</span>个token <span class="math inline">\(x_i\)</span>，并行生成长度为<span class="math inline">\(t\)</span>的<span class="math inline">\(r\)</span>个推理（或思考步骤）<span class="math inline">\(c_i=(c_{i1},c_{i2},...,c_{it})\)</span>，最终生成<span class="math inline">\(n \times r\)</span>个推理候选。</p>
+<p><strong>混合两种形式的推理</strong><br>
+通过每个推理生成后的隐藏状态，训练一个“混合头”（shallow MLP），产生权重，决定有思考步骤的下一个词的logits与无思考步骤的logits之间如何融合。</p>
+<p><strong>优化推理生成</strong><br>
+通过优化思考起始/结束token，来使模型的训练更容易。<br>
+使用非短视评分方法，更充分的考虑推理链对后续预测的影响。<br>
+采用教师强制技巧（teacher-forcing trick），解决模型熵太高导致文本质量下降的问题。</p>
 <h3 id="并行思考步骤生成">并行思考步骤生成</h3>
 <p>因为本文基本思想是在每个token后都去生成思考步骤，所以如果按顺序对每个token进行生成不可避免地会产生多次前向传播，这对于长序列来说在时间上的花费是让人难以接受的。</p>
 <p>所以为了高效的实现并行思考步骤生成，本文提出了特殊的注意力掩码方法，并行生成每一个token处的思考步骤，如下图所示：</p>
@@ -189,10 +197,11 @@
 <div class="note info"><p>思考过程thoughts是被两个特殊token包围的，分别为思考开始token <code>&lt;start-of-thought&gt;</code>，和思考结束token <code>&lt;end-of-thought&gt;</code>。</p>
 <p>MLP的输入为token本身的隐藏状态（代表无思考步骤的结果）和<code>&lt;end-of-thought&gt;</code> token的隐藏状态（代表有思考步骤的结果）。</p>
 </div>
-<h3 id="优化推理开始和结束token">优化推理开始和结束token</h3>
+<h3 id="优化推理生成">优化推理生成</h3>
+<h4 id="优化推理开始和结束token">优化推理开始和结束token</h4>
 <p>优化这些token的表示非常重要，尤其是<code>&lt;start-of-thought&gt;</code> token，因为它会影响模型如何生成思考过程。作者选择将思考开始和结束的嵌入初始化为类似于文本中的破折号 ——，这种符号在文本数据中通常表示一个停顿或思考的开始，借此利用语言模型已经具备的先验知识，使模型在初始化时有更好的特征表示。</p>
 <p>为了更快地优化这些特殊符号，作者给这些token增加了一个超参数权重。简单来说，模型在每次训练中调整这些token的权重时，会给它们的梯度施加一个额外的权重，从而加速它们的学习。</p>
-<h3 id="非短视评分和教师强制">非短视评分和教师强制</h3>
+<h4 id="非短视评分和教师强制">非短视评分和教师强制</h4>
 <p>目前模型的奖励来自于是否有助于预测下一个token，但作者认为模型的奖励机制应该更多地依赖后续的语义内容，而不是仅仅依赖于思维之后生成的下一个具体token，因此提出了非短视评分和教师强制的方法。如下图所示：</p>
 <p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-3.png"></p>
 <p><strong>非短视评分</strong><br>
