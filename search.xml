@@ -151,6 +151,66 @@
       </tags>
   </entry>
   <entry>
+    <title>STaR和Quiet-STaR</title>
+    <url>/2024/11/22/STaR%E5%92%8CQuiet-STaR/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2203.14465">STaR</a></li>
+<li><a href="https://arxiv.org/abs/2403.09629">Quiet-STaR</a></li>
+</ul>
+<span id="more"></span>
+<h2 id="star">STaR</h2>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/1-1.png"></p>
+<p>STaR分为两个部分，分别为STaR Without Rationalization和Rationalization，如下所示：</p>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/1-2.png"></p>
+<ol type="1">
+<li><code>数据生成</code>：人工生成一些推理+答案的内容，然后通过In-Context-Learning的方法来让模型生成推理过程+答案。</li>
+<li><code>答案过滤v1</code>：只保留答案正确的推理过程，默认答案正确的推理过程是好的推理过程。</li>
+<li><font color="blue"><code>答案过滤v2</code>：对于答案错误的数据，给出问题+正确答案，重新让模型生成推理过程。</font></li>
+<li>用步骤2得到的数据微调模型，得到更好的生成模型。</li>
+<li><font color="blue">用步骤3得到的数据微调模型，得到更好的生成模型。</font></li>
+<li>重复1～5步骤，不断改进模型的推理能力。</li>
+</ol>
+<p>STaR结果如下所示：</p>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/1-3.png"></p>
+<h2 id="quiet-star">Quiet-STaR</h2>
+<p>在Quiet-STaR中，语言模型学习在每个token生成时生成思考步骤(thoughts)，以解释未来文本，从而改善其预测。</p>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-1.png"></p>
+<p>Quiet-STaR通过在生成每个token后生成思考(thoughts)来解释未来文本，将带有和不带有思考步骤的未来文本预测结合，然后利用REINFORCE来优化模型。</p>
+<h3 id="并行思考步骤生成">并行思考步骤生成</h3>
+<p>因为本文基本思想是在每个token后都去生成思考步骤，所以如果按顺序对每个token进行生成不可避免地会产生多次前向传播，这对于长序列来说在时间上的花费是让人难以接受的。</p>
+<p>所以为了高效的实现并行思考步骤生成，本文提出了特殊的注意力掩码方法，并行生成每一个token处的思考步骤，如下图所示：</p>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-2.png"></p>
+<p>假设输入的Base Text是abcd，然后在并行生成Thought Token1时，a允许注意到a本身，b则是a,b，以此类推，去生成a',b',c',d'。在生成Thought Token2时a'允许注意到a和a'，去生成a''，b'允许注意到a，b，b'去生成b''。依次类推生成c''和d''。因此注意力掩码就形成了如上图所示的上三角+对角注意力掩码，生成后续Thought Token的过程其实就是在继承上次的掩码的同时，增加一个对角注意力掩码。</p>
+<h3 id="混合两种形式的推理">混合两种形式的推理</h3>
+<p>在使用预训练模型时，由于预训练模型并没有被设计来处理“思考”（thoughts）这种额外的信息，刚开始生成的推理会与模型的原始数据分布不一致（out of distribution）。这会对语言建模的性能产生负面影响。简单来说，预训练模型并不习惯处理“思维过程”的信息，因此需要一个平滑的过渡来适应这种新信息。</p>
+<p>为了平滑引入推理的过渡，作者提出了一种插值方法，在语言模型的预测中引入“有思考步骤”与“无思考步骤”的预测混合。也就是说，模型需要根据推理信息来调整其预测的权重，平衡“有思考步骤”和“无思考步骤”的结果。</p>
+<p>本文使用一个浅层的MLP来生成每个token的权重。这个 MLP 的输出是一个标量（scalar），表示每个token的混合权重，权重越大，模型越倾向于使用带有思考步骤的预测结果。</p>
+<div class="note info"><p>思考过程thoughts是被两个特殊token包围的，分别为思考开始token <code>&lt;start-of-thought&gt;</code>，和思考结束token <code>&lt;end-of-thought&gt;</code>。</p>
+</div>
+<h3 id="优化推理开始和结束token">优化推理开始和结束token</h3>
+<p>优化这些token的表示非常重要，尤其是<code>&lt;start-of-thought&gt;</code> token，因为它会影响模型如何生成思考过程。作者选择将思考开始和结束的嵌入初始化为类似于文本中的破折号 ——，这种符号在文本数据中通常表示一个停顿或思考的开始，借此利用语言模型已经具备的先验知识，使模型在初始化时有更好的特征表示。</p>
+<p>为了更快地优化这些特殊符号，作者给这些token增加了一个超参数权重。简单来说，模型在每次训练中调整这些token的权重时，会给它们的梯度施加一个额外的权重，从而加速它们的学习。</p>
+<h3 id="非短视评分和教师强制">非短视评分和教师强制</h3>
+<p>目前模型的奖励来自于是否有助于预测下一个token，但作者认为模型的奖励机制应该更多地依赖后续的语义内容，而不是仅仅依赖于思维之后生成的下一个具体token，因此提出了非短视评分和教师强制的方法。如下图所示：</p>
+<p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-3.png"></p>
+<p><strong>非短视评分</strong> 对于<span class="math inline">\(f\)</span>的推理链更新，会设置一个向后观察几个token的超参数，如图中设定的超参是3。然后在计算损失函数更新参数时，会将这些token的结果一起计算，作为当前步骤的奖励。</p>
+<p><strong>教师强制</strong> 如图中虚线部分，模型的输入不使用预测得到的token（<span class="math inline">\(\hat{g}、\hat{h}），而是强制使用正确的输入token（\)</span>g、h$）。这样的话就保证了每一次预测下一个token时，模型前面传入的token都是正确的。不会出现语言模型熵太高导致文本质量下降的问题。</p>
+<div class="note info"><p>这里是为了优化<span class="math inline">\(f\)</span>的推理链，所以在预测第二个token <span class="math inline">\(h\)</span>的时候，使用的仍然是token <span class="math inline">\(f\)</span>的thoughs，而不是token <span class="math inline">\(g\)</span>的thoughs（在inference阶段时预测token <span class="math inline">\(h\)</span>使用的是token <span class="math inline">\(g\)</span>的thoughs）。</p>
+</div>
+<div class="note info"><p>上图可直观的看到混合推理的过程，无思考步骤的推理为上半部分的<span class="math inline">\(g\)</span>和<span class="math inline">\(h\)</span>，有思考步骤的推理为下半部分的<span class="math inline">\(g\)</span>和<span class="math inline">\(h\)</span>。两者通过一个MLP进行融合。</p>
+</div>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>文献阅读</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+        <tag>RAG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>OpenAI o1 技术整理</title>
     <url>/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<p>对OpenAI o1可能用到的技术进行整理。</p>
