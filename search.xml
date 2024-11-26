@@ -198,7 +198,12 @@
 <p>为了平滑引入推理的过渡，作者提出了一种插值方法，在语言模型的预测中引入“有思考步骤”与“无思考步骤”的预测混合。也就是说，模型需要根据推理信息来调整其预测的权重，平衡“有思考步骤”和“无思考步骤”的结果。</p>
 <p>本文使用一个浅层的MLP来生成每个token的权重。这个 MLP 的输出是一个标量（scalar），表示每个token的混合权重，权重越大，模型越倾向于使用带有思考步骤的预测结果。</p>
 <div class="note info"><p>思考过程thoughts是被两个特殊token包围的，分别为思考开始token <code>&lt;start-of-thought&gt;</code>，和思考结束token <code>&lt;end-of-thought&gt;</code>。</p>
-<p>MLP的输入为token本身的隐藏状态（代表无思考步骤的结果）和<code>&lt;end-of-thought&gt;</code> token的隐藏状态（代表有思考步骤的结果）。</p>
+<p>MLP的输入分为两个部分：</p>
+<ul>
+<li>token本身的隐藏状态（代表无思考步骤的结果）</li>
+<li><code>&lt;end-of-thought&gt;</code> token的隐藏状态（代表有思考步骤的结果）。</li>
+</ul>
+<p>实际上混合头的输入是一个向量，这个向量的大小是带有思考过程的预测和不带思考过程的预测拼接在一起得到的。 混合头使用了一个三层的 MLP，作为计算权重的核心部分。MLP 的每一层使用了 ReLU 激活函数，最终输出一个标量用于对两类logits的加权。</p>
 </div>
 <h3 id="优化推理生成">优化推理生成</h3>
 <h4 id="优化推理开始和结束token">优化推理开始和结束token</h4>
