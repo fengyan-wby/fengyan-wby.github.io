@@ -215,11 +215,13 @@
 ]]></content>
       <categories>
         <category>算法</category>
+        <category>AIGC</category>
         <category>文献阅读</category>
       </categories>
       <tags>
+        <tag>AIGC</tag>
         <tag>文献阅读</tag>
-        <tag>RAG</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
