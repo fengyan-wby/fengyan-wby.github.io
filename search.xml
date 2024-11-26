@@ -176,6 +176,9 @@
 <h2 id="quiet-star">Quiet-STaR</h2>
 <p>在Quiet-STaR中，语言模型学习在每个token生成时生成思考步骤(thoughts)，以解释未来文本，从而改善其预测。如下图所示：</p>
 <p><img src="/2024/11/22/STaR%E5%92%8CQuiet-STaR/2-1.png"></p>
+<p>其优化函数为：</p>
+<p><span class="math display">\[\theta^{*} = \arg \mathop{max}\limits_{\theta}E_x[logp_{\theta}(x_{i:n}|x_{0:i},rationale_{\theta}(x_{0:i}))]\]</span></p>
+<p>意思是模型不仅要根据之前的输入token <span class="math inline">\(x_{0:i}\)</span>来预测后续token <span class="math inline">\(x_{i:n}\)</span>，还要生成一个中间的推理过程<span class="math inline">\(rationale_{\theta}\)</span>，用以提升对后续序列的预测能力。</p>
 <p>Quiet-STaR模型有三个主要步骤:</p>
 <p><strong>并行思考步骤生成</strong><br>
 对于输入序列中的<span class="math inline">\(n\)</span>个token <span class="math inline">\(x_i\)</span>，并行生成长度为<span class="math inline">\(t\)</span>的<span class="math inline">\(r\)</span>个推理（或思考步骤）<span class="math inline">\(c_i=(c_{i1},c_{i2},...,c_{it})\)</span>，最终生成<span class="math inline">\(n \times r\)</span>个推理候选。</p>
