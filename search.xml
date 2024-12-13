@@ -153,7 +153,8 @@
   <entry>
     <title>蒙特卡洛树搜索（MCTS）</title>
     <url>/2024/12/03/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2%EF%BC%88MCTS%EF%BC%89/</url>
-    <content><![CDATA[<span id="more"></span>
+    <content><![CDATA[<p>介绍蒙特卡洛树搜索算法。</p>
+<span id="more"></span>
 <h2 id="介绍">介绍</h2>
 <h3 id="极小极大minimax搜索">极小极大（Minimax）搜索</h3>
 <h3 id="蒙特卡洛树搜索">蒙特卡洛树搜索</h3>
