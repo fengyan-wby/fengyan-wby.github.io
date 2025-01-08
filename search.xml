@@ -157,6 +157,7 @@
 <span id="more"></span>
 <p><img src="/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/modernbert_pareto_curve.png"></p>
 <h2 id="modernbert-的技术创新">ModernBERT 的技术创新</h2>
+<p>ModernBERT主要从三个方面着手改进传统的BERT模型：</p>
 <ol type="1">
 <li>Transformer 架构的现代化革新</li>
 <li>计算效率的系统性优化</li>
@@ -182,7 +183,7 @@
 <p>这一问题的优化过程如图所示：</p>
 <p><img src="/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/modernbert_unpadding.png"></p>
 <p>去填充技术完全移除填充标记，将实际内容重组为批量大小为一的小批次，从而避免了冗余计算。</p>
-<p>为进一步提升预训练效率，将去填充技术与序列打包机制相结合。考虑到 GPU 的并行计算优势，应当充分利用每次模型前向传播的计算资源。所以ModernBERT实现了一个贪婪算法，将独立序列组合成接近模型最大输入长度的统一序列Batch。</p>
+<p>为进一步提升预训练效率，将去填充技术与序列打包机制相结合。考虑到 GPU 的并行计算优势，应当充分利用每次模型前向传播的计算资源。所以ModernBERT实现了一个贪婪算法，将独立序列组合成接近模型最大输入长度的统一序列。</p>
 <h4 id="硬件感知的模型设计">硬件感知的模型设计</h4>
 <p>ModernBERT 效率优化的第三个关键维度是硬件感知的设计理念。</p>
 <p>设计试图平衡两个来自先前研究的重要发现：</p>
