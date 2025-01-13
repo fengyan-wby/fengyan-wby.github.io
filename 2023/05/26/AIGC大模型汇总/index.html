@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="转自https:&#x2F;&#x2F;github.com&#x2F;chenking2020&#x2F;FindTheChatGPTer。 汇总开源AIGC大模型，持续更新。">
 <meta property="og:type" content="article">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="转自https:&#x2F;&#x2F;github.com&#x2F;chenking2020&#x2F;FindTheChatGPTer。 汇总开源AIGC大模型，持续更新。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-26T13:55:30.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.564Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.195Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="AIGC">
 <meta name="twitter:card" content="summary">
@@ -536,7 +536,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -598,7 +598,8 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>转自<a target="_blank" rel="noopener" href="https://github.com/chenking2020/FindTheChatGPTer">https://github.com/chenking2020/FindTheChatGPTer</a>。 汇总开源AIGC大模型，持续更新。</p>
+    <div class="post-body" itemprop="articleBody"><p>转自<a target="_blank" rel="noopener" href="https://github.com/chenking2020/FindTheChatGPTer">https://github.com/chenking2020/FindTheChatGPTer</a>。
+汇总开源AIGC大模型，持续更新。</p>
 <span id="more"></span>
 <h2 id="自主模型篇">自主模型篇</h2>
 <p>该类方法通过自主设计模型或者优化GPT、T5等模型，来实现大模型的预训练、监督微调以及强化学习过程。</p>
@@ -634,7 +635,8 @@ if(canvas.getContext){
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/mlfoundations/open_flamingo">https://github.com/mlfoundations/open_flamingo</a></li>
 </ul>
-<p>OpenFlamingo是一个对标GPT-4、支持大型多模态模型训练和评估的框架，由非盈利机构LAION重磅开源发布，其是对DeepMind的Flamingo模型的复现。目前开源的是其基于LLaMA的 OpenFlamingo-9B模型。Flamingo模型在包含交错文本和图像的大规模网络语料库上进行训练，具备上下文少样本学习能力。OpenFlamingo实现了原始Flamingo中提出的相同架构，在一个新的多模态C4数据集的5M样本和LAION-2B的10M样本上训练而来。</p>
+<p>OpenFlamingo是一个对标GPT-4、支持大型多模态模型训练和评估的框架，由非盈利机构LAION重磅开源发布，其是对DeepMind的Flamingo模型的复现。目前开源的是其基于LLaMA的
+OpenFlamingo-9B模型。Flamingo模型在包含交错文本和图像的大规模网络语料库上进行训练，具备上下文少样本学习能力。OpenFlamingo实现了原始Flamingo中提出的相同架构，在一个新的多模态C4数据集的5M样本和LAION-2B的10M样本上训练而来。</p>
 <h3 id="moss">MOSS</h3>
 <p>链接：</p>
 <ul>
@@ -646,7 +648,8 @@ if(canvas.getContext){
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/X-PLUG/mPLUG-Owl">https://github.com/X-PLUG/mPLUG-Owl</a></li>
 </ul>
-<p>与miniGPT-4、LLaVA类似，其是一个对标GPT-4的开源多模态大模型，其延续了mPLUG系列的模块化训练思想。其目前开源了7B参数量的模型，同时第一次针对视觉相关的指令理解提出一个全⾯的测试集 OwlEval，通过人工评测对比了已有模型，包括LLaVA、MiniGPT-4等工作，其展示出更优的多模态能力，尤其在多模态指令理解能力、多轮对话能力、知识推理能力等方⾯表现突出。目前遗憾的是跟其他图文大模型一样，仍然只支持英文，但中文版已在其待开源List中。</p>
+<p>与miniGPT-4、LLaVA类似，其是一个对标GPT-4的开源多模态大模型，其延续了mPLUG系列的模块化训练思想。其目前开源了7B参数量的模型，同时第一次针对视觉相关的指令理解提出一个全⾯的测试集
+OwlEval，通过人工评测对比了已有模型，包括LLaVA、MiniGPT-4等工作，其展示出更优的多模态能力，尤其在多模态指令理解能力、多轮对话能力、知识推理能力等方⾯表现突出。目前遗憾的是跟其他图文大模型一样，仍然只支持英文，但中文版已在其待开源List中。</p>
 <h3 id="pandalm">PandaLM</h3>
 <p>链接：</p>
 <ul>
@@ -666,13 +669,17 @@ if(canvas.getContext){
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/nebuly-ai/nebullvm/tree/main/apps/accelerate/chatllama">https://github.com/nebuly-ai/nebullvm/tree/main/apps/accelerate/chatllama</a></li>
 </ul>
-<p>是由Nebuly+AI推出的基于人类反馈强化学习的LLaMA+AI聊天机器人的开源实现，它的技术路线类似 ChatGPT，该项目上线刚刚 2 天，狂揽 5.2K 星。</p>
-<p>ChatLLaMA 训练过程算法实现主打比 ChatGPT 训练更快、更便宜，据说能快近15倍，主要特色有：</p>
+<p>是由Nebuly+AI推出的基于人类反馈强化学习的LLaMA+AI聊天机器人的开源实现，它的技术路线类似
+ChatGPT，该项目上线刚刚 2 天，狂揽 5.2K 星。</p>
+<p>ChatLLaMA 训练过程算法实现主打比 ChatGPT
+训练更快、更便宜，据说能快近15倍，主要特色有：</p>
 <ul>
-<li>完整的开源实现，允许用户基于预训练的 LLaMA 模型构建 ChatGPT 风格的服务；</li>
+<li>完整的开源实现，允许用户基于预训练的 LLaMA 模型构建 ChatGPT
+风格的服务；</li>
 <li>LLaMA 架构更小，使得训练过程和推理速度更快，成本更低；</li>
 <li>内置了对 DeepSpeed ZERO 的支持，以加速微调过程；</li>
-<li>支持各种尺寸的 LLaMA 模型架构，用户可以根据自身偏好对模型进行微调。</li>
+<li>支持各种尺寸的 LLaMA
+模型架构，用户可以根据自身偏好对模型进行微调。</li>
 </ul>
 <h3 id="openchatkit">OpenChatKit</h3>
 <p>链接：</p>
@@ -685,31 +692,60 @@ if(canvas.getContext){
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">https://github.com/LianjiaTech/BELLE</a></li>
 </ul>
-<p>基于 Stanford Alpaca ，实现基于Bloom、LLama的监督微调。Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，该开源项目是促进中文对话大模型开源社区的发展，针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。</p>
+<p>基于 Stanford Alpaca ，实现基于Bloom、LLama的监督微调。Stanford
+Alpaca
+的种子任务都是英语，收集的数据也都是英文，该开源项目是促进中文对话大模型开源社区的发展，针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。</p>
 <h3 id="alpaca-lora">alpaca-lora</h3>
-<p>alpaca-lora是斯坦福大学的另一个巨作，其使用LoRA（low-rank adaptation）技术复现了Alpaca的结果，用了一个更加低成本的方法，只在一块RTX 4090显卡上训练5个小时得到了一个Alpaca水平相当的模型。而且，该模型可以在树莓派上运行。在该项目中，其使用了Hugging Face的PEFT来实现廉价高效的微调。PEFT 是一个库（LoRA 是其支持的技术之一），可以让你使用各种基于 Transformer的语言模型并使用LoRA对其进行微调，从而使得在一般的硬件上廉价而有效地微调模型。该项目github地址是： <a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">https://github.com/tloen/alpaca-lora</a></p>
-<p>尽管 Alpaca和alpaca-lora取得了较大的提升，但其种子任务都是英语，缺乏对中文的支持。一方面除了以上提到Belle收集到了大量的中文语料，另一方面基于alpaca-lora等前人工作，来自华中师范大学等机构的三位个人开发者开源的中文语言模型骆驼 (Luotuo)，单卡就能完成训练部署。目前该项目释放了两个模型 luotuo-lora-7b-0.1、luotuo-lora-7b-0.3，还有一个模型在计划中。其github地址是： <a target="_blank" rel="noopener" href="https://github.com/LC1332/Chinese-alpaca-lora">https://github.com/LC1332/Chinese-alpaca-lora</a></p>
+<p>alpaca-lora是斯坦福大学的另一个巨作，其使用LoRA（low-rank
+adaptation）技术复现了Alpaca的结果，用了一个更加低成本的方法，只在一块RTX
+4090显卡上训练5个小时得到了一个Alpaca水平相当的模型。而且，该模型可以在树莓派上运行。在该项目中，其使用了Hugging
+Face的PEFT来实现廉价高效的微调。PEFT 是一个库（LoRA
+是其支持的技术之一），可以让你使用各种基于
+Transformer的语言模型并使用LoRA对其进行微调，从而使得在一般的硬件上廉价而有效地微调模型。该项目github地址是：
+<a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">https://github.com/tloen/alpaca-lora</a></p>
+<p>尽管
+Alpaca和alpaca-lora取得了较大的提升，但其种子任务都是英语，缺乏对中文的支持。一方面除了以上提到Belle收集到了大量的中文语料，另一方面基于alpaca-lora等前人工作，来自华中师范大学等机构的三位个人开发者开源的中文语言模型骆驼
+(Luotuo)，单卡就能完成训练部署。目前该项目释放了两个模型
+luotuo-lora-7b-0.1、luotuo-lora-7b-0.3，还有一个模型在计划中。其github地址是：
+<a target="_blank" rel="noopener" href="https://github.com/LC1332/Chinese-alpaca-lora">https://github.com/LC1332/Chinese-alpaca-lora</a></p>
 <h3 id="dolly">Dolly</h3>
 <p>Dolly在Alpaca的启发下，用Alpaca数据集，在GPT-J-6B上实现微调，由于Dolly本身是一个模型的“克隆”，所以团队最终决定将其命名为“多莉”。这种克隆式在Alpaca启发下越来越多，总结起来大致采用Alpaca开源的数据获取方式，在6B或者7B规模大小的旧模型上进行指令微调，获得类似ChatGPT的的效果。这种思想很经济，也能迅速模仿出ChatGPT的韵味来，广受欢迎，一经推出star爆棚。该项目github地址是：</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly">https://github.com/databrickslabs/dolly</a></p>
-<p>4月12日，Databricks发布了Dolly2.0，号称业内第一个开源、遵循指令的LLM，数据集由Databricks员工生成，并进行了开源且可用于商业目的。新提出的Dolly2.0是一个120亿参数的语言模型，基于开源EleutherAI pythia模型系列，针对小型开源指令记录语料库进行了微调。</p>
+<p>4月12日，Databricks发布了Dolly2.0，号称业内第一个开源、遵循指令的LLM，数据集由Databricks员工生成，并进行了开源且可用于商业目的。新提出的Dolly2.0是一个120亿参数的语言模型，基于开源EleutherAI
+pythia模型系列，针对小型开源指令记录语料库进行了微调。</p>
 <p>开源地址为： <a target="_blank" rel="noopener" href="https://github.com/databrickslabs/dolly">https://github.com/databrickslabs/dolly</a><br>
 <a target="_blank" rel="noopener" href="https://huggingface.co/databricks/dolly-v2-12b">https://huggingface.co/databricks/dolly-v2-12b</a></p>
 <h3 id="vicuna和chinese-vicuna">Vicuna和Chinese-Vicuna</h3>
-<p>斯坦福学者继推出alpaca后，联手CMU、UC伯克利等，推出一个全新模型——130亿参数的Vicuna（俗称小羊驼、骆马）。仅需300美元就能实现ChatGPT 90%的性能。Vicuna是通过在ShareGPT收集的用户共享对话上对LLaMA进行微调训练而来，测试过程使用GPT-4作为评判标准，结果显示Vicuna-13B在超过90%的情况下实现了与ChatGPT和Bard相匹敌的能力。</p>
-<p>UC伯克利LMSys org近期又发布了70亿参数的Vicuna，不仅体积小、效率高、能力强，而且只需两行命令就能在M1/M2芯片的Mac上运行，还能开启GPU加速！ github开源地址为： <a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat/">https://github.com/lm-sys/FastChat/</a></p>
+<p>斯坦福学者继推出alpaca后，联手CMU、UC伯克利等，推出一个全新模型——130亿参数的Vicuna（俗称小羊驼、骆马）。仅需300美元就能实现ChatGPT
+90%的性能。Vicuna是通过在ShareGPT收集的用户共享对话上对LLaMA进行微调训练而来，测试过程使用GPT-4作为评判标准，结果显示Vicuna-13B在超过90%的情况下实现了与ChatGPT和Bard相匹敌的能力。</p>
+<p>UC伯克利LMSys
+org近期又发布了70亿参数的Vicuna，不仅体积小、效率高、能力强，而且只需两行命令就能在M1/M2芯片的Mac上运行，还能开启GPU加速！
+github开源地址为： <a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat/">https://github.com/lm-sys/FastChat/</a></p>
 <p>另一个中文版的进行了开源Chinese-Vicuna ，github地址为： <a target="_blank" rel="noopener" href="https://github.com/Facico/Chinese-Vicuna">https://github.com/Facico/Chinese-Vicuna</a></p>
 <h3 id="lmflow">LMFLOW</h3>
 <p>ChatGPT爆火后，都在寻找通往圣殿的快捷之路，一些类ChatGPT开始出现，尤其是低成本效仿ChatGPT成为一个热门途径。LMFlow就是在这种需求场景下诞生的产物，他使得在3090这样的普通显卡上也能炼大模型。该项目由香港科技大学统计和机器学习实验室团队发起，致力于建立一个全开放的大模型研究平台，支持有限机器资源下的各类实验，并且在平台上提升现有的数据利用方式和优化算法效率，让平台发展成一个比之前方法更高效的大模型训练系统。</p>
-<p>利用该项目，即便是有限的计算资源，也能让使用者针对专有领域支持个性化训练。例如LLaMA-7B，一张3090耗时 5 个小时即可完成训练，成本大幅降低。该项目还开放了网页端即刻体验问答服务 (lmflow.com)。LMFlow的出现和开源使得普通资源可以训练问答、陪伴、写作、翻译、专家领域咨询等各种任务。目前很多研究者们正在尝试用该项目训练650亿甚至更高参数量的大模型。</p>
+<p>利用该项目，即便是有限的计算资源，也能让使用者针对专有领域支持个性化训练。例如LLaMA-7B，一张3090耗时
+5 个小时即可完成训练，成本大幅降低。该项目还开放了网页端即刻体验问答服务
+(lmflow.com)。LMFlow的出现和开源使得普通资源可以训练问答、陪伴、写作、翻译、专家领域咨询等各种任务。目前很多研究者们正在尝试用该项目训练650亿甚至更高参数量的大模型。</p>
 <p>该项目github地址为： <a target="_blank" rel="noopener" href="https://github.com/OptimalScale/LMFlow">https://github.com/OptimalScale/LMFlow</a></p>
 <h3 id="baize白泽">Baize白泽</h3>
-<p>该项目提出了一个自动收集 ChatGPT 对话的方法，让 ChatGPT 自我对话，批量生成高质量多轮对话数据集，分别收集了5万条左右Quora、StackOverflow和MedQA的高质量问答语料，并已经全部开源。同时其改进了LLama模型，效果还不错。白泽同样采用目前低成本的LoRA微调方案，获得白泽-7B、13B 和30B三种不同尺度，以及一个医疗垂直领域的模型。遗憾的是中文名字起的不错，但目前仍然不支持中文，中文的白泽模型据悉在计划中，未来发布。其开源github地址是： <a target="_blank" rel="noopener" href="https://github.com/project-baize/baize">https://github.com/project-baize/baize</a></p>
+<p>该项目提出了一个自动收集 ChatGPT 对话的方法，让 ChatGPT
+自我对话，批量生成高质量多轮对话数据集，分别收集了5万条左右Quora、StackOverflow和MedQA的高质量问答语料，并已经全部开源。同时其改进了LLama模型，效果还不错。白泽同样采用目前低成本的LoRA微调方案，获得白泽-7B、13B
+和30B三种不同尺度，以及一个医疗垂直领域的模型。遗憾的是中文名字起的不错，但目前仍然不支持中文，中文的白泽模型据悉在计划中，未来发布。其开源github地址是：
+<a target="_blank" rel="noopener" href="https://github.com/project-baize/baize">https://github.com/project-baize/baize</a></p>
 <h3 id="koala考拉">Koala考拉</h3>
-<p>基于LLama的ChatGPT平替继续发酵，UC伯克利的伯克利发布了一个可以在消费级GPU上运行的对话模型Koala，参数达到13B。Koala 的训练数据集包括如下几个部分：ChatGPT数据和开源数据（Open Instruction Generalist (OIG)、斯坦福 Alpaca 模型使用的数据集、Anthropic HH、OpenAI WebGPT、OpenAI Summarization）。Koala模型在EasyLM中使用JAX/Flax实现，用了8 个A100 GPU，完成2轮迭代需要6个小时。评测效果优于Alpaca，达到ChatGPT 50%的性能。</p>
+<p>基于LLama的ChatGPT平替继续发酵，UC伯克利的伯克利发布了一个可以在消费级GPU上运行的对话模型Koala，参数达到13B。Koala
+的训练数据集包括如下几个部分：ChatGPT数据和开源数据（Open Instruction
+Generalist (OIG)、斯坦福 Alpaca 模型使用的数据集、Anthropic HH、OpenAI
+WebGPT、OpenAI
+Summarization）。Koala模型在EasyLM中使用JAX/Flax实现，用了8 个A100
+GPU，完成2轮迭代需要6个小时。评测效果优于Alpaca，达到ChatGPT
+50%的性能。</p>
 <p>开源地址：<a target="_blank" rel="noopener" href="https://github.com/young-geng/EasyLM">https://github.com/young-geng/EasyLM</a></p>
 <h3 id="stackllama">StackLLaMA</h3>
-<p>随着斯坦福Alpaca的出现，一大堆基于LLama的羊驼家族和扩展动物家族开始出现，终于Hugging Face研究人员近期发布了一篇博客StackLLaMA：用RLHF训练LLaMA的实践指南。同时也发布了一个70亿参数的模型——StackLLaMA。这是一个通过人类反馈强化学习在LLaMA-7B微调而来的模型。详细见其博客地址： <a target="_blank" rel="noopener" href="https://huggingface.co/blog/stackllama">https://huggingface.co/blog/stackllama</a></p>
+<p>随着斯坦福Alpaca的出现，一大堆基于LLama的羊驼家族和扩展动物家族开始出现，终于Hugging
+Face研究人员近期发布了一篇博客StackLLaMA：用RLHF训练LLaMA的实践指南。同时也发布了一个70亿参数的模型——StackLLaMA。这是一个通过人类反馈强化学习在LLaMA-7B微调而来的模型。详细见其博客地址：
+<a target="_blank" rel="noopener" href="https://huggingface.co/blog/stackllama">https://huggingface.co/blog/stackllama</a></p>
 <h3 id="chinese-llama-alpaca">Chinese-LLaMA-Alpaca</h3>
 <p>该项目针对中文对LLaMA进行了优化，并开源了其精调对话系统。该项目具体步骤包括：</p>
 <ol type="1">
@@ -719,7 +755,9 @@ if(canvas.getContext){
 </ol>
 <p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">https://github.com/ymcui/Chinese-LLaMA-Alpaca</a></p>
 <h3 id="deep-speed-chat">Deep Speed Chat</h3>
-<p>该项目带来了全民ChatGPT的时代，训练成本再次大幅降低。项目是微软基于其Deep Speed优化库开发而成，具备强化推理、RLHF模块、RLHF系统三大核心功能，可将训练速度提升15倍以上，成本却大幅度降低。例如，一个130亿参数的类ChatGPT模型，只需1.25小时就能完成训练。 开源地址为：<a target="_blank" rel="noopener" href="https://github.com/microsoft/DeepSpeed">https://github.com/microsoft/DeepSpeed</a></p>
+<p>该项目带来了全民ChatGPT的时代，训练成本再次大幅降低。项目是微软基于其Deep
+Speed优化库开发而成，具备强化推理、RLHF模块、RLHF系统三大核心功能，可将训练速度提升15倍以上，成本却大幅度降低。例如，一个130亿参数的类ChatGPT模型，只需1.25小时就能完成训练。
+开源地址为：<a target="_blank" rel="noopener" href="https://github.com/microsoft/DeepSpeed">https://github.com/microsoft/DeepSpeed</a></p>
 <h3 id="wombat">Wombat</h3>
 <p>该项目采取了不同于RLHF的方式RRHF进行人类偏好对齐，RRHF相对于RLHF训练的模型量和超参数量远远降低。RRHF训练得到的Wombat-7B在性能上相比于Alpaca有显著的增加，和人类偏好对齐的更好。</p>
 <p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/GanjinZero/RRHF">https://github.com/GanjinZero/RRHF</a></p>
@@ -728,7 +766,8 @@ if(canvas.getContext){
 <p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/Guanaco-Model/Guanaco-Model.github.io">https://github.com/Guanaco-Model/Guanaco-Model.github.io</a></p>
 <h3 id="llmzoo凤凰phoenix和chimera">LLMZoo（凤凰Phoenix和Chimera）</h3>
 <p>LLMZoo，即LLM动物园开源项目维护了一系列开源大模型，其中包括了近期备受关注的来自香港中文大学（深圳）和深圳市大数据研究院的王本友教授团队开发的Phoenix（凤凰）和Chimera等开源大语言模型，其中文本效果号称接近百度文心一言，GPT-4评测号称达到了97%文心一言的水平，在人工评测中五成不输文心一言。</p>
-<p>Phoenix 模型有两点不同之处：在微调方面，指令式微调与对话式微调的进行了优化结合；支持四十余种全球化语言。</p>
+<p>Phoenix
+模型有两点不同之处：在微调方面，指令式微调与对话式微调的进行了优化结合；支持四十余种全球化语言。</p>
 <p>开源地址为：<a target="_blank" rel="noopener" href="https://github.com/FreedomIntelligence/LLMZoo">https://github.com/FreedomIntelligence/LLMZoo</a></p>
 <h3 id="openassistant">OpenAssistant</h3>
 <p>OpenAssistant是一个开源聊天助手，其可以理解任务、与第三方系统交互、动态检索信息。据其说，其是第一个在人类数据上进行训练的完全开源的大规模指令微调模型。该模型主要创新在于一个较大的人类反馈数据集（详细说明见数据篇），公开测试显示效果在人类对齐和毒性方面做的不错，但是中文效果尚有不足。</p>
@@ -738,22 +777,31 @@ if(canvas.getContext){
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor">https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor</a><br>
 在线体验地址是：<a target="_blank" rel="noopener" href="https://huggingface.co/chat">https://huggingface.co/chat</a></p>
 <h3 id="stablelm">StableLM</h3>
-<p>StableVicuna是一个Vicuna-13B v0（LLaMA-13B上的微调）的RLHF的微调模型。</p>
-<p>StableLM-Alpha是以开源数据集the Pile（含有维基百科、Stack Exchange和PubMed等多个数据源）基础上训练所得，训练token量达1.5万亿。</p>
-<p>为了适应对话，其在Stanford Alpaca模式基础上，结合了Stanford's Alpaca, Nomic-AI's gpt4all, RyokoAI's ShareGPT52K datasets, Databricks labs' Dolly, and Anthropic's HH.等数据集，微调获得模型StableLM-Tuned-Alpha</p>
+<p>StableVicuna是一个Vicuna-13B
+v0（LLaMA-13B上的微调）的RLHF的微调模型。</p>
+<p>StableLM-Alpha是以开源数据集the Pile（含有维基百科、Stack
+Exchange和PubMed等多个数据源）基础上训练所得，训练token量达1.5万亿。</p>
+<p>为了适应对话，其在Stanford Alpaca模式基础上，结合了Stanford's Alpaca,
+Nomic-AI's gpt4all, RyokoAI's ShareGPT52K datasets, Databricks labs'
+Dolly, and Anthropic's HH.等数据集，微调获得模型StableLM-Tuned-Alpha</p>
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Stability-AI/StableLM">https://github.com/Stability-AI/StableLM</a></p>
 <h3 id="华驼huatuo">华驼(HuaTuo)</h3>
 <p>该模型垂直医学领域，经过中文医学指令精调/指令集对原始LLaMA-7B模型进行了微调，增强了医学领域上的对话能力。</p>
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese">https://github.com/SCIR-HI/Huatuo-Llama-Med-Chinese</a></p>
 <h3 id="chatrwkvraven">ChatRWKV(Raven)</h3>
-<p>该模型的底座采用了自主研发的RWKV语言模型，100% RNN，微调部分仍然是经典的Alpaca、CodeAlpaca、Guanaco、GPT4All、 ShareGPT等。其开源了1B5、3B、7B和14B的模型，目前支持中英两个语种，提供不同语种比例的模型文件。</p>
+<p>该模型的底座采用了自主研发的RWKV语言模型，100%
+RNN，微调部分仍然是经典的Alpaca、CodeAlpaca、Guanaco、GPT4All、
+ShareGPT等。其开源了1B5、3B、7B和14B的模型，目前支持中英两个语种，提供不同语种比例的模型文件。</p>
 <p>该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/BlinkDL/ChatRWKV">https://github.com/BlinkDL/ChatRWKV</a><br>
 <a target="_blank" rel="noopener" href="https://huggingface.co/BlinkDL/rwkv-4-raven">https://huggingface.co/BlinkDL/rwkv-4-raven</a></p>
 <h3 id="self-align和dromedary">SELF-ALIGN和Dromedary</h3>
-<p>目前大部分类ChatGPT基本都是采用人工对齐方式，如RLHF，Alpaca模式只是实现了ChatGPT的效仿式对齐，对齐能力受限于原始ChatGPT对齐能力。卡内基梅隆大学语言技术研究所、IBM 研究院MIT-IBM Watson AI Lab和马萨诸塞大学阿默斯特分校的研究者提出了一种全新的自对齐方法。其结合了原则驱动式推理和生成式大模型的生成能力，用极少的监督数据就能达到很好的效果。该项目工作成功应用在LLaMA-65b模型上，研发出了Dromedary（单峰骆驼）。</p>
+<p>目前大部分类ChatGPT基本都是采用人工对齐方式，如RLHF，Alpaca模式只是实现了ChatGPT的效仿式对齐，对齐能力受限于原始ChatGPT对齐能力。卡内基梅隆大学语言技术研究所、IBM
+研究院MIT-IBM Watson AI
+Lab和马萨诸塞大学阿默斯特分校的研究者提出了一种全新的自对齐方法。其结合了原则驱动式推理和生成式大模型的生成能力，用极少的监督数据就能达到很好的效果。该项目工作成功应用在LLaMA-65b模型上，研发出了Dromedary（单峰骆驼）。</p>
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/IBM/Dromedary">https://github.com/IBM/Dromedary</a></p>
 <h3 id="llava">LLaVA</h3>
-<p>LLaVA是一个多模态的语言和视觉对话模型，类似GPT-4，其主要还是在多模态数据指令工程上做了大量工作，目前开源了其13B的模型文件。从性能上，据了解视觉聊天相对得分达到了GPT-4的85%；多模态推理任务的科学问答达到了SoTA的92.53%。该项目的开源地址是： <a target="_blank" rel="noopener" href="https://github.com/haotian-liu/LLaVA">https://github.com/haotian-liu/LLaVA</a></p>
+<p>LLaVA是一个多模态的语言和视觉对话模型，类似GPT-4，其主要还是在多模态数据指令工程上做了大量工作，目前开源了其13B的模型文件。从性能上，据了解视觉聊天相对得分达到了GPT-4的85%；多模态推理任务的科学问答达到了SoTA的92.53%。该项目的开源地址是：
+<a target="_blank" rel="noopener" href="https://github.com/haotian-liu/LLaVA">https://github.com/haotian-liu/LLaVA</a></p>
 <h3 id="minigpt-4">miniGPT-4</h3>
 <p>从名字上看，该项目对标GPT-4的能力域，实现了一个缩略版。该项目来自来自沙特阿拉伯阿卜杜拉国王科技大学的研究团队。该模型利用两阶段的训练方法，先在大量对齐的图像-文本对上训练以获得视觉语言知识，然后用一个较小但高质量的图像-文本数据集和一个设计好的对话模板对预训练的模型进行微调，以提高模型生成的可靠性和可用性。该模型语言解码器使用Vicuna，视觉感知部分使用与BLIP-2相同的视觉编码器。</p>
 <p>该项目的开源地址是：<a target="_blank" rel="noopener" href="https://github.com/Vision-CAIR/MiniGPT-4">https://github.com/Vision-CAIR/MiniGPT-4</a></p>

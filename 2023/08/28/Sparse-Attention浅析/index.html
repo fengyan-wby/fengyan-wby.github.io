@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="传统Transformer的Self Attention架构会带来\(O(n^2)\)的复杂度，总结一下对Self Attention结构进行优化的工作。">
 <meta property="og:type" content="article">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/9.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/10.png">
 <meta property="article:published_time" content="2023-08-28T16:37:12.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.608Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.235Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="Attention">
 <meta name="twitter:card" content="summary">
@@ -545,7 +545,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -611,7 +611,8 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>传统Transformer的Self Attention架构会带来<span class="math inline">\(O(n^2)\)</span>的复杂度，总结一下对Self Attention结构进行优化的工作。</p>
+    <div class="post-body" itemprop="articleBody"><p>传统Transformer的Self Attention架构会带来<span class="math inline">\(O(n^2)\)</span>的复杂度，总结一下对Self
+Attention结构进行优化的工作。</p>
 <span id="more"></span>
 <h2 id="sparse-transformer">Sparse Transformer</h2>
 <p>机构：OpenAI<br>
@@ -620,34 +621,49 @@ if(canvas.getContext){
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1904.10509.pdf">https://arxiv.org/pdf/1904.10509.pdf</a></li>
 </ul>
 <h3 id="前言">前言</h3>
-<p>自从<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Transformer</a>被提出以来，它依靠强大的效果得到了广泛的关注。Transformer最被诟病的一个问题是它的时间复杂度以及空间复杂度和输入序列的长度成二次方的关系<span class="math inline">\(O(n^2)\)</span>。而这篇文章提出的Sparse Transformer方法使用稀疏自注意力替代了传统Transformer的密集自注意力，将Transformer的复杂度降低到<span class="math inline">\(O(n\sqrt{n})\)</span>。</p>
+<p>自从<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Transformer</a>被提出以来，它依靠强大的效果得到了广泛的关注。Transformer最被诟病的一个问题是它的时间复杂度以及空间复杂度和输入序列的长度成二次方的关系<span class="math inline">\(O(n^2)\)</span>。而这篇文章提出的Sparse
+Transformer方法使用稀疏自注意力替代了传统Transformer的密集自注意力，将Transformer的复杂度降低到<span class="math inline">\(O(n\sqrt{n})\)</span>。</p>
 <h3 id="算法动机">算法动机</h3>
-<p>在CIFAR-10数据集上，使用一个128层的自注意力模型。对注意力进行可视化，得到下图： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/1.png"> 图中白色区域是注意力机制的高权值位置，黑色区域是被mask掉的位置（由于是自回归生成图片，所以需要将未来信息遮掩）。</p>
+<p>在CIFAR-10数据集上，使用一个128层的自注意力模型。对注意力进行可视化，得到下图：
+<img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/1.png">
+图中白色区域是注意力机制的高权值位置，黑色区域是被mask掉的位置（由于是自回归生成图片，所以需要将未来信息遮掩）。</p>
 <ul>
 <li>（a）浅层的注意力高权值点集中在当前预测点的附近，也就是说浅层的注意力更关注当前像素周围的纹理信息。</li>
 <li>（b）第19、20层的更关注同行和同列的像素。</li>
 <li>（c）深层的注意力关注图像的全局信息。</li>
 <li>（d）更深层的注意力关注点十分的稀疏。</li>
 </ul>
-<p>那么是否可以将稀疏性引入Transformer中呢，这也就是Sparse Transformer提出的动机。</p>
+<p>那么是否可以将稀疏性引入Transformer中呢，这也就是Sparse
+Transformer提出的动机。</p>
 <h3 id="sparse-transformer-1">Sparse Transformer</h3>
 <p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/2.png"></p>
 <h4 id="传统自注意力">传统自注意力</h4>
-<p>像GPT这样的自回归模型，使用的是之前所有时间片的内容来预测当前时间片的结果。传统的Transformer需要为之前的所有时间片计算一个权值，所以传统Transformer的自注意力机制的复杂度是<span class="math inline">\(O(n^2)\)</span>。如上图(a)中为<span class="math inline">\(6 \times 6\)</span>大小图像的注意力和长度为16的注意力连接矩阵。</p>
+<p>像GPT这样的自回归模型，使用的是之前所有时间片的内容来预测当前时间片的结果。传统的Transformer需要为之前的所有时间片计算一个权值，所以传统Transformer的自注意力机制的复杂度是<span class="math inline">\(O(n^2)\)</span>。如上图(a)中为<span class="math inline">\(6 \times
+6\)</span>大小图像的注意力和长度为16的注意力连接矩阵。</p>
 <h4 id="factorized-self-attention">Factorized Self-Attention</h4>
-<p>Transformer在进行图像生成时，注意力矩阵与注意力所处的网络深度呈现了明显的相关稀疏性。那么我们能否提前就人工设置好自注意力矩阵的稀疏性呢？这样我们一是能够引入网络结构的归纳偏置，二是能够减轻模型的计算量，提升计算速度。下面就来介绍Sparse Transformer是如何实现这个目标的。</p>
-<p>传统的自注意力的计算方式可以表示为： <span class="math display">\[softmax(\frac{QK^T}{\sqrt{d}})\]</span> 该计算方式复杂度最高的地方是<span class="math inline">\(QK^T\)</span>，达到了<span class="math inline">\(O(n^2)\)</span>。而Sparse Transformer的核心是只让设置好的像素点参与自注意力的计算（注意这里不是只选取设置好位置上的像素点，其他mask掉，因为这样斌不能降低模型的复杂度）。</p>
-<p>为了实现上述目标，我们这里引入一个名为连接模式(Connectivity Pattern)的变量，它表示为<span class="math inline">\(S=\{S_1, ..., S_n\}\)</span>。其中<span class="math inline">\(S_i\)</span>表示预测第<span class="math inline">\(i\)</span>个时间片的索引，表示为一个由0和1组成的二维矩阵，二维矩阵中的数值为1表示该位置的像素点参与自注意力的计算。如在上图中，位置为28，则传统自注意力中<span class="math inline">\(6 \times 6\)</span>大小的<span class="math inline">\(S_{28}\)</span>表示为(a)的上半部分，其中深色部分为1，浅色部分为0。</p>
+<p>Transformer在进行图像生成时，注意力矩阵与注意力所处的网络深度呈现了明显的相关稀疏性。那么我们能否提前就人工设置好自注意力矩阵的稀疏性呢？这样我们一是能够引入网络结构的归纳偏置，二是能够减轻模型的计算量，提升计算速度。下面就来介绍Sparse
+Transformer是如何实现这个目标的。</p>
+<p>传统的自注意力的计算方式可以表示为： <span class="math display">\[softmax(\frac{QK^T}{\sqrt{d}})\]</span>
+该计算方式复杂度最高的地方是<span class="math inline">\(QK^T\)</span>，达到了<span class="math inline">\(O(n^2)\)</span>。而Sparse
+Transformer的核心是只让设置好的像素点参与自注意力的计算（注意这里不是只选取设置好位置上的像素点，其他mask掉，因为这样斌不能降低模型的复杂度）。</p>
+<p>为了实现上述目标，我们这里引入一个名为连接模式(Connectivity
+Pattern)的变量，它表示为<span class="math inline">\(S=\{S_1, ...,
+S_n\}\)</span>。其中<span class="math inline">\(S_i\)</span>表示预测第<span class="math inline">\(i\)</span>个时间片的索引，表示为一个由0和1组成的二维矩阵，二维矩阵中的数值为1表示该位置的像素点参与自注意力的计算。如在上图中，位置为28，则传统自注意力中<span class="math inline">\(6 \times 6\)</span>大小的<span class="math inline">\(S_{28}\)</span>表示为(a)的上半部分，其中深色部分为1，浅色部分为0。</p>
 <p>在Sparse Transformer的自注意力计算中，连接模式只作用在<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>的计算上，计算过程如下所示。</p>
 <ol type="1">
-<li>对于第<span class="math inline">\(i\)</span>个时间片的输入，首先使用<span class="math inline">\(key\)</span>和<span class="math inline">\(value\)</span>的权值矩阵乘以输入特征，得到<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>。然后再将连接模式<span class="math inline">\(S_i\)</span>作用到<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>上，得到稀疏的特征<span class="math inline">\(K_{S_i}\)</span>和<span class="math inline">\(V_{S_i}\)</span>。 <span class="math display">\[K_{S_i}=(W_kx_j)_{j \in S_i}, V_{S_i}=(W_vx_j)_{j \in S_i}\]</span></li>
+<li>对于第<span class="math inline">\(i\)</span>个时间片的输入，首先使用<span class="math inline">\(key\)</span>和<span class="math inline">\(value\)</span>的权值矩阵乘以输入特征，得到<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>。然后再将连接模式<span class="math inline">\(S_i\)</span>作用到<span class="math inline">\(K\)</span>和<span class="math inline">\(V\)</span>上，得到稀疏的特征<span class="math inline">\(K_{S_i}\)</span>和<span class="math inline">\(V_{S_i}\)</span>。 <span class="math display">\[K_{S_i}=(W_kx_j)_{j \in S_i}, V_{S_i}=(W_vx_j)_{j
+\in S_i}\]</span></li>
 <li>然后使用稀疏特征得到第<span class="math inline">\(i\)</span>个时间片的自注意力结果。 <span class="math display">\[a(x_i,S_i)=softmax(\frac{(W_qx_i)K_{S_i}^{T}}{\sqrt{d}})V_{S_i}\]</span></li>
-<li>最后再将<span class="math inline">\(n\)</span>个时间片的结果合并起来，得到最终的结果。 <span class="math display">\[Attend(X, S)=(a(x_i, S_i))_{i \in \{1,...,n\}}\]</span></li>
+<li>最后再将<span class="math inline">\(n\)</span>个时间片的结果合并起来，得到最终的结果。
+<span class="math display">\[Attend(X, S)=(a(x_i, S_i))_{i \in
+\{1,...,n\}}\]</span></li>
 </ol>
-<p>其中<span class="math inline">\(W_q\)</span>，<span class="math inline">\(W_k\)</span>以及<span class="math inline">\(W_v\)</span>分别是<span class="math inline">\(Query\)</span>，<span class="math inline">\(Key\)</span>，<span class="math inline">\(Value\)</span>三个向量对应的权值矩阵。Sparse Transformer通过让连接模式作用到<span class="math inline">\(K^T\)</span>上，从而降低了<span class="math inline">\(QK^T\)</span>的复杂度。</p>
+<p>其中<span class="math inline">\(W_q\)</span>，<span class="math inline">\(W_k\)</span>以及<span class="math inline">\(W_v\)</span>分别是<span class="math inline">\(Query\)</span>，<span class="math inline">\(Key\)</span>，<span class="math inline">\(Value\)</span>三个向量对应的权值矩阵。Sparse
+Transformer通过让连接模式作用到<span class="math inline">\(K^T\)</span>上，从而降低了<span class="math inline">\(QK^T\)</span>的复杂度。</p>
 <p>我们这里已经定义好了稀疏自注意力机制的通用计算方式，接下来要做的就是设计不同的连接模式。对于每个自注意力的计算，我们可以使用若干不同的注意力核。在论文中，作者使用了2个注意力核（行+列），也可以扩展到更高的维度。</p>
 <h5 id="strided-attention">Strided Attention</h5>
-<p>Strided Attention由两种形式的连接模式组成，如上图(b)所示，其包含行和列两种注意力核。假设步长为<span class="math inline">\(l\)</span>，行注意力核指的是在连接模式中，当前时间片的前<span class="math inline">\(l\)</span>个时间片的值是1，其余的值是0.列注意力核指的是连接模式中每隔l个时间片的值为1，其余值为0。<br>
+<p>Strided
+Attention由两种形式的连接模式组成，如上图(b)所示，其包含行和列两种注意力核。假设步长为<span class="math inline">\(l\)</span>，行注意力核指的是在连接模式中，当前时间片的前<span class="math inline">\(l\)</span>个时间片的值是1，其余的值是0.列注意力核指的是连接模式中每隔l个时间片的值为1，其余值为0。<br>
 行注意力核和列注意力核的表达式如下： <span class="math display">\[
 \begin{matrix}
     A_i^{(1)}=&amp;\{t,t+1,...,i\}, t=max(0, i-l) \\
@@ -655,15 +671,27 @@ if(canvas.getContext){
 \end{matrix}
 \]</span> 对于图片生成这一类任务来说，<span class="math inline">\(l\)</span>一般为图像的宽或者高。所以复杂度为<span class="math inline">\(O(l)=O(\sqrt{n})\)</span>。</p>
 <h5 id="fixed-attention">Fixed Attention</h5>
-<p>Fixed Attention同样也是由行注意力核和列注意力核组成，如上图中(c)所示。行注意力核是当前时间片同行的的时间片。表示为下面的式子： <span class="math display">\[A_i^{(1)}=\{j:(\lfloor j/l \rfloor=\lfloor i/l \rfloor)\}\]</span></p>
-<p>列注意力核表示为： <span class="math display">\[A_i^{(2)}=\{j:j \space mod \space l \in \{t,t+1,...,l\}\}\]</span> 其中<span class="math inline">\(t=l-c\)</span>，Fixed Attention的列注意力核又被叫做滑窗注意力核，超参数<span class="math inline">\(c\)</span>相当于滑窗卷积窗口的大小。上述两个注意力核的复杂度同样为<span class="math inline">\(O(\sqrt{n})\)</span>。</p>
+<p>Fixed
+Attention同样也是由行注意力核和列注意力核组成，如上图中(c)所示。行注意力核是当前时间片同行的的时间片。表示为下面的式子：
+<span class="math display">\[A_i^{(1)}=\{j:(\lfloor j/l \rfloor=\lfloor
+i/l \rfloor)\}\]</span></p>
+<p>列注意力核表示为： <span class="math display">\[A_i^{(2)}=\{j:j
+\space mod \space l \in \{t,t+1,...,l\}\}\]</span> 其中<span class="math inline">\(t=l-c\)</span>，Fixed
+Attention的列注意力核又被叫做滑窗注意力核，超参数<span class="math inline">\(c\)</span>相当于滑窗卷积窗口的大小。上述两个注意力核的复杂度同样为<span class="math inline">\(O(\sqrt{n})\)</span>。</p>
 <h4 id="factorized-attention-heads">Factorized attention heads</h4>
 <p>上面介绍了多种不同形式的注意力核，下面将介绍如何既那个这些不同形式的注意力核融入到网络中。</p>
-<p>传统的Transformer通过如下方式计算注意力核： <span class="math display">\[attention(X) = W_p \cdot attend(X,S)\]</span> 本文作者提出了一下三种新的方式：</p>
+<p>传统的Transformer通过如下方式计算注意力核： <span class="math display">\[attention(X) = W_p \cdot attend(X,S)\]</span>
+本文作者提出了一下三种新的方式：</p>
 <ol type="1">
-<li>每个残差块使用不同的注意力核类型，一个深层网络是由多个连续的残差块组成的，对于每个残差块，我们可以使用不同类型的注意力核，表示为下式： <span class="math display">\[attention(X)=W_p \cdot attend(X, A^{(r \space mod \space p)})\]</span></li>
-<li>第二个方式是每个注意力头都计算所有类型的注意力核，然后合并他们的结果，如下式所示： <span class="math display">\[attention(X)=W_p \cdot attend(X,\bigcup_{m=1}^{p}A^{(m)})\]</span></li>
-<li>第三个方式是对于多头的注意力机制，每组头选择一个形式的注意力核，然后将他们合并起来，如下式所示： <span class="math display">\[attention(X)=W_p(attend(X,A)^{(i)})_{i \in \{1,...,n_h\}}\]</span> 其中<span class="math inline">\(n_h\)</span>组不同的注意力核会并行计算，然后在特征维度进行特征拼接。实验结果证明这种方式是最好的融合策略。</li>
+<li>每个残差块使用不同的注意力核类型，一个深层网络是由多个连续的残差块组成的，对于每个残差块，我们可以使用不同类型的注意力核，表示为下式：
+<span class="math display">\[attention(X)=W_p \cdot attend(X, A^{(r
+\space mod \space p)})\]</span></li>
+<li>第二个方式是每个注意力头都计算所有类型的注意力核，然后合并他们的结果，如下式所示：
+<span class="math display">\[attention(X)=W_p \cdot
+attend(X,\bigcup_{m=1}^{p}A^{(m)})\]</span></li>
+<li>第三个方式是对于多头的注意力机制，每组头选择一个形式的注意力核，然后将他们合并起来，如下式所示：
+<span class="math display">\[attention(X)=W_p(attend(X,A)^{(i)})_{i \in
+\{1,...,n_h\}}\]</span> 其中<span class="math inline">\(n_h\)</span>组不同的注意力核会并行计算，然后在特征维度进行特征拼接。实验结果证明这种方式是最好的融合策略。</li>
 </ol>
 <h2 id="longformer">Longformer</h2>
 <p>论文地址：</p>
@@ -682,9 +710,12 @@ if(canvas.getContext){
 <h4 id="注意力模式">注意力模式</h4>
 <p>Longformer定义了如下几种形式的改进self-attention。</p>
 <h5 id="sliding-window">Sliding window</h5>
-<p>Sliding window如上图(b)所示，每个位置的token只关注其相邻窗口位置的token，相当于CNN的卷积窗口。 给定一个固定窗口大小<span class="math inline">\(w\)</span>，每个token关注其左右<span class="math inline">\(\frac{1}{2}\)</span>长度的token，则复杂度为<span class="math inline">\(O(n \times w)\)</span>。对于一个<span class="math inline">\(l\)</span>层的Transformer模型，顶层token的感受野大小为<span class="math inline">\(l \times w\)</span>（假设每一层的窗口大小都是<span class="math inline">\(w\)</span>），设置合适的窗口大小可以让顶层token关注到所有的输入token。</p>
+<p>Sliding
+window如上图(b)所示，每个位置的token只关注其相邻窗口位置的token，相当于CNN的卷积窗口。
+给定一个固定窗口大小<span class="math inline">\(w\)</span>，每个token关注其左右<span class="math inline">\(\frac{1}{2}\)</span>长度的token，则复杂度为<span class="math inline">\(O(n \times w)\)</span>。对于一个<span class="math inline">\(l\)</span>层的Transformer模型，顶层token的感受野大小为<span class="math inline">\(l \times w\)</span>（假设每一层的窗口大小都是<span class="math inline">\(w\)</span>），设置合适的窗口大小可以让顶层token关注到所有的输入token。</p>
 <h5 id="dilated-sliding-window">Dilated Sliding Window</h5>
-<p>Dilated Sliding Window如上图(c)所示。为了进一步提升感受野大小，可以在滑动窗口中加入空洞，相当于CNN中的空洞卷积。给定窗口大小<span class="math inline">\(w\)</span>，窗口之间的空洞个数<span class="math inline">\(d\)</span>，假设每一层都采用上述参数，则感受野大小为<span class="math inline">\(l \times d \times w\)</span>。</p>
+<p>Dilated Sliding
+Window如上图(c)所示。为了进一步提升感受野大小，可以在滑动窗口中加入空洞，相当于CNN中的空洞卷积。给定窗口大小<span class="math inline">\(w\)</span>，窗口之间的空洞个数<span class="math inline">\(d\)</span>，假设每一层都采用上述参数，则感受野大小为<span class="math inline">\(l \times d \times w\)</span>。</p>
 <p>此外，作者发现在多头自注意力中，对每个头使用不同的<span class="math inline">\(d\)</span>可以有更好的效果。通过设置空洞参数，某些头可以不使用空洞从而可以更加关注附近的信息，而某些头使用空洞去关注长距离的文本信息。</p>
 <h5 id="global-attention">Global Attention</h5>
 <p>全局注意力如上图(d)所示。除了上述两种形式的self-attention之外，作者还定义了全局注意力，即选择一些token关注全局的token。特别的是，全局注意力token是对称的，即全局注意力token会关注所有的token，所有的其他token也会关注全局token。</p>
@@ -701,24 +732,33 @@ if(canvas.getContext){
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2007.14062.pdf">https://arxiv.org/pdf/2007.14062.pdf</a></li>
 </ul>
 <h3 id="摘要-1">摘要</h3>
-<p>当下各种地表最强的NLP模型都同宗同源于Transformer，但Transformer的完全注意力机制会带来模型的复杂度和序列长度呈二次依赖的问题，即<span class="math inline">\(O(n^2)\)</span>。Big Bird模型的核心是使用稀疏注意力机制将二次依赖降至线性。文章中还证明了Big Bird是一个序列函数的通用逼近器，而且是图灵完备的，而且可以保持完全注意力模型的性质。在相同的硬件配置下，Big Bird能够处理的序列长度是BERT的8倍。</p>
+<p>当下各种地表最强的NLP模型都同宗同源于Transformer，但Transformer的完全注意力机制会带来模型的复杂度和序列长度呈二次依赖的问题，即<span class="math inline">\(O(n^2)\)</span>。Big
+Bird模型的核心是使用稀疏注意力机制将二次依赖降至线性。文章中还证明了Big
+Bird是一个序列函数的通用逼近器，而且是图灵完备的，而且可以保持完全注意力模型的性质。在相同的硬件配置下，Big
+Bird能够处理的序列长度是BERT的8倍。</p>
 <div class="note info"><p>一个模型图灵完备意味着一切可以计算的问题模型都能完成，理论上，它可以用来解决任何算法。</p>
 </div>
 <h3 id="big-bird架构">Big Bird架构</h3>
 <p><img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/4.png"></p>
-<p>由于BERT使用的是完全注意力机制，即每个token都需要关注所有的token，所以内存消耗就是序列长度的二次方。Big Bird中引入了稀疏注意力机制，将二次依赖降至线形，其主要由以下三个部分组成：</p>
+<p>由于BERT使用的是完全注意力机制，即每个token都需要关注所有的token，所以内存消耗就是序列长度的二次方。Big
+Bird中引入了稀疏注意力机制，将二次依赖降至线形，其主要由以下三个部分组成：</p>
 <h4 id="random-attention">Random attention</h4>
 <p><code>Random attention</code>：随机注意力，如上图(a)，每个token随机关注r个token，r为超参数。</p>
 <h4 id="sliding-window-attention">Sliding window attention</h4>
 <p><code>Sliding window attention</code>：局部注意力，如上图(b)，每个token关注附近w个token，w为超参数，表示窗口大小。</p>
 <h4 id="global-attention-1">Global attention</h4>
-<p><code>Global attention</code>：全局注意力，如上图(c)，全局token可以关注到全部的token，同时全部token都会关注到全局token。Global token的定义有两种：</p>
+<p><code>Global attention</code>：全局注意力，如上图(c)，全局token可以关注到全部的token，同时全部token都会关注到全局token。Global
+token的定义有两种：</p>
 <ol type="1">
-<li>ITC(internal transformer construction)，选用现有的一些token作为全局token。</li>
-<li>ETC(extended transformer construction)，通过添加一些token(比如<code>[CLS]</code>)作为全局token。</li>
+<li>ITC(internal transformer
+construction)，选用现有的一些token作为全局token。</li>
+<li>ETC(extended transformer
+construction)，通过添加一些token(比如<code>[CLS]</code>)作为全局token。</li>
 </ol>
 <p>三种注意力的消融实验，三者联合的效果是最好的： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/5.png"></p>
-<p>从模型角度来看，Big Bird和Longformer模型非常类似。相对Longformer模型，Big Bird模型增加了<code>Random attention</code>，而在<code>Sliding window attention</code>没有使用空洞，其他基本都一致。</p>
+<p>从模型角度来看，Big
+Bird和Longformer模型非常类似。相对Longformer模型，Big
+Bird模型增加了<code>Random attention</code>，而在<code>Sliding window attention</code>没有使用空洞，其他基本都一致。</p>
 <h2 id="etc">ETC</h2>
 <p>论文地址：</p>
 <ul>
@@ -742,7 +782,8 @@ if(canvas.getContext){
 <li>long-to-global(l2g)</li>
 <li>long-to-long(l2l)</li>
 </ol>
-<p>其中复杂度最高的<span class="math inline">\(l2l\)</span>部分被限制在一个固定的半径<span class="math inline">\(r(r&lt;&lt;n_l)\)</span>之内，这样<span class="math inline">\(l2l\)</span>中的token只能关注到邻近的<span class="math inline">\(2r+1\)</span>个token。如下图所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/6.png"> 而且，ETC的attention矩阵可以更加的灵活，如下所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/9.png"> <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/10.png"></p>
+<p>其中复杂度最高的<span class="math inline">\(l2l\)</span>部分被限制在一个固定的半径<span class="math inline">\(r(r&lt;&lt;n_l)\)</span>之内，这样<span class="math inline">\(l2l\)</span>中的token只能关注到邻近的<span class="math inline">\(2r+1\)</span>个token。如下图所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/6.png">
+而且，ETC的attention矩阵可以更加的灵活，如下所示： <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/9.png"> <img src="/2023/08/28/Sparse-Attention%E6%B5%85%E6%9E%90/10.png"></p>
 
     </div>
 

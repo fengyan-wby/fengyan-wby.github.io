@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="转载自： https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;636270877 梳理一个完整的LLM训练流程，包括：  模型预训练（Pretrain） 指令微调（Instruction Tuning） 奖励模型（Reward Model） 强化学习（RLHF）">
 <meta property="og:type" content="article">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/9.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/10.png">
 <meta property="article:published_time" content="2023-12-07T09:54:59.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.768Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.376Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="AIGC">
 <meta property="article:tag" content="大模型">
@@ -158,7 +158,10 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.</span> <span class="nav-text">预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E6%B8%85%E6%B4%97"><span class="nav-number">1.1.1.</span> <span class="nav-text">数据集的收集和清洗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%BA%90%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.3.</span> <span class="nav-text">数据源采样</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E8%A1%A8%E6%89%A9%E5%85%85"><span class="nav-number">1.2.</span> <span class="nav-text">词表扩充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">语言模型预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.3.1.</span> <span class="nav-text">预训练任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.3.3.</span> <span class="nav-text">参数设置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%95%88%E6%9E%9C%E8%AF%84%E6%B5%8B"><span class="nav-number">1.4.</span> <span class="nav-text">模型效果评测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83"><span class="nav-number">2.</span> <span class="nav-text">指令微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86"><span class="nav-number">2.1.</span> <span class="nav-text">数据收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#self-instruction"><span class="nav-number">2.1.1.</span> <span class="nav-text">Self Instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.1.2.</span> <span class="nav-text">开源数据集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.</span> <span class="nav-text">指令微调模型训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">模型评测方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">奖励模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%81%8F%E5%BA%8F%E5%AF%B9%E8%AE%AD%E7%BB%83%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">使用偏序对训练奖励模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83rm%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">训练RM的数据量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.3.</span> <span class="nav-text">RM的大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ppoproximal-policy-optimization"><span class="nav-number">4.1.</span> <span class="nav-text">PPO（Proximal Policy Optimization）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E4%B8%8D%E7%A8%B3%E5%AE%9A"><span class="nav-number">4.1.1.</span> <span class="nav-text">训练过程不稳定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%9C%E4%B8%8D%E7%A8%B3%E5%AE%9A"><span class="nav-number">4.1.2.</span> <span class="nav-text">训练结果不稳定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dpodirect-preference-optimization"><span class="nav-number">4.2.</span> <span class="nav-text">DPO（Direct Preference Optimization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bonbest-of-n"><span class="nav-number">4.3.</span> <span class="nav-text">BON（Best-of-N）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ktokahneman-tversky-optimization"><span class="nav-number">4.4.</span> <span class="nav-text">KTO（Kahneman-Tversky optimization ）</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.</span> <span class="nav-text">预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E6%B8%85%E6%B4%97"><span class="nav-number">1.1.1.</span> <span class="nav-text">数据集的收集和清洗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%BA%90%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.3.</span> <span class="nav-text">数据源采样</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E8%A1%A8%E6%89%A9%E5%85%85"><span class="nav-number">1.2.</span> <span class="nav-text">词表扩充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">语言模型预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.3.1.</span> <span class="nav-text">预训练任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.3.3.</span> <span class="nav-text">参数设置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%95%88%E6%9E%9C%E8%AF%84%E6%B5%8B"><span class="nav-number">1.4.</span> <span class="nav-text">模型效果评测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83"><span class="nav-number">2.</span> <span class="nav-text">指令微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86"><span class="nav-number">2.1.</span> <span class="nav-text">数据收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#self-instruction"><span class="nav-number">2.1.1.</span> <span class="nav-text">Self Instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.1.2.</span> <span class="nav-text">开源数据集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.</span> <span class="nav-text">指令微调模型训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">模型评测方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">奖励模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%81%8F%E5%BA%8F%E5%AF%B9%E8%AE%AD%E7%BB%83%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">使用偏序对训练奖励模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83rm%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">训练RM的数据量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.3.</span> <span class="nav-text">RM的大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ppoproximal-policy-optimization"><span class="nav-number">4.1.</span> <span class="nav-text">PPO（Proximal Policy
+Optimization）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E4%B8%8D%E7%A8%B3%E5%AE%9A"><span class="nav-number">4.1.1.</span> <span class="nav-text">训练过程不稳定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%9C%E4%B8%8D%E7%A8%B3%E5%AE%9A"><span class="nav-number">4.1.2.</span> <span class="nav-text">训练结果不稳定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dpodirect-preference-optimization"><span class="nav-number">4.2.</span> <span class="nav-text">DPO（Direct Preference
+Optimization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bonbest-of-n"><span class="nav-number">4.3.</span> <span class="nav-text">BON（Best-of-N）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ktokahneman-tversky-optimization"><span class="nav-number">4.4.</span> <span class="nav-text">KTO（Kahneman-Tversky
+optimization ）</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -549,7 +552,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -655,12 +658,14 @@ if(canvas.getContext){
 <tr class="even">
 <td>琅琊榜的导演是</td>
 <td>琅琊榜的导演是很多的人都不知道，因为他的父亲是一位杰作家，他的父亲的杰作家是一位杰作家，</td>
-<td>琅琊榜的导演是谁？Who are the directors of the Rolling Stone?琅琊榜的导演是谁？Who are the</td>
+<td>琅琊榜的导演是谁？Who are the directors of the Rolling
+Stone?琅琊榜的导演是谁？Who are the</td>
 </tr>
 </tbody>
 </table>
 <ol start="2" type="1">
-<li><code>专业知识不足</code>：当我们需要一个专业领域的LLM时，预训练模型中的知识就尤为重要。由于大多数预训练模型都是在通用语料上进行学习，对于一些特殊领域（金融、法律等）中的概念和名词无法具备很好的理解。我们通常需要在训练语料中加入一些领域数据，以帮助模型在指定领域内获得更好的效果。如<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.12002.pdf">xuanyuan模型</a>通过金融语料在金融领域的对话进行了增强。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/1.jpg"></li>
+<li><code>专业知识不足</code>：当我们需要一个专业领域的LLM时，预训练模型中的知识就尤为重要。由于大多数预训练模型都是在通用语料上进行学习，对于一些特殊领域（金融、法律等）中的概念和名词无法具备很好的理解。我们通常需要在训练语料中加入一些领域数据，以帮助模型在指定领域内获得更好的效果。如<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.12002.pdf">xuanyuan模型</a>通过金融语料在金融领域的对话进行了增强。
+<img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/1.jpg"></li>
 </ol>
 <p>基于上述原因，通常我们需要在开源的基座大模型上进行二次预训练。预训练分为如下几个部分。</p>
 <h3 id="数据处理">数据处理</h3>
@@ -674,36 +679,52 @@ if(canvas.getContext){
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/3.png"></p>
 <h4 id="数据预处理">数据预处理</h4>
 <p>通常来讲，目前的大模型使用的基本上都是Transformer结构，由于Attention机制在时间和空间上的复杂度，输入模型的文本不会特别的长（如2048）。</p>
-<p>这时需要将文本截断，但以书籍数据为例，一本书的内容肯定远远超过2048个token，直接采用头部截断的方式太过浪费训练数据（每本书永远只能够学习到开头的 2048 tokens 的内容，连序章都不一定能看完）。</p>
-<p>因此，最好的方式是将长文章按照 seq_len（2048）作分割，将切割后的文本喂给模型做训练。</p>
+<p>这时需要将文本截断，但以书籍数据为例，一本书的内容肯定远远超过2048个token，直接采用头部截断的方式太过浪费训练数据（每本书永远只能够学习到开头的
+2048 tokens 的内容，连序章都不一定能看完）。</p>
+<p>因此，最好的方式是将长文章按照
+seq_len（2048）作分割，将切割后的文本喂给模型做训练。</p>
 <h4 id="数据源采样">数据源采样</h4>
 <p>在<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2005.14165.pdf">GPT3</a>中提到，对不同的数据源会选择不同的采样比例：</p>
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/2.jpg"></p>
-<p>从上图可以看到，训练300B tokens时，通过不同的采样比例，相对较大的数据集（Common Crawl）相当于训练了0.44个epochs，而较小的数据集（Wikipedia）则相当与训练了3.4个epochs。</p>
+<p>从上图可以看到，训练300B
+tokens时，通过不同的采样比例，相对较大的数据集（Common
+Crawl）相当于训练了0.44个epochs，而较小的数据集（Wikipedia）则相当与训练了3.4个epochs。</p>
 <p>这样一来就能使得模型不会太偏向于规模较大的数据集，从而失去对规模小但作用大的数据集上的学习信息。</p>
 <h3 id="词表扩充">词表扩充</h3>
 <p>在进行预训练之前，我们需要先选择一个预训练的模型基座，然后在此基础上二次预训练。</p>
 <p>一个较为普遍的问题是：大部分优秀的语言模型都没有进行充分的中文预训练，因此许多工作都尝试将在英语上表现比较优秀的模型用中文语料进行二次预训练，期望能够将模型在英语上的优秀能力迁移到中文任务中来。如<a target="_blank" rel="noopener" href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">Chinese-LLaMA-Alpaca</a>。</p>
 <p>但在进行正式的训练之前，我们还有一步很重要的事情去做：词表扩充。</p>
 <p>因为在英文训练集上建立的词表不一定完全适用于中文，可能有些不该被拆分的词也被拆分了，所以要对原先的词表进行修改。</p>
-<p>为了降低模型的训练难度，通常会在原来的词表上进行词表扩充，也就是将一些常见的汉字添加到原来的词表之后，最后再在中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
-<div class="note info"><p>如在<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2304.07854.pdf">BELLE</a>大模型中，作者在 120w 行中文文本上训练出一个 5w 规模的 token 集合，并将这部分 token 集合与原来的 LLaMA 词表做合并，最后再在 3.2B 的中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
+<p>为了降低模型的训练难度，通常会在原来的词表上进行词表扩充，也就是将一些常见的汉字添加到原来的词表之后，最后再在中文语料上对这部分新扩展的
+token embedding 做二次预训练。</p>
+<div class="note info"><p>如在<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2304.07854.pdf">BELLE</a>大模型中，作者在
+120w 行中文文本上训练出一个 5w 规模的 token 集合，并将这部分 token
+集合与原来的 LLaMA 词表做合并，最后再在 3.2B
+的中文语料上对这部分新扩展的 token embedding 做二次预训练。</p>
 </div>
 <h3 id="语言模型预训练">语言模型预训练</h3>
 <p>在扩充完词表之后，我们就可以开始正式进行模型的预训练步骤了。</p>
 <h4 id="预训练任务">预训练任务</h4>
-<p>预训练任务就是让模型做Next Token Prediction任务，即预测输入文本的下一个token。</p>
-<div class="note info"><p>如输入为“我想吃苹”，那么下一个token大概率为“果”。 预训练任务就是最大化<span class="math inline">\(p(果|我想吃苹)\)</span>的概率。</p>
+<p>预训练任务就是让模型做Next Token
+Prediction任务，即预测输入文本的下一个token。</p>
+<div class="note info"><p>如输入为“我想吃苹”，那么下一个token大概率为“果”。
+预训练任务就是最大化<span class="math inline">\(p(果|我想吃苹)\)</span>的概率。</p>
 </div>
 <h4 id="模型结构">模型结构</h4>
 <p>上面说过，目前的大模型使用的基本上都是Transformer结构。</p>
-<p>为了加快模型的训练速度，通常会在模型中加入一些 tricks 来缩短模型训练周期。 目前大部分加速 tricks 都集中在 Attention 计算上，如：</p>
+<p>为了加快模型的训练速度，通常会在模型中加入一些 tricks
+来缩短模型训练周期。 目前大部分加速 tricks 都集中在 Attention
+计算上，如：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.02150">MQA(Multi Query Attention)</a></li>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.13245.pdf">GQA(Grouped Query Attention)</a></li>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2205.14135.pdf">Flash Attention</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.02150">MQA(Multi Query
+Attention)</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.13245.pdf">GQA(Grouped Query
+Attention)</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2205.14135.pdf">Flash
+Attention</a></li>
 </ul>
-<p>此外，为了让模型能够在不同长度的样本上都具备较好的推理能力，通常也会在Position Embedding上进行一些处理，如：</p>
+<p>此外，为了让模型能够在不同长度的样本上都具备较好的推理能力，通常也会在Position
+Embedding上进行一些处理，如：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.12409">AliBi</a>，模型<a target="_blank" rel="noopener" href="https://huggingface.co/bigscience/bloom-7b1">Bloom</a>中使用了该方法。</li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2104.09864.pdf">RoPE</a>，模型<a href="GLM-130B">GLM-130B</a>中使用了该方法。</li>
@@ -713,10 +734,12 @@ if(canvas.getContext){
 <li>使用了RMSNorm替换了LayerNorm并前置了其位置。</li>
 <li>使用了SwiGLU激活函数替换ReLU。</li>
 </ol>
-<div class="note info"><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1910.07467.pdf">RMSNorm(root mean square)</a>发现LayerNorm的中心偏移没什么用(减去均值等操作)。将其去掉之后，效果几乎不变，但是速度提升了40%。</p>
+<div class="note info"><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1910.07467.pdf">RMSNorm(root mean
+square)</a>发现LayerNorm的中心偏移没什么用(减去均值等操作)。将其去掉之后，效果几乎不变，但是速度提升了40%。</p>
 </div>
 <h4 id="参数设置">参数设置</h4>
-<p>在继续预训练中，我们通常会使用 warmup 策略，此时我们按照 2 种不同情况划分：</p>
+<p>在继续预训练中，我们通常会使用 warmup 策略，此时我们按照 2
+种不同情况划分：</p>
 <ol type="1">
 <li>当训练资源充足时，应尽可能选择较大的学习率以更好的适配下游任务。</li>
 <li>当资源不充足时，更小的学习率和更长的预热步数或许是个更好的选择。</li>
@@ -724,11 +747,17 @@ if(canvas.getContext){
 <h3 id="模型效果评测">模型效果评测</h3>
 <p>大模型评测数据集如下：</p>
 <ul>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/hkust-nlp/ceval">C-Eval</a>：一个很好的中文知识能力测试数据集，涵盖1.4w 道选择题，共 52 个学科。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/4.png"> 由于是选择题的形式，我们可以通过将题目写进prompt 中，并让模型续写 1 个 token，判断这个续写 token 的答案是不是正确答案即可。</p>
-<p>但大部分没有精调过的预训练模型可能无法续写出「A B C D」这样的选项答案，因此，官方推荐使用 5-shot 的方式来让模型知道如何输出答案：</p>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/hkust-nlp/ceval">C-Eval</a>：一个很好的中文知识能力测试数据集，涵盖1.4w
+道选择题，共 52 个学科。 <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/4.png">
+由于是选择题的形式，我们可以通过将题目写进prompt 中，并让模型续写 1 个
+token，判断这个续写 token 的答案是不是正确答案即可。</p>
+<p>但大部分没有精调过的预训练模型可能无法续写出「A B C
+D」这样的选项答案，因此，官方推荐使用 5-shot
+的方式来让模型知道如何输出答案：</p>
 <p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">以下是中国关于&#123;科目&#125;考试的单项选择题，请选出其中的正确答案。</span><br><span class="line"></span><br><span class="line">&#123;题目1&#125;</span><br><span class="line">A. &#123;选项A&#125;</span><br><span class="line">B. &#123;选项B&#125;</span><br><span class="line">C. &#123;选项C&#125;</span><br><span class="line">D. &#123;选项D&#125;</span><br><span class="line">答案：A</span><br><span class="line"></span><br><span class="line">[k-shot demo, note that k is 0 in the zero-shot case]</span><br><span class="line"></span><br><span class="line">&#123;测试题目&#125;</span><br><span class="line">A. &#123;选项A&#125;</span><br><span class="line">B. &#123;选项B&#125;</span><br><span class="line">C. &#123;选项C&#125;</span><br><span class="line">D. &#123;选项D&#125;</span><br><span class="line">答案：</span><br></pre></td></tr></table></figure></p>
 <p>通过前面的样例后，模型能够知道在「答案：」后面应该输出选项字母。</p>
-<p>于是，我们获得模型续写后的第一个 token 的概率分布（logits），并取出[A B C D]这 4 个字母的概率，通过 softmax 进行归一化：</p>
+<p>于是，我们获得模型续写后的第一个 token 的概率分布（logits），并取出[A
+B C D]这 4 个字母的概率，通过 softmax 进行归一化：</p>
 <p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">probs = (</span><br><span class="line">   	torch.nn.functional.softmax(</span><br><span class="line">       	torch.tensor(</span><br><span class="line">           	[</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;A&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;B&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;C&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">               	logits[self.tokenizer.encode(</span><br><span class="line">                   	<span class="string">&quot;D&quot;</span>, bos=<span class="literal">False</span>, eos=<span class="literal">False</span>)[<span class="number">0</span>]],</span><br><span class="line">           	]</span><br><span class="line">       	),</span><br><span class="line">       	dim=<span class="number">0</span>,</span><br><span class="line">   	).detach().cpu().numpy()</span><br><span class="line">)</span><br><span class="line">pred = &#123;<span class="number">0</span>: <span class="string">&quot;A&quot;</span>, <span class="number">1</span>: <span class="string">&quot;B&quot;</span>, <span class="number">2</span>: <span class="string">&quot;C&quot;</span>, <span class="number">3</span>: <span class="string">&quot;D&quot;</span>&#125;[np.argmax(probs)]           <span class="comment"># 将概率最大的选项作为模型输出的答案</span></span><br></pre></td></tr></table></figure></p>
 <p>C-Eval官网上的5-shot结果如下：</p>
 <table>
@@ -840,9 +869,15 @@ if(canvas.getContext){
 <li><p><a target="_blank" rel="noopener" href="https://github.com/openai/grade-school-math">GSM</a></p></li>
 </ul>
 <h2 id="指令微调">指令微调</h2>
-<p>在完成语言模型的预训练之后，就可以开始进行指令微调了，这一步也被称为SFT(Supervised Fine-tuning)。</p>
+<p>在完成语言模型的预训练之后，就可以开始进行指令微调了，这一步也被称为SFT(Supervised
+Fine-tuning)。</p>
 <p>由于预训练任务的本质在于续写，而续写的方式并不一定能够很好的回答用户的问题。例如：</p>
 <table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>用户问题</th>
@@ -861,6 +896,11 @@ if(canvas.getContext){
 <p>因为训练数据大多来自互联网中的数据，我们无法保证数据中只存在规范的一问一答形式的文本，这就会造成预训练模型通常无法按照预期的形式给出人们想要的答案。</p>
 <p>但是，模型中并不是没有相关的知识，其实模型是知道相关答案的，只是模型的输出形式没有和人类的规定对齐。如这样询问就可以引导出答案：</p>
 <table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>用户问题</th>
@@ -876,19 +916,27 @@ if(canvas.getContext){
 </tr>
 </tbody>
 </table>
-<p>不过，这种需要用户精心设计从而去套答案的方式，显然没有那么优雅。既然模型知道这些知识，只是不符合我们人类的对话习惯，那么我们只要再去教会模型如何对话就好了。这就是Instruction Tuning要做的事情，即指令对齐。</p>
-<p>通过指令微调对齐之后，GPT-3就可以变为InstructGPT或ChatGPT这种对话模型： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/5.png"></p>
+<p>不过，这种需要用户精心设计从而去套答案的方式，显然没有那么优雅。既然模型知道这些知识，只是不符合我们人类的对话习惯，那么我们只要再去教会模型如何对话就好了。这就是Instruction
+Tuning要做的事情，即指令对齐。</p>
+<p>通过指令微调对齐之后，GPT-3就可以变为InstructGPT或ChatGPT这种对话模型：
+<img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/5.png"></p>
 <h3 id="数据收集">数据收集</h3>
 <h4 id="self-instruction">Self Instruction</h4>
 <p>既然需要教会模型说人话，那么我们就需要去精心编写各式各样的问题和答案，让模型学会人类的对话方式。</p>
-<p>在 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02155.pdf">InstructGPT Paper</a> 中，使用了1.3w的数据来对 GPT-3.5 进行监督学习： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
-<p>这种规模的人工标注问答数据较难获取，所以<a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a>里提出可以通过已有的对话模型ChatGPT来获取问答数据，这种获取对话数据的方式就是Self Instruction。通过将如下的prompt输入ChatGPT就可以得到需要的指令、输入以及输出。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02155.pdf">InstructGPT
+Paper</a> 中，使用了1.3w的数据来对 GPT-3.5 进行监督学习： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
+<p>这种规模的人工标注问答数据较难获取，所以<a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a>里提出可以通过已有的对话模型ChatGPT来获取问答数据，这种获取对话数据的方式就是Self
+Instruction。通过将如下的prompt输入ChatGPT就可以得到需要的指令、输入以及输出。</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">你被要求提供10个多样化的任务指令。这些任务指令将被提供给GPT模型，我们将评估GPT模型完成指令的能力。</span><br><span class="line">以下是你提供指令需要满足的要求：</span><br><span class="line">1.尽量不要在每个指令中重复动词，要最大化指令的多样性。</span><br><span class="line">2.使用指令的语气也应该多样化。例如，将问题与祈使句结合起来。</span><br><span class="line">3.指令类型应该是多样化的，包括各种类型的任务，类别种类例如：brainstorming，open QA，closed QA，rewrite，extract，generation，classification，chat，summarization。</span><br><span class="line">4.GPT语言模型应该能够完成这些指令。例如，不要要求助手创建任何视觉或音频输出。例如，不要要求助手在下午5点叫醒你或设置提醒，因为它无法执行任何操作。例如，指令不应该和音频、视频、图片、链接相关，因为GPT模型无法执行这个操作。</span><br><span class="line">5.指令用中文书写，指令应该是1到2个句子，允许使用祈使句或问句。</span><br><span class="line">6.你应该给指令生成适当的输入，输入字段应包含为指令提供的具体示例，它应该涉及现实数据，不应包含简单的占位符。输入应提供充实的内容，使指令具有挑战性。</span><br><span class="line">7.并非所有指令都需要输入。例如，当指令询问一些常识信息，比如“世界上最高的山峰是什么”，不需要提供具体的上下文。在这种情况下，我们只需在输入字段中放置“&lt;无输入&gt;”。当输入需要提供一些文本素材（例如文章，文章链接）时，就在输入部分直接提供一些样例。当输入需要提供音频、图片、视频或者链接时，则不是满足要求的指令。</span><br><span class="line">8.输出应该是针对指令和输入的恰当回答。 </span><br><span class="line">下面是10个任务指令的列表：</span><br><span class="line">###</span><br><span class="line">1. 指令: 在面试中如何回答这个问题？</span><br><span class="line">1. 输入:当你在车里独处时，你会想些什么？</span><br><span class="line">1. 输出:如果是在晚上，我通常会考虑我今天所取得的进步，如果是在早上，我会思考如何做到最好。我也会尝试练习感恩和活在当下的状态，以避免分心驾驶。</span><br><span class="line">###</span><br><span class="line">2. 指令: 按人口对这些国家进行排名。</span><br><span class="line">2. 输入:巴西，中国，美国，日本，加拿大，澳大利亚</span><br><span class="line">2. 输出:中国，美国，巴西，日本，加拿大，澳大利亚</span><br><span class="line">###</span><br><span class="line">3. 指令:</span><br></pre></td></tr></table></figure>
 <h4 id="开源数据集">开源数据集</h4>
-<p>除了使用Self Instruction方法获取微调数据，我们还可以使用开源数据对模型进行微调。</p>
+<p>除了使用Self
+Instruction方法获取微调数据，我们还可以使用开源数据对模型进行微调。</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a><br>
-stanford_alpaca采用Self Instruction方法收集了5200条指令微调数据集，数据样例如下： <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;Arrange the words in the given sentence to form a grammatically correct sentence.&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;quickly the brown fox jumped&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;The quick brown fox jumped quickly.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 其中，instruction 代表要求模型做的任务，input 代表用户输入， output 代表喂给模型的 label。<br>
+stanford_alpaca采用Self
+Instruction方法收集了5200条指令微调数据集，数据样例如下： <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;instruction&quot;: &quot;Arrange the words in the given sentence to form a grammatically correct sentence.&quot;,</span><br><span class="line">    &quot;input&quot;: &quot;quickly the brown fox jumped&quot;,</span><br><span class="line">    &quot;output&quot;: &quot;The quick brown fox jumped quickly.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+其中，instruction 代表要求模型做的任务，input 代表用户输入， output
+代表喂给模型的 label。<br>
 Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/6.png"></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a>
 <ul>
@@ -901,7 +949,9 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><a target="_blank" rel="noopener" href="https://github.com/project-baize/baize-chatbot">BAIZE</a></li>
 </ul>
 <h3 id="指令微调模型训练">指令微调模型训练</h3>
-<p>通过SFT(Supervised Fine-tuning)这个名字就可以知道，指令微调的训练过程是一个有监督的训练过程，通过上面数据收集步骤得到的数据对模型进行有监督的微调。训练任务仍然是让模型做Next Token Prediction任务，即预测输入文本的下一个token。</p>
+<p>通过SFT(Supervised
+Fine-tuning)这个名字就可以知道，指令微调的训练过程是一个有监督的训练过程，通过上面数据收集步骤得到的数据对模型进行有监督的微调。训练任务仍然是让模型做Next
+Token Prediction任务，即预测输入文本的下一个token。</p>
 <h3 id="模型评测方法">模型评测方法</h3>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/hkust-nlp/ceval">C-Eval</a></li>
@@ -913,52 +963,78 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><a target="_blank" rel="noopener" href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">open_llm_leaderboard</a></li>
 </ul>
 <h2 id="奖励模型">奖励模型</h2>
-<p>在完成SFT之后，我们大概率已经能够得到一个还不错的模型了。但在SFT阶段，我们一直都在告诉模型什么是好的数据，却没有给出不好的数据。SFT的目的更多是将Pretrained Model中的知识给引导出来，而奖励模型和强化学习阶段更多是解决模型的有害和幻觉问题，让模型不要输出不该输出的内容，这就需要告诉模型什么是不好的数据。</p>
+<p>在完成SFT之后，我们大概率已经能够得到一个还不错的模型了。但在SFT阶段，我们一直都在告诉模型什么是好的数据，却没有给出不好的数据。SFT的目的更多是将Pretrained
+Model中的知识给引导出来，而奖励模型和强化学习阶段更多是解决模型的有害和幻觉问题，让模型不要输出不该输出的内容，这就需要告诉模型什么是不好的数据。</p>
 <p>为了让大模型知道什么是好的数据，什么是不好的数据，就需要一个奖励模型，给数据进行打分。好的数据会得到更高的得分，而不好的数据会得到较低的得分。</p>
-<div class="note info"><p>当然也可以不使用奖励模型打分，靠人工标注来打分，但这样的成本就太高了。 我们可以用少量标注数据训练一个奖励模型，然后通过奖励模型给大量数据打分，这样效率更高且成本更低，所以训练一个奖励模型还是很有必要的。</p>
+<div class="note info"><p>当然也可以不使用奖励模型打分，靠人工标注来打分，但这样的成本就太高了。
+我们可以用少量标注数据训练一个奖励模型，然后通过奖励模型给大量数据打分，这样效率更高且成本更低，所以训练一个奖励模型还是很有必要的。</p>
 </div>
 <h3 id="使用偏序对训练奖励模型">使用偏序对训练奖励模型</h3>
 <p>直接给数据打分较为困难，需要的人工标注成本很高，而且难以统一，所以可以不为每一个样本直接打分，而是标注这些样本的好坏顺序。如下两种方法：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">直接打分：A句子（5分），B句子（3分）</span><br><span class="line">偏序对标注：A &gt; B</span><br></pre></td></tr></table></figure>
-<p>偏序对的方式更容易统一，且标注困难度大大减少。 因为使用了偏序对，所以损失函数不可以使用原先的Cross Entropy或者MSE，在InstructGPT论文中使用了pair wise ranking loss训练奖励模型：</p>
+<p>偏序对的方式更容易统一，且标注困难度大大减少。
+因为使用了偏序对，所以损失函数不可以使用原先的Cross
+Entropy或者MSE，在InstructGPT论文中使用了pair wise ranking
+loss训练奖励模型：</p>
 <p><span class="math display">\[loss(\theta)=-\frac{1}{K\choose2}E_{(x,y_w,y_l)～D}[log(\sigma(r_\theta(x,y_w)-r_\theta(x,y_l)))]\]</span></p>
-<p>这里我们假设<span class="math inline">\(y_w\)</span>的排序比<span class="math inline">\(y_l\)</span>高，其中<span class="math inline">\(r_\theta(x,y)\)</span>是RM模型对于prompt <span class="math inline">\(x\)</span>生成回答<span class="math inline">\(y\)</span>的打分。<span class="math inline">\(D\)</span>是标注人员对于当前prompt以及模型生成答案的排序结果。 这样就可以让排在前面的问答对分数高于排在后面的问答对分数。</p>
+<p>这里我们假设<span class="math inline">\(y_w\)</span>的排序比<span class="math inline">\(y_l\)</span>高，其中<span class="math inline">\(r_\theta(x,y)\)</span>是RM模型对于prompt <span class="math inline">\(x\)</span>生成回答<span class="math inline">\(y\)</span>的打分。<span class="math inline">\(D\)</span>是标注人员对于当前prompt以及模型生成答案的排序结果。
+这样就可以让排在前面的问答对分数高于排在后面的问答对分数。</p>
 <h3 id="训练rm的数据量">训练RM的数据量</h3>
 <p>奖励模型的训练数据量取决于具体的任务，可以参考InstructGPT中的数量和比例：</p>
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/7.png"></p>
 <h3 id="rm的大小">RM的大小</h3>
-<p>Reward Model的大小没有明确的限制，不过一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT 使用了6B的RM，175B的LM。</p>
+<p>Reward
+Model的大小没有明确的限制，不过一种直觉的理解是：评分任务要比生成任务简单一些，因此可以使用稍小一点的模型。InstructGPT
+使用了6B的RM，175B的LM。</p>
 <h2 id="强化学习">强化学习</h2>
 <p>奖励模型训练好了之后，就可以用强化学习方法对大模型进行更进一步的训练，减少模型生成有害文本和幻觉信息。</p>
-<h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy Optimization）</h3>
+<h3 id="ppoproximal-policy-optimization">PPO（Proximal Policy
+Optimization）</h3>
 <p>PPO算法可以参考<a href="https://fengyan-wby.github.io/2023/09/15/PPO%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">这篇文章</a>。</p>
 <p>PPO有四个网络参数（这也是 RL 非常耗卡的一个重要原因）：</p>
 <ol type="1">
 <li><span class="math inline">\(\theta\)</span>：训练网络，每次都会被更新。(也就是大家说的actor模型)</li>
 <li><span class="math inline">\(\theta&#39;\)</span>：训练网络副本，负责与环境交互采样数据。（也就是大家说的ref模型）</li>
 <li><span class="math inline">\(\phi\)</span>：奖励模型，拟合折扣奖励。（也就是大家说的critic模型，获取每个位置的奖励）</li>
-<li><span class="math inline">\(RM\)</span>: 奖励模型，获取一整句话的奖励。</li>
+<li><span class="math inline">\(RM\)</span>:
+奖励模型，获取一整句话的奖励。</li>
 </ol>
-<div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
+<div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic
+model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
 </div>
 <h4 id="训练过程不稳定">训练过程不稳定</h4>
-<p>由于 PPO 对超参非常敏感，不合理的超参搭配很有可能使得模型训练过程中 Reward 剧烈抖动。存在几个因素与此有关：</p>
+<p>由于 PPO 对超参非常敏感，不合理的超参搭配很有可能使得模型训练过程中
+Reward 剧烈抖动。存在几个因素与此有关：</p>
 <ul>
-<li><code>KL Penalty</code>：适当调大 KL可以帮助稳定训练（可使用动态调整 KL 系数策略）。</li>
-<li><code>Reward Model</code>：使用一个更稳定的 RM 能够有效缓解这种问题。</li>
-<li><code>Reward Scaling</code>：reward 的归一化对训练稳定有着很重要的作用。</li>
+<li><code>KL Penalty</code>：适当调大 KL可以帮助稳定训练（可使用动态调整
+KL 系数策略）。</li>
+<li><code>Reward Model</code>：使用一个更稳定的 RM
+能够有效缓解这种问题。</li>
+<li><code>Reward Scaling</code>：reward
+的归一化对训练稳定有着很重要的作用。</li>
 <li><code>Batch Size</code>：适当增大 batch_size 有助于训练稳定。</li>
 </ul>
 <h4 id="训练结果不稳定">训练结果不稳定</h4>
-<p>因为 reward 的提升并不代表模型真的表现的更好，可能是RM模型对某些数据有不正确的打分。</p>
-<div class="note info"><p>这种通过找到 shortcut 形成 reward 提升的现象又称为 reward hacking。</p>
+<p>因为 reward
+的提升并不代表模型真的表现的更好，可能是RM模型对某些数据有不正确的打分。</p>
+<div class="note info"><p>这种通过找到 shortcut 形成 reward 提升的现象又称为 reward
+hacking。</p>
 </div>
-<p>对于这种情况，除了提升 RM 本身的能力以外，我们还可以通过 Combine 多个 RM 以防止这种情况出现。</p>
-<div class="note info"><p>如 Llama 2 中同时使用了 2 个 RM（Safety + Helpful）来进行打分，不过论文中给出的理由是 Safety 和 Helpful 这两个任务目标之间可能存在冲突，但使用多个 RM 来综合打分同时也能较好的防止模型训到天上去。</p>
+<p>对于这种情况，除了提升 RM 本身的能力以外，我们还可以通过 Combine 多个
+RM 以防止这种情况出现。</p>
+<div class="note info"><p>如 Llama 2 中同时使用了 2 个 RM（Safety +
+Helpful）来进行打分，不过论文中给出的理由是 Safety 和 Helpful
+这两个任务目标之间可能存在冲突，但使用多个 RM
+来综合打分同时也能较好的防止模型训到天上去。</p>
 </div>
-<h3 id="dpodirect-preference-optimization">DPO（Direct Preference Optimization）</h3>
+<h3 id="dpodirect-preference-optimization">DPO（Direct Preference
+Optimization）</h3>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.18290v2.pdf">DPO</a>使用如下Loss进行训练：</p>
-<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{ref})=-E_{(x,y_w,y_l) \sim D} \left[ log \sigma \left(\beta log \frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]\]</span></p>
+<p><span class="math display">\[L_{DPO}(\pi_{\theta};\pi_{ref})=-E_{(x,y_w,y_l)
+\sim D} \left[ log \sigma \left(\beta log
+\frac{\pi_{\theta}(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log
+\frac{\pi_{\theta}(y_l|x)}{\pi_{ref}(y_l|x)} \right)
+\right]\]</span></p>
 <p>其中：</p>
 <ul>
 <li><span class="math inline">\(y_w\)</span>表示偏序对中好的回答</li>
@@ -967,14 +1043,25 @@ Alpaca 覆盖了多种类型的指令，其数据分布如下： <img src="/2023
 <li><span class="math inline">\(\pi_{ref}(y_w|x)\)</span>表示给定输入<span class="math inline">\(x\)</span>，当前reference model生成<span class="math inline">\(y_w\)</span>的累计概率</li>
 <li><span class="math inline">\(\pi_{\theta}(y_l|x)\)</span>和<span class="math inline">\(\pi_{ref}(y_l|x)\)</span>原理同上</li>
 </ul>
-<p>由于只使用了两个模型（actor model和ref model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
-<div class="note info"><p><a target="_blank" rel="noopener" href="https://huggingface.co/HuggingFaceH4/zephyr-7b-beta">Zephyr-7B</a> 基于 <a target="_blank" rel="noopener" href="https://huggingface.co/mistralai/Mistral-7B-v0.1">Mistral-7B</a> 使用了 DPO 进行微调，而 Zephyr-7B 的实验表明，使用 DPO 后它优于同期所有同尺寸的其他模型。</p>
+<p>由于只使用了两个模型（actor model和ref
+model）和偏序对数据进行训练，所以相对PPO更容易训练。</p>
+<div class="note info"><p><a target="_blank" rel="noopener" href="https://huggingface.co/HuggingFaceH4/zephyr-7b-beta">Zephyr-7B</a>
+基于 <a target="_blank" rel="noopener" href="https://huggingface.co/mistralai/Mistral-7B-v0.1">Mistral-7B</a>
+使用了 DPO 进行微调，而 Zephyr-7B 的实验表明，使用 DPO
+后它优于同期所有同尺寸的其他模型。</p>
 </div>
 <h3 id="bonbest-of-n">BON（Best-of-N）</h3>
-<p>BON 也叫 <code>reject sampling</code>，是指我们通过设置 temperature 值让同一个模型生成若干回复。接着，使用 Reward Model 挑出这些回复中得分较高的回复并再次训练原本的模型。 这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to Sample \to SFT \to ...\)</span>)。</p>
-<p>在<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2307.09288.pdf">Llama2</a>中使用了这种方法，论文中指出：在进行 SFT 时，应当使用之前所有策略下的 Good Samples（而非仅是最近一次策略模型 Sample 出的样本），以提高模型的泛化性。</p>
+<p>BON 也叫 <code>reject sampling</code>，是指我们通过设置 temperature
+值让同一个模型生成若干回复。接着，使用 Reward Model
+挑出这些回复中得分较高的回复并再次训练原本的模型。
+这是一个循环迭代的过程(<span class="math inline">\(Sample \to SFT \to
+Sample \to SFT \to ...\)</span>)。</p>
+<p>在<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2307.09288.pdf">Llama2</a>中使用了这种方法，论文中指出：在进行
+SFT 时，应当使用之前所有策略下的 Good Samples（而非仅是最近一次策略模型
+Sample 出的样本），以提高模型的泛化性。</p>
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/9.png"></p>
-<h3 id="ktokahneman-tversky-optimization">KTO（Kahneman-Tversky optimization ）</h3>
+<h3 id="ktokahneman-tversky-optimization">KTO（Kahneman-Tversky
+optimization ）</h3>
 <p><img src="/2023/12/07/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83%E5%A4%A7%E6%A8%A1%E5%9E%8B/10.png"></p>
 <p>如上图，PPO和DPO的方法需要偏序对数据，即<span class="math inline">\((x, y_1, y_2)\)</span>，其中x是输入，回答<span class="math inline">\(y_1\)</span>优于回答<span class="math inline">\(y_2\)</span>。而KTO只需要输入、回答以及一个标签，即<span class="math inline">\((x,y,label)\)</span>，其中label表示回答<span class="math inline">\(y\)</span>在输入<span class="math inline">\(x\)</span>下是否可以被接受。</p>
 

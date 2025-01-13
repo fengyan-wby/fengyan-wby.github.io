@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="对OpenAI o1可能用到的技术进行整理。">
 <meta property="og:type" content="article">
@@ -42,7 +42,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/9.jpg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/10.jpg">
 <meta property="article:published_time" content="2024-10-18T10:55:19.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.580Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.209Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="AIGC">
 <meta property="article:tag" content="大模型">
@@ -548,7 +548,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -619,12 +619,19 @@ if(canvas.getContext){
 <h2 id="如何让模型学会自我思考">如何让模型学会自我思考</h2>
 <p>主要是如下两篇论文中的内容：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a></li>
-<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by
+Step</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time
+Compute Optimally can be More Effective than Scaling Model
+Parameters</a></li>
 </ul>
 <p>首先来看<a target="_blank" rel="noopener" href="https://openai.com/index/learning-to-reason-with-llms/">o1技术报告</a>中的下图：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/1.jpg"></p>
-<p>其中包含了<code>train-time compute</code>和<code>test-time compute</code>。 曾经，为了提升模型的逻辑推理能力，我们把算力都花在pretrain阶段，由此诞生了Pretrain scaling law，对应上图中的<code>train-time compute</code>。 而o1证明，算力如果花在inference上，模型的推理能力将得到更大提升，也就是存在一个Inferece scaling law，对应上图中的<code>test-time compute</code>。</p>
+<p>其中包含了<code>train-time compute</code>和<code>test-time compute</code>。
+曾经，为了提升模型的逻辑推理能力，我们把算力都花在pretrain阶段，由此诞生了Pretrain
+scaling law，对应上图中的<code>train-time compute</code>。
+而o1证明，算力如果花在inference上，模型的推理能力将得到更大提升，也就是存在一个Inferece
+scaling law，对应上图中的<code>test-time compute</code>。</p>
 <p>把算力用在inference阶段，分为两种情况：</p>
 <ul>
 <li>优化推理输入</li>
@@ -634,15 +641,22 @@ if(canvas.getContext){
 <p>这个方法大家应该非常熟悉了。其使用的就是CoT技术，如下图所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/2.jpg"></p>
 <p>你的prompt给的越细节，你的多轮引导给的越多，模型或许就能产出更好的结果。而更多的token意味着推理阶段需要花费更多的算力，所以这就是我们所说的【把算力花在推理阶段上可以提升模型效果】的具体内容之一。</p>
-<p>CoT的更多细节可以参考<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>这篇论文。</p>
+<p>CoT的更多细节可以参考<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting
+Elicits Reasoning in Large Language Models</a>这篇论文。</p>
 <h3 id="优化推理输出">优化推理输出</h3>
-<p>可是，优化推理输入的方法还是不够直接。难道对于每一个问题，我需要精心设计prompt，或者手动诱导模型think step by step才行。所以能不能让模型吃下一个问题后，自动化地去做CoT的过程呢？</p>
+<p>可是，优化推理输入的方法还是不够直接。难道对于每一个问题，我需要精心设计prompt，或者手动诱导模型think
+step by
+step才行。所以能不能让模型吃下一个问题后，自动化地去做CoT的过程呢？</p>
 <p>也就是说，现在我们希望模型在吃下一个问题后，能自主产生以下输出：</p>
-<p><span class="math inline">\(question \rightarrow attempt_1 \rightarrow attempt_2 \rightarrow attempt_3 \rightarrow ... \rightarrow attempt_i \rightarrow answer\)</span></p>
-<p><strong>先来看看<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a>这篇论文的做法：</strong></p>
+<p><span class="math inline">\(question \rightarrow attempt_1
+\rightarrow attempt_2 \rightarrow attempt_3 \rightarrow ... \rightarrow
+attempt_i \rightarrow answer\)</span></p>
+<p><strong>先来看看<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's
+Verify Step by Step</a>这篇论文的做法：</strong></p>
 <ol type="1">
 <li><p>用一个已经pretrain好的大模型来生成符合如上格式的数据。</p>
-<p>这里的大模型论文中使用的是GPT（large scale中使用了GPT-4），我们需要通过输入prompt+few-shot的方式引导模型从“只产生结果”变成“同时产生中间步骤和结果”，此时只关注是否产出了中间结果，而不关注中间结果的质量。论文中还将生成模型在产生的Cot数据中微调了一个epoch，使其更好的生成符合格式的数据。</p></li>
+<p>这里的大模型论文中使用的是GPT（large
+scale中使用了GPT-4），我们需要通过输入prompt+few-shot的方式引导模型从“只产生结果”变成“同时产生中间步骤和结果”，此时只关注是否产出了中间结果，而不关注中间结果的质量。论文中还将生成模型在产生的Cot数据中微调了一个epoch，使其更好的生成符合格式的数据。</p></li>
 <li><p>将上述符合格式的数据打标并训练出奖励模型。</p>
 <p>这里分为两种方式：</p>
 <ul>
@@ -659,7 +673,8 @@ if(canvas.getContext){
 同时，在标注的过程中，PRM是会实时用最新的数据重新训练得到更新的，这样人工标注的数据就一直是训练PRM的高价值数据。</p>
 </div></p>
 <p>通过上图中的方法，OpenAI获取并公开了<a target="_blank" rel="noopener" href="https://github.com/openai/prm800k">PRM800K数据集</a>，其中包含了12,000个数学问题的75,000个解决方案，共计800,000个步骤级别的标签。</p>
-<p>最终得到的Process-supervision Reward Model可对思维链中每个步骤进行打分，如下所示：</p>
+<p>最终得到的Process-supervision Reward
+Model可对思维链中每个步骤进行打分，如下所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/4.jpg"></p></li>
 </ul></li>
 <li><p>通过强化学习方法，结合奖励模型的结果，微调生成大模型。</p>
@@ -667,21 +682,27 @@ if(canvas.getContext){
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/5.jpg"></p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/6.jpg"></p></li>
 </ol>
-<p><strong>然后再来看看<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters</a>这篇论文的做法：</strong></p>
+<p><strong>然后再来看看<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute
+Optimally can be More Effective than Scaling Model
+Parameters</a>这篇论文的做法：</strong></p>
 <p>论文中中提出了两种方案优化推理输出：</p>
 <ul>
 <li><p>一种方案是通过SFT训练，改变生成模型的输出分布，使模型生成即符合格式要求，又符合质量需求的数据。问题在于如何才能使用最少的成本，生成高质量的涵盖中间思考步骤的sft数据？</p>
 <ol type="1">
-<li>先对模型做格式微调，使其能够产出“中间结果 + 答案”。这一步只负责格式，不负责质量。</li>
+<li>先对模型做格式微调，使其能够产出“中间结果 +
+答案”。这一步只负责格式，不负责质量。</li>
 <li>由于每个attempt中都包含了答案，答案是有标签的，所以我们可以知道哪些attempt给出了正确答案。</li>
-<li>我们希望为每个正确attempt匹配上若干错误attempt，作为一条训练数据。也就是我们的训练数据是“问题 + 若干错误attempt+正确attempt”的形式，这一步是让模型模拟人类思考的模式，从步步错误的attempt中推出正确的attemp。</li>
+<li>我们希望为每个正确attempt匹配上若干错误attempt，作为一条训练数据。也就是我们的训练数据是“问题
++
+若干错误attempt+正确attempt”的形式，这一步是让模型模拟人类思考的模式，从步步错误的attempt中推出正确的attemp。</li>
 </ol>
 <p>最终得到的数据如下图：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/8.jpg"></p>
 <p><div class="note info"><p>在构造attemp链训练数据时，论文中也有一些细节。<br>
 如要对一个正确回答匹配<span class="math inline">\(x\)</span>个错误回答时，会根据编辑距离先从所有的错误回答中找到和正确回答最相似的错误回答。<br>
 然后再从剩下的不正确的回答中，随机采样<span class="math inline">\(x-1\)</span>条。 最终构造的训练数据为：<br>
-<span class="math inline">\(问题 \rightarrow 随机不正确的x-1条回答 \rightarrow 最相似的不正确回答 \rightarrow 正确回答\)</span>。<br>
+<span class="math inline">\(问题 \rightarrow 随机不正确的x-1条回答
+\rightarrow 最相似的不正确回答 \rightarrow 正确回答\)</span>。<br>
 这样模型可以学得更好。</p>
 </div></p>
 <p><div class="note info"><p>只通过答案判断attemp的正确与否不够准确，为了取得更好的效果，实际上论文中依然会配合PRM和ORM对中间步骤再做评估，更有利于选择尽可能正确的attempt。如下图所示：</p>
@@ -689,21 +710,28 @@ if(canvas.getContext){
 </div></p></li>
 <li><p>另一种方案是利用PRM指引搜索。</p>
 <ol type="1">
-<li>先对模型做格式微调，使其能够产出“中间结果 + 答案”。这一步只负责格式，不负责质量。</li>
-<li>现在，模型已经能在生成结果里产出“思考步骤”数据了。我们需要训练一个能够评估这些steps的奖励模型，也就是PRM。这一步和<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a>中训练PRM的过程一致。</li>
+<li>先对模型做格式微调，使其能够产出“中间结果 +
+答案”。这一步只负责格式，不负责质量。</li>
+<li>现在，模型已经能在生成结果里产出“思考步骤”数据了。我们需要训练一个能够评估这些steps的奖励模型，也就是PRM。这一步和<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by
+Step</a>中训练PRM的过程一致。</li>
 <li>到这一步为止，我们已经有以下模型：
 <ul>
 <li>一个能按照格式，产出中间思考步骤的模型（generator），但中间思考步骤质量得不到保证。</li>
 <li>一个能对中间思考步骤进行评估的奖励模型PRM。</li>
 </ul></li>
 </ol>
-<p>而现在我们想做的事情是：如何在不对generator继续做任何训练的情况下，使用PRM来引导generator搜索出最佳的“steps + answer”。论文中给出了3种常用的搜索方案，如下图所示：</p>
+<p>而现在我们想做的事情是：如何在不对generator继续做任何训练的情况下，使用PRM来引导generator搜索出最佳的“steps
++ answer”。论文中给出了3种常用的搜索方案，如下图所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/9.jpg"></p>
 <p>其中：</p>
 <ul>
-<li>Best-of-N对一个问题采样N个samples，然后调用PRM对这N个sample进行整体打分，选取整体得分最高的那组steps + answer作为输出。</li>
-<li>Beam search在每个step通过PRM筛选出分数最高的top M个结果继续生成。</li>
-<li>Lookahead search对每一步做筛选时，都会先“向前看K步”，用K步后的收益去评估当前步骤的结果。（如评估当前step时，让它继续往下生成K个step，然后将最后一个steps们送进PRM进行打分，并筛选出分数最高的top M个结果。）</li>
+<li>Best-of-N对一个问题采样N个samples，然后调用PRM对这N个sample进行整体打分，选取整体得分最高的那组steps
++ answer作为输出。</li>
+<li>Beam search在每个step通过PRM筛选出分数最高的top
+M个结果继续生成。</li>
+<li>Lookahead
+search对每一步做筛选时，都会先“向前看K步”，用K步后的收益去评估当前步骤的结果。（如评估当前step时，让它继续往下生成K个step，然后将最后一个steps们送进PRM进行打分，并筛选出分数最高的top
+M个结果。）</li>
 </ul>
 <p><div class="note info"><p>使用PRM对数据整体进行打分的方式有：</p>
 <ul>
@@ -711,7 +739,10 @@ if(canvas.getContext){
 <li>最小式（min）：取所有steps中最小的得分作为整体得分。</li>
 <li>最后一步式（last step）：取last step的得分，反映出整体得分。</li>
 </ul>
-<p>prod和min是openAI在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a>中探索的方法，last step则是deepmind在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters</a>中使用的方法。</p>
+<p>prod和min是openAI在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.20050">Let's
+Verify Step by Step</a>中探索的方法，last step则是deepmind在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute
+Optimally can be More Effective than Scaling Model
+Parameters</a>中使用的方法。</p>
 </div></p>
 <p>不同搜索方法的对比结果如下图所示：</p>
 <p><img src="/2024/10/18/OpenAI-o1-%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/10.jpg"></p></li>

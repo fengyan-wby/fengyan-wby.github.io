@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="通过deepin-wine方式在Ubuntu22.04中安装微信。">
 <meta property="og:type" content="article">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="通过deepin-wine方式在Ubuntu22.04中安装微信。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-12T19:04:14.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.644Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.264Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="Ubuntu">
 <meta name="twitter:card" content="summary">
@@ -536,7 +536,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -651,7 +651,9 @@ if(canvas.getContext){
 <p>完整列表参见<a target="_blank" rel="noopener" href="https://deepin-wine.i-m.dev">https://deepin-wine.i-m.dev</a></p>
 <p>如果安装报错：<code>libsasl2***无法下载</code> 可以去这里手动下载：<a target="_blank" rel="noopener" href="http://mirrors.163.com/ubuntu/pool/main/c/cyrus-sasl2/">http://mirrors.163.com/ubuntu/pool/main/c/cyrus-sasl2/</a></p>
 <h2 id="卸载">卸载</h2>
-<p>Deepin Wine平台位于<code>.deepinwine</code>文件夹中。由于它是一个隐藏的文件夹，因此您需要按Ctrl + H才能在文件浏览器中显示/隐藏它。您可以将其删除以清除Wine配置。</p>
+<p>Deepin
+Wine平台位于<code>.deepinwine</code>文件夹中。由于它是一个隐藏的文件夹，因此您需要按Ctrl
++ H才能在文件浏览器中显示/隐藏它。您可以将其删除以清除Wine配置。</p>
 <h3 id="清理应用运行时目录">清理应用运行时目录</h3>
 <p>例如QQ/TIM会把帐号配置、聊天文件等保存<code>~/Documents/Tencent Files</code>目录下，而微信是<code>~/Documents/WeChat Files</code>，删除这些文件夹以移除帐号配置等数据。</p>
 <h3 id="清理wine容器">清理wine容器</h3>

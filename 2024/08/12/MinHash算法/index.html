@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="MinHash算法和LSH（Locality Sensitive Hashing），用于快速估计两个集合的相似度。它们被广泛应用于大数据集的相似检索、推荐系统、聚类分析中，如今在大模型预训练的数据处理中也有使用到这两个算法。">
 <meta property="og:type" content="article">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/08/12/MinHash%E7%AE%97%E6%B3%95/3.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/08/12/MinHash%E7%AE%97%E6%B3%95/4.png">
 <meta property="article:published_time" content="2024-08-12T16:50:28.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.572Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.202Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="MinHash">
 <meta property="article:tag" content="LSH">
@@ -151,7 +151,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#minhash"><span class="nav-number">1.</span> <span class="nav-text">MinHash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jaccard-%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">1.1.</span> <span class="nav-text">Jaccard 相似度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minhash%E9%99%8D%E7%BB%B4"><span class="nav-number">1.2.</span> <span class="nav-text">MinHash降维</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lshlocality-sensitive-hashing"><span class="nav-number">2.</span> <span class="nav-text">LSH（Locality Sensitive Hashing）</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#minhash"><span class="nav-number">1.</span> <span class="nav-text">MinHash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jaccard-%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">1.1.</span> <span class="nav-text">Jaccard 相似度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minhash%E9%99%8D%E7%BB%B4"><span class="nav-number">1.2.</span> <span class="nav-text">MinHash降维</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lshlocality-sensitive-hashing"><span class="nav-number">2.</span> <span class="nav-text">LSH（Locality Sensitive
+Hashing）</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -542,7 +543,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -604,14 +605,18 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>MinHash算法和LSH（Locality Sensitive Hashing），用于快速估计两个集合的相似度。它们被广泛应用于大数据集的相似检索、推荐系统、聚类分析中，如今在大模型预训练的数据处理中也有使用到这两个算法。</p>
+    <div class="post-body" itemprop="articleBody"><p>MinHash算法和LSH（Locality Sensitive
+Hashing），用于快速估计两个集合的相似度。它们被广泛应用于大数据集的相似检索、推荐系统、聚类分析中，如今在大模型预训练的数据处理中也有使用到这两个算法。</p>
 <span id="more"></span>
 <h2 id="minhash">MinHash</h2>
-<p>MinHash算法主要工作是对输入的高维向量（可能是几百万维甚至更高）转换为低维的向量（降维后的向量被称作数字签名），然后再对低维向量计算其相似，以达到降低计算成本，提高运行效率的目的, 我们接下来需要关注的就是MinHash是如何实现上述需求的了。</p>
+<p>MinHash算法主要工作是对输入的高维向量（可能是几百万维甚至更高）转换为低维的向量（降维后的向量被称作数字签名），然后再对低维向量计算其相似，以达到降低计算成本，提高运行效率的目的,
+我们接下来需要关注的就是MinHash是如何实现上述需求的了。</p>
 <h3 id="jaccard-相似度">Jaccard 相似度</h3>
-<p>Jaccard相似度计算的是两个集合的相似性， 两个集合中，交集的个数/并集的个数。</p>
+<p>Jaccard相似度计算的是两个集合的相似性，
+两个集合中，交集的个数/并集的个数。</p>
 <p>定义集合A和B的的 Jaccard 系数为</p>
-<p><span class="math display">\[J(A, B)=\frac{A \cap B}{A \cup B}\]</span></p>
+<p><span class="math display">\[J(A, B)=\frac{A \cap B}{A \cup
+B}\]</span></p>
 <p>假设有如下集合，</p>
 <p><span class="math display">\[
 \begin{align}
@@ -620,14 +625,17 @@ if(canvas.getContext){
     S_3 =&amp; \{2,3,4,6\} \\
 \end{align}
 \]</span></p>
-<p>集合<span class="math inline">\(S_1\)</span>和<span class="math inline">\(S_3\)</span>之间的 <code>Jaccard similarity</code> 为</p>
-<p><span class="math display">\[J(S_1, S_3)=\frac{|\{2\}|}{|\{1,2,3,4,5,6\}|}=\frac{1}{6}\]</span></p>
+<p>集合<span class="math inline">\(S_1\)</span>和<span class="math inline">\(S_3\)</span>之间的 <code>Jaccard similarity</code>
+为</p>
+<p><span class="math display">\[J(S_1,
+S_3)=\frac{|\{2\}|}{|\{1,2,3,4,5,6\}|}=\frac{1}{6}\]</span></p>
 <p>当处理文本时，两个集合可以是两个文本的<code>字</code>集合，也可以是分词后的<code>词</code>集合，如果词集合太大，也可以先用<code>TF-IDF</code>筛选出比较重要的关键词作为词集。</p>
 <p>Jaccard相似度和汉明距离类似的，只不过汉明距离考虑位置信息，而Jaccard相似度不考虑位置。</p>
 <h3 id="minhash降维">MinHash降维</h3>
 <p>海量文本直接求Jaccard相似度复杂度太高，两个文档需要逐个词比较（此时词的维度可能是几百万维甚至更高），为降低复杂度，我们使用两个文档的最小哈希值相等的概率来等价于两个文档的Jaccard相似度，并可以证明两者是相等的。</p>
 <hr>
-<p>首先说明一下如何求一个集合的最小哈希值，假设现在有4个集合，分别为<span class="math inline">\(S_1, S_2, S_3, S_4\)</span>；其中，<span class="math inline">\(S_1=\{a, d\}\)</span>，<span class="math inline">\(S_2=\{c\}\)</span>，<span class="math inline">\(S_3=\{b, d, e\}\)</span>，<span class="math inline">\(S_4=\{a, c, d\}\)</span>，所以全集<span class="math inline">\(\cup = \{a, b, c, d, e\}\)</span>。我们可以构造如下0-1矩阵：</p>
+<p>首先说明一下如何求一个集合的最小哈希值，假设现在有4个集合，分别为<span class="math inline">\(S_1, S_2, S_3, S_4\)</span>；其中，<span class="math inline">\(S_1=\{a, d\}\)</span>，<span class="math inline">\(S_2=\{c\}\)</span>，<span class="math inline">\(S_3=\{b, d, e\}\)</span>，<span class="math inline">\(S_4=\{a, c, d\}\)</span>，所以全集<span class="math inline">\(\cup = \{a, b, c, d,
+e\}\)</span>。我们可以构造如下0-1矩阵：</p>
 <table>
 <thead>
 <tr class="header">
@@ -785,17 +793,25 @@ if(canvas.getContext){
 </ol>
 <div class="note info"><p>当特征矩阵很大时，对其进行打乱非常耗时，而且要进行多次打乱，所以在实际使用中，通过多个随机哈希函数来模拟打乱的效果。具体的步骤如下：</p>
 <ol type="1">
-<li>定义n个随机哈希函数<span class="math inline">\(h_1, h_2, ..., h_n\)</span>，例如<span class="math inline">\(h_1(x) = (x+1)%m（m是行数）\)</span>。</li>
-<li>计算<span class="math inline">\(h_1(r), h_2(r), ..., h_n(r)\)</span>对应下图中的<span class="math inline">\(Permutation \pi\)</span>。</li>
-<li>对第i个哈希函数<span class="math inline">\(h_i\)</span>，在集合<span class="math inline">\(S_j\)</span>上更新签名矩阵，<span class="math inline">\(sig(i, j)=min(sig(i, j), h_i(r)),if 特征值为1，r=0,1,...,m(m为特征数)\)</span>。</li>
+<li>定义n个随机哈希函数<span class="math inline">\(h_1, h_2, ...,
+h_n\)</span>，例如<span class="math inline">\(h_1(x) =
+(x+1)%m（m是行数）\)</span>。</li>
+<li>计算<span class="math inline">\(h_1(r), h_2(r), ...,
+h_n(r)\)</span>对应下图中的<span class="math inline">\(Permutation
+\pi\)</span>。</li>
+<li>对第i个哈希函数<span class="math inline">\(h_i\)</span>，在集合<span class="math inline">\(S_j\)</span>上更新签名矩阵，<span class="math inline">\(sig(i, j)=min(sig(i, j), h_i(r)),if
+特征值为1，r=0,1,...,m(m为特征数)\)</span>。</li>
 </ol>
 <p><code>注：下图中Permutation下标从1开始。</code> <img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/1.png"></p>
 </div>
-<h2 id="lshlocality-sensitive-hashing">LSH（Locality Sensitive Hashing）</h2>
+<h2 id="lshlocality-sensitive-hashing">LSH（Locality Sensitive
+Hashing）</h2>
 <p><code>MinHash</code>降低了两个高维向量之间的计算复杂性，但还有一个需要考虑的问题是，我们需要对大量的向量之间进行两两比较，如果每个都直接比较，复杂度是<span class="math inline">\(O(N^2)\)</span>（N是向量个数），是否有一种方法，将潜在的可能相似度高的向量聚在一起，将相似度低的向量分开？</p>
-<p><code>LSH(Locality Sensitive Hashing)</code>做的就是这个事情，其基本思想为：我们不需要去比对所有的文档，将所有的文档(columns) hash到许多桶中，形成候选匹配对，只有同一个桶中的signature会进行匹配。</p>
+<p><code>LSH(Locality Sensitive Hashing)</code>做的就是这个事情，其基本思想为：我们不需要去比对所有的文档，将所有的文档(columns)
+hash到许多桶中，形成候选匹配对，只有同一个桶中的signature会进行匹配。</p>
 <hr>
-<p><code>LSH</code>将原signature matrix按行划分成多个band，每个band的宽度是r，显然有<code>b*r=num of hash function for MinHash</code>，然后对band内每个signature段hash，形成多个桶，如下图:</p>
+<p><code>LSH</code>将原signature
+matrix按行划分成多个band，每个band的宽度是r，显然有<code>b*r=num of hash function for MinHash</code>，然后对band内每个signature段hash，形成多个桶，如下图:</p>
 <p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/2.png"></p>
 <p>两个文档作为候选匹配的充要条件是至少有一个band的hash在同一个桶中。</p>
 <p><img src="/2024/08/12/MinHash%E7%AE%97%E6%B3%95/3.png"></p>

@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="最近，深度学习的研究中出现了许多大型预训练模型，例如GPT-3、BERT等，这些模型可以在多种自然语言处理任务中取得优异的性能表现。而其中，ChatGPT模型因为在对话生成方面的表现而备受瞩目，成为了自然语言处理领域的热门研究方向。 然而，这些大型预训练模型的训练成本非常高昂，需要庞大的计算资源和大量的数据，一般人难以承受。这也导致了一些研究人员难以重复和验证先前的研究成果。为了解决这个问题，研究">
 <meta property="og:type" content="article">
@@ -48,7 +48,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/15.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/16.png">
 <meta property="article:published_time" content="2023-04-25T14:59:24.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.940Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.528Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="PEFT">
@@ -554,7 +554,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -625,7 +625,9 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody"><p>最近，深度学习的研究中出现了许多大型预训练模型，例如GPT-3、BERT等，这些模型可以在多种自然语言处理任务中取得优异的性能表现。而其中，ChatGPT模型因为在对话生成方面的表现而备受瞩目，成为了自然语言处理领域的热门研究方向。<br>
-然而，这些大型预训练模型的训练成本非常高昂，需要庞大的计算资源和大量的数据，一般人难以承受。这也导致了一些研究人员难以重复和验证先前的研究成果。为了解决这个问题，研究人员开始研究Parameter-Efficient Fine-Tuning (PEFT)技术。PEFT技术旨在通过最小化微调参数的数量和计算复杂度，来提高预训练模型在新任务上的性能，从而缓解大型预训练模型的训练成本。这样一来，即使计算资源受限，也可以利用预训练模型的知识来迅速适应新任务，实现高效的迁移学习。因此，PEFT技术可以在提高模型效果的同时，大大缩短模型训练时间和计算成本，让更多人能够参与到深度学习研究中来。下面我们将深入探讨PEFT的一些主要做法。</p>
+然而，这些大型预训练模型的训练成本非常高昂，需要庞大的计算资源和大量的数据，一般人难以承受。这也导致了一些研究人员难以重复和验证先前的研究成果。为了解决这个问题，研究人员开始研究Parameter-Efficient
+Fine-Tuning
+(PEFT)技术。PEFT技术旨在通过最小化微调参数的数量和计算复杂度，来提高预训练模型在新任务上的性能，从而缓解大型预训练模型的训练成本。这样一来，即使计算资源受限，也可以利用预训练模型的知识来迅速适应新任务，实现高效的迁移学习。因此，PEFT技术可以在提高模型效果的同时，大大缩短模型训练时间和计算成本，让更多人能够参与到深度学习研究中来。下面我们将深入探讨PEFT的一些主要做法。</p>
 <span id="more"></span>
 <h2 id="adapter-tuning">Adapter Tuning</h2>
 <p>论文地址：</p>
@@ -636,10 +638,12 @@ if(canvas.getContext){
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/google-research/adapter-bert">https://github.com/google-research/adapter-bert</a></li>
 </ul>
-<p>谷歌的研究人员首次在论文《Parameter-Efficient Transfer Learning for NLP》提出针对BERT的PEFT微调方式，拉开了PEFT研究的序幕。他们指出，在面对特定的下游任务时，如果进行Full-fintuning（即预训练模型中的所有参数都进行微调），太过低效；而如果采用固定预训练模型的某些层，只微调接近下游任务的那几层参数，又难以达到较好的效果。<br>
+<p>谷歌的研究人员首次在论文《Parameter-Efficient Transfer Learning for
+NLP》提出针对BERT的PEFT微调方式，拉开了PEFT研究的序幕。他们指出，在面对特定的下游任务时，如果进行Full-fintuning（即预训练模型中的所有参数都进行微调），太过低效；而如果采用固定预训练模型的某些层，只微调接近下游任务的那几层参数，又难以达到较好的效果。<br>
 于是他们设计了如下图所示的Adapter结构，将其嵌入Transformer的结构里面，在训练时，固定住原来预训练模型的参数不变，只对新增的Adapter结构进行微调。同时为了保证训练的高效性（也就是尽可能少的引入更多参数），他们将Adapter设计为这样的结构：首先是一个down-project层将高维度特征映射到低维特征，然后过一个非线形层之后，再用一个up-project结构将低维特征映射回原来的高维特征；同时也设计了skip-connection结构，确保了在最差的情况下能够退化为identity。</p>
 <p><img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/1.png"></p>
-<div class="note info"><p>模型在最开始初始化的时候需要让Adapter对原大模型影响最小，否则会出现训练失败的情况。即上图中Adapter Layer中绿色的部分的输出需要接近0，只让skip-connection起作用，通过这样的初始化让刚开始加了Adapter的模型和没加Adapter的模型在结果上基本是一致的。这样可以在起点上让模型表现的更好，从而使得微调过程更容易成功。</p>
+<div class="note info"><p>模型在最开始初始化的时候需要让Adapter对原大模型影响最小，否则会出现训练失败的情况。即上图中Adapter
+Layer中绿色的部分的输出需要接近0，只让skip-connection起作用，通过这样的初始化让刚开始加了Adapter的模型和没加Adapter的模型在结果上基本是一致的。这样可以在起点上让模型表现的更好，从而使得微调过程更容易成功。</p>
 </div>
 <h2 id="p-tuning">P-Tuning</h2>
 <h3 id="p-tuning-v1">P-Tuning v1</h3>
@@ -653,18 +657,30 @@ if(canvas.getContext){
 </ul>
 <h4 id="模型">模型</h4>
 <p><img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/2.png"></p>
-<p>对于一个prompt模版<span class="math inline">\(T = \{[P_{0:i}], x, [P_{i+1:m}], y\}\)</span>来说，有如下两种构建prompt的方式：</p>
+<p>对于一个prompt模版<span class="math inline">\(T = \{[P_{0:i}], x,
+[P_{i+1:m}], y\}\)</span>来说，有如下两种构建prompt的方式：</p>
 <ul>
-<li>传统的添加离散prompt的方式： <span class="math display">\[\{e([P_{0:i}]), e(x), e([P_{i+1:m}]), e(y)\}\]</span> 其中<span class="math inline">\(P_i\)</span>是词汇表中的token。</li>
-<li>P-tuning添加连续prompt的方式： <span class="math display">\[\{h_0, ..., h_i, e(x), h_{i+1}, ..., h_m, e(y)\}\]</span> 其中<span class="math inline">\(h_i(0\leq i\leq m)\)</span>是可训练的embedding向量，然后可以通过如下目标函数优化增加的embedding向量。 <span class="math display">\[\hat{h}_{0:m} = \mathop{\arg\min}\limits_{\theta}L(Model(x,y))\]</span></li>
+<li>传统的添加离散prompt的方式： <span class="math display">\[\{e([P_{0:i}]), e(x), e([P_{i+1:m}]),
+e(y)\}\]</span> 其中<span class="math inline">\(P_i\)</span>是词汇表中的token。</li>
+<li>P-tuning添加连续prompt的方式： <span class="math display">\[\{h_0,
+..., h_i, e(x), h_{i+1}, ..., h_m, e(y)\}\]</span> 其中<span class="math inline">\(h_i(0\leq i\leq
+m)\)</span>是可训练的embedding向量，然后可以通过如下目标函数优化增加的embedding向量。
+<span class="math display">\[\hat{h}_{0:m} =
+\mathop{\arg\min}\limits_{\theta}L(Model(x,y))\]</span></li>
 </ul>
 <h4 id="optimization">Optimization</h4>
 <p>在训练连续prompt的过程中有两个问题：</p>
 <ol type="1">
-<li><code>Discreteness:</code>原始大模型中的embedding已经在预训练中被训练好了，如果将新增加的prompt embedding随机初始化，则很容易陷入局部最优解。</li>
-<li><code>Association:</code>prompt embedding中的tokens之间应该是互相依赖而非独立的。</li>
+<li><code>Discreteness:</code>原始大模型中的embedding已经在预训练中被训练好了，如果将新增加的prompt
+embedding随机初始化，则很容易陷入局部最优解。</li>
+<li><code>Association:</code>prompt
+embedding中的tokens之间应该是互相依赖而非独立的。</li>
 </ol>
-<p>为解决如上两个问题，P-tuning额外使用了一个LSTM模型来编码<span class="math inline">\(h_i\)</span>，实际输入模型的prompt embedding为下式中的<span class="math inline">\(h^{&#39;}_i\)</span>： <span class="math display">\[h^{&#39;}_i = MLP([\overrightarrow{h_i}:\overleftarrow{h_i}]) = MLP([LSTM(h_{0:i}):LSTM(h_{i:m})])\]</span></p>
+<p>为解决如上两个问题，P-tuning额外使用了一个LSTM模型来编码<span class="math inline">\(h_i\)</span>，实际输入模型的prompt
+embedding为下式中的<span class="math inline">\(h^{&#39;}_i\)</span>：
+<span class="math display">\[h^{&#39;}_i =
+MLP([\overrightarrow{h_i}:\overleftarrow{h_i}]) =
+MLP([LSTM(h_{0:i}):LSTM(h_{i:m})])\]</span></p>
 <p>而且，在inference中，我们只需要直接使用<span class="math inline">\(h^{&#39;}_i\)</span>即可，而不用再使用LSTM模型进行计算。</p>
 <h3 id="p-tuning-v2">P-Tuning v2</h3>
 <p>论文地址：</p>
@@ -681,20 +697,28 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <h4 id="模型-1">模型</h4>
 <p>P-tuning存在以下两个缺陷：</p>
 <ol type="1">
-<li><code>Lack of universality across scales</code>: 对于参数数量在10B以下的模型，p-tuning表现的比fine-tuning要差很多。</li>
-<li><code>Lack of universality across tasks</code>: 对于分类问题，p-tuning可以表现的较好，但是对于序列标注这种<code>hard sequence tagging tasks</code>，p-tuning表现的较差。</li>
+<li><code>Lack of universality across scales</code>:
+对于参数数量在10B以下的模型，p-tuning表现的比fine-tuning要差很多。</li>
+<li><code>Lack of universality across tasks</code>:
+对于分类问题，p-tuning可以表现的较好，但是对于序列标注这种<code>hard sequence tagging tasks</code>，p-tuning表现的较差。</li>
 </ol>
 <p>针对上述问题，作者提出了P-Tuning v2。 <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/3.png"></p>
-<p>如上图所示，在P-tuning中，<code>continuous prompts</code>只在embedding层插入。而在P-tuning v2中，<code>continuous prompts</code>在每一个layer层都可以作为<code>prefix tokens</code>被插入。这样可以带来两个好处：</p>
+<p>如上图所示，在P-tuning中，<code>continuous prompts</code>只在embedding层插入。而在P-tuning
+v2中，<code>continuous prompts</code>在每一个layer层都可以作为<code>prefix tokens</code>被插入。这样可以带来两个好处：</p>
 <ol type="1">
-<li>P-tuning v2拥有更多的可学习参数，可以在微调的时候学到更多的东西。</li>
+<li>P-tuning
+v2拥有更多的可学习参数，可以在微调的时候学到更多的东西。</li>
 <li>在更深层中加入的<code>continuous prompts</code>可以更好的影响模型的输出。</li>
 </ol>
 <h4 id="其他细节和结果">其他细节和结果</h4>
 <h5 id="reparameterization">Reparameterization</h5>
-<p>P-tuning中使用了双向的LSTM对<code>continuous prompts</code>进行编码，在P-tuning v2中发现这一改进在有些任务中会带来积极作用，但在有些任务中会带来消极作用。</p>
+<p>P-tuning中使用了双向的LSTM对<code>continuous prompts</code>进行编码，在P-tuning
+v2中发现这一改进在有些任务中会带来积极作用，但在有些任务中会带来消极作用。</p>
 <h5 id="prompt-length">Prompt Length</h5>
-<p>We find that different NLU tasks usually achieve their best performance with different prompt lengths. Generally, simple classification tasks prefer shorter prompts (less than 20); hard sequence labeling tasks prefer longer ones (around 100).</p>
+<p>We find that different NLU tasks usually achieve their best
+performance with different prompt lengths. Generally, simple
+classification tasks prefer shorter prompts (less than 20); hard
+sequence labeling tasks prefer longer ones (around 100).</p>
 <h5 id="multi-task-learning">Multi-task Learning</h5>
 <p>可以通过多任务训练共享的<code>continuous prompts</code>来对其进行更好的初始化，然后再在特定的下游任务中对<code>continuous prompts</code>进行微调。</p>
 <h5 id="结果">结果</h5>
@@ -705,8 +729,16 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.08691">https://arxiv.org/abs/2104.08691</a></li>
 </ul>
-<p>在T5模型中，原始输入为<span class="math inline">\(X_e \in \mathbb{R}^{n \times e}\)</span>，Prompt-Tuning将可学习的prompt参数<span class="math inline">\(P_e \in \mathbb{R}^{p \times e}\)</span>和原始输入拼接起来得到<span class="math inline">\([P_e;X_e] \in \mathbb{R}^{(p+n) \times e}\)</span>，作为模型新的输入。训练时冻结预训练模型的参数，仅对prompt参数进行训练与更新。</p>
+<p>在T5模型中，原始输入为<span class="math inline">\(X_e \in
+\mathbb{R}^{n \times e}\)</span>，Prompt-Tuning将可学习的prompt参数<span class="math inline">\(P_e \in \mathbb{R}^{p \times
+e}\)</span>和原始输入拼接起来得到<span class="math inline">\([P_e;X_e]
+\in \mathbb{R}^{(p+n) \times
+e}\)</span>，作为模型新的输入。训练时冻结预训练模型的参数，仅对prompt参数进行训练与更新。</p>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th><img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/6.png" alt="描述" width="500"></th>
@@ -717,7 +749,8 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 </tbody>
 </table>
 <h3 id="prompt长度">Prompt长度</h3>
-<p>论文针对 1，5，20，100，150五种不同的prompt参数长度进行了测试。当prompt参数长度超过20时，整体模型的效果提升并不是很明显。当预训练模型较大时，不同prompt参数长度的表现差异较小。</p>
+<p>论文针对
+1，5，20，100，150五种不同的prompt参数长度进行了测试。当prompt参数长度超过20时，整体模型的效果提升并不是很明显。当预训练模型较大时，不同prompt参数长度的表现差异较小。</p>
 <div data-align="center">
 <p><img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/8.png" alt="描述" width="500"></p>
 </div>
@@ -751,16 +784,22 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <p><code>Fine-tuning</code>是使用大规模预训练语言模型来进行下游任务的流行范式，但该方法需要更新和储存语言模型的全部参数，且在下游任务应用时，需要对每一个任务都存储一份修改后的参数。<br>
 <code>Lightweight fine-tuning</code>是尝试解决上述问题的方法，其固定住绝大部分的预训练参数，只修改预训练模型的小部分模块。<br>
 <code>Prompting</code>是在模型的输入前加上instructions和一些样本使模型输出任务需要的结果。<br>
-而作者提出了<code>prefix-tuning</code>在调节模型时的过程中只优化一小段contiuous task-specific vector(prefix)。这种方法有以下优点：</p>
+而作者提出了<code>prefix-tuning</code>在调节模型时的过程中只优化一小段contiuous
+task-specific vector(prefix)。这种方法有以下优点：</p>
 <ol type="1">
-<li>与fine tuning相比，只需要存储一份共享的预训练模型参数和多个task-specific prefix，对于不同的任务只需要不同的prefix。</li>
-<li>与Lightweight fine-tuning相比，prefix tuning在相同的表现下需要调节的参数量更小。</li>
+<li>与fine
+tuning相比，只需要存储一份共享的预训练模型参数和多个task-specific
+prefix，对于不同的任务只需要不同的prefix。</li>
+<li>与Lightweight fine-tuning相比，prefix
+tuning在相同的表现下需要调节的参数量更小。</li>
 <li>与prompting相比，prefix包含的是连续的可训练的参数，而不是真实tokens对应的embedding，其表达的特征更加灵活和丰富。</li>
 </ol>
 <p><img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/11.png"></p>
 <h3 id="prefix-tuning-1">Prefix-Tuning</h3>
 <h4 id="method">Method</h4>
-<p>Prefix-tuning在autoregressive LM（如GPT）前添加prefix得到<span class="math inline">\(z=[PREFIX;X;Y]\)</span>，或者在encoder-decoder模型（如T5、BART）的encoder和decoder之前添加prefixs得到<span class="math inline">\(z=[PREFIX;x;PREFIX&#39;;y]\)</span>，如下图所示。 <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/12.png"> 其中，<span class="math inline">\(P_{idx}\)</span>表示prefix indices序列；<span class="math inline">\(|P_{idx}|\)</span>表示prefix的长度。Prefix-tuning将初始化一个参数量为<span class="math inline">\(|P_{idx}| \times dim(h_i)\)</span>的可训练矩阵： <span class="math display">\[
+<p>Prefix-tuning在autoregressive LM（如GPT）前添加prefix得到<span class="math inline">\(z=[PREFIX;X;Y]\)</span>，或者在encoder-decoder模型（如T5、BART）的encoder和decoder之前添加prefixs得到<span class="math inline">\(z=[PREFIX;x;PREFIX&#39;;y]\)</span>，如下图所示。
+<img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/12.png"> 其中，<span class="math inline">\(P_{idx}\)</span>表示prefix indices序列；<span class="math inline">\(|P_{idx}|\)</span>表示prefix的长度。Prefix-tuning将初始化一个参数量为<span class="math inline">\(|P_{idx}| \times dim(h_i)\)</span>的可训练矩阵：
+<span class="math display">\[
   h_i =
     \begin{cases}
       P_{\theta}[i,:],  &amp; \text{if $i \in P_{idx}$} \\
@@ -768,17 +807,25 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
     \end{cases}
 \]</span> training objective与fine-tuning相同，但语言模型的参数<span class="math inline">\(\phi\)</span>固定，仅对prefix参数<span class="math inline">\(\theta\)</span>进行训练。</p>
 <h4 id="parametrization-of-p_theta">Parametrization of <span class="math inline">\(P_\theta\)</span></h4>
-<p>在实验上，直接更新<span class="math inline">\(P_\theta\)</span>的参数会导致优化不稳定以及表现性能上的下降。因此文中通过使用较小的初始化矩阵<span class="math inline">\(P_{\theta}&#39;\)</span>，然后通过大型前馈神经网络来reparametrize矩阵<span class="math inline">\(P_\theta\)</span>。 <span class="math display">\[P_\theta[i,:]=MLP_{\theta}(P_{\theta}&#39;[i,:])\]</span> 当训练完成后，reparametrization参数被丢掉，仅<span class="math inline">\(prefix(P_\theta)\)</span>需要被保存下来。</p>
+<p>在实验上，直接更新<span class="math inline">\(P_\theta\)</span>的参数会导致优化不稳定以及表现性能上的下降。因此文中通过使用较小的初始化矩阵<span class="math inline">\(P_{\theta}&#39;\)</span>，然后通过大型前馈神经网络来reparametrize矩阵<span class="math inline">\(P_\theta\)</span>。 <span class="math display">\[P_\theta[i,:]=MLP_{\theta}(P_{\theta}&#39;[i,:])\]</span>
+当训练完成后，reparametrization参数被丢掉，仅<span class="math inline">\(prefix(P_\theta)\)</span>需要被保存下来。</p>
 <h3 id="intrinsic-evaluation">Intrinsic Evaluation</h3>
 <h4 id="prefix-length">Prefix Length</h4>
-<p>Prefix长度饿影响如下，更长的prefix长度意味着更多的训练参数和更丰富的表达能力。 <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/13.png"></p>
+<p>Prefix长度饿影响如下，更长的prefix长度意味着更多的训练参数和更丰富的表达能力。
+<img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/13.png"></p>
 <h4 id="full-vs-embedding-only">Full vs Embedding-only</h4>
-<p>Prefix可仅在embedding层插入，也可在每一层layer中插入，结果对比如下： <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/14.png"> 可以看出：discrete prompting &lt; embedding-only ablation &lt; prefix-tuning。</p>
+<p>Prefix可仅在embedding层插入，也可在每一层layer中插入，结果对比如下：
+<img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/14.png"> 可以看出：discrete prompting &lt;
+embedding-only ablation &lt; prefix-tuning。</p>
 <h4 id="prefixing-vs-infixing">Prefixing vs Infixing</h4>
 <p>在Prefix-tuning中，连续向量在输入前被插入，<span class="math inline">\([PREFIX;x;y]\)</span>。除了在输入前面插入之外，还可以在中间插入，如<span class="math inline">\([x;INFIX;y]\)</span>。<br>
 对比结果如上表，prefix-tuning略优于infix-tuning。这可能是因为在语言模型中prefix-tuning可以同时影响x和y，而infix-tuning只可以影响到y。</p>
 <h4 id="initialization">Initialization</h4>
-<p>prefix参数的初始化也会对效果有较大影响，随机初始化会带来较低的performence和较大的variance。而将prefix初始化为真实token的embedding可以带来较好的效果。 In particular, initializing with task relevant words such as “summarization” and “table-to-text” obtains slightly better performance than task irrelevant words such as “elephant” and “divide”, but using real words is still better than random. <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/15.png"></p>
+<p>prefix参数的初始化也会对效果有较大影响，随机初始化会带来较低的performence和较大的variance。而将prefix初始化为真实token的embedding可以带来较好的效果。
+In particular, initializing with task relevant words such as
+“summarization” and “table-to-text” obtains slightly better performance
+than task irrelevant words such as “elephant” and “divide”, but using
+real words is still better than random. <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/15.png"></p>
 <h2 id="lora">LoRA</h2>
 <p>论文地址：</p>
 <ul>
@@ -796,10 +843,12 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <li>以前的方法都或多或少有其他性能问题：
 <ul>
 <li>adapter增加了模型的层数，引入了额外的推理延迟。</li>
-<li>prefix-tuning比较难训练，效果不如直接finetune。而且，prefix-tuning会占用模型的sequence length，使得模型的有效输入变短。</li>
+<li>prefix-tuning比较难训练，效果不如直接finetune。而且，prefix-tuning会占用模型的sequence
+length，使得模型的有效输入变短。</li>
 </ul></li>
 </ol>
-<p>基于上述背景，论文作者得益于前人的一些关于内在维度（intrinsic dimension）的发现，提出了低秩自适应方法（LoRA）。该方法有以下好处：</p>
+<p>基于上述背景，论文作者得益于前人的一些关于内在维度（intrinsic
+dimension）的发现，提出了低秩自适应方法（LoRA）。该方法有以下好处：</p>
 <ol type="1">
 <li>一个预训练的大模型可以在多个下游任务中被共享。我们可以freeze大模型的权重，而只去训练和保存各个下游任务中的低秩自适应矩阵。</li>
 <li>由于LoRA方法将大模型的参数完全冻住，只训练增加的低秩矩阵，因此训练参数很少，相应的训练效率也会很高。</li>
@@ -807,21 +856,30 @@ P-Tuning v2，在大模型的Embedding和每一层layer前都加上新的参数�
 <li>LoRA可以和之前提出的方法完美的结合，多种方法可以结合在一起使用（如adapter、prefix-tuning）。</li>
 </ol>
 <h3 id="方法">方法</h3>
-<p>LoRA方法如下图所示，即冻结预训练大模型的参数，然后通过A、B两个矩阵来模型大模型的参数更新，在下游任务中只更新新增加的矩阵。 <img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/16.png"></p>
-<p>微调一个大模型时，如果使用full finetune方法，则公式如下： <span class="math display">\[W=W_0+\Delta W\]</span> 其中，<span class="math inline">\(W_0\)</span>是预训练模型的初始化参数，<span class="math inline">\(\Delta W\)</span>是需要更新的变化量。在全参数微调中，<span class="math inline">\(\Delta W\)</span>的参数量是和<span class="math inline">\(W_0\)</span>的参数量一样的。对于一个超大模型（如GPT3）来说，其成本是很高的。</p>
-<p>而在LoRA中，其更新公式如下： <span class="math display">\[W=W_0+\Delta W=W_0+BA, W_0 \in \mathbb{R}^{d \times k}, B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}\]</span> 其中<span class="math inline">\(r\)</span>就是低秩自适应矩阵中的秩，<span class="math inline">\(r \ll min(d,k)\)</span>。在训练过程中，<span class="math inline">\(W_0\)</span>被冻住（不通过梯度进行更新），而需要训练的参数为AB两个矩阵，这样由于<span class="math inline">\(r\)</span>的取值很小，需要训练的参数远远小于<span class="math inline">\(W_0\)</span>的参数量。</p>
+<p>LoRA方法如下图所示，即冻结预训练大模型的参数，然后通过A、B两个矩阵来模型大模型的参数更新，在下游任务中只更新新增加的矩阵。
+<img src="/2023/04/25/%E7%AE%80%E8%BF%B0PEFT%E6%96%B9%E6%B3%95/16.png"></p>
+<p>微调一个大模型时，如果使用full finetune方法，则公式如下： <span class="math display">\[W=W_0+\Delta W\]</span> 其中，<span class="math inline">\(W_0\)</span>是预训练模型的初始化参数，<span class="math inline">\(\Delta
+W\)</span>是需要更新的变化量。在全参数微调中，<span class="math inline">\(\Delta W\)</span>的参数量是和<span class="math inline">\(W_0\)</span>的参数量一样的。对于一个超大模型（如GPT3）来说，其成本是很高的。</p>
+<p>而在LoRA中，其更新公式如下： <span class="math display">\[W=W_0+\Delta W=W_0+BA, W_0 \in \mathbb{R}^{d
+\times k}, B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times
+k}\]</span> 其中<span class="math inline">\(r\)</span>就是低秩自适应矩阵中的秩，<span class="math inline">\(r \ll min(d,k)\)</span>。在训练过程中，<span class="math inline">\(W_0\)</span>被冻住（不通过梯度进行更新），而需要训练的参数为AB两个矩阵，这样由于<span class="math inline">\(r\)</span>的取值很小，需要训练的参数远远小于<span class="math inline">\(W_0\)</span>的参数量。</p>
 <div class="note info"><p>在论文中，作者将A矩阵用随机高斯分布初始化，将B矩阵初始化为0矩阵，保证训练开始时旁路矩阵为0矩阵，使得刚开始的LoRA模型和预训练模型一致。</p>
 </div>
 <div class="note info"><p>在推理阶段，只需要将模型的改变和预训练模型相加并替换预训练模型的参数即可，<span class="math inline">\(W=W_0+BA\)</span>，不会带来任务额外的参数和推理延迟。</p>
 </div>
 <h2 id="peft代码实现">PEFT代码实现</h2>
-<p>使用<a target="_blank" rel="noopener" href="https://github.com/huggingface/peft">Hugging Face封装代码</a>，目前支持的方法：</p>
+<p>使用<a target="_blank" rel="noopener" href="https://github.com/huggingface/peft">Hugging
+Face封装代码</a>，目前支持的方法：</p>
 <ul>
 <li>LoRA: LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS</li>
-<li>Prefix Tuning: Prefix-Tuning: Optimizing Continuous Prompts for Generation, P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks</li>
+<li>Prefix Tuning: Prefix-Tuning: Optimizing Continuous Prompts for
+Generation, P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning
+Universally Across Scales and Tasks</li>
 <li>P-Tuning: GPT Understands, Too</li>
-<li>Prompt Tuning: The Power of Scale for Parameter-Efficient Prompt Tuning</li>
-<li>AdaLoRA: Adaptive Budget Allocation for Parameter-Efficient Fine-Tuning</li>
+<li>Prompt Tuning: The Power of Scale for Parameter-Efficient Prompt
+Tuning</li>
+<li>AdaLoRA: Adaptive Budget Allocation for Parameter-Efficient
+Fine-Tuning</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSeq2SeqLM</span><br><span class="line"><span class="keyword">from</span> peft <span class="keyword">import</span> get_peft_config, get_peft_model, LoraConfig, TaskType</span><br><span class="line">model_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line">tokenizer_name_or_path = <span class="string">&quot;bigscience/mt0-large&quot;</span></span><br><span class="line"></span><br><span class="line">peft_config = LoraConfig(</span><br><span class="line">    task_type=TaskType.SEQ_2_SEQ_LM, inference_mode=<span class="literal">False</span>, r=<span class="number">8</span>, lora_alpha=<span class="number">32</span>, lora_dropout=<span class="number">0.1</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)</span><br><span class="line">model = get_peft_model(model, peft_config)</span><br><span class="line">model.print_trainable_parameters()</span><br></pre></td></tr></table></figure>
 

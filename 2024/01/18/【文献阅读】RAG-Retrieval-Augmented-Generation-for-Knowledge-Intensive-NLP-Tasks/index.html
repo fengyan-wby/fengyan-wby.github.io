@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2005.11401v4  论文代码：  https:&#x2F;&#x2F;github.com&#x2F;huggingface&#x2F;transformers&#x2F;blob&#x2F;master&#x2F;examples&#x2F;rag&#x2F;">
 <meta property="og:type" content="article">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/7.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/8.png">
 <meta property="article:published_time" content="2024-01-18T14:49:54.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.696Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.311Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="RAG">
@@ -155,7 +155,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">检索器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">2.3.</span> <span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#database%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="nav-number">3.1.</span> <span class="nav-text">Database的构建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#faiss"><span class="nav-number">3.1.1.</span> <span class="nav-text">Faiss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hnswhierarchcal-navigable-small-world-graphs%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.</span> <span class="nav-text">HNSW（Hierarchcal Navigable Small World graphs）算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#knn%E6%97%A0%E6%B3%95%E8%B7%9F%E4%B8%8A%E9%80%9F%E5%BA%A6"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">KNN无法跟上速度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E6%B3%95"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">朴素法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nsw%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">NSW算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hnsw%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">HNSW算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llm%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">3.2.</span> <span class="nav-text">LLM的生成</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">检索器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">2.3.</span> <span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#database%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="nav-number">3.1.</span> <span class="nav-text">Database的构建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#faiss"><span class="nav-number">3.1.1.</span> <span class="nav-text">Faiss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hnswhierarchcal-navigable-small-world-graphs%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.</span> <span class="nav-text">HNSW（Hierarchcal
+Navigable Small World graphs）算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#knn%E6%97%A0%E6%B3%95%E8%B7%9F%E4%B8%8A%E9%80%9F%E5%BA%A6"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">KNN无法跟上速度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E6%B3%95"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">朴素法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nsw%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">NSW算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hnsw%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">HNSW算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llm%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">3.2.</span> <span class="nav-text">LLM的生成</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -546,7 +547,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -634,14 +635,17 @@ if(canvas.getContext){
 <li>模型无法扩展或修改知识，比如用某天前的数据预训练的模型无法直接回答该天后发生的事。</li>
 <li>模型可能产生“幻觉”，所有的AI模型的底层原理都是基于数学概率，其模型输出实质上是一系列数值运算，大模型也不例外，所以它有时候会一本正经地胡说八道，尤其是在大模型自身不具备某一方面的知识时或在不擅长的场景上更容易出错。而这种幻觉问题的区分是比较困难的，因为它要求使用者自身具备相应领域的知识。</li>
 </ol>
-<p>因此，Facebook在2020年提出了RAG（Retrieval-Augmented Generation，检索增强生成）架构，该架构包含生成器与检索器两部分。</p>
+<p>因此，Facebook在2020年提出了RAG（Retrieval-Augmented
+Generation，检索增强生成）架构，该架构包含生成器与检索器两部分。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/1.png"></p>
 <p>对于问答，RAG架构首先将问题输入检索器。检索器包含两个子部分：</p>
 <ul>
 <li><code>查询编码器（Query Encoder）</code>：用<span class="math inline">\(q\)</span>表示，其将问题进行向量化。</li>
 <li><code>文档索引（Document Index）</code>：用<span class="math inline">\(d\)</span>表示，其将文档进行向量化，并构建文档向量索引。</li>
 </ul>
-<p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum Inner Product Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答。</p>
+<p>问题输入检索器后，先通过查询编码器转化为问题向量，然后从文档向量索引中以最大内积搜索（Maximum
+Inner Product
+Search，MIPS）方式查找前K个文档。再将查找出的K个文档和问题合并输入生成器。生成器即预训练语言模型，其推理生成相应的问答。</p>
 <h2 id="方法">方法</h2>
 <ol type="1">
 <li>输入序列用<span class="math inline">\(x\)</span>表示。</li>
@@ -650,7 +654,8 @@ if(canvas.getContext){
 </ol>
 <h3 id="检索器">检索器</h3>
 <p>检索器可用如下公式表示：</p>
-<p><span class="math display">\[d(z)=BERT_d(z)\]</span> <span class="math display">\[q(x)=BERT_q(x)\]</span> <span class="math display">\[p_{\eta}(z|x) \propto exp(d(z)^Tq(x))\]</span></p>
+<p><span class="math display">\[d(z)=BERT_d(z)\]</span> <span class="math display">\[q(x)=BERT_q(x)\]</span> <span class="math display">\[p_{\eta}(z|x) \propto
+exp(d(z)^Tq(x))\]</span></p>
 <p>其中，检索器的两个子部分均使用BERT模型，通过上述两个编码器分别得到问题和文档的向量。论文使用<code>Faiss</code>构建文档向量索引，并使用了<code>HNSW算法</code>对向量检索进行加速。向量检索的过程就是对问题和文档的向量求取内积作为相关度量，返回和问题向量内积最大、和问题最相关的前K个文档。</p>
 <div class="note info"><p>论文指出，检索器中的文档采用维基百科截至2018年12月的全量数据，将每篇维基百科文档切分为互不重叠的包含100个单词的块，每个块作为一个文档，共有2100万个文档。</p>
 </div>
@@ -661,18 +666,26 @@ if(canvas.getContext){
 <p>论文采用端到端的方式对检索器和生成器进行联合训练，输入数据为文本对<span class="math inline">\((x,y)\)</span>。</p>
 <ul>
 <li><code>RAG-Sequence Model</code><br>
-<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in
+top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in
+top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
 <li><code>RAG-Token Model</code><br>
-<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N
+\sum_{z \in top-k(p(\cdot|x))}
+p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
 </ul>
-<p>论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。 因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用<span class="math inline">\(BERT_q\)</span>模型和生成器所使用BART模型的参数进行更新。</p>
+<p>论文指出，训练时如果调整文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数，则需要定期重新计算所有文档的向量并构建索引，成本较高且对效果提升不大。
+因此，训练时，文档编码器所使用<span class="math inline">\(BERT_d\)</span>模型的参数固定、不更新，而只对查询编码器所使用<span class="math inline">\(BERT_q\)</span>模型和生成器所使用BART模型的参数进行更新。</p>
 <h2 id="扩展">扩展</h2>
 <p>对于构建一个RAG模型，我们可以将流程分为两步，分别为<code>Database的构建</code>和<code>LLM的生成</code>。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/2.png"></p>
 <h3 id="database的构建">Database的构建</h3>
 <h4 id="faiss">Faiss</h4>
-<p><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss">Faiss</a>是一个Facebook AI团队开源的库，全称为Facebook AI Similarity Search，该开源库针对高维空间中的海量数据（稠密向量），提供了高效且可靠的相似性聚类和检索方法，可支持十亿级别向量的搜索，是目前最为成熟的近似近邻搜索库。</p>
-<h4 id="hnswhierarchcal-navigable-small-world-graphs算法">HNSW（Hierarchcal Navigable Small World graphs）算法</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss">Faiss</a>是一个Facebook
+AI团队开源的库，全称为Facebook AI Similarity
+Search，该开源库针对高维空间中的海量数据（稠密向量），提供了高效且可靠的相似性聚类和检索方法，可支持十亿级别向量的搜索，是目前最为成熟的近似近邻搜索库。</p>
+<h4 id="hnswhierarchcal-navigable-small-world-graphs算法">HNSW（Hierarchcal
+Navigable Small World graphs）算法</h4>
 <h5 id="knn无法跟上速度">KNN无法跟上速度</h5>
 <p>假设你有一本新书，你想在图书馆找到类似的书。k-最近邻（KNN）将浏览书架上的每一本书，并将它们从最相似到最不相似的顺序排列，以确定最相似的书。这样查找的时间是没有办法满足实时需求的。而且在真实应用中，图书馆有成千上万本书，每秒的找书请求也是成千上万的。这时KNN就更加没办法满足速度需求了。</p>
 <p>如果我们对图书馆中的图书进行预排序和索引，这时要找到与你的新书相似的书，你所需要做的就是去正确的楼层，正确的区域，正确的通道找到相似的书。这一步骤大大减少了需要检查接近性的数据点的数量，使得检测时间大大缩短。这就是近似近邻（ANN）的思想。</p>
@@ -721,12 +734,14 @@ if(canvas.getContext){
 <div class="note danger"><p>如上图所示就是一个经典的满足上述三个条件的德劳内三角网图。但NSW没有采用德劳内三角剖分法来构成德劳内三角网图，原因是：</p>
 <ul>
 <li>德劳内三角剖分构图算法时间复杂度太高，换句话说，构图太耗时。</li>
-<li>德劳内三角形的查找效率并不一定最高，如果初始点和查找点距离很远的话我们需要进行多次跳转才能查到其临近点，需要“高速公路”机制（Expressway mechanism, 这里指部分远点之间拥有线段连接，以便于快速查找）。</li>
+<li>德劳内三角形的查找效率并不一定最高，如果初始点和查找点距离很远的话我们需要进行多次跳转才能查到其临近点，需要“高速公路”机制（Expressway
+mechanism, 这里指部分远点之间拥有线段连接，以便于快速查找）。</li>
 </ul>
 </div>
 <p>在理想状态下，我们的算法不仅要满足上面三条需求，还要算法复杂度低，同时配有高速公路机制的构图法。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/5.png"></p>
-<p>如上图所示，这是NSW论文中给出的一张满足条件的网络图，可以发现黑色是近邻点的连线，红色线就是“高速公路机制”了。我们从enter point点进入查找，查找绿色点临近节点的时候，就可以用过红色连线“高速公路机制”快速查找到结果。</p>
+<p>如上图所示，这是NSW论文中给出的一张满足条件的网络图，可以发现黑色是近邻点的连线，红色线就是“高速公路机制”了。我们从enter
+point点进入查找，查找绿色点临近节点的时候，就可以用过红色连线“高速公路机制”快速查找到结果。</p>
 <div class="note success"><p>NSW构图算法：</p>
 <ol type="1">
 <li>向图中逐个插入点，点的选取上随机的；</li>
@@ -753,10 +768,12 @@ if(canvas.getContext){
 <p>图画完了，请关注E点和A点的连线，如果我再这个图的基础上再插入6个点，这6个点有3个和E很近，有3个和A很近，那么距离E最近的3个点中没有A，距离A最近的3个点中也没有E，但因为A和E是构图早期添加的点，A和E有了连线，我们管这种连线叫“高速公路”，在查找时可以提高查找效率（当进入点为E，待查找距离A很近时，我们可以通过AE连线从E直接到达A，而不是一小步一小步分多次跳转到A）。</p>
 <h5 id="hnsw算法">HNSW算法</h5>
 <p>HNSW算法就是<code>跳表结构</code>+<code>NSW算法</code>。</p>
-<p>首先来看跳表结构。设有有序链表，名叫sorted_link，里面有n个节点，每个节点是一个整数。我们从表头开始查找，查找第t个节点需要跳转几次？答：t-1次。把n个节点分成n次查找的需求，都查找一遍，需要跳转几次？答： （0+1+2+3+.....+（n-1））次。如果我这链表长成下图这样呢？</p>
+<p>首先来看跳表结构。设有有序链表，名叫sorted_link，里面有n个节点，每个节点是一个整数。我们从表头开始查找，查找第t个节点需要跳转几次？答：t-1次。把n个节点分成n次查找的需求，都查找一遍，需要跳转几次？答：
+（0+1+2+3+.....+（n-1））次。如果我这链表长成下图这样呢？</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/7.png"></p>
 <p>这已经不是一个有序链表了，这是三个有序链表+分层连接指针构成的跳表了。看这张示意图就能明白它的查找过程，先查第一层，然后查第二层，然后查第三层，然后找到结果。如果把上段所描述的名字叫sorted_link的链表建立成这样的跳表，那么把sorted_link中的所有元素都查一遍还需要花费（0+1+2+3+.....+（n-1））次吗？当然不需要。</p>
-<p>跳表怎么构建呢？三个字，抛硬币。对于sorted_link链表中的每个节点进行抛硬币，如抛正，则该节点进入上一层有序链 表，每个sorted_link中的节点有50%的概率进入上一层有序链表。将上一层有序链表中和sorted_link链表中相同的元素做一一对应的指针链接。再从sorted_link上一层链表中再抛硬币，sorted_link上一层链表中的节点有50%的可能进入最表层，相当于sorted_link中的每个节点有25%的概率进入最表层。以此类推。</p>
+<p>跳表怎么构建呢？三个字，抛硬币。对于sorted_link链表中的每个节点进行抛硬币，如抛正，则该节点进入上一层有序链
+表，每个sorted_link中的节点有50%的概率进入上一层有序链表。将上一层有序链表中和sorted_link链表中相同的元素做一一对应的指针链接。再从sorted_link上一层链表中再抛硬币，sorted_link上一层链表中的节点有50%的可能进入最表层，相当于sorted_link中的每个节点有25%的概率进入最表层。以此类推。</p>
 <p>这样就保证了表层是“高速通道”，底层是精细查找，这个思想被应用到了NSW算法中，变成了其升级版-----HNSW。</p>
 <p><img src="/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/8.png"></p>
 <p>其中，Layer0中包含了数据集中的所有点，Layer1和Layer2是“高速通道”，越往高层越稀疏。</p>
@@ -765,9 +782,13 @@ if(canvas.getContext){
 <p><strong>重新训练（针对特殊的输入格式进行微调）</strong></p>
 <ul>
 <li><code>RAG-Sequence Model</code><br>
-<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<span class="math display">\[p_{RAG-Sequence}(y|x) \approx \sum_{z \in
+top-k(p(\cdot|x))}p_{\eta}(z|x)p_{\theta}(y|x,z)=\sum_{z \in
+top-k(p(\cdot|x))}p_{\eta}(z|x)\prod_{i}^{N}p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
 <li><code>RAG-Token Model</code><br>
-<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N \sum_{z \in top-k(p(\cdot|x))} p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
+<span class="math display">\[p_{RAG-Token}(y|x) \approx \prod_i^N
+\sum_{z \in top-k(p(\cdot|x))}
+p_{\eta}(z|x)p_{\theta}(y_i|x,z,y_{1:i-1})\]</span></li>
 </ul>
 <p><strong>不重新训练（通过prompt进行调整）</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">question_answering</span>(<span class="params">context, query</span>):</span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                Give the answer to the user query delimited by triple backticks ```<span class="subst">&#123;query&#125;</span>```\</span></span><br><span class="line"><span class="string">                using the information given in context delimited by triple backticks ```<span class="subst">&#123;context&#125;</span>```.\</span></span><br><span class="line"><span class="string">                If there is no relevant information in the provided context, try to answer yourself, </span></span><br><span class="line"><span class="string">                but tell user that you did not have any relevant context to base your answer on.</span></span><br><span class="line"><span class="string">                Be concise and output the answer of size less than 80 tokens.</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    response = get_completion(instruction, prompt, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line">    answer = response.choices[<span class="number">0</span>].message[<span class="string">&quot;content&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>

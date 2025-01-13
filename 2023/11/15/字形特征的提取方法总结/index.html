@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="最近做了一些提取字符形状特征的工作，这里进行一下总结。">
 <meta property="og:type" content="article">
@@ -56,7 +56,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/22.jpg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/24.jpg">
 <meta property="article:published_time" content="2023-11-15T10:36:05.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.832Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.430Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="特征提取">
 <meta property="article:tag" content="对比学习">
@@ -562,7 +562,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -730,7 +730,18 @@ if(canvas.getContext){
 </tbody>
 </table>
 <p>对于笔划部分，我们可以先将字符拆分成偏旁和部首，如下所示：</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>编码</th>
@@ -793,6 +804,11 @@ if(canvas.getContext){
 </table>
 <p>然后我们可以通过递归的方法得到各个字符的笔划，如下所示：</p>
 <table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>编码</th>
@@ -829,7 +845,8 @@ if(canvas.getContext){
 <h3 id="字符相似度计算">字符相似度计算</h3>
 <p>有了字符的结构和笔划的组成序列之后，我们就可以计算字符之间的相似度了。这里我使用了编辑距离来进行计算。</p>
 <p>如字符<code>木</code>的序列构成为<code>⿻一⿲丿丨乀</code>，字符<code>本</code>的序列构成为<code>⿻⿻一⿲丿丨乀一</code>，它们的编辑距离为2。则最终相似度计算如下：</p>
-<p><span class="math display">\[similarity(木, 本)=1 - \frac{dis(木, 本)}{max(len(木), len(本))}=1 - \frac{2}{max(6, 8)}=0.75\]</span></p>
+<p><span class="math display">\[similarity(木, 本)=1 - \frac{dis(木,
+本)}{max(len(木), len(本))}=1 - \frac{2}{max(6, 8)}=0.75\]</span></p>
 <h2 id="ocr">OCR</h2>
 <h3 id="数据构造">数据构造</h3>
 <p>OCR流程分为几个部分，分别为：</p>
@@ -839,7 +856,8 @@ if(canvas.getContext){
 <li>文本识别</li>
 </ol>
 <p>这里由于我们只需要提取字形的特征，可以通过自行构造数据省略“文本检测”和“文本方向检测”两个步骤，即文本位置和文本方向都是给定的，我们只需要提取固定区域的字形特征就可以了。</p>
-<p>具体来说，对于字符<code>A</code>，我们可以通过字体文件（ttf、otf）将其转化为图片。 这里以<code>刀隶体</code>为例，转化的图片如下：<br>
+<p>具体来说，对于字符<code>A</code>，我们可以通过字体文件（ttf、otf）将其转化为图片。
+这里以<code>刀隶体</code>为例，转化的图片如下：<br>
 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/1.png"></p>
 <p>我们也可以多使用几种字体，增加模型的泛化性，如<code>像素体</code>的图片如下：<br>
 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/2.png"></p>
@@ -864,7 +882,11 @@ if(canvas.getContext){
 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/6.png"></p>
 <p>这样就得到了<span class="math inline">\(2N=4\)</span>张图像，对每一个图像对算相似度得到相似度矩阵，需要最大化正样本对的相似度。</p>
 <p><img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/7.png"><img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/8.png"></p>
-<p>SimCLR的损失函数为InfoNCE： <span class="math display">\[l(i, j) = -log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i, k})}\]</span> <span class="math display">\[L = \frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k, 2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span></p>
+<p>SimCLR的损失函数为InfoNCE： <span class="math display">\[l(i, j) =
+-log\frac{exp(s_{i, j})}{ \sum_{k=1}^{2N} {}_{[k!= i]} exp(s_{i,
+k})}\]</span> <span class="math display">\[L =
+\frac{1}{2\textcolor{skyblue}{N}} \sum_{k=1}^{N} [l(2k-1, 2k) + l(2k,
+2k-1)]\]</span> <span class="math display">\[s_{i,j}=\frac{z_i^Tz_j}{\tau||z_i||||z_j||}\]</span></p>
 <p>首先计算图像i对图像j的损失：<br>
 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/9.png"></p>
 <p>然后交换位置，再算一次，保持对称性：<br>
@@ -876,11 +898,17 @@ if(canvas.getContext){
 <h3 id="moco">MoCo</h3>
 <p>MoCo和SimCLR不同的地方主要有两个方面：</p>
 <ol type="1">
-<li>负样本并不是在同一个batch中取，而是通过一个队列进行存储，从而将负样本数量和batch size解耦。</li>
+<li>负样本并不是在同一个batch中取，而是通过一个队列进行存储，从而将负样本数量和batch
+size解耦。</li>
 <li>正负样本的编码器并没有共享参数，而是使用动量更新的方法来更新负样本编码器。</li>
 </ol>
-<p>MoCo通过使用队列将负样本存储起来，如下图所示。将最新得到的负样本特征加入队列，并将最早的负样本特征移出队列，从而去维护一个负样本队列。这样负样本的数量就是队列的大小，队列中的负样本可以来自多个batch。 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/14.jpeg"></p>
-<p>但是使用队列存储负样本就会出现一个问题，每个不同batch的数据都是来自不同时刻的模型，如下图所示： <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/15.jpeg"> 如果像simCLR一样直接将<span class="math inline">\(\theta_q\)</span>的参数复制给<span class="math inline">\(\theta_k\)</span>，即<span class="math inline">\(\theta_k \leftarrow \theta_q\)</span>，则会出现负样本队列中数据特征不一致的问题。因为负样本队列中的数据来自不同的batch，而且<span class="math inline">\(\theta_q\)</span>是根据梯度在快速更新的，如果<span class="math inline">\(\theta_k\)</span>的参数也快速更新，则队列中<span class="math inline">\(\theta_{k-1}\)</span>、<span class="math inline">\(\theta_{k-2}\)</span>等模型得到的特征分布会和<span class="math inline">\(\theta_k\)</span>的得到的特征分布有很大的区别，这样模型就会学到一个捷径解，即根据特征分布的不同来区分正负样本，而不是理解样本的语义信息。 因此，MoCo在这里使用了动量更新来改变<span class="math inline">\(\theta_k\)</span>模型的参数： <span class="math display">\[\theta_k = m\theta_{k-1} + (1-m)\theta_q\]</span> 从而使<span class="math inline">\(\theta_k\)</span>模型缓慢更新，保证了队列中负样本队列中特征分布的一致性。在论文中，作者将<span class="math inline">\(m\)</span>设为了0.999。 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/17.png"></p>
+<p>MoCo通过使用队列将负样本存储起来，如下图所示。将最新得到的负样本特征加入队列，并将最早的负样本特征移出队列，从而去维护一个负样本队列。这样负样本的数量就是队列的大小，队列中的负样本可以来自多个batch。
+<img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/14.jpeg"></p>
+<p>但是使用队列存储负样本就会出现一个问题，每个不同batch的数据都是来自不同时刻的模型，如下图所示：
+<img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/15.jpeg"> 如果像simCLR一样直接将<span class="math inline">\(\theta_q\)</span>的参数复制给<span class="math inline">\(\theta_k\)</span>，即<span class="math inline">\(\theta_k \leftarrow
+\theta_q\)</span>，则会出现负样本队列中数据特征不一致的问题。因为负样本队列中的数据来自不同的batch，而且<span class="math inline">\(\theta_q\)</span>是根据梯度在快速更新的，如果<span class="math inline">\(\theta_k\)</span>的参数也快速更新，则队列中<span class="math inline">\(\theta_{k-1}\)</span>、<span class="math inline">\(\theta_{k-2}\)</span>等模型得到的特征分布会和<span class="math inline">\(\theta_k\)</span>的得到的特征分布有很大的区别，这样模型就会学到一个捷径解，即根据特征分布的不同来区分正负样本，而不是理解样本的语义信息。
+因此，MoCo在这里使用了动量更新来改变<span class="math inline">\(\theta_k\)</span>模型的参数： <span class="math display">\[\theta_k = m\theta_{k-1} + (1-m)\theta_q\]</span>
+从而使<span class="math inline">\(\theta_k\)</span>模型缓慢更新，保证了队列中负样本队列中特征分布的一致性。在论文中，作者将<span class="math inline">\(m\)</span>设为了0.999。 <img src="/2023/11/15/%E5%AD%97%E5%BD%A2%E7%89%B9%E5%BE%81%E7%9A%84%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/17.png"></p>
 <h3 id="字形特征提取中的对比学习与方法改进">字形特征提取中的对比学习与方法改进</h3>
 <h4 id="方法">方法</h4>
 <p>通过对比来学习字符的字形特征表示如下图所示：<br>

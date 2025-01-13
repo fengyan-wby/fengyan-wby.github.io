@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Oh My Zsh是一款社区驱动的命令行工具，是基于Zsh命令行的一个扩展工具集，提供了丰富的扩展功能，如：主题配置，插件机制，内置的便捷操作等，可以给我们一种全新的命令行使用体验。下文对Oh My Zsh的安装及配置方法进行总结，只总结最佳的实践。">
 <meta property="og:type" content="article">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="Oh My Zsh是一款社区驱动的命令行工具，是基于Zsh命令行的一个扩展工具集，提供了丰富的扩展功能，如：主题配置，插件机制，内置的便捷操作等，可以给我们一种全新的命令行使用体验。下文对Oh My Zsh的安装及配置方法进行总结，只总结最佳的实践。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-10T14:49:03.000Z">
-<meta property="article:modified_time" content="2025-01-10T10:53:45.644Z">
+<meta property="article:modified_time" content="2025-01-13T02:50:30.264Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="Ubuntu">
 <meta property="article:tag" content="zsh">
@@ -537,7 +537,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-10 10:53:45" itemprop="dateModified" datetime="2025-01-10T10:53:45+00:00">2025-01-10</time>
+      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -609,7 +609,8 @@ if(canvas.getContext){
 <h3 id="字体的安装">字体的安装</h3>
 <p>推荐在终端使用<code>Powerline</code>类型的主题，该类型主题可以使用图形表示尽可能多的信息，方便用户的使用。推荐安装用户量最大的<code>Powerlevel9k</code>。</p>
 <p><code>Powerlevel9k</code>中需要使用较多的图形符号，字体大多不会自带这些符号，所以需要使用专门的<code>Powerline</code>字体。</p>
-<p>不推荐安装官方默认的<code>Powerline Fonts</code>，理由是图形符号不全，符号处会有乱码。推荐安装<code>Nerd-Fonts</code>系列字体，因为该系列字体附带有尽可能全的符号，并且更新非常频繁，项目地址在这里。例如直接下载 <code>Ubuntu Font Family</code>中的<code>Ubuntu Nerd Font Complete.ttf</code>，然后直接在Ubuntu下安装。</p>
+<p>不推荐安装官方默认的<code>Powerline Fonts</code>，理由是图形符号不全，符号处会有乱码。推荐安装<code>Nerd-Fonts</code>系列字体，因为该系列字体附带有尽可能全的符号，并且更新非常频繁，项目地址在这里。例如直接下载
+<code>Ubuntu Font Family</code>中的<code>Ubuntu Nerd Font Complete.ttf</code>，然后直接在Ubuntu下安装。</p>
 <h3 id="主题的配置">主题的配置</h3>
 <p>如果要在Oh My Zsh中安装Powerlevel9k ，只需执行如下指令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k</span><br></pre></td></tr></table></figure>
@@ -623,7 +624,8 @@ if(canvas.getContext){
 <h3 id="fasd">fasd</h3>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install fasd  <span class="comment"># mac使用brew install fasd</span></span><br></pre></td></tr></table></figure>
 <h3 id="zsh-autosuggestions">zsh-autosuggestions</h3>
-<p>命令行命令键入时的历史命令建议插件 按照官方文档提示，直接执行如下命令安装：</p>
+<p>命令行命令键入时的历史命令建议插件
+按照官方文档提示，直接执行如下命令安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
 <h3 id="zsh-syntax-highlighting">zsh-syntax-highlighting</h3>
 <p>命令行语法高亮插件 按照官方文档提示，直接执行如下命令安装：</p>
