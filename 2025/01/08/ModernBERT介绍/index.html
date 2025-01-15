@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/modernbert_accuracy_table.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/modernbert_efficiency_table.png">
 <meta property="article:published_time" content="2025-01-08T15:38:41.000Z">
-<meta property="article:modified_time" content="2025-01-13T02:50:30.203Z">
+<meta property="article:modified_time" content="2025-01-15T07:17:39.747Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="ModernBERT">
@@ -153,7 +153,7 @@
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#modernbert-%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0"><span class="nav-number">1.</span> <span class="nav-text">ModernBERT 的技术创新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#transformer-%E6%9E%B6%E6%9E%84%E7%9A%84%E7%8E%B0%E4%BB%A3%E5%8C%96%E9%9D%A9%E6%96%B0"><span class="nav-number">1.1.</span> <span class="nav-text">Transformer 架构的现代化革新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%95%88%E7%8E%87%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%80%A7%E4%BC%98%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">计算效率的系统性优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#global-and-local-attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">Global and Local Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unpadding-and-sequence-packing"><span class="nav-number">1.2.2.</span> <span class="nav-text">Unpadding and Sequence
-Packing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%84%9F%E7%9F%A5%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.2.3.</span> <span class="nav-text">硬件感知的模型设计</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%96%B9%E6%B3%95%E7%9A%84%E5%88%9B%E6%96%B0"><span class="nav-number">2.</span> <span class="nav-text">训练方法的创新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">训练过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="nav-number">2.2.</span> <span class="nav-text">训练技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#performance"><span class="nav-number">3.</span> <span class="nav-text">Performance</span></a></li></ol></div>
+Packing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%84%9F%E7%9F%A5%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.2.3.</span> <span class="nav-text">硬件感知的模型设计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%96%B9%E6%B3%95%E7%9A%84%E5%88%9B%E6%96%B0"><span class="nav-number">1.3.</span> <span class="nav-text">训练方法的创新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">训练过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">训练技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#performance"><span class="nav-number">2.</span> <span class="nav-text">Performance</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -544,7 +544,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-13 02:50:30" itemprop="dateModified" datetime="2025-01-13T02:50:30+00:00">2025-01-13</time>
+      <time title="修改时间：2025-01-15 07:17:39" itemprop="dateModified" datetime="2025-01-15T07:17:39+00:00">2025-01-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -672,12 +672,12 @@ GPU 优化模型架构的方法。</li>
 </ul>
 <p>在此基础上，还通过受约束的网格搜索方法，系统地探索了不同的模型配置，包括层数和层宽的各种组合。在识别出最具潜力的架构配置后，通过实际
 GPU 性能测试验证了启发式方法的有效性，最终确定了最优的模型设计方案。</p>
-<h2 id="训练方法的创新">训练方法的创新</h2>
+<h3 id="训练方法的创新">训练方法的创新</h3>
 <p>ModernBERT
 采用了更加多元化的训练数据策略，整合了来自网络文档、程序代码和学术论文等多种英语文本源。训练规模达到2
 万亿token，其中绝大部分是独特的内容，而不是像传统编码器那样对相同内容进行
 20-40 次重复训练。</p>
-<h3 id="训练过程">训练过程</h3>
+<h4 id="训练过程">训练过程</h4>
 <p>在保留原始 BERT
 训练方法核心的同时，根据后续研究成果进行了若干优化：移除了收益不明显的下一句预测目标，同时将掩码比率从
 15% 提升至 30%。</p>
@@ -690,7 +690,7 @@ GPU 性能测试验证了启发式方法的有效性，最终确定了最优的�
 亿个特选token进行退火训练。</li>
 </ol>
 <p>这种三阶段训练方法确保了模型在各种应用场景中的稳定表现：它不仅在长文本处理任务上具有竞争力，同时保持了对短文本的高效处理能力。</p>
-<h3 id="训练技巧">训练技巧</h3>
+<h4 id="训练技巧">训练技巧</h4>
 <ol type="1">
 <li>考虑到训练初期主要是在更新随机初始化的权重，实现了批次大小预热机制
 ——
