@@ -175,6 +175,15 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
 BERT
 及其后继模型。这个新模型整合了近年来大语言模型（LLMs）研究中的数十项技术进展，并将这些创新应用到
 BERT 风格的模型中。</p>
+<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2412.13663">https://arxiv.org/pdf/2412.13663</a></li>
+</ul>
+<p>论文代码：</p>
+<ul>
+<li><a href="https://github.com/AnswerDotAI/ModernBERT">https://github.com/AnswerDotAI/ModernBERT</a></li>
+<li><a href="https://huggingface.co/collections/answerdotai/modernbert-67627ad707a4acbf33c41deb">https://huggingface.co/collections/answerdotai/modernbert-67627ad707a4acbf33c41deb</a></li>
+</ul>
 <span id="more"></span>
 <p><img src="/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/modernbert_pareto_curve.png"></p>
 <h2 id="modernbert-的技术创新">ModernBERT 的技术创新</h2>
