@@ -238,18 +238,18 @@ Cache的容量，但同时也导致模型整体性能会有一定程度的下降
 vector，这里<span class="math inline">\(d_c(&lt;&lt;d_hn_h)\)</span>表示KV压缩的维度。</li>
 <li><span class="math inline">\(W^{DKV} \in \mathbb{R}^{d_c \times
 d}\)</span>：表示降维映射down-projection矩阵，将<span class="math inline">\(d\)</span>维向量降维到<span class="math inline">\(d_c\)</span>。</li>
-<li><span class="math inline">\(W^{UK},w^{UV} \in \mathbb{R}^{d_hn_h
+<li><span class="math inline">\(W^{UK},W^{UV} \in \mathbb{R}^{d_hn_h
 \times d_c}\)</span>：表示升维映射up-projection矩阵，将<span class="math inline">\(d_c\)</span>维向量升维到<span class="math inline">\(d_hn_h\)</span>。</li>
 </ul>
 <p>这样在推理时，只需要缓存隐向量<span class="math inline">\(c_t^{KV}\)</span>即可，这样MLA对应的每一个token的KV
 Cache参数只有<span class="math inline">\(d_cl\)</span>个。</p>
-<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},w^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，带来额外的推理开销。
-MLA在推理时将<span class="math inline">\(W^{UK},w^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，不会带来额外的推理开销。</p>
+<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},W^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，增加大量推理开销。
+MLA在推理时将<span class="math inline">\(W^{UK},W^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，从而不带来额外的推理开销。</p>
 <p>对于<span class="math inline">\(q_t^{\top}k_t^C\)</span>的计算：</p>
 <p><span class="math display">\[
 \begin{align}
-    q_t^{\top}k_t^C = (W^Qh_t)^{\top}W^{UK}c_t^{KV} =
-h_t^{\top}((W^Q)^{\top}W^{UK})c_t^{KV}
+    q_t^{\top}k_t^C &amp;= (W^Qh_t)^{\top}W^{UK}c_t^{KV} \\
+    &amp;= h_t^{\top}((W^Q)^{\top}W^{UK})c_t^{KV}
 \end{align}
 \]</span></p>
 <p>将<span class="math inline">\((W^Q)^{\top}W^{UK}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(k_t^{C}\)</span>。</p>
@@ -286,7 +286,7 @@ d_c^{\prime}}\)</span>：分别表示down-projection和up-projection矩阵。</l
 </ul>
 <h2 id="融入rope">融入RoPE</h2>
 <p>上面的过程中，我们丢失了一个非常重要的步骤，即位置编码RoPE。<br>
-原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的，但是由于Cache缓存的是压缩后的低秩kv信息，因为RoPE要在&amp;q、k&amp;做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中。 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。<br>
+原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的。但是对于key，Cache缓存的是压缩后的低秩kv信息，而RoPE要在<span class="math inline">\(q、k\)</span>做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中， 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。<br>
 为此，MLA 采用 decoupled RoPE，使用额外的queries <span class="math inline">\(q_{t,i}^R \in
 \mathbb{R}^{d_h^R}\)</span>以及共享的key <span class="math inline">\(k_t^R \in
 \mathbb{R}^{d_h^R}\)</span>来携带RoPE信息。</p>
