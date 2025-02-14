@@ -169,6 +169,162 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>MLA（Multi-head Latent Attention）详解</title>
+    <url>/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>在DeepSeek的模型层面，有两个值得关注的点：</p>
+<ul>
+<li>Multi-head Latent
+Attention（MLA）：这个结构对传统Transformer中的MHA结构进行改进，主要目标有两个：
+<ol type="1">
+<li>降低推理时KV Cache的存储开销；</li>
+<li>缓解GQA和MQA等方法导致的模型性能损耗。</li>
+</ol></li>
+<li>DeepSeekMoE：这部分结构和DeepSeek-MoE 中保持一致，两个核心思想是：
+<ol type="1">
+<li>Fine-grained Expert
+Segmentation，即将FFN中间层隐层维度拆分成多个更小的维度；</li>
+<li>Shared Expert Isolation，设置共享专家捕获常识性知识。</li>
+</ol></li>
+</ul>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_1.png"></p>
+<p>这篇文章先来说第一个部分， MLA（Multi-head Latent
+Attention）算法的原理。</p>
+<span id="more"></span>
+<h2 id="标准的mha结构">标准的MHA结构</h2>
+<p>MHA（即多头注意力机制）是在Transformer原始论文中提出的。这里设<span class="math inline">\(d\)</span>表示embedding的维度，<span class="math inline">\(n_h\)</span>表示attention heads的数量，<span class="math inline">\(d_h\)</span>表示每一个头的维度，<span class="math inline">\(h_t \in \mathbb{R}^d\)</span>表示第<span class="math inline">\(t\)</span>个token在一个attention层的输入。那么通过3个参数矩阵<span class="math inline">\(W^Q, W^K, W^V \in \mathbb{R}^{d_hn_h \times
+d}\)</span>就可以得到<span class="math inline">\(q_t, k_t, v_t \in
+\mathbb{R}^{d_hn_h}\)</span>，即：</p>
+<p><span class="math display">\[
+\begin{align}
+    q_t = W^Qh_t \\
+    k_t = W^Kh_t \\
+    v_t = W^Vh_t
+\end{align}
+\]</span></p>
+<p>在多头注意力计算中，这里的<span class="math inline">\(q_t, k_t, v_t
+\in \mathbb{R}^{d_hn_h}\)</span>会分割成<span class="math inline">\(n_h\)</span>个注意力头，即：</p>
+<p><span class="math display">\[
+\begin{align}
+    [q_{t,1};q_{t,2};...;q_{t,n_h}] = q_t \\
+    [k_{t,1};k_{t,2};...;k_{t,n_h}] = k_t \\
+    [v_{t,1};v_{t,2};...;v_{t,n_h}] = v_t \\
+    o_{t,i} =
+\sum_{j=1}^{t}Softmax_j(\frac{q_{t,i}^{\top}k_{j,i}}{\sqrt{d_h}})v_{j,i}
+\\
+    u_t = W^O[o_{t,1};o_{t,2};...;o_{t,n_h}]
+\end{align}
+\]</span></p>
+<p>这里<span class="math inline">\(q_{t,i},k_{t,i},v_{t,i} \in
+\mathbb{R}^{d_h}\)</span>分别表示query、key、value的第<span class="math inline">\(i\)</span>个attention head，<span class="math inline">\(W^O \in \mathbb{R}^{d \times
+d_hn_h}\)</span>表示输出映射矩阵。那么如果模型结构是MHA，在推理时，KV
+Cache对于每个token需要缓存的参数有<span class="math inline">\(2n_hd_hl\)</span>（l表示网络层数）。</p>
+<p>为了缓解推理时KV Cache显存占用的问题，相继出现了Multi-Query Attention
+(MQA) 和 Grouped-Query Attention (GQA) 等方法，这些方法降低了KV
+Cache的容量，但同时也导致模型整体性能会有一定程度的下降。</p>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_2.png"></p>
+<h1 id="mla结构">MLA结构</h1>
+<p>MLA的核心是对keys和values进行低秩联合压缩，从而降低KV Cache。</p>
+<p><span class="math display">\[
+\begin{align}
+    c_t^{KV} = W^{DKV}h_t \\
+    k_t^{C} = W^{UK}c_t^{KV} \\
+    v_t^{C} = W^{UV}c_t^{KV}
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(c_t^{KV} \in
+\mathbb{R}^{d_c}\)</span>：表示对keys和values压缩后的隐向量latent
+vector，这里<span class="math inline">\(d_c(&lt;&lt;d_hn_h)\)</span>表示KV压缩的维度。</li>
+<li><span class="math inline">\(W^{DKV} \in \mathbb{R}^{d_c \times
+d}\)</span>：表示降维映射down-projection矩阵，将<span class="math inline">\(d\)</span>维向量降维到<span class="math inline">\(d_c\)</span>。</li>
+<li><span class="math inline">\(W^{UK},w^{UV} \in \mathbb{R}^{d_hn_h
+\times d_c}\)</span>：表示升维映射up-projection矩阵，将<span class="math inline">\(d_c\)</span>维向量升维到<span class="math inline">\(d_hn_h\)</span>。</li>
+</ul>
+<p>这样在推理时，只需要缓存隐向量<span class="math inline">\(c_t^{KV}\)</span>即可，这样MLA对应的每一个token的KV
+Cache参数只有<span class="math inline">\(d_cl\)</span>个。</p>
+<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},w^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，带来额外的推理开销。
+MLA在推理时将<span class="math inline">\(W^{UK},w^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，不会带来额外的推理开销。</p>
+<p>对于<span class="math inline">\(q_t^{\top}k_t^C\)</span>的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    q_t^{\top}k_t^C = (W^Qh_t)^{\top}W^{UK}c_t^{KV} =
+h_t^{\top}((W^Q)^{\top}W^{UK})c_t^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\((W^Q)^{\top}W^{UK}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(k_t^{C}\)</span>。</p>
+<p>对于注意力输出的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    u_t &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})v_j^C \\
+    &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})W^{UV}c_j^{KV}
+\\
+    &amp;= \sum_{j=1}^{t} \text{Softmax}_j\left( \frac{q_t^{\top}
+k_j^C}{\sqrt{d_h}} \right) (W^O W^{UV}) c_j^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\(W^O
+W^{UV}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(v_t^{C}\)</span>。</p>
+</div>
+<p>此外，为了降低训练过程中的激活内存activation
+memory，DeepSeek还对queries进行低秩压缩，即便这并不能降低KV Cache：</p>
+<p><span class="math display">\[
+\begin{align}
+    c_t^{Q} = W^{DQ}h_t \\
+    q_t^{C} = W^{UQ}c_t^Q
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(c_t^Q \in
+\mathbb{R}^{d_c^{\prime}}\)</span>：表示将queries压缩后的隐向量，<span class="math inline">\(d_c^{\prime}(&lt;&lt;d_hn_h)\)</span>表示压缩后的维度。</li>
+<li><span class="math inline">\(W^{DQ} \in \mathbb{R}^{d_c^{\prime}
+\times d}, W^{UQ} \in \mathbb{R}^{d_hn_h \times
+d_c^{\prime}}\)</span>：分别表示down-projection和up-projection矩阵。</li>
+</ul>
+<h2 id="融入rope">融入RoPE</h2>
+<p>上面的过程中，我们丢失了一个非常重要的步骤，即位置编码RoPE。<br>
+原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的，但是由于Cache缓存的是压缩后的低秩kv信息，因为RoPE要在&amp;q、k&amp;做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中。 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。<br>
+为此，MLA 采用 decoupled RoPE，使用额外的queries <span class="math inline">\(q_{t,i}^R \in
+\mathbb{R}^{d_h^R}\)</span>以及共享的key <span class="math inline">\(k_t^R \in
+\mathbb{R}^{d_h^R}\)</span>来携带RoPE信息。</p>
+<div class="note info"><p>此时需要缓存<span class="math inline">\(c_t^{KV}\)</span>和<span class="math inline">\(k_t^R\)</span>，所需的KV Cache变为<span class="math inline">\((d_c + d_h^R)l\)</span></p>
+</div>
+<p>基于这种解偶的RoPE策略，MLA遵循的计算逻辑为：</p>
+<p><span class="math display">\[
+\begin{align}
+    [q_{t,1}^R;q_{t,2}^R;...;q_{t,n_h}^R] = q_t^R &amp;=
+RoPE(W^{QR}c_t^Q) \\
+    k_t^R &amp;= RoPE(W^{KR}h_t) \\
+    q_{t,i} &amp;= [q_{t,i}^C;q_{t,i}^R] \\
+    k_{t,i} &amp;= [k_{t,i}^C;k_t^R] \\
+    o_{t,i} &amp;=
+\sum_{j=1}^tSoftmax_j(\frac{q_{t,i}^{\top}k_{j,i}}{\sqrt{d_h +
+d_h^R}})v_{j,i}^C \\
+    u_t &amp;= W^O[o_{t,1};o_{t,2};...;o_{t,n_h}]
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(W^{QR} \in \mathbb{R}^{d_h^Rn_h \times
+d_c^{\prime}}\)</span>和<span class="math inline">\(W^{KR} \in
+\mathbb{R}^{d_h^R \times
+d}\)</span>分别表示计算解耦后的queries和key的矩阵。</li>
+<li>RoPE(...)表示应用RoPE的操作。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>DeepSeek</tag>
+        <tag>MLA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一个传文件的好方法</title>
     <url>/2025/01/17/%E4%B8%80%E4%B8%AA%E4%BC%A0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A5%BD%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>通过Python传文件。</p>

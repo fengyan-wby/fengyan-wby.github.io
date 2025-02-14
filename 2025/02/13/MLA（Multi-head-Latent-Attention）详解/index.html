@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CMa+Shan+Zheng:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在DeepSeek的模型层面，有两个值得关注的点：  Multi-head Latent Attention（MLA）：这个结构对传统Transformer中的MHA结构进行改进，主要目标有两个：  降低推理时KV Cache的存储开销； 缓解GQA和MQA等方法导致的模型性能损耗。  DeepSeekMoE：这部分结构和DeepSeek-MoE 中保持一致，两个核心思想是：  Fine-grai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MLA（Multi-head Latent Attention）详解">
+<meta property="og:url" content="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="丰言的博客">
+<meta property="og:description" content="在DeepSeek的模型层面，有两个值得关注的点：  Multi-head Latent Attention（MLA）：这个结构对传统Transformer中的MHA结构进行改进，主要目标有两个：  降低推理时KV Cache的存储开销； 缓解GQA和MQA等方法导致的模型性能损耗。  DeepSeekMoE：这部分结构和DeepSeek-MoE 中保持一致，两个核心思想是：  Fine-grai">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_2.png">
+<meta property="article:published_time" content="2025-02-13T17:27:33.000Z">
+<meta property="article:modified_time" content="2025-02-14T07:03:23.320Z">
+<meta property="article:author" content="丰言">
+<meta property="article:tag" content="DeepSeek">
+<meta property="article:tag" content="MLA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_1.png">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/","path":"2025/02/13/MLA（Multi-head-Latent-Attention）详解/","title":"MLA（Multi-head Latent Attention）详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MLA（Multi-head Latent Attention）详解 | 丰言的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰言的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">72</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">77</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E7%9A%84mha%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">标准的MHA结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mla%E7%BB%93%E6%9E%84"><span class="nav-number"></span> <span class="nav-text">MLA结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%9E%8D%E5%85%A5rope"><span class="nav-number">1.</span> <span class="nav-text">融入RoPE</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="丰言"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">丰言</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">72</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/" title="2025&#x2F;02&#x2F;13&#x2F;MLA（Multi-head-Latent-Attention）详解&#x2F;">MLA（Multi-head Latent Attention）详解</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/01/17/%E4%B8%80%E4%B8%AA%E4%BC%A0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A5%BD%E6%96%B9%E6%B3%95/" title="2025&#x2F;01&#x2F;17&#x2F;一个传文件的好方法&#x2F;">一个传文件的好方法</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/01/08/ModernBERT%E4%BB%8B%E7%BB%8D/" title="2025&#x2F;01&#x2F;08&#x2F;ModernBERT介绍&#x2F;">ModernBERT介绍</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/12/03/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2%EF%BC%88MCTS%EF%BC%89/" title="2024&#x2F;12&#x2F;03&#x2F;蒙特卡洛树搜索（MCTS）&#x2F;">蒙特卡洛树搜索（MCTS）</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/11/22/STaR%E5%92%8CQuiet-STaR/" title="2024&#x2F;11&#x2F;22&#x2F;STaR和Quiet-STaR&#x2F;">STaR和Quiet-STaR</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="丰言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰言的博客">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MLA（Multi-head Latent Attention）详解 | 丰言的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MLA（Multi-head Latent Attention）详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-13 17:27:33" itemprop="dateCreated datePublished" datetime="2025-02-13T17:27:33+00:00">2025-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-14 07:03:23" itemprop="dateModified" datetime="2025-02-14T07:03:23+00:00">2025-02-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2025/02/13/MLA（Multi-head-Latent-Attention）详解/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在DeepSeek的模型层面，有两个值得关注的点：</p>
+<ul>
+<li>Multi-head Latent
+Attention（MLA）：这个结构对传统Transformer中的MHA结构进行改进，主要目标有两个：
+<ol type="1">
+<li>降低推理时KV Cache的存储开销；</li>
+<li>缓解GQA和MQA等方法导致的模型性能损耗。</li>
+</ol></li>
+<li>DeepSeekMoE：这部分结构和DeepSeek-MoE 中保持一致，两个核心思想是：
+<ol type="1">
+<li>Fine-grained Expert
+Segmentation，即将FFN中间层隐层维度拆分成多个更小的维度；</li>
+<li>Shared Expert Isolation，设置共享专家捕获常识性知识。</li>
+</ol></li>
+</ul>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_1.png"></p>
+<p>这篇文章先来说第一个部分， MLA（Multi-head Latent
+Attention）算法的原理。</p>
+<span id="more"></span>
+<h2 id="标准的mha结构">标准的MHA结构</h2>
+<p>MHA（即多头注意力机制）是在Transformer原始论文中提出的。这里设<span class="math inline">\(d\)</span>表示embedding的维度，<span class="math inline">\(n_h\)</span>表示attention heads的数量，<span class="math inline">\(d_h\)</span>表示每一个头的维度，<span class="math inline">\(h_t \in \mathbb{R}^d\)</span>表示第<span class="math inline">\(t\)</span>个token在一个attention层的输入。那么通过3个参数矩阵<span class="math inline">\(W^Q, W^K, W^V \in \mathbb{R}^{d_hn_h \times
+d}\)</span>就可以得到<span class="math inline">\(q_t, k_t, v_t \in
+\mathbb{R}^{d_hn_h}\)</span>，即：</p>
+<p><span class="math display">\[
+\begin{align}
+    q_t = W^Qh_t \\
+    k_t = W^Kh_t \\
+    v_t = W^Vh_t
+\end{align}
+\]</span></p>
+<p>在多头注意力计算中，这里的<span class="math inline">\(q_t, k_t, v_t
+\in \mathbb{R}^{d_hn_h}\)</span>会分割成<span class="math inline">\(n_h\)</span>个注意力头，即：</p>
+<p><span class="math display">\[
+\begin{align}
+    [q_{t,1};q_{t,2};...;q_{t,n_h}] = q_t \\
+    [k_{t,1};k_{t,2};...;k_{t,n_h}] = k_t \\
+    [v_{t,1};v_{t,2};...;v_{t,n_h}] = v_t \\
+    o_{t,i} =
+\sum_{j=1}^{t}Softmax_j(\frac{q_{t,i}^{\top}k_{j,i}}{\sqrt{d_h}})v_{j,i}
+\\
+    u_t = W^O[o_{t,1};o_{t,2};...;o_{t,n_h}]
+\end{align}
+\]</span></p>
+<p>这里<span class="math inline">\(q_{t,i},k_{t,i},v_{t,i} \in
+\mathbb{R}^{d_h}\)</span>分别表示query、key、value的第<span class="math inline">\(i\)</span>个attention head，<span class="math inline">\(W^O \in \mathbb{R}^{d \times
+d_hn_h}\)</span>表示输出映射矩阵。那么如果模型结构是MHA，在推理时，KV
+Cache对于每个token需要缓存的参数有<span class="math inline">\(2n_hd_hl\)</span>（l表示网络层数）。</p>
+<p>为了缓解推理时KV Cache显存占用的问题，相继出现了Multi-Query Attention
+(MQA) 和 Grouped-Query Attention (GQA) 等方法，这些方法降低了KV
+Cache的容量，但同时也导致模型整体性能会有一定程度的下降。</p>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_2.png"></p>
+<h1 id="mla结构">MLA结构</h1>
+<p>MLA的核心是对keys和values进行低秩联合压缩，从而降低KV Cache。</p>
+<p><span class="math display">\[
+\begin{align}
+    c_t^{KV} = W^{DKV}h_t \\
+    k_t^{C} = W^{UK}c_t^{KV} \\
+    v_t^{C} = W^{UV}c_t^{KV}
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(c_t^{KV} \in
+\mathbb{R}^{d_c}\)</span>：表示对keys和values压缩后的隐向量latent
+vector，这里<span class="math inline">\(d_c(&lt;&lt;d_hn_h)\)</span>表示KV压缩的维度。</li>
+<li><span class="math inline">\(W^{DKV} \in \mathbb{R}^{d_c \times
+d}\)</span>：表示降维映射down-projection矩阵，将<span class="math inline">\(d\)</span>维向量降维到<span class="math inline">\(d_c\)</span>。</li>
+<li><span class="math inline">\(W^{UK},w^{UV} \in \mathbb{R}^{d_hn_h
+\times d_c}\)</span>：表示升维映射up-projection矩阵，将<span class="math inline">\(d_c\)</span>维向量升维到<span class="math inline">\(d_hn_h\)</span>。</li>
+</ul>
+<p>这样在推理时，只需要缓存隐向量<span class="math inline">\(c_t^{KV}\)</span>即可，这样MLA对应的每一个token的KV
+Cache参数只有<span class="math inline">\(d_cl\)</span>个。</p>
+<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},w^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，带来额外的推理开销。
+MLA在推理时将<span class="math inline">\(W^{UK},w^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，不会带来额外的推理开销。</p>
+<p>对于<span class="math inline">\(q_t^{\top}k_t^C\)</span>的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    q_t^{\top}k_t^C = (W^Qh_t)^{\top}W^{UK}c_t^{KV} =
+h_t^{\top}((W^Q)^{\top}W^{UK})c_t^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\((W^Q)^{\top}W^{UK}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(k_t^{C}\)</span>。</p>
+<p>对于注意力输出的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    u_t &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})v_j^C \\
+    &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})W^{UV}c_j^{KV}
+\\
+    &amp;= \sum_{j=1}^{t} \text{Softmax}_j\left( \frac{q_t^{\top}
+k_j^C}{\sqrt{d_h}} \right) (W^O W^{UV}) c_j^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\(W^O
+W^{UV}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(v_t^{C}\)</span>。</p>
+</div>
+<p>此外，为了降低训练过程中的激活内存activation
+memory，DeepSeek还对queries进行低秩压缩，即便这并不能降低KV Cache：</p>
+<p><span class="math display">\[
+\begin{align}
+    c_t^{Q} = W^{DQ}h_t \\
+    q_t^{C} = W^{UQ}c_t^Q
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(c_t^Q \in
+\mathbb{R}^{d_c^{\prime}}\)</span>：表示将queries压缩后的隐向量，<span class="math inline">\(d_c^{\prime}(&lt;&lt;d_hn_h)\)</span>表示压缩后的维度。</li>
+<li><span class="math inline">\(W^{DQ} \in \mathbb{R}^{d_c^{\prime}
+\times d}, W^{UQ} \in \mathbb{R}^{d_hn_h \times
+d_c^{\prime}}\)</span>：分别表示down-projection和up-projection矩阵。</li>
+</ul>
+<h2 id="融入rope">融入RoPE</h2>
+<p>上面的过程中，我们丢失了一个非常重要的步骤，即位置编码RoPE。<br>
+原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的，但是由于Cache缓存的是压缩后的低秩kv信息，因为RoPE要在&amp;q、k&amp;做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中。 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。<br>
+为此，MLA 采用 decoupled RoPE，使用额外的queries <span class="math inline">\(q_{t,i}^R \in
+\mathbb{R}^{d_h^R}\)</span>以及共享的key <span class="math inline">\(k_t^R \in
+\mathbb{R}^{d_h^R}\)</span>来携带RoPE信息。</p>
+<div class="note info"><p>此时需要缓存<span class="math inline">\(c_t^{KV}\)</span>和<span class="math inline">\(k_t^R\)</span>，所需的KV Cache变为<span class="math inline">\((d_c + d_h^R)l\)</span></p>
+</div>
+<p>基于这种解偶的RoPE策略，MLA遵循的计算逻辑为：</p>
+<p><span class="math display">\[
+\begin{align}
+    [q_{t,1}^R;q_{t,2}^R;...;q_{t,n_h}^R] = q_t^R &amp;=
+RoPE(W^{QR}c_t^Q) \\
+    k_t^R &amp;= RoPE(W^{KR}h_t) \\
+    q_{t,i} &amp;= [q_{t,i}^C;q_{t,i}^R] \\
+    k_{t,i} &amp;= [k_{t,i}^C;k_t^R] \\
+    o_{t,i} &amp;=
+\sum_{j=1}^tSoftmax_j(\frac{q_{t,i}^{\top}k_{j,i}}{\sqrt{d_h +
+d_h^R}})v_{j,i}^C \\
+    u_t &amp;= W^O[o_{t,1};o_{t,2};...;o_{t,n_h}]
+\end{align}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(W^{QR} \in \mathbb{R}^{d_h^Rn_h \times
+d_c^{\prime}}\)</span>和<span class="math inline">\(W^{KR} \in
+\mathbb{R}^{d_h^R \times
+d}\)</span>分别表示计算解耦后的queries和key的矩阵。</li>
+<li>RoPE(...)表示应用RoPE的操作。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>丰言
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/" title="MLA（Multi-head Latent Attention）详解">https://fengyan-wby.github.io/2025/02/13/MLA（Multi-head-Latent-Attention）详解/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DeepSeek/" rel="tag"><i class="fa fa-tag"></i> DeepSeek</a>
+              <a href="/tags/MLA/" rel="tag"><i class="fa fa-tag"></i> MLA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/17/%E4%B8%80%E4%B8%AA%E4%BC%A0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A5%BD%E6%96%B9%E6%B3%95/" rel="prev" title="一个传文件的好方法">
+                  <i class="fa fa-angle-left"></i> 一个传文件的好方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2023 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">丰言</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">208k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:37</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
