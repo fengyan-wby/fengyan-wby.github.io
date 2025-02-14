@@ -222,7 +222,7 @@ Cache对于每个token需要缓存的参数有<span class="math inline">\(2n_hd_
 (MQA) 和 Grouped-Query Attention (GQA) 等方法，这些方法降低了KV
 Cache的容量，但同时也导致模型整体性能会有一定程度的下降。</p>
 <p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_2.png"></p>
-<h1 id="mla结构">MLA结构</h1>
+<h2 id="mla结构">MLA结构</h2>
 <p>MLA的核心是对keys和values进行低秩联合压缩，从而降低KV Cache。</p>
 <p><span class="math display">\[
 \begin{align}
