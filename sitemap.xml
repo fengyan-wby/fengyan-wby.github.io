@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
+    <loc>https://fengyan-wby.github.io/about/index.html</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/about/index.html</loc>
+    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -362,15 +362,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/</loc>
-    
-    <lastmod>2025-02-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Big-Bird-Transformers-for-Longer-Sequences/</loc>
     
     <lastmod>2025-02-18</lastmod>
@@ -380,7 +371,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91BERT-Pre-training-of-Deep-Bidirectional-Transformers-for-Language-Understanding/</loc>
+    <loc>https://fengyan-wby.github.io/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -389,7 +380,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/</loc>
+    <loc>https://fengyan-wby.github.io/2023/02/27/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91BERT-Pre-training-of-Deep-Bidirectional-Transformers-for-Language-Understanding/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -408,6 +399,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/11/21/VQ-VAE%E4%BB%8B%E7%BB%8D/</loc>
+    
+    <lastmod>2025-02-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/04/28/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Adapter-Tuning-Parameter-Efficient-Transfer-Learning-for-NLP/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -569,7 +569,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/</loc>
+    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -578,7 +578,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/04/27/Markdown%E5%85%AC%E5%BC%8F%E7%AC%A6%E5%8F%B7/</loc>
+    <loc>https://fengyan-wby.github.io/2023/02/23/Markdown%E8%AF%AD%E6%B3%95/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -606,6 +606,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/02/24/KMP%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2025-02-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -686,7 +695,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    <loc>https://fengyan-wby.github.io/2023/02/02/Hexo-Next%E4%B8%BB%E9%A2%98%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BC%98%E5%8C%96/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -695,7 +704,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/02/Hexo-Next%E4%B8%BB%E9%A2%98%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BC%98%E5%8C%96/</loc>
+    <loc>https://fengyan-wby.github.io/2023/02/02/GitHub-Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -713,7 +722,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/02/GitHub-Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -732,15 +741,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/02/21/BPE%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
-    
-    <lastmod>2025-02-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2023/02/13/ChatGPT%E8%B5%B7%E6%BA%90/</loc>
     
     <lastmod>2025-02-18</lastmod>
     
@@ -774,6 +774,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/AIGC/</loc>
+    <lastmod>2025-02-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/BPE/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -796,13 +803,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/</loc>
-    <lastmod>2025-02-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/AIGC/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -851,13 +851,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/Hugging-Face/</loc>
-    <lastmod>2025-02-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/tags/Java/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -866,6 +859,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</loc>
+    <lastmod>2025-02-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/Hugging-Face/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1026,14 +1026,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/MTP/</loc>
+    <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
+    <loc>https://fengyan-wby.github.io/tags/MTP/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1308,7 +1308,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/AIGC/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/Tokenization/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1316,6 +1316,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/</loc>
+    <lastmod>2025-02-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/AIGC/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1330,13 +1337,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/categories/%E8%B5%84%E6%BA%90/</loc>
-    <lastmod>2025-02-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/categories/%E7%AE%97%E6%B3%95/Tokenization/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1406,14 +1406,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/Hugging-Face/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Java/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E7%A8%8B/Java/</loc>
+    <loc>https://fengyan-wby.github.io/categories/%E5%B7%A5%E5%85%B7/Hugging-Face/</loc>
     <lastmod>2025-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
