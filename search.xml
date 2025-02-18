@@ -169,6 +169,50 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】Better &amp; Faster Large Language Models via Multi-token Prediction</title>
+    <url>/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2404.19737">https://arxiv.org/pdf/2404.19737</a></li>
+</ul>
+<p>DeepSeek-V3使用了多token预测（Multi-token Prediction,
+MTP）技术，今天来读一下这篇文章。</p>
+<span id="more"></span>
+<h2 id="模型架构">模型架构</h2>
+<p>传统的NSP任务一次只会预测一个token，即next
+token。损失函数如下所示：</p>
+<p><span class="math display">\[L_1 =
+-\sum_tlogP_{\theta}(x_{t+1}|x_{t:1}),\]</span></p>
+<p>而MTP技术则让模型在当前时刻预测后续的<span class="math inline">\(n\)</span>个token，损失函数如下所示：</p>
+<p><span class="math display">\[L_n =
+-\sum_tlogP_{\theta}(x_{t+n}:x_{t+1}|x_{t:1})\]</span></p>
+<p>具体实现如下图：</p>
+<p><img src="/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/1.png"></p>
+<p>上图中，每个时刻的token输入都会输出n(图中n=4)个预测token：</p>
+<p><span class="math display">\[P_{\theta}(x_{t+i}|x_{t:1}),i=1,...,n\]</span></p>
+<p>其中，模型主干是被共享的，每个待预测的token都有一个独立的输出头。这些输出头并行工作，预测对应的未来token。每个输出头后面跟着一个共享的Unembedding层，将Transformer的输出转换成词表空间（vocabulary
+space）。</p>
+<h2 id="内存优化">内存优化</h2>
+<p>为了解决多token预测带来的内存消耗问题，论文提出了一种内存高效的实现方法。前向和反向传播顺序调整：在计算梯度时，模型会依次计算每个输出头的梯度，而不是一次性计算所有头的梯度，从而避免了同时存储所有输出头的梯度信息，降低GPU内存占用。</p>
+<p><img src="/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/2.png"></p>
+<h2 id="推理加速">推理加速</h2>
+<ul>
+<li>自推测解码（Self-Speculative
+Decoding）：利用多token预测的额外输出头进行自推测解码，从而加速推理过程。</li>
+<li>工作原理：先用多个输出头并行预测多个token，然后用主输出头（next-token
+prediction head）验证预测结果，并选择最有可能的预测结果。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>文献阅读</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+        <tag>MTP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DeepSeekMoE详解</title>
     <url>/2025/02/17/DeepSeekMoE%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<p>论文地址：</p>
