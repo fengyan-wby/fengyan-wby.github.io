@@ -185,10 +185,10 @@ token。损失函数如下所示：</p>
 -\sum_tlogP_{\theta}(x_{t+1}|x_{t:1}),\]</span></p>
 <p>而MTP技术则让模型在当前时刻预测后续的<span class="math inline">\(n\)</span>个token，损失函数如下所示：</p>
 <p><span class="math display">\[L_n =
--\sum_tlogP_{\theta}(x_{t+n}:x_{t+1}|x_{t:1})\]</span></p>
+-\sum_tlogP_{\theta}(x_{t+n:t+1}|x_{t:1})\]</span></p>
 <p>具体实现如下图：</p>
 <p><img src="/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/1.png"></p>
-<p>上图中，每个时刻的token输入都会输出n(图中n=4)个预测token：</p>
+<p>上图中，每个时刻的token输入都会输出<span class="math inline">\(n\)</span>（图中<span class="math inline">\(n\)</span>=4）个预测token：</p>
 <p><span class="math display">\[P_{\theta}(x_{t+i}|x_{t:1}),i=1,...,n\]</span></p>
 <p>其中，模型主干是被共享的，每个待预测的token都有一个独立的输出头。这些输出头并行工作，预测对应的未来token。每个输出头后面跟着一个共享的Unembedding层，将Transformer的输出转换成词表空间（vocabulary
 space）。</p>
@@ -196,6 +196,8 @@ space）。</p>
 <p>为了解决多token预测带来的内存消耗问题，论文提出了一种内存高效的实现方法。前向和反向传播顺序调整：在计算梯度时，模型会依次计算每个输出头的梯度，而不是一次性计算所有头的梯度，从而避免了同时存储所有输出头的梯度信息，降低GPU内存占用。</p>
 <p><img src="/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/2.png"></p>
 <h2 id="推理加速">推理加速</h2>
+<p>最简单的推理方法是只保留第一个输出头，即等效于NSP，只预测下一个token。论文中使用了Self-Speculative
+Decoding的方法，利用多个输出头加速推理。</p>
 <ul>
 <li>自推测解码（Self-Speculative
 Decoding）：利用多token预测的额外输出头进行自推测解码，从而加速推理过程。</li>
@@ -738,8 +740,8 @@ token，因为它会影响模型如何生成思考过程。作者选择将思考
         <category>文献阅读</category>
       </categories>
       <tags>
-        <tag>AIGC</tag>
         <tag>文献阅读</tag>
+        <tag>AIGC</tag>
         <tag>大模型</tag>
       </tags>
   </entry>
