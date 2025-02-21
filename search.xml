@@ -5879,9 +5879,9 @@ a_t)=Q_{\pi}(s_t,a_t)-V_{\pi}(s_t)=\sum_{t&#39;&gt;t}\gamma^{t&#39;-t}r_{t&#39;}
 <ol type="1">
 <li><span class="math inline">\(\theta\)</span>：训练网络，每次都会被更新。(也就是大家说的actor模型)</li>
 <li><span class="math inline">\(\theta&#39;\)</span>：训练网络副本，负责与环境交互采样数据。（也就是大家说的ref模型）</li>
-<li><span class="math inline">\(\phi\)</span>：奖励模型，拟合折扣奖励。（也就是大家说的critic模型，获取每个位置的奖励）</li>
+<li><span class="math inline">\(\phi\)</span>：价值模型，拟合折扣奖励。（也就是大家说的critic模型，获取每个state的价值期望）</li>
 <li><span class="math inline">\(reward model\)</span>:
-奖励模型，获取一整句话的奖励。</li>
+奖励模型，获取奖励。</li>
 </ol>
 <div class="note info"><p>PPO共涉及actor model，ref_model，reward model和critic
 model这四个模型，其实更新参数的模型只有actor model和critic model。</p>
