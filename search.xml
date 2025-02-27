@@ -424,31 +424,6 @@ d}\)</span>：表示降维映射down-projection矩阵，将<span class="math inl
 </ul>
 <p>这样在推理时，只需要缓存隐向量<span class="math inline">\(c_t^{KV}\)</span>即可，这样MLA对应的每一个token的KV
 Cache参数只有<span class="math inline">\(d_cl\)</span>个。</p>
-<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},W^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，增加大量推理开销。
-MLA在推理时将<span class="math inline">\(W^{UK},W^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，从而不带来额外的推理开销。</p>
-<p>对于<span class="math inline">\(q_t^{\top}k_t^C\)</span>的计算：</p>
-<p><span class="math display">\[
-\begin{align}
-    q_t^{\top}k_t^C &amp;= (W^Qh_t)^{\top}W^{UK}c_t^{KV} \\
-    &amp;= h_t^{\top}((W^Q)^{\top}W^{UK})c_t^{KV}
-\end{align}
-\]</span></p>
-<p>将<span class="math inline">\((W^Q)^{\top}W^{UK}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(k_t^{C}\)</span>。</p>
-<p>对于注意力输出的计算：</p>
-<p><span class="math display">\[
-\begin{align}
-    u_t &amp;=
-W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})v_j^C \\
-    &amp;=
-W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})W^{UV}c_j^{KV}
-\\
-    &amp;= \sum_{j=1}^{t} \text{Softmax}_j\left( \frac{q_t^{\top}
-k_j^C}{\sqrt{d_h}} \right) (W^O W^{UV}) c_j^{KV}
-\end{align}
-\]</span></p>
-<p>将<span class="math inline">\(W^O
-W^{UV}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(v_t^{C}\)</span>。</p>
-</div>
 <p>此外，为了降低训练过程中的激活内存activation
 memory，DeepSeek还对queries进行低秩压缩，即便这并不能降低KV Cache：</p>
 <p><span class="math display">\[
@@ -465,10 +440,46 @@ memory，DeepSeek还对queries进行低秩压缩，即便这并不能降低KV Ca
 \times d}, W^{UQ} \in \mathbb{R}^{d_hn_h \times
 d_c^{\prime}}\)</span>：分别表示down-projection和up-projection矩阵。</li>
 </ul>
+<div class="note info"><p>这里有一个技巧，因为缓存的是<span class="math inline">\(c_t^{KV}\)</span>，在计算注意力时如果还用原来的方法，则需要通过<span class="math inline">\(W^{UK},W^{UV}\)</span>重新计算出<span class="math inline">\(k_t^{C},v_t^{C}\)</span>，增加大量推理开销。
+MLA在推理时将<span class="math inline">\(W^{UK},W^{UV}\)</span>分别融入到模型权重<span class="math inline">\(W^Q,W^O\)</span>里，从而不带来额外的推理开销。</p>
+<p>对于<span class="math inline">\({q_t^C}^{\top}k_j^C\)</span>的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    {q_t^C}^{\top}k_j^C &amp;= (W^{UQ}c_t^Q)^{\top}W^{UK}c_j^{KV} \\
+    &amp;= {c_t^Q}^{\top}((W^{UQ})^{\top}W^{UK})c_j^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\((W^{UQ})^{\top}W^{UK}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(k_t^{C}\)</span>。</p>
+<p>对于注意力输出的计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    u_t &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})v_j^C \\
+    &amp;=
+W^O\sum_{j=1}^{t}Softmax_j(\frac{q_t^{\top}k_j^C}{\sqrt{d_h}})W^{UV}c_j^{KV}
+\\
+    &amp;= \sum_{j=1}^{t} \text{Softmax}_j\left( \frac{q_t^{\top}
+k_j^C}{\sqrt{d_h}} \right) (W^O W^{UV}) c_j^{KV}
+\end{align}
+\]</span></p>
+<p>将<span class="math inline">\(W^O
+W^{UV}\)</span>视为一个合并后的矩阵，用它进行推理阶段的计算即可，这时只需用到<span class="math inline">\(c_t^{KV}\)</span>，不需重新计算<span class="math inline">\(v_t^{C}\)</span>。</p>
+</div>
 <h2 id="融入rope">融入RoPE</h2>
 <p>上面的过程中，我们丢失了一个非常重要的步骤，即位置编码RoPE。<br>
-原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的。但是对于key，Cache缓存的是压缩后的低秩kv信息，而RoPE要在<span class="math inline">\(q、k\)</span>做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中， 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。<br>
-为此，MLA 采用 decoupled RoPE，使用额外的queries <span class="math inline">\(q_{t,i}^R \in
+原始的RoPE需要在query和key中融入相对位置信息。在MLA中，在query中融入相对位置信息是比较容易的。但是对于key，Cache缓存的是压缩后的低秩kv信息，而RoPE要在<span class="math inline">\(q、k\)</span>做内积之前进行旋转，这将导致<span class="math inline">\(W^{UK}\)</span>无法融入到<span class="math inline">\(W^Q\)</span>中， 每次推理时都需要重新从<span class="math inline">\(c_t^{KV}\)</span>计算<span class="math inline">\(k_t^{C}\)</span>，从而增加大量推理开销。</p>
+<div class="note info"><p>加入RoPE之后，对于<span class="math inline">\({q_t^C}^{\top}k_j^C\)</span>的计算变成如下形式：</p>
+<p><span class="math display">\[
+\begin{align}
+    {q_t^C}^{\top}k_j^C &amp;= (R_tW^{UQ}c_t^Q)^{\top} \times
+R_jW^{UK}c_j^{KV} \\
+    &amp;= {c_t^Q}^{\top}(W^{UQ})^{\top}R_t^{\top}R_jW^{UK}c_j^{KV} \\
+    &amp;= {c_t^Q}^{\top}(W^{UQ})^{\top}R_{t-j}W^{UK}c_j^{KV}
+\end{align}
+\]</span></p>
+<p>其中，<span class="math inline">\((W^{UQ})^{\top}R_{t-j}W^{UK}\)</span>是随着相对位置变化而变化的，并不是个固定矩阵，因此不能提前计算好。</p>
+</div>
+<p>为此，MLA 采用 decoupled RoPE，使用额外的queries <span class="math inline">\(q_{t,i}^R \in
 \mathbb{R}^{d_h^R}\)</span>以及共享的key <span class="math inline">\(k_t^R \in
 \mathbb{R}^{d_h^R}\)</span>来携带RoPE信息。</p>
 <div class="note info"><p>此时需要缓存<span class="math inline">\(c_t^{KV}\)</span>和<span class="math inline">\(k_t^R\)</span>，所需的KV Cache变为<span class="math inline">\((d_c + d_h^R)l\)</span></p>
@@ -495,6 +506,10 @@ d_c^{\prime}}\)</span>和<span class="math inline">\(W^{KR} \in
 d}\)</span>分别表示计算解耦后的queries和key的矩阵。</li>
 <li>RoPE(...)表示应用RoPE的操作。</li>
 </ul>
+<h2 id="mla效果">MLA效果</h2>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_3.png"></p>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_4.png"></p>
+<p><img src="/2025/02/13/MLA%EF%BC%88Multi-head-Latent-Attention%EF%BC%89%E8%AF%A6%E8%A7%A3/1_5.png"></p>
 ]]></content>
       <categories>
         <category>算法</category>
