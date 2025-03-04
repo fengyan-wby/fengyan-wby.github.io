@@ -24,15 +24,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Pytorch中AveragedModel实现了随机权重平均 (SWA) 和指数移动平均 (EMA) 的平均模型。 官方文档 SWA示例 123456789101112131415161718192021loader, optimizer, model, loss_fn &#x3D; ...swa_model &#x3D; torch.optim.swa_utils.AveragedModel(model)sched">
+    <meta name="description" content="Pytorch中AveragedModel实现了随机权重平均 (SWA) 和指数移动平均 (EMA) 的平均模型。 官方文档 SWA示例 在下面的示例中，swa_model是累积权重平均值的 SWA 模型。我们总共训练模型 300 个时期，并切换到 SWA 学习率计划，并开始在第 160 个时期收集参数的 SWA 平均值： 123456789101112131415161718192021load">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pytorch实现AverageModel">
 <meta property="og:url" content="https://fengyan-wby.github.io/2025/03/04/Pytorch%E5%AE%9E%E7%8E%B0AverageModel/index.html">
 <meta property="og:site_name" content="丰言的博客">
-<meta property="og:description" content="Pytorch中AveragedModel实现了随机权重平均 (SWA) 和指数移动平均 (EMA) 的平均模型。 官方文档 SWA示例 123456789101112131415161718192021loader, optimizer, model, loss_fn &#x3D; ...swa_model &#x3D; torch.optim.swa_utils.AveragedModel(model)sched">
+<meta property="og:description" content="Pytorch中AveragedModel实现了随机权重平均 (SWA) 和指数移动平均 (EMA) 的平均模型。 官方文档 SWA示例 在下面的示例中，swa_model是累积权重平均值的 SWA 模型。我们总共训练模型 300 个时期，并切换到 SWA 学习率计划，并开始在第 160 个时期收集参数的 SWA 平均值： 123456789101112131415161718192021load">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-04T16:48:31.000Z">
-<meta property="article:modified_time" content="2025-03-04T09:26:00.501Z">
+<meta property="article:modified_time" content="2025-03-04T09:31:42.126Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary">
@@ -530,7 +530,7 @@ if(canvas.getContext){
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-03-04 16:48:31 / 修改时间：09:26:00" itemprop="dateCreated datePublished" datetime="2025-03-04T16:48:31+00:00">2025-03-04</time>
+      <time title="创建时间：2025-03-04 16:48:31 / 修改时间：09:31:42" itemprop="dateCreated datePublished" datetime="2025-03-04T16:48:31+00:00">2025-03-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -575,7 +575,7 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>157</span>
+      <span>270</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -596,8 +596,14 @@ if(canvas.getContext){
 的平均模型。</p>
 <p><a target="_blank" rel="noopener" href="https://pytorch.ac.cn/docs/stable/generated/torch.optim.swa_utils.AveragedModel.html">官方文档</a></p>
 <h2 id="swa示例">SWA示例</h2>
+<p>在下面的示例中，swa_model是累积权重平均值的 SWA
+模型。我们总共训练模型 300 个时期，并切换到 SWA 学习率计划，并开始在第
+160 个时期收集参数的 SWA 平均值：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">loader, optimizer, model, loss_fn = ...</span><br><span class="line">swa_model = torch.optim.swa_utils.AveragedModel(model)</span><br><span class="line">scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=<span class="number">300</span>)</span><br><span class="line">swa_start = <span class="number">160</span></span><br><span class="line">swa_scheduler = SWALR(optimizer, swa_lr=<span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">300</span>):</span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">input</span>, target <span class="keyword">in</span> loader:</span><br><span class="line">          optimizer.zero_grad()</span><br><span class="line">          loss_fn(model(<span class="built_in">input</span>), target).backward()</span><br><span class="line">          optimizer.step()</span><br><span class="line">      <span class="keyword">if</span> epoch &gt; swa_start:</span><br><span class="line">          swa_model.update_parameters(model)</span><br><span class="line">          swa_scheduler.step()</span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">          scheduler.step()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Update bn statistics for the swa_model at the end</span></span><br><span class="line">torch.optim.swa_utils.update_bn(loader, swa_model)</span><br><span class="line"><span class="comment"># Use swa_model to make predictions on test data</span></span><br><span class="line">preds = swa_model(test_input) </span><br></pre></td></tr></table></figure>
 <h2 id="ema示例">EMA示例</h2>
+<p>在下面的示例中，ema_model是 EMA
+模型，它累积权重的指数衰减平均值，衰减率为 0.999。我们总共训练模型 300
+个时期，并立即开始收集 EMA 平均值。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">loader, optimizer, model, loss_fn = ...</span><br><span class="line">ema_model = torch.optim.swa_utils.AveragedModel(model, multi_avg_fn=torch.optim.swa_utils.get_ema_multi_avg_fn(<span class="number">0.999</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">300</span>):</span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">input</span>, target <span class="keyword">in</span> loader:</span><br><span class="line">          optimizer.zero_grad()</span><br><span class="line">          loss_fn(model(<span class="built_in">input</span>), target).backward()</span><br><span class="line">          optimizer.step()</span><br><span class="line">          ema_model.update_parameters(model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Update bn statistics for the ema_model at the end</span></span><br><span class="line">torch.optim.swa_utils.update_bn(loader, ema_model)</span><br><span class="line"><span class="comment"># Use ema_model to make predictions on test data</span></span><br><span class="line">preds = ema_model(test_input) </span><br></pre></td></tr></table></figure>
 
     </div>
