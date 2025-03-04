@@ -524,7 +524,6 @@ d}\)</span>分别表示计算解耦后的queries和key的矩阵。</li>
     <title>一个传文件的好方法</title>
     <url>/2025/01/17/%E4%B8%80%E4%B8%AA%E4%BC%A0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A5%BD%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>通过Python传文件。</p>
-<span id="more"></span>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 服务端</span></span><br><span class="line"><span class="comment"># Python2</span></span><br><span class="line">python -m SimpleHTTPServer <span class="number">39090</span></span><br><span class="line"><span class="comment"># Python3</span></span><br><span class="line">python -m http.server <span class="number">39090</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户端获取文件方法</span></span><br><span class="line">wget &#123;容器IP&#125;:<span class="number">39090</span>/filename</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -771,8 +770,8 @@ token，因为它会影响模型如何生成思考过程。作者选择将思考
         <category>文献阅读</category>
       </categories>
       <tags>
-        <tag>AIGC</tag>
         <tag>文献阅读</tag>
+        <tag>AIGC</tag>
         <tag>大模型</tag>
       </tags>
   </entry>
