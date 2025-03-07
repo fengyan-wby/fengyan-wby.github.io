@@ -169,6 +169,229 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>PPO&amp;GRPO</title>
+    <url>/2025/03/06/PPO-GRPO/</url>
+    <content><![CDATA[<p>详解PPO算法和GRPO算法。</p>
+<span id="more"></span>
+<h2 id="强化学习的概念">强化学习的概念</h2>
+<ul>
+<li>State:
+状态，表示当前的局面，如果是LLM那就是一个句子（可以是不完整的句子），用<span class="math inline">\(s\)</span>表示。</li>
+<li>Action:
+动作，在当前局面下作出的反应，如果是LLM那就是生成一个token，用<span class="math inline">\(a\)</span>表示。</li>
+<li>Action Space:
+动作空间，可选择的动作，在LLM中就是可以输出的所有token。</li>
+<li>Policy: 策略函数，输入State，输出Action的概率分布，用<span class="math inline">\(\pi\)</span>表示。</li>
+<li>Trajectory: 轨迹，一连串状态和动作的序列。表示为<span class="math inline">\(\tau = s_0, a_0, s_1, a_1, ....\)</span>。</li>
+<li>Reward: 当前时间点的奖励。</li>
+<li>Return: 回报，从当前时间点到结束的Reward的累计和。</li>
+</ul>
+<p>期望计算方式：</p>
+<ol type="1">
+<li>每个可能结果的概率与其结果值的乘积之和。</li>
+<li>采样多次取平均值。（约等于，采样次数趋于无穷时取等号）</li>
+</ol>
+<p><span class="math display">\[E(x)_{x \sim p(x)}=\sum_{x}x * p(x)
+\approx \frac{1}{n}\sum_{i=1}^{n}{x_i}\]</span></p>
+<p>强化学习的目标：训练一个Policy（神经网络<span class="math inline">\(\pi\)</span>），在所有的状态s下，给出相应的Action，使得到的Return期望最大。</p>
+<h2 id="ppo">PPO</h2>
+<p>将上面强化学习的目标变为公式，一步一步计算。</p>
+<p>Return的期望表示为：</p>
+<p><span class="math display">\[E(R(\tau))_{\tau \sim
+P_{\theta}(\tau)}=\sum_{\tau}R(\tau)P_{\theta}(\tau)\]</span></p>
+<p>因为要对上面的期望求最大值，所以对上式求梯度：</p>
+<p><span class="math display">\[
+\begin{align}
+    \nabla E(R(\tau))_{\tau \sim P_{\theta}(\tau)}&amp;=\nabla
+\sum_{\tau}R(\tau)P_{\theta}(\tau) \\
+    &amp;=\sum_{\tau}R(\tau) \nabla P_{\theta}(\tau) \\
+    &amp;=\sum_{\tau}R(\tau) \nabla P_{\theta}(\tau)
+\frac{P_{\theta}(\tau)}{P_{\theta}(\tau)} \\
+    &amp;=\sum_{\tau}P_{\theta}(\tau)R(\tau) \frac{\nabla
+P_{\theta}(\tau)}{P_{\theta}(\tau)}
+\end{align}
+\]</span></p>
+<p>这里将<span class="math inline">\(R(\tau) \frac{\nabla
+P_{\theta}(\tau)}{P_{\theta}(\tau)}\)</span>看作一个整体，则概率<span class="math inline">\(P_{\theta}(\tau)\)</span>和这个整体的乘积可表示为期望，用期望计算方式二来变换上式得到：</p>
+<div class="note info"><p>数学技巧： <span class="math display">\[\nabla logf(x)=\frac{\nabla
+f(x)}{f(x)}\]</span></p>
+</div>
+<p><span class="math display">\[
+\begin{align}
+    \nabla E(R(\tau))_{\tau \sim
+P_{\theta}(\tau)}&amp;=\sum_{\tau}P_{\theta}(\tau)R(\tau) \frac{\nabla
+P_{\theta}(\tau)}{P_{\theta}(\tau)} \\
+    &amp; \approx \frac{1}{N}\sum_{n=1}^{N}R(\tau^n) \frac{\nabla
+P_{\theta}(\tau^n)}{P_{\theta}(\tau^n)} \\
+    &amp;=\frac{1}{N}\sum_{n=1}^{N}R(\tau^n) \nabla
+logP_{\theta}(\tau^n)
+\end{align}
+\]</span></p>
+<p>更进一步，我们将上式中的Trajectory拆分细化：</p>
+<p><span class="math display">\[
+\begin{align}
+    \nabla E(R(\tau))_{\tau \sim
+P_{\theta}(\tau)}&amp;=\frac{1}{N}\sum_{n=1}^{N}R(\tau^n) \nabla
+logP_{\theta}(\tau^n) \\
+    &amp;=\frac{1}{N}\sum_{n=1}^{N}R(\tau^n) \nabla log
+\prod_{t=1}^{T_n}P_{\theta}(a_n^t|s_n^t) \\
+    &amp;=\frac{1}{N}\sum_{n=1}^{N}R(\tau^n) \sum_{t=1}^{T_n} \nabla
+logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;=\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n} R(\tau^n) \nabla
+logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>这样，我们需要最大化的期望就可以写作最小化的Loss函数形式，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+R(\tau^n)logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>我们继续对上式中的<span class="math inline">\(R(\tau^n)\)</span>进行拆解。</p>
+<p>最寻常的Return就是从当前时间点到结束的Reward的累计和，如下所示：</p>
+<p><span class="math display">\[R(\tau^n) =
+\sum_{t=1}^{T_n}r_t^n\]</span></p>
+<p>而PPO算法中引入了两点改进：</p>
+<ol type="1">
+<li>当前时刻所作出的动作应该只会影响之后的reward，和之前步骤的reward应该无关。---》<span class="math inline">\(R(\tau^n)\)</span>之计算当前时刻之后的累积。</li>
+<li>一个动作对接下来的几步影响是大的，但对接下来很远步骤的影响力应该减小。---》<span class="math inline">\(R(\tau^n)\)</span>引入衰减因子<span class="math inline">\(\gamma\)</span>，越远影响越小。</li>
+</ol>
+<p>则上式优化为：</p>
+<p><span class="math display">\[R(\tau^n) = \sum_{t^{\prime}=t}^{T_n}
+\gamma^{t^{\prime}-t}r_{t^{\prime}}^n=R_t^n\]</span></p>
+<p>这样，我们的Loss函数可以写成：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+R_t^nlogP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>到这里，我们就可以根据上面的Loss函数训练我们的强化学习模型了。其中<span class="math inline">\(T_n\)</span>可视做LLM中句子的长度，<span class="math inline">\(N\)</span>可视做batch的大小。</p>
+<p>但是，仅通过上述Loss函数做优化，还存在许多缺点，我们继续一步一步添加PPO算法中的优化对上述Loss函数进行改进。</p>
+<h3 id="奖励减去baseline">奖励减去baseline</h3>
+<p>在好的局势下，无论做什么动作都能得到正的Reward；而在坏的局势下，无论做什么动作都会得到负的Reward。如下图所示：</p>
+<p><img src="/2025/03/06/PPO-GRPO/1.png"></p>
+<p>这是不合适的，我们需要的是当前这个动作相对于其他动作的优势，即只要这个动作相对于其他的动作好的话，则给他正向的奖励，反之给负向的奖励。所以这就需要我们对奖励减去一个baseline。</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n} (R_t^n -
+B(s_n^t))logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>我们把<span class="math inline">\((R_t^n -
+B(s_n^t))\)</span>称为一个动作对其他动作的优势。<br>
+这样，无论在好的局势下还是坏的局势下，我们得到的奖励都是有正有负的，更利于强化学习的训练，如下图所示：</p>
+<p><img src="/2025/03/06/PPO-GRPO/2.png"></p>
+<h3 id="引入优势函数">引入优势函数</h3>
+<p>计算Return的式子：</p>
+<p><span class="math display">\[
+\begin{align}
+    R_t^n - B(s_n^t) \\
+    R_t^n = \sum_{t^{\prime}=t}^{T_n}
+\gamma^{t^{\prime}-t}r_{t^{\prime}}^n
+\end{align}
+\]</span></p>
+<p>可以看到，<span class="math inline">\(R_t^n\)</span>是一次随机采样，方差很大，只有采样次数足够多的时候才会比较准确。那么是不是可以通过一个神经网络来估计<span class="math inline">\(R_t^n -
+B(s_n^t)\)</span>这个优势呢？PPO算法在这里就引入了优势函数。</p>
+<p>几个概念：</p>
+<ul>
+<li>Action-Value Function（动作价值函数）： <span class="math inline">\(Q_{\theta}(s,
+a)\)</span>，在状态s下，做出动作a的期望回报。</li>
+<li>State-Value Function（状态价值函数）：<span class="math inline">\(V_{\theta}(s)\)</span>，在状态s下的期望回报。</li>
+<li>Advantage Function（优势函数）：<span class="math inline">\(A_{\theta}(s, a)=Q_{\theta}(s,
+a)-V_{\theta}(s)\)</span>，在状态s下，做出动作a，相比于其他动作能带来多少优势。</li>
+</ul>
+<p>这样，Loss函数就可以更新为：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n} A_{\theta}(s_n^t,
+a_n^t)logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>下面进一步拆解优势函数<span class="math inline">\(A_{\theta}(s,
+a)=Q_{\theta}(s, a)-V_{\theta}(s)\)</span>。</p>
+<p>首先<span class="math inline">\(Q_{\theta}(s_t,
+a)\)</span>可以理解为当前状态<span class="math inline">\(s_t\)</span>下，作出动作<span class="math inline">\(a\)</span>的期望回报。同时，它也等效于当前状态<span class="math inline">\(s_t\)</span>下，作出动作<span class="math inline">\(a\)</span>的奖励加上下一个状态<span class="math inline">\(s_{t+1}\)</span>的期望回报，写作下式：</p>
+<p><span class="math display">\[Q_{\theta}(s_t, a) = r_t + \gamma *
+V_{\theta}(s_{t+1})\]</span></p>
+<p>然后，把<span class="math inline">\(Q_{\theta}(s_t,
+a)\)</span>代入优势函数可以得到：</p>
+<p><span class="math display">\[A_{\theta}(s_t, a)=r_t + \gamma *
+V_{\theta}(s_{t+1})-V_{\theta}(s_t)\]</span></p>
+<p>这样我们就可以通过一个预测状态价值<span class="math inline">\(V_{\theta}(s)\)</span>的神经网络去计算得到优势函数，其中<span class="math inline">\(V_{\theta}(s)\)</span>可以和要训练的强化学习网络结构相同，如下图所示：</p>
+<p><img src="/2025/03/06/PPO-GRPO/3.png"></p>
+<h3 id="gae">GAE</h3>
+<p>对于状态价值<span class="math inline">\(V_{\theta}(s_t)\)</span>的计算，我们可以直接在当前时间直接通过神经网络预测，即直接得到:</p>
+<p><span class="math display">\[V_{\theta}(s_t)\]</span></p>
+<p>我们也可以先现在当前时间随机采样一个动作<span class="math inline">\(a\)</span>，得到奖励<span class="math inline">\(r_t\)</span>，然后再通过神经网络预测下一个状态的价值，即得到:</p>
+<p><span class="math display">\[V_{\theta}(s_t) \approx r_t + \gamma *
+V_{\theta}(s_{t+1})\]</span></p>
+<p>更进一步，我们可以采样两步，然后再通过神经网络预测，即得到</p>
+<p><span class="math display">\[V_{\theta}(s_t) \approx r_t + \gamma *
+r_{t+1} + \gamma^2 * V_{\theta}(s_{t+2})\]</span></p>
+<p>以此类推，我们可以向后一直采样，得到采样多个步骤的优势函数如下：</p>
+<p><span class="math display">\[
+\begin{align}
+    A^1_{\theta}(s_t, a) &amp;= r_t + \gamma * V_{\theta}(s_{t+1}) -
+V_{\theta}(s_t) \\
+    A^2_{\theta}(s_t, a) &amp;= r_t + \gamma * r_{t+1} + \gamma^2 *
+V_{\theta}(s_{t+2}) - V_{\theta}(s_t) \\
+    A^3_{\theta}(s_t, a) &amp;= ...
+\end{align}
+\]</span></p>
+<p>定义中间变量：</p>
+<p><span class="math display">\[
+\begin{align}
+    \delta_t^V &amp;= r_t + \gamma * V_{\theta}(s_{t+1}) -
+V_{\theta}(s_t) \\
+    \delta_{t+1}^V &amp;= r_{t+1} + \gamma * V_{\theta}(s_{t+2}) -
+V_{\theta}(s_{t+1}) \\
+    \delta_{t+2}^V &amp;= ...
+\end{align}
+\]</span></p>
+<p>采样多个步骤的优势函数可简化为：</p>
+<p><span class="math display">\[
+\begin{align}
+    A^1_{\theta}(s_t, a) &amp;= \delta_t^V \\
+    A^2_{\theta}(s_t, a) &amp;= \delta_t^V + \gamma \delta_{t+1}^V \\
+    A^3_{\theta}(s_t, a) &amp;= ...
+\end{align}
+\]</span></p>
+<p>那么在优势函数计算的时候，应该使用采样了几步的优势函数呢，GAE的做法是全都要：</p>
+<p><span class="math display">\[
+\begin{align}
+    A_{\theta}^{GAE}&amp;=(1 - \lambda)(A_{\theta}^1 + \lambda
+A_{\theta}^2 + \lambda^2A_{\theta}^3) \\
+    &amp;=\sum_{b=0}^{\infty}(\gamma \lambda)^b\delta_{t+b}^V
+\end{align}
+\]</span></p>
+<p>这样，经过PPO算法中GAE步骤的改进，我们的损失函数变为如下形式：</p>
+<p><span class="math display">\[
+\begin{align}
+    \delta_t^V &amp;= r_t + \gamma * V_{\theta}(s_{t+1}) -
+V_{\theta}(s_t) \\
+    A_{\theta}^{GAE}(s_t, a)&amp;=\sum_{b=0}^{\infty}(\gamma
+\lambda)^b\delta_{t+b}^V \\
+    Loss&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<h3 id="onpolicy变为offpolicy">onpolicy变为offpolicy</h3>
+<h2 id="grpo">GRPO</h2>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>学习</category>
+        <category>AIGC</category>
+      </categories>
+      <tags>
+        <tag>PPO</tag>
+        <tag>GRPO</tag>
+        <tag>强化学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Pytorch实现AverageModel</title>
     <url>/2025/03/04/Pytorch%E5%AE%9E%E7%8E%B0AverageModel/</url>
     <content><![CDATA[<p>Pytorch中AveragedModel实现了随机权重平均 (SWA) 和指数移动平均 (EMA)
