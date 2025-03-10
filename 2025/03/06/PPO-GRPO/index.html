@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2025/03/06/PPO-GRPO/3.jpg">
 <meta property="og:image" content="https://fengyan-wby.github.io/2025/03/06/PPO-GRPO/4.png">
 <meta property="article:published_time" content="2025-03-06T13:59:46.000Z">
-<meta property="article:modified_time" content="2025-03-10T03:43:19.174Z">
+<meta property="article:modified_time" content="2025-03-10T07:02:39.333Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="PPO">
 <meta property="article:tag" content="GRPO">
@@ -543,7 +543,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-10 03:43:19" itemprop="dateModified" datetime="2025-03-10T03:43:19+00:00">2025-03-10</time>
+      <time title="修改时间：2025-03-10 07:02:39" itemprop="dateModified" datetime="2025-03-10T07:02:39+00:00">2025-03-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -592,14 +592,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.5k</span>
+      <span>3.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
+      <span>13 分钟</span>
     </span>
 </div>
 
@@ -757,9 +757,13 @@ V_{\theta}(s_{t+1})\]</span></p>
 a)\)</span>代入优势函数可以得到：</p>
 <p><span class="math display">\[A_{\theta}(s_t, a)=r_t + \gamma *
 V_{\theta}(s_{t+1})-V_{\theta}(s_t)\]</span></p>
-<p>这样我们就可以通过一个预测状态价值<span class="math inline">\(V_{\theta}(s)\)</span>的神经网络去计算得到优势函数，其中<span class="math inline">\(V_{\theta}(s)\)</span>可以和要训练的强化学习网络结构相同，如下图所示：</p>
+<p>这样我们就可以通过一个预测状态价值<span class="math inline">\(V_{\theta}(s)\)</span>的神经网络去计算得到优势函数，如下图所示：</p>
 <p><img src="/2025/03/06/PPO-GRPO/3.jpg"></p>
-<p>TODO 其中</p>
+<p>其中，<span class="math inline">\(V_{\theta}(s)\)</span>可以和要训练的强化学习网络结构相同，只是最后一层不再是动作空间Action
+Space的大小，而是输出单一的一个值，来代表当前状态的价值。<br>
+预测状态价值的网络的训练Label可表示为<span class="math inline">\(R_t^n =
+\sum_{t^{\prime}=t}^{T_n}
+\gamma^{t^{\prime}-t}r_{t^{\prime}}^n\)</span>，用价值网络来拟合该Return值即可。</p>
 <h3 id="gae">GAE</h3>
 <p>对于状态价值<span class="math inline">\(V_{\theta}(s_t)\)</span>的计算，我们可以直接在当前时间直接通过神经网络预测，即直接得到:</p>
 <p><span class="math display">\[V_{\theta}(s_t)\]</span></p>
@@ -823,8 +827,87 @@ A_{\theta}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
 <li>被直接表扬的同学就是On-Policy模型，他直接从老师的表扬和批评中进行学习：当老师表扬其某个动作<span class="math inline">\(a_i\)</span>时，其增大当前状态下该动作的概率；当老师批评其某个动作<span class="math inline">\(a_i\)</span>时，则减小当前状态下该动作的概率。</li>
 <li>身旁的同学就是Off-Policy模型，其通过On-Policy模型间接的从老师的表扬和批评中进行学习：当其看到老师表扬On-Policy模型的某个动作<span class="math inline">\(a_i\)</span>时，其增大当前状态下该动作的概率；当其看到老师批评On-Policy模型的某个动作<span class="math inline">\(a_i\)</span>时，其减小当前状态下该动作的概率。</li>
 </ul>
-<p>但上面的情况要求On-Policy模型和Off-Policy模型不要相差太远。例如，班上总是上课玩手机的同学今天没有玩手机了，老师表扬了他；但这样的行为对于从来不玩手机的学生来说没有意义，因为其本来就不玩手机。<br>
-因此，我们在公式中引入KL散度，以此来约束On-Policy模型和Off-Policy模型不要相差太远。</p>
+<div class="note info"><p>重要性采样公式推导：</p>
+<p><span class="math display">\[
+\begin{align}
+    E(f(x))_{x \sim p(x)} &amp;= \sum_xf(x)*p(x) \\
+    &amp;= \sum_xf(x) * p(x) \frac{q(x)}{q(x)} \\
+    &amp;= \sum_xf(x) * \frac{p(x)}{q(x)} * q(x) \\
+    &amp;= E(f(x) \frac{p(x)}{q(x)})_{x \sim q(x)} \\
+    &amp;\approx \frac{1}{N} \sum_{n=1}^N {f(x) \frac{p(x)}{q(x)}}_{x
+\sim q(x)}
+\end{align}
+\]</span></p>
+</div>
+<p>将重要性采样公式应用到之前的Loss函数中得到：</p>
+<p><span class="math display">\[
+\begin{align}
+    \nabla Loss&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta}^{GAE}(s_n^t, a_n^t) \nabla logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)} \nabla
+logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(\theta^{\prime}\)</span>就是直接受到老师批评/表扬的学生，<span class="math inline">\(\theta\)</span>就是旁边的同学，<span class="math inline">\(\theta^{\prime}\)</span>的优势函数<span class="math inline">\(_{\theta^{\prime}}^{GAE}(s_n^t,
+a_n^t)\)</span>就是老师对On-Policy模型的批评/表扬。<br>
+而<span class="math inline">\(\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)}\)</span>则是Off-Policy模型相对于On-Policy模型对<span class="math inline">\(_{\theta^{\prime}}^{GAE}(s_n^t,
+a_n^t)\)</span>应该放大或缩小的程度。<br>
+如：老师批评On-Policy模型玩手机，On-Policy模型要做出改进。而Off-Policy模型玩手机的概率是On-Policy模型的两倍，则应该做出两倍的改进。</p>
+<p>通过数学技巧<span class="math inline">\(\nabla logf(x)=\frac{\nabla
+f(x)}{f(x)}\)</span>继续优化上面的式子：</p>
+<p><span class="math display">\[
+\begin{align}
+    \nabla Loss&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta}^{GAE}(s_n^t, a_n^t) \nabla logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)} \nabla
+logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)}
+\frac{\nabla P_{\theta}(a_n^t|s_n^t)}{P_{\theta}(a_n^t|s_n^t)} \\
+    &amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t) \frac{\nabla
+P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)}
+\end{align}
+\]</span></p>
+<p>这样，我们就得到了PPO算法Loss函数的进一步表现形式：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)}
+\end{align}
+\]</span></p>
+<p>其中，<span class="math inline">\(\theta^{\prime}\)</span>为参考的网络，也称为Ref网络，我们用它来进行数据采样，并用该数据计算优势函数。<br>
+<span class="math inline">\(\theta\)</span>为我们真实要训练的网络，我们只需计算它做出某个动作的概率，除以参考网络的概率，从而调整优势函数的程度，并进一步训练网络。<br>
+可以看到，数据采集和我们要训练的网络是区分开的，这样我们就解决了On-Policy网络训练效率太低的问题。</p>
+<p>上面的情况有一点限制，即要求On-Policy模型和Off-Policy模型不要相差太远。不然Off-Policy模型很难学到有用的经验和教训。
+例如，班上总是上课玩手机的同学今天没有玩手机了，老师表扬了他；但这样的行为对于从来不玩手机的学生来说没有意义，因为其本来就不玩手机。
+同样，如果某个差生今天考试交了白卷，老师批评了他，但这样的批评对好学生来说同样没有意义，因为其不会交白卷。</p>
+<p>所以PPO算法加入了KL散度来约束On-Policy模型和Off-Policy模型不要相差太远，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss_{ppo}&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)} + \beta
+KL(P_{\theta}, P_{\theta^{\prime}})
+\end{align}
+\]</span></p>
+<p>更进一步，PPO2中提出了截断来替代KL散度：</p>
+<p><span class="math display">\[
+\begin{align}
+    Loss_{ppo2}&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+min(A_{\theta^{\prime}}^{GAE}(s_n^t, a_n^t)
+\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)},
+A_{\theta^{\prime}}^{GAE}(s_n^t,
+a_n^t)clip(\frac{P_{\theta}(a_n^t|s_n^t)}{P_{\theta^{\prime}}(a_n^t|s_n^t)},
+1 - \epsilon, 1 + \epsilon))
+\end{align}
+\]</span></p>
 <h2 id="grpo">GRPO</h2>
 
     </div>
@@ -902,14 +985,14 @@ A_{\theta}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">213k</span>
+    <span title="站点总字数">214k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">12:55</span>
+    <span title="站点阅读时长">12:58</span>
   </span>
 </div>
 <div class="busuanzi-count">
