@@ -272,7 +272,7 @@ R_t^nlogP_{\theta}(a_n^t|s_n^t)
 <h2 id="ppo">PPO</h2>
 <h3 id="奖励减去baseline">奖励减去baseline</h3>
 <p>在好的局势下，无论做什么动作都能得到正的Reward；而在坏的局势下，无论做什么动作都会得到负的Reward。如下图所示：</p>
-<p><img src="/2025/03/06/PPO-GRPO/1.jpg"></p>
+<p><img src="/2025/03/06/PPO-GRPO/1.jpg" width="600"></p>
 <p>这是不合适的，我们需要的是当前这个动作相对于其他动作的优势，即只要这个动作相对于其他的动作好的话，则给他正向的奖励，反之给负向的奖励。所以这就需要我们对奖励减去一个baseline。</p>
 <p><span class="math display">\[
 \begin{align}
@@ -283,7 +283,7 @@ B(s_n^t))logP_{\theta}(a_n^t|s_n^t)
 <p>我们把<span class="math inline">\(R_t^n -
 B(s_n^t)\)</span>称为一个动作对其他动作的优势。<br>
 这样，无论在好的局势下还是坏的局势下，我们得到的奖励都是有正有负的，更利于强化学习的训练，如下图所示：</p>
-<p><img src="/2025/03/06/PPO-GRPO/2.jpg"></p>
+<p><img src="/2025/03/06/PPO-GRPO/2.jpg" width="600"></p>
 <h3 id="引入优势函数">引入优势函数</h3>
 <p>计算Return的式子：</p>
 <p><span class="math display">\[
@@ -321,7 +321,7 @@ a)\)</span>代入优势函数可以得到：</p>
 <p><span class="math display">\[A_{\phi}(s_t, a)=r_t + \gamma *
 V_{\phi}(s_{t+1})-V_{\phi}(s_t)\]</span></p>
 <p>这样我们就可以通过一个预测状态价值<span class="math inline">\(V_{\phi}(s)\)</span>的神经网络去计算得到优势函数，如下图所示：</p>
-<p><img src="/2025/03/06/PPO-GRPO/3.jpg"></p>
+<p><img src="/2025/03/06/PPO-GRPO/3.jpg" width="600"></p>
 <p>其中，左图为我们需要训练的模型<span class="math inline">\(\theta\)</span>，其输出为在当前状态下每个动作的输出概率。右图为状态价值网络<span class="math inline">\(\phi\)</span>，其输出为当前状态下的期望回报。<br>
 状态价值网络可以和要训练的模型<span class="math inline">\(\theta\)</span>结构相同，只是最后一层不再是动作空间Action
 Space的大小，而是输出单一的一个值，来代表当前状态的价值。<br>
@@ -385,14 +385,14 @@ A_{\phi}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
 \end{align}
 \]</span></p>
 <h3 id="on-policy变为off-policy">On-Policy变为Off-Policy</h3>
-<p><img src="/2025/03/06/PPO-GRPO/4.png"></p>
+<p><img src="/2025/03/06/PPO-GRPO/4.png" width="600"></p>
 <p>什么是On-Policy模型和Off-Policy模型？以上图为例子：</p>
 <ul>
 <li>被直接表扬的同学就是On-Policy模型，他直接从老师的表扬和批评中进行学习：当老师表扬其某个动作<span class="math inline">\(a_i\)</span>时，其增大当前状态下该动作的概率；当老师批评其某个动作<span class="math inline">\(a_i\)</span>时，则减小当前状态下该动作的概率。</li>
 <li>身旁的同学就是Off-Policy模型，其通过On-Policy模型间接的从老师的表扬和批评中进行学习：当其看到老师表扬On-Policy模型的某个动作<span class="math inline">\(a_i\)</span>时，其增大当前状态下该动作的概率；当其看到老师批评On-Policy模型的某个动作<span class="math inline">\(a_i\)</span>时，其减小当前状态下该动作的概率。</li>
 </ul>
 <p>On-Policy网络存在训练效率太低的问题，如下图所示：</p>
-<p><img src="/2025/03/06/PPO-GRPO/5.jpg"></p>
+<p><img src="/2025/03/06/PPO-GRPO/5.jpg" width="600"></p>
 <p>即如果通过On-Policy策略去教一个学生，我们需要先看他有哪些地方做的好/不好，然后对其进行表扬/批评，等他改进完成后，再继续观察他有哪些地方做的好/不好。这样采集数据就会很慢。
 所以PPO算法这里引入了Off-Policy策略，将采集数据和训练模型这两个步骤解偶，从而加快训练效率。</p>
 <div class="note info"><p>重要性采样公式推导：</p>
@@ -546,8 +546,8 @@ log\frac{P_{\theta^{\prime}}(a_n^t|s_n^t)}{P_{\theta}(a_n^t|s_n^t)} - 1
       </categories>
       <tags>
         <tag>PPO</tag>
-        <tag>强化学习</tag>
         <tag>GRPO</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
