@@ -546,8 +546,8 @@ log\frac{P_{\theta^{\prime}}(a_n^t|s_n^t)}{P_{\theta}(a_n^t|s_n^t)} - 1
       </categories>
       <tags>
         <tag>PPO</tag>
-        <tag>GRPO</tag>
         <tag>强化学习</tag>
+        <tag>GRPO</tag>
       </tags>
   </entry>
   <entry>
