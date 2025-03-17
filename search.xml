@@ -322,10 +322,11 @@ a)\)</span>代入优势函数可以得到：</p>
 V_{\phi}(s_{t+1})-V_{\phi}(s_t)\]</span></p>
 <p>这样我们就可以通过一个预测状态价值<span class="math inline">\(V_{\phi}(s)\)</span>的神经网络去计算得到优势函数，如下图所示：</p>
 <p><img src="/2025/03/06/PPO-GRPO/3.jpg"></p>
-<p>其中，<span class="math inline">\(V_{\phi}(s)\)</span>可以和要训练的强化学习网络结构相同，只是最后一层不再是动作空间Action
+<p>其中，左图为我们需要训练的模型<span class="math inline">\(\theta\)</span>，其输出为在当前状态下每个动作的输出概率。右图为状态价值网络<span class="math inline">\(\phi\)</span>，其输出为当前状态下的期望回报。<br>
+状态价值网络可以和要训练的模型<span class="math inline">\(\theta\)</span>结构相同，只是最后一层不再是动作空间Action
 Space的大小，而是输出单一的一个值，来代表当前状态的价值。<br>
-预测状态价值的网络的训练Label可表示为<span class="math inline">\(R_t^n =
-\sum_{t^{\prime}=t}^{T_n}
+预测状态价值的网络的训练Label可表示为<span class="math inline">\(Label =
+R_t^n = \sum_{t^{\prime}=t}^{T_n}
 \gamma^{t^{\prime}-t}r_{t^{\prime}}^n\)</span>，用价值网络来拟合该Return值即可。</p>
 <h3 id="gae">GAE</h3>
 <p>对于状态价值<span class="math inline">\(V_{\phi}(s_t)\)</span>的计算，我们可以直接在当前时间直接通过神经网络预测，即直接得到:</p>
@@ -490,7 +491,8 @@ PPO 的基础上引入了下面几个创新：</p>
 <li>采用群组采样方法，实现更高效且稳定的优势估计</li>
 <li>通过强化目标函数和奖励的惩罚机制，实现更保守的策略更新</li>
 </ol>
-<p><img src="/2025/03/06/PPO-GRPO/6.jpeg"></p>
+<p><img src="/2025/03/06/PPO-GRPO/6.jpeg"><br>
+<em>上图使用了<a href="https://avoid.overfit.cn/post/05d4b8fb001b4adeb4e050fb323cd21f">https://avoid.overfit.cn/post/05d4b8fb001b4adeb4e050fb323cd21f</a>这里的图，和本文符号存在一些区别，详细流程可参考下面的式子。</em></p>
 <h3 id="grpo技术解析">GRPO技术解析</h3>
 <p>GRPO优势函数估计流程如下：</p>
 <ol type="1">
