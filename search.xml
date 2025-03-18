@@ -306,8 +306,10 @@ a)-V_{\phi}(s)\)</span>，在状态s下，做出动作a，相比于其他动作�
 <p>这样，Loss函数就可以更新为：</p>
 <p><span class="math display">\[
 \begin{align}
-    Loss=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n} A_{\phi}(s_n^t,
-a_n^t)logP_{\theta}(a_n^t|s_n^t)
+    Loss &amp;= -\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n} (R_t^n -
+B(s_n^t))logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;\Rightarrow -\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\phi}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
 \end{align}
 \]</span></p>
 <p>下面进一步拆解优势函数<span class="math inline">\(A_{\phi}(s,
@@ -376,12 +378,18 @@ V_{\phi}(s_{t+1}) \\
 <p>这样，经过PPO算法中GAE步骤的改进，我们的损失函数变为如下形式：</p>
 <p><span class="math display">\[
 \begin{align}
-    \delta_t^V &amp;= r_t + \gamma * V_{\phi}(s_{t+1}) - V_{\phi}(s_t)
-\\
-    A_{\phi}^{GAE}(s_t, a)&amp;=\sum_{b=0}^{\infty}(\gamma
-\lambda)^b\delta_{t+b}^V \\
-    Loss&amp;=-\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+    Loss &amp;= -\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
+A_{\phi}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t) \\
+    &amp;\Rightarrow -\frac{1}{N}\sum_{n=1}^{N}\sum_{t=1}^{T_n}
 A_{\phi}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(A_{\phi}^{GAE}\)</span>通过如下方式计算：</p>
+<p><span class="math display">\[
+\begin{align}
+    A_{\phi}^{GAE}(s_t, a)=\sum_{b=0}^{\infty}(\gamma
+\lambda)^b\delta_{t+b}^V \\
+    \delta_t^V = r_t + \gamma * V_{\phi}(s_{t+1}) - V_{\phi}(s_t)
 \end{align}
 \]</span></p>
 <h3 id="on-policy变为off-policy">On-Policy变为Off-Policy</h3>
@@ -398,7 +406,8 @@ A_{\phi}^{GAE}(s_n^t, a_n^t)logP_{\theta}(a_n^t|s_n^t)
 <div class="note info"><p>重要性采样公式推导：</p>
 <p><span class="math display">\[
 \begin{align}
-    E(f(x))_{x \sim p(x)} &amp;= \sum_xf(x)*p(x) \\
+    E(f(x))_{x \sim p(x)} &amp;= \sum_xf(x)*p(x) \approx \frac{1}{N}
+\sum_{n=1}^{N}{f(x)}_{x \sim p(x)} \\
     &amp;= \sum_xf(x) * p(x) \frac{q(x)}{q(x)} \\
     &amp;= \sum_xf(x) * \frac{p(x)}{q(x)} * q(x) \\
     &amp;= E(f(x) \frac{p(x)}{q(x)})_{x \sim q(x)} \\
