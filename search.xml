@@ -337,6 +337,7 @@ Space的大小，而是输出单一的一个值，来代表当前状态的价值
 R_t^n = \sum_{t^{\prime}=t}^{T_n}
 \gamma^{t^{\prime}-t}r_{t^{\prime}}^n\)</span>，用价值网络来拟合该Return值即可。</p>
 <h3 id="gae">GAE</h3>
+<p>由于<span class="math inline">\(V_{\phi}\)</span>的值都是通过神经网络估计的，所以<span class="math inline">\(A_{\phi}\)</span>会存在偏差，GAE的目的就是在偏差和方差之前取得均衡。</p>
 <p>对于状态价值<span class="math inline">\(V_{\phi}(s_t)\)</span>的计算，我们可以直接在当前时间直接通过神经网络预测，即直接得到:</p>
 <p><span class="math display">\[V_{\phi}(s_t)\]</span></p>
 <p>我们也可以先现在当前时间随机采样一个动作<span class="math inline">\(a\)</span>，得到奖励<span class="math inline">\(r_t\)</span>，然后再通过神经网络预测下一个状态的价值，即得到:</p>
