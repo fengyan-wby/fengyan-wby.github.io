@@ -175,6 +175,48 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>MCP介绍</title>
+    <url>/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>官方介绍：</p>
+<ul>
+<li><a href="https://www.anthropic.com/news/model-context-protocol">https://www.anthropic.com/news/model-context-protocol</a></li>
+</ul>
+<p>MCP
+是一个开放协议，用于标准化应用程序向大语言模型提供上下文的方式。可以将
+MCP 想象成 AI 应用程序的 USB-C 接口。就像 USB-C
+为设备连接各种外设和配件提供了标准化方式一样，MCP 为 AI
+模型连接不同的数据源和工具提供了标准化方式。</p>
+<span id="more"></span>
+<h2 id="mcp介绍">MCP介绍</h2>
+<p>在传统的AI使用中，我们需要通过手动截图或复制文本的方式，将信息输入到AI工具中进行对话。如下图所示：</p>
+<p><img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/1.png"></p>
+<p>而MCP则通过标准化的协议，自动化了上述步骤，从而代替人类访问并且操作外部工具。</p>
+<p><img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/2.png"></p>
+<p>MCP
+server大多都专精于一类的工作，比如有的负责操作Git仓库，有的负责读写浏览器等等。其结构如下：</p>
+<p><img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/3.png"></p>
+<h2 id="实战">实战</h2>
+<p>这里使用VSCode + Cline演示MCP的使用</p>
+<ol type="1">
+<li>在VSCode中安装Cline插件。<br>
+<img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/4.png"></li>
+<li>对Cline进行配置。<br>
+<img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/5.png"></li>
+<li>增加MCP Servers。<br>
+<img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/6.png"></li>
+<li>进行对话，使用MCP功能。<br>
+<img src="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/7.png"></li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PPO&amp;GRPO</title>
     <url>/2025/03/06/PPO-GRPO/</url>
     <content><![CDATA[<p>详解PPO算法和GRPO算法。</p>
