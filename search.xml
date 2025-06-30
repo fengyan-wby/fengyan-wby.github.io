@@ -210,7 +210,7 @@ label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<st
 3. 选择<span class="math inline">\(Head_1\)</span>校验token与label一致的最长输出作为可接受的结果。
 由于在步骤1中是并行，在步骤2中是Batch输入，所以该推理方法有加速效果。</p>
 <h2 id="deepseekmoe">DeepSeekMoE</h2>
-<p><img src="/2025/06/30/DeepSeekMoE-MTP/1.png"></p>
+<p><img src="/2025/06/30/DeepSeekMoE-MTP/3.png"></p>
 <h3 id="基础知识">基础知识</h3>
 <p>标准transformer语言模型构造由<span class="math inline">\(L\)</span>层的标准transformer块堆叠构成，每个块表示如下：</p>
 <p><span class="math display">\[
