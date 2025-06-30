@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
+    <loc>https://fengyan-wby.github.io/about/index.html</loc>
     
     <lastmod>2025-06-30</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/about/index.html</loc>
+    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
     
     <lastmod>2025-06-30</lastmod>
     
@@ -218,7 +218,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</loc>
+    <loc>https://fengyan-wby.github.io/2024/02/02/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91R-Drop-Regularized-Dropout-for-Neural-Networks/</loc>
     
     <lastmod>2025-06-30</lastmod>
     
@@ -227,7 +227,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/02/02/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91R-Drop-Regularized-Dropout-for-Neural-Networks/</loc>
+    <loc>https://fengyan-wby.github.io/2024/01/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91RAG-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks/</loc>
     
     <lastmod>2025-06-30</lastmod>
     
@@ -497,24 +497,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2024/11/22/STaR%E5%92%8CQuiet-STaR/</loc>
-    
-    <lastmod>2025-06-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/2024/07/19/Resource%E6%B3%A8%E8%A7%A3/</loc>
-    
-    <lastmod>2025-06-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2023/04/13/PyTorch%E6%95%99%E7%A8%8B/</loc>
     
     <lastmod>2025-06-30</lastmod>
@@ -525,6 +507,24 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2025/03/04/Pytorch%E5%AE%9E%E7%8E%B0AverageModel/</loc>
+    
+    <lastmod>2025-06-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2024/11/22/STaR%E5%92%8CQuiet-STaR/</loc>
+    
+    <lastmod>2025-06-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2024/07/19/Resource%E6%B3%A8%E8%A7%A3/</loc>
     
     <lastmod>2025-06-30</lastmod>
     
@@ -641,15 +641,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2025-06-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/2024/07/23/Git%E4%BB%93%E5%BA%93%E6%B8%85%E7%90%86/</loc>
     
     <lastmod>2025-06-30</lastmod>
@@ -714,6 +705,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2023/02/14/Hexo-NexT%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2025-06-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/02/09/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2025-06-30</lastmod>
     

@@ -203,12 +203,14 @@ space）。</p>
 <h3 id="推理加速">推理加速</h3>
 <p><code>推理方法1</code>:
 只保留第一个输出头，模型预测变成了一个NTP任务。这个就跟正常LLM模型推理一样，没有什么加速效果。</p>
-<p><code>推理方法2</code>:<br>
-1. 保留多个输出头，利用<span class="math inline">\(k\)</span>个Head<strong>并行</strong>生成<span class="math inline">\(k\)</span>个token。 2.
-将输入序列和生成的token组成多个<span class="math inline">\(Pair&lt;sequence_input,
-label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<strong>Batch</strong>输入第一个Head做校验。
-3. 选择<span class="math inline">\(Head_1\)</span>校验token与label一致的最长输出作为可接受的结果。
-由于在步骤1中是并行，在步骤2中是Batch输入，所以该推理方法有加速效果。</p>
+<p><code>推理方法2</code>:</p>
+<ol type="1">
+<li>保留多个输出头，利用<span class="math inline">\(k\)</span>个Head<strong>并行</strong>生成<span class="math inline">\(k\)</span>个token。</li>
+<li>将输入序列和生成的token组成多个<span class="math inline">\(Pair&lt;sequence_input,
+label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<strong>Batch</strong>输入第一个Head做校验。</li>
+<li>选择<span class="math inline">\(Head_1\)</span>校验token与label一致的最长输出作为可接受的结果。
+由于在步骤1中是并行，在步骤2中是Batch输入，所以该推理方法有加速效果。</li>
+</ol>
 <h2 id="deepseekmoe">DeepSeekMoE</h2>
 <p><img src="/2025/06/30/DeepSeekMoE-MTP/3.png"></p>
 <h3 id="基础知识">基础知识</h3>
