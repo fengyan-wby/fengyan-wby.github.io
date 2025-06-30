@@ -175,6 +175,165 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>DeepSeekMoE+MTP</title>
+    <url>/2025/06/30/DeepSeekMoE-MTP/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://arxiv.org/pdf/2404.19737">MTP论文</a></li>
+<li><a href="https://arxiv.org/pdf/2401.06066">DeepSeekMoE论文</a></li>
+</ul>
+<span id="more"></span>
+<h2 id="mtp">MTP</h2>
+<h3 id="模型架构">模型架构</h3>
+<p>传统的NTP任务一次只会预测一个token，即next
+token。损失函数如下所示：</p>
+<p><span class="math display">\[L_1 =
+-\sum_tlogP_{\theta}(x_{t+1}|x_{t:1}),\]</span></p>
+<p>而MTP技术则让模型在当前时刻预测后续的<span class="math inline">\(n\)</span>个token，损失函数如下所示：</p>
+<p><span class="math display">\[L_n =
+-\sum_tlogP_{\theta}(x_{t+n:t+1}|x_{t:1})\]</span></p>
+<p>具体实现如下图：</p>
+<p><img src="/2025/06/30/DeepSeekMoE-MTP/1.png"></p>
+<p>上图中，每个时刻的token输入都会输出<span class="math inline">\(n\)</span>（图中<span class="math inline">\(n\)</span>=4）个预测token：</p>
+<p><span class="math display">\[P_{\theta}(x_{t+i}|x_{t:1}),i=1,...,n\]</span></p>
+<p>其中，模型主干是被共享的，每个待预测的token都有一个独立的输出头。这些输出头并行工作，预测对应的未来token。每个输出头后面跟着一个共享的Unembedding层，将Transformer的输出转换成词表空间（vocabulary
+space）。</p>
+<h3 id="内存优化">内存优化</h3>
+<p>为了解决多token预测带来的内存消耗问题，论文提出了一种内存高效的实现方法。前向和反向传播顺序调整：在计算梯度时，模型会依次计算每个输出头的梯度，而不是一次性计算所有头的梯度，从而避免了同时存储所有输出头的梯度信息，降低GPU内存占用。</p>
+<p><img src="/2025/06/30/DeepSeekMoE-MTP/2.png"></p>
+<h3 id="推理加速">推理加速</h3>
+<p><code>推理方法1</code>:
+只保留第一个输出头，模型预测变成了一个NTP任务。这个就跟正常LLM模型推理一样，没有什么加速效果。</p>
+<p><code>推理方法2</code>:<br>
+1. 保留多个输出头，利用<span class="math inline">\(k\)</span>个Head<strong>并行</strong>生成<span class="math inline">\(k\)</span>个token。 2.
+将输入序列和生成的token组成多个<span class="math inline">\(Pair&lt;sequence_input,
+label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<strong>Batch</strong>输入第一个Head做校验。
+3. 选择<span class="math inline">\(Head_1\)</span>校验token与label一致的最长输出作为可接受的结果。
+由于在步骤1中是并行，在步骤2中是Batch输入，所以该推理方法有加速效果。</p>
+<h2 id="deepseekmoe">DeepSeekMoE</h2>
+<p><img src="/2025/06/30/DeepSeekMoE-MTP/1.png"></p>
+<h3 id="基础知识">基础知识</h3>
+<p>标准transformer语言模型构造由<span class="math inline">\(L\)</span>层的标准transformer块堆叠构成，每个块表示如下：</p>
+<p><span class="math display">\[
+\begin{align}
+    u_{1:T}^l &amp;= SelfAtt(h_{1:T}^{l-1}) + h_{1:T}^{l-1}  \\
+    h_t^l &amp;= FFN(u_t^l) + u_t^l
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(T\)</span>表示序列长度，Self-Att(·)
+表示自注意力模块，FFN(·) 表示前馈网络。</p>
+<p>传统的MoE网络将transformer语言模型中的FFN层替换成MoE层，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    h_t^l &amp;= \sum_{i=1}^N(g_{i,t}FFN_i(u_t^l)) + u_t^l, \\
+    g_{i,t} &amp;=
+    \begin{cases}
+        s_{i,t}, s_{i,t} \in Topk(\{s_{j,t}|1 \leq j \leq N\}, K), \\
+        0, otherwise,
+    \end{cases} \\
+    s_{i,t} &amp;= Softmax_i({u_t^l}^{\top}e_i^l),
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(N\)</span>表示专家总数，<span class="math inline">\(FFN_i(·)\)</span>是第<span class="math inline">\(i\)</span>个专家的<span class="math inline">\(FFN\)</span>，<span class="math inline">\(g_{i,t}\)</span>表示第<span class="math inline">\(i\)</span>个专家的门控值，<span class="math inline">\(s_{i,t}\)</span>表示token到专家的亲和度。</p>
+<p>传统的MoE架构将transformer中的前馈网络（FFNs）替换为MoE层，每个MoE层由多个与标准FFN结构相同的专家组成，每个token被分配给一个或两个专家。现有的MoE架构可能遭受知识混合(Knowledge
+Hybridity)和知识冗余(Knowledge
+Redundancy)的问题，这限制了专家的专业化。</p>
+<ul>
+<li>知识混合:
+现有MoE实践通常使用有限数量的专家（如8或16），因此分配给特定专家的tokens可能覆盖多种知识，导致专家在其参数中聚合不同类型的知识，难以同时利用。</li>
+<li>知识冗余:
+分配给不同专家的tokens可能需要共同的知识，导致多个专家在各自的参数中收敛获取共享知识，从而引起专家参数的冗余。</li>
+</ul>
+<p>DeepSeekMoE提出了两点改进：</p>
+<ul>
+<li><code>Fine-grained Expert Segmentation</code>：在保持参数数量不变的同时，通过细分FFN的中间隐藏维度，将专家分割成更细的粒度。相应地，在保持恒定的计算成本下，激活更多细粒度的专家，以实现更灵活、适应性更强的激活专家组合。专家细分允许将不同的知识被更精确地学习以及被更细致地分配到不同的专家，每个专家都将保持更高水平的专业化。此外，增加专家激活的灵活性也有助于更准确和有针对性的知识获取。</li>
+<li><code>Shared Expert Isolation</code>：隔离某些专家作为始终激活的共享专家，可以捕获和整合不同上下文中的共同知识。通过将共同知识压缩到这些共享专家中，可以减轻其他路由专家中的冗余。这可以提高参数效率，并确保每个路由专家通过专注于独特方面而保持专业化。</li>
+</ul>
+<h3 id="fine-grained-expert-segmentation">Fine-grained Expert
+Segmentation</h3>
+<p>Fine-grained Expert Segmentation实现细节如下：</p>
+<ol type="1">
+<li>将专家数量变为原来的<span class="math inline">\(m\)</span>倍，即专家数量为<span class="math inline">\(mN\)</span>。</li>
+<li>为了保证参数数量不变，将每个FFN的intermediate hidden
+dimension变为原来的<span class="math inline">\(\frac{1}{m}\)</span>。</li>
+<li>由于每个专家都变小了（变为<span class="math inline">\(\frac{1}{m}\)</span>），所以将激活的专家数也变为原来的<span class="math inline">\(m\)</span>倍，即激活的专家数量为<span class="math inline">\(mK\)</span>。</li>
+</ol>
+<p>则DeepSeekMoE可以表示为如下式子：</p>
+<p><span class="math display">\[
+\begin{align}
+    h_t^l &amp;= \sum_{i=1}^{mN}(g_{i,t}FFN_i(u_t^l)) + u_t^l, \\
+    g_{i,t} &amp;=
+    \begin{cases}
+        s_{i,t}, s_{i,t} \in Topk(\{s_{j,t}|1 \leq j \leq mN\}, mK), \\
+        0, otherwise,
+    \end{cases} \\
+    s_{i,t} &amp;= Softmax_i({u_t^l}^{\top}e_i^l),
+\end{align}
+\]</span></p>
+<p>这样，当<span class="math inline">\(N=16\)</span>时，传统的top-2路由策略可以产生<span class="math inline">\({16 \choose
+2}=120\)</span>种组合。而同样参数数量的DeepSeekMoE，取<span class="math inline">\(m=4\)</span>，则Fine-grained路由策略可以产生<span class="math inline">\({64 \choose
+8}=4426165368\)</span>种组合，灵活度大大增加。</p>
+<h3 id="shared-expert-isolation">Shared Expert Isolation</h3>
+<p>在传统的MoE路由策略中，分配给不同专家的tokens可能需要一些共同的知识或信息，这可能导致多个专家在其参数中收敛获取共享知识，从而导致专家参数的冗余。而通过专门用于捕获和整合不同上下文中的共同知识的共享专家，可以减轻其他路由专家之间的参数冗余。冗余的减少有助于创建一个更高效的参数模型并拥有更专业化的专家。</p>
+<p>Shared Expert Isolation实现细节如下：</p>
+<ol type="1">
+<li>隔离出<span class="math inline">\(K_s\)</span>个专家作为共享专家。不管路由模块如何，每个token都会被分配给这些共享专家。</li>
+<li>非共享的激活的专家数量减少<span class="math inline">\(K_s\)</span>个。</li>
+</ol>
+<p>则带有共享专家的DeepSeekMoE可以表示为如下式子：</p>
+<p><span class="math display">\[
+\begin{align}
+    h_t^l &amp;= \sum_{i=1}^{K_s}FFN_i(u_t^l) + \sum_{i=K_s +
+1}^{mN}(g_{i,t}FFN_i(u_t^l)) + u_t^l, \\
+    g_{i,t} &amp;=
+    \begin{cases}
+        s_{i,t}, s_{i,t} \in Topk(\{s_{j,t}|K_s + 1 \leq j \leq mN\},
+mK-K_s), \\
+        0, otherwise,
+    \end{cases} \\
+    s_{i,t} &amp;= Softmax_i({u_t^l}^{\top}e_i^l),
+\end{align}
+\]</span></p>
+<h3 id="load-balance-consideration">Load Balance Consideration</h3>
+<p>自动学习的路由策略可能导致负载不均衡，这主要表现为两个缺陷：</p>
+<ol type="1">
+<li>路由崩溃的风险（即模型总是只选择少数几个专家，阻止其他专家获得足够的训练）。</li>
+<li>如果专家分布在多个设备上，设备间的负载不均衡可能加剧计算瓶颈。</li>
+</ol>
+<p>为此，DeepSeekMoE增加了两个损失：</p>
+<ol type="1">
+<li>专家间平衡损失(Expert-Level Balance Loss):
+为了减轻路由崩溃的风险，引入专家间平衡损失值。</li>
+<li>设备间平衡损失(Device-Level Balance Loss):
+为了减轻计算瓶颈，引入了设备级平衡损失值。</li>
+</ol>
+<div class="note info"><p>在DeepSeek-V3中，作者进一步提出了无辅助损失负载平衡的DeepSeekMoE。<br>
+针对专家负载不均衡的问题，为每个专家引入了一个偏置项<span class="math inline">\(b_i\)</span>，并将其加到的亲和力得分<span class="math inline">\(s_{i,t}\)</span>上。如下式所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    g_{i,t}^{\prime} &amp;=
+    \begin{cases}
+        s_{i,t}, s_{i,t} + b_i \in Topk(\{s_{j,t} + b_j|K_s + 1 \leq j
+\leq mN\}, mK-K_s), \\
+        0, otherwise,
+    \end{cases}
+\end{align}
+\]</span></p>
+<p>需要注意的是，偏置项仅用于路由。与FFN输出相乘的门控值仍然来源于原始得分<span class="math inline">\(s_{i,t}\)</span>。<br>
+在训练过程中，持续监控每个训练步骤中整个批次的专家负载。在每个步骤的末尾，如果相应的专家过载，将减少偏置项；如果相应的专家欠载，将增加偏置项。通过动态调整，DeepSeek-V3
+在训练期间保持专家负载平衡，并比通过纯辅助损失鼓励负载平衡的模型实现了更好的性能。</p>
+</div>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>文献阅读</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+        <tag>MoE</tag>
+        <tag>MTP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MCP介绍</title>
     <url>/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>官方介绍：</p>
@@ -824,8 +983,8 @@ mK-K_s), \\
         <category>学习</category>
       </categories>
       <tags>
-        <tag>DeepSeek</tag>
         <tag>MoE</tag>
+        <tag>DeepSeek</tag>
       </tags>
   </entry>
   <entry>
@@ -1245,8 +1404,8 @@ token，因为它会影响模型如何生成思考过程。作者选择将思考
 ]]></content>
       <categories>
         <category>算法</category>
-        <category>AIGC</category>
         <category>文献阅读</category>
+        <category>AIGC</category>
       </categories>
       <tags>
         <tag>AIGC</tag>
