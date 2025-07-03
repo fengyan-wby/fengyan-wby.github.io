@@ -206,8 +206,7 @@ space）。</p>
 <p><code>推理方法2</code>:</p>
 <ol type="1">
 <li>保留多个输出头，利用<span class="math inline">\(k\)</span>个Head<strong>并行</strong>生成<span class="math inline">\(k\)</span>个token。</li>
-<li>将输入序列和生成的token组成多个<span class="math inline">\(Pair&lt;sequence_input,
-label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<strong>Batch</strong>输入第一个Head做校验。</li>
+<li>将输入序列和生成的token组成多个<span class="math inline">\(Pair&lt;sequence\_input\_label&gt;\)</span>，将多个<span class="math inline">\(Pair\)</span>作为<strong>Batch</strong>输入第一个Head做校验。</li>
 <li>选择<span class="math inline">\(Head_1\)</span>校验token与label一致的最长输出作为可接受的结果。
 由于在步骤1中是并行，在步骤2中是Batch输入，所以该推理方法有加速效果。</li>
 </ol>
@@ -985,8 +984,8 @@ mK-K_s), \\
         <category>学习</category>
       </categories>
       <tags>
-        <tag>MoE</tag>
         <tag>DeepSeek</tag>
+        <tag>MoE</tag>
       </tags>
   </entry>
   <entry>
