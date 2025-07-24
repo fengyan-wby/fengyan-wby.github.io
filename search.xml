@@ -175,6 +175,151 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>优化器(optimizer)介绍</title>
+    <url>/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>介绍SGD、SGDM、Adagrad、RMSProp、Adam等优化器算法</p>
+<span id="more"></span>
+<h2 id="sgd">SGD</h2>
+<p>SGD全称Stochastic Gradient
+Descent，随机梯度下降，1847年提出。每次选择一个mini-batch，而不是全部样本，使用梯度下降来更新模型参数。它解决了随机小批量样本的问题，但仍然有自适应学习率、容易卡在梯度较小点等问题。</p>
+<p>SGD的计算公式为：</p>
+<p><span class="math display">\[\theta^t = \theta^{t-1} - \eta
+g^{t-1}\]</span></p>
+<p>其中，<span class="math inline">\(\eta\)</span>为学习率，<span class="math inline">\(g^{t-1}\)</span>为<span class="math inline">\(t-1\)</span>时刻的梯度。</p>
+<p>SGD计算过程如下图所示：</p>
+<!-- ![]() -->
+<h2 id="sgdm">SGDM</h2>
+<p>SGDM即为SGD with
+momentum，它在SGD的基础上加入了动量机制，1986年提出。</p>
+<p>SGDM的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} - \eta m_t \\
+    m_t = \lambda m_{t-1} + g_{t-1}
+\end{align}
+\]</span></p>
+<p>SGDM计算过程如下图所示：</p>
+<!-- ![]() -->
+<p>可以看到，此时<span class="math inline">\(\theta^{t-1}\)</span>减去的不再是当前的梯度，而是前<span class="math inline">\(t-1\)</span>次迭代的梯度的加权累积。其中<span class="math inline">\(\lambda\)</span>为衰减权重，越远的迭代权重越小。<br>
+从而我们可以发现，SGDM相比于SGD的差别就在于，参数更新时，不仅仅减去了当前迭代的梯度，还减去了前<span class="math inline">\(t-1\)</span>迭代的梯度的加权和。加入动量后，参数更新就可以保持之前更新趋势，而不会卡在当前梯度较小的点了。如下图所示：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_2.png"></p>
+<p>美中不足的是，SGDM没有考虑对学习率进行自适应更新，故学习率的选择很关键。</p>
+<h2 id="adagrad">Adagrad</h2>
+<p>Adagrad在2011年提出，它利用迭代次数和累积梯度，对学习率进行自动衰减，从而使得刚开始迭代时，学习率较大，可以快速收敛。而后来则逐渐减小，精调参数，使得模型可以稳定找到最优点。</p>
+<p>Adagrad的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} -
+\frac{\eta}{\sqrt{\sum_{t=0}^{t-1}(g_i^2)}}g_{t-1}
+\end{align}
+\]</span></p>
+<p>Adagrad与SGD的区别在于学习率除以前<span class="math inline">\(t-1\)</span>迭代的梯度的平方和,故称为自适应梯度下降。</p>
+<p>但Adagrad有个致命问题，就是没有考虑迭代衰减。极端情况，如果刚开始的梯度特别大，而后面的比较小，则学习率基本不会变化了，也就谈不上自适应学习率了。这个问题在RMSProp中得到了修正。</p>
+<h2 id="rmsprop">RMSProp</h2>
+<p>RMSProp的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}g_{t-1} \\
+    v_t = \alpha v_{t-1} + (1 - \alpha)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>在RMSProp中，梯度累积不是简单的前<span class="math inline">\(t-1\)</span>次迭代梯度的平方和了，而是加入了衰减因子α，越远的迭代梯度权重越小。</p>
+<h2 id="adam">Adam</h2>
+<p>Adam在2015年提出，是SGDM和RMSProp的结合。</p>
+<p>回顾上面说的SGDM和RMSProp。</p>
+<p>SGDM的计算公式：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \eta m_t \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1}
+\end{align}
+\]</span></p>
+<p>RMSProp的计算公式：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>结合上面两式，则Adam的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}m_t \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<div class="note info"><p>Adam在真实使用时还加入了de-biasing，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{\hat{v_t} +
+\epsilon}}\hat{m_t} \\
+    \hat{m_t} &amp;= \frac{m_t}{1-\beta_1^t} \\
+    \hat{v_t} &amp;= \frac{v_t}{1-\beta_2^t} \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(\beta_1\)</span>取值一般为0.9，<span class="math inline">\(\beta_2\)</span>取值一般为0.999，<span class="math inline">\(\epsilon\)</span>取值一般为<span class="math inline">\(10^{-8}\)</span>。</p>
+<p>更进一步，AdamW引入了weight decay，计算过程如下所示：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/5_1.png"></p>
+</div>
+<h2 id="muon">Muon</h2>
+<ul>
+<li>参考<a href="https://kellerjordan.github.io/posts/muon/">https://kellerjordan.github.io/posts/muon/</a></li>
+</ul>
+<p>Muon的计算过程为：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/6_1.png"></p>
+<p>其中<span class="math inline">\(B_t\)</span>即相当于之前的<span class="math inline">\(m_t\)</span>，NewtonSchulz5为Newton-schulz矩阵迭代：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Pytorch code</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">newtonschulz5</span>(<span class="params">G, steps=<span class="number">5</span>, eps=<span class="number">1e-7</span></span>):</span><br><span class="line">    <span class="keyword">assert</span> G.ndim == <span class="number">2</span></span><br><span class="line">    a, b, c = (<span class="number">3.4445</span>, -<span class="number">4.7750</span>, <span class="number">2.0315</span>)</span><br><span class="line">    X = G.bfloat16()</span><br><span class="line">    X /= (X.norm() + eps)</span><br><span class="line">    <span class="keyword">if</span> G.size(<span class="number">0</span>) &gt; G.size(<span class="number">1</span>):</span><br><span class="line">        X = X.T</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(steps):</span><br><span class="line">        A = X @ X.T</span><br><span class="line">        B = b * A + c * A @ A</span><br><span class="line">        X = a * X + B @ X</span><br><span class="line">    <span class="keyword">if</span> G.size(<span class="number">0</span>) &gt; G.size(<span class="number">1</span>):</span><br><span class="line">        X = X.T</span><br><span class="line">    <span class="keyword">return</span> X</span><br></pre></td></tr></table></figure>
+<h3 id="muonclip">MuonClip</h3>
+<p>参考<a href="https://github.com/MoonshotAI/Kimi-K2/blob/main/tech_report.pdf">https://github.com/MoonshotAI/Kimi-K2/blob/main/tech_report.pdf</a></p>
+<p>MuonClip在Kimi-K2中被使用。他们发现大模型训练存在MaxLogit爆炸现象，MaxLogit爆炸是指，<span class="math inline">\(S_{max}\)</span>随着训练的推进一直往上涨，增长速度是线性甚至是超线性的，并且在相当长的时间内没有稳定的迹象。</p>
+<p><span class="math display">\[S_{max} = \max \limits_{i,j} q_i
+k_j\]</span></p>
+<p>因为：</p>
+<p><span class="math inline">\(|q_ik_j| \leq ||q_i|| ||k_j|| =
+||x_iW_q|| ||x_jW_k|| \leq ||x_i|| ||x_j|| ||W_q|| ||W_k||\)</span></p>
+<p>由于<span class="math inline">\(x\)</span>通常会加RMSNorm，所以一般情况下<span class="math inline">\(||x_i||||x_j||\)</span>是不会爆炸的，因此MaxLogit爆炸意味着谱范数<span class="math inline">\(||Wq||,||Wk||\)</span>有往无穷大发展的风险，可能会导致训练崩溃。因此，保险起见应当尽量避免MaxLogit爆炸的出现。</p>
+<p>MuonClip在Muon的基础上使用了QK-Clip，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    if\ S_{max}^{(l)} &gt; \tau \ and \ W \in \{W_q^{(l)}, W_k^{(l)}\}:
+\\
+    W_t \leftarrow W_t \times \sqrt{\tau / S_{max}^{(l)}}
+\end{align}
+\]</span></p>
+<p>也就是说，在优化器更新之后，根据<span class="math inline">\(S_{max}^{(l)}\)</span>的大小来决定是否对<span class="math inline">\(Q,K\)</span>的权重进行裁剪，裁剪的幅度直接由<span class="math inline">\(S_{max}^{(l)}\)</span>与阈值<span class="math inline">\(\tau\)</span>的比例来决定，直接保证裁剪后的矩阵不再MaxLogit爆炸。</p>
+<p>在实际使用中，MuonClip为了避免过度裁剪，对Attention的多个Head分别进行监控MaxLogit和QK-Clip，并且由于Kimi-K2使用了MLA，所以上述公式更新为：</p>
+<p><span class="math display">\[
+\begin{align}
+    &amp;if\ S_{max}^{(l,h)} &gt; \tau: \\
+    &amp;\qquad if\ W \in \{W_{qc}^{(l,h)}, W_{kc}^{(l,h)}\}: \\
+    &amp;\qquad \qquad W_t \leftarrow W_t \times \sqrt{\tau /
+S_{max}^{(l,h)}} \\
+    &amp;\qquad elif\ W \in \{W_{qr}^{(l,h)}\}: \\
+    &amp;\qquad \qquad W_t \leftarrow W_t \times \tau / S_{max}^{(l,h)}
+\end{align}
+\]</span></p>
+<div class="note info"><p>MLA的<span class="math inline">\(Q,K\)</span>有<span class="math inline">\(qr、qc、kr、kc\)</span>四部分，其中<span class="math inline">\(kr\)</span>是所有Head共享的。</p>
+</div>
+<div class="note info"><p>不管哪种Attention变体都有多个Head，一开始我们是每一层Attention只监控一个MaxLogit指标，所有Head的Logit是放在一起取Max的，这导致QK-Clip也是所有Head一起Clip的。<br>
+然而，实际上每层只有为数不多的Head会出现MaxLogit爆炸，如果所有Head按同一个比例来Clip，那么大部份Head都是被“无辜受累”的了，这就是过度裁剪的含义。</p>
+</div>
+<h1 id="todo">TODO</h1>
+<ol type="1">
+<li>画完上面的图。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>optimizer</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DeepSeekMoE+MTP</title>
     <url>/2025/06/30/DeepSeekMoE-MTP/</url>
     <content><![CDATA[<ul>
@@ -984,8 +1129,8 @@ mK-K_s), \\
         <category>学习</category>
       </categories>
       <tags>
-        <tag>DeepSeek</tag>
         <tag>MoE</tag>
+        <tag>DeepSeek</tag>
       </tags>
   </entry>
   <entry>

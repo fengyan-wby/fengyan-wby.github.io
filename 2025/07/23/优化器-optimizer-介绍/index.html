@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CMa+Shan+Zheng:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍SGD、SGDM、Adagrad、RMSProp、Adam等优化器算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优化器(optimizer)介绍">
+<meta property="og:url" content="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="丰言的博客">
+<meta property="og:description" content="介绍SGD、SGDM、Adagrad、RMSProp、Adam等优化器算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_2.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/5_1.png">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/6_1.png">
+<meta property="article:published_time" content="2025-07-23T16:55:59.000Z">
+<meta property="article:modified_time" content="2025-07-24T08:27:22.989Z">
+<meta property="article:author" content="丰言">
+<meta property="article:tag" content="optimizer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_2.png">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/","path":"2025/07/23/优化器-optimizer-介绍/","title":"优化器(optimizer)介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>优化器(optimizer)介绍 | 丰言的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰言的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">76</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">84</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sgd"><span class="nav-number">1.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sgdm"><span class="nav-number">2.</span> <span class="nav-text">SGDM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adagrad"><span class="nav-number">3.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rmsprop"><span class="nav-number">4.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adam"><span class="nav-number">5.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#muon"><span class="nav-number">6.</span> <span class="nav-text">Muon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#muonclip"><span class="nav-number">6.1.</span> <span class="nav-text">MuonClip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#todo"><span class="nav-number"></span> <span class="nav-text">TODO</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="丰言"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">丰言</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/" title="2025&#x2F;07&#x2F;23&#x2F;优化器-optimizer-介绍&#x2F;">优化器(optimizer)介绍</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/06/30/DeepSeekMoE-MTP/" title="2025&#x2F;06&#x2F;30&#x2F;DeepSeekMoE-MTP&#x2F;">DeepSeekMoE+MTP</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/04/27/MCP%E4%BB%8B%E7%BB%8D/" title="2025&#x2F;04&#x2F;27&#x2F;MCP介绍&#x2F;">MCP介绍</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/03/06/PPO-GRPO/" title="2025&#x2F;03&#x2F;06&#x2F;PPO-GRPO&#x2F;">PPO&GRPO</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/03/04/Pytorch%E5%AE%9E%E7%8E%B0AverageModel/" title="2025&#x2F;03&#x2F;04&#x2F;Pytorch实现AverageModel&#x2F;">Pytorch实现AverageModel</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="丰言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰言的博客">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="优化器(optimizer)介绍 | 丰言的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          优化器(optimizer)介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-23 16:55:59" itemprop="dateCreated datePublished" datetime="2025-07-23T16:55:59+00:00">2025-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-24 08:27:22" itemprop="dateModified" datetime="2025-07-24T08:27:22+00:00">2025-07-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2025/07/23/优化器-optimizer-介绍/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>介绍SGD、SGDM、Adagrad、RMSProp、Adam等优化器算法</p>
+<span id="more"></span>
+<h2 id="sgd">SGD</h2>
+<p>SGD全称Stochastic Gradient
+Descent，随机梯度下降，1847年提出。每次选择一个mini-batch，而不是全部样本，使用梯度下降来更新模型参数。它解决了随机小批量样本的问题，但仍然有自适应学习率、容易卡在梯度较小点等问题。</p>
+<p>SGD的计算公式为：</p>
+<p><span class="math display">\[\theta^t = \theta^{t-1} - \eta
+g^{t-1}\]</span></p>
+<p>其中，<span class="math inline">\(\eta\)</span>为学习率，<span class="math inline">\(g^{t-1}\)</span>为<span class="math inline">\(t-1\)</span>时刻的梯度。</p>
+<p>SGD计算过程如下图所示：</p>
+<!-- ![]() -->
+<h2 id="sgdm">SGDM</h2>
+<p>SGDM即为SGD with
+momentum，它在SGD的基础上加入了动量机制，1986年提出。</p>
+<p>SGDM的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} - \eta m_t \\
+    m_t = \lambda m_{t-1} + g_{t-1}
+\end{align}
+\]</span></p>
+<p>SGDM计算过程如下图所示：</p>
+<!-- ![]() -->
+<p>可以看到，此时<span class="math inline">\(\theta^{t-1}\)</span>减去的不再是当前的梯度，而是前<span class="math inline">\(t-1\)</span>次迭代的梯度的加权累积。其中<span class="math inline">\(\lambda\)</span>为衰减权重，越远的迭代权重越小。<br>
+从而我们可以发现，SGDM相比于SGD的差别就在于，参数更新时，不仅仅减去了当前迭代的梯度，还减去了前<span class="math inline">\(t-1\)</span>迭代的梯度的加权和。加入动量后，参数更新就可以保持之前更新趋势，而不会卡在当前梯度较小的点了。如下图所示：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_2.png"></p>
+<p>美中不足的是，SGDM没有考虑对学习率进行自适应更新，故学习率的选择很关键。</p>
+<h2 id="adagrad">Adagrad</h2>
+<p>Adagrad在2011年提出，它利用迭代次数和累积梯度，对学习率进行自动衰减，从而使得刚开始迭代时，学习率较大，可以快速收敛。而后来则逐渐减小，精调参数，使得模型可以稳定找到最优点。</p>
+<p>Adagrad的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} -
+\frac{\eta}{\sqrt{\sum_{t=0}^{t-1}(g_i^2)}}g_{t-1}
+\end{align}
+\]</span></p>
+<p>Adagrad与SGD的区别在于学习率除以前<span class="math inline">\(t-1\)</span>迭代的梯度的平方和,故称为自适应梯度下降。</p>
+<p>但Adagrad有个致命问题，就是没有考虑迭代衰减。极端情况，如果刚开始的梯度特别大，而后面的比较小，则学习率基本不会变化了，也就谈不上自适应学习率了。这个问题在RMSProp中得到了修正。</p>
+<h2 id="rmsprop">RMSProp</h2>
+<p>RMSProp的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t = \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}g_{t-1} \\
+    v_t = \alpha v_{t-1} + (1 - \alpha)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>在RMSProp中，梯度累积不是简单的前<span class="math inline">\(t-1\)</span>次迭代梯度的平方和了，而是加入了衰减因子α，越远的迭代梯度权重越小。</p>
+<h2 id="adam">Adam</h2>
+<p>Adam在2015年提出，是SGDM和RMSProp的结合。</p>
+<p>回顾上面说的SGDM和RMSProp。</p>
+<p>SGDM的计算公式：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \eta m_t \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1}
+\end{align}
+\]</span></p>
+<p>RMSProp的计算公式：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>结合上面两式，则Adam的计算公式为：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{v_t}}m_t \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<div class="note info"><p>Adam在真实使用时还加入了de-biasing，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    \theta^t &amp;= \theta^{t-1} - \frac{\eta}{\sqrt{\hat{v_t} +
+\epsilon}}\hat{m_t} \\
+    \hat{m_t} &amp;= \frac{m_t}{1-\beta_1^t} \\
+    \hat{v_t} &amp;= \frac{v_t}{1-\beta_2^t} \\
+    m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)g_{t-1} \\
+    v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2)g_{t-1}^2
+\end{align}
+\]</span></p>
+<p>其中<span class="math inline">\(\beta_1\)</span>取值一般为0.9，<span class="math inline">\(\beta_2\)</span>取值一般为0.999，<span class="math inline">\(\epsilon\)</span>取值一般为<span class="math inline">\(10^{-8}\)</span>。</p>
+<p>更进一步，AdamW引入了weight decay，计算过程如下所示：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/5_1.png"></p>
+</div>
+<h2 id="muon">Muon</h2>
+<ul>
+<li>参考<a target="_blank" rel="noopener" href="https://kellerjordan.github.io/posts/muon/">https://kellerjordan.github.io/posts/muon/</a></li>
+</ul>
+<p>Muon的计算过程为：</p>
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/6_1.png"></p>
+<p>其中<span class="math inline">\(B_t\)</span>即相当于之前的<span class="math inline">\(m_t\)</span>，NewtonSchulz5为Newton-schulz矩阵迭代：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Pytorch code</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">newtonschulz5</span>(<span class="params">G, steps=<span class="number">5</span>, eps=<span class="number">1e-7</span></span>):</span><br><span class="line">    <span class="keyword">assert</span> G.ndim == <span class="number">2</span></span><br><span class="line">    a, b, c = (<span class="number">3.4445</span>, -<span class="number">4.7750</span>, <span class="number">2.0315</span>)</span><br><span class="line">    X = G.bfloat16()</span><br><span class="line">    X /= (X.norm() + eps)</span><br><span class="line">    <span class="keyword">if</span> G.size(<span class="number">0</span>) &gt; G.size(<span class="number">1</span>):</span><br><span class="line">        X = X.T</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(steps):</span><br><span class="line">        A = X @ X.T</span><br><span class="line">        B = b * A + c * A @ A</span><br><span class="line">        X = a * X + B @ X</span><br><span class="line">    <span class="keyword">if</span> G.size(<span class="number">0</span>) &gt; G.size(<span class="number">1</span>):</span><br><span class="line">        X = X.T</span><br><span class="line">    <span class="keyword">return</span> X</span><br></pre></td></tr></table></figure>
+<h3 id="muonclip">MuonClip</h3>
+<p>参考<a target="_blank" rel="noopener" href="https://github.com/MoonshotAI/Kimi-K2/blob/main/tech_report.pdf">https://github.com/MoonshotAI/Kimi-K2/blob/main/tech_report.pdf</a></p>
+<p>MuonClip在Kimi-K2中被使用。他们发现大模型训练存在MaxLogit爆炸现象，MaxLogit爆炸是指，<span class="math inline">\(S_{max}\)</span>随着训练的推进一直往上涨，增长速度是线性甚至是超线性的，并且在相当长的时间内没有稳定的迹象。</p>
+<p><span class="math display">\[S_{max} = \max \limits_{i,j} q_i
+k_j\]</span></p>
+<p>因为：</p>
+<p><span class="math inline">\(|q_ik_j| \leq ||q_i|| ||k_j|| =
+||x_iW_q|| ||x_jW_k|| \leq ||x_i|| ||x_j|| ||W_q|| ||W_k||\)</span></p>
+<p>由于<span class="math inline">\(x\)</span>通常会加RMSNorm，所以一般情况下<span class="math inline">\(||x_i||||x_j||\)</span>是不会爆炸的，因此MaxLogit爆炸意味着谱范数<span class="math inline">\(||Wq||,||Wk||\)</span>有往无穷大发展的风险，可能会导致训练崩溃。因此，保险起见应当尽量避免MaxLogit爆炸的出现。</p>
+<p>MuonClip在Muon的基础上使用了QK-Clip，如下所示：</p>
+<p><span class="math display">\[
+\begin{align}
+    if\ S_{max}^{(l)} &gt; \tau \ and \ W \in \{W_q^{(l)}, W_k^{(l)}\}:
+\\
+    W_t \leftarrow W_t \times \sqrt{\tau / S_{max}^{(l)}}
+\end{align}
+\]</span></p>
+<p>也就是说，在优化器更新之后，根据<span class="math inline">\(S_{max}^{(l)}\)</span>的大小来决定是否对<span class="math inline">\(Q,K\)</span>的权重进行裁剪，裁剪的幅度直接由<span class="math inline">\(S_{max}^{(l)}\)</span>与阈值<span class="math inline">\(\tau\)</span>的比例来决定，直接保证裁剪后的矩阵不再MaxLogit爆炸。</p>
+<p>在实际使用中，MuonClip为了避免过度裁剪，对Attention的多个Head分别进行监控MaxLogit和QK-Clip，并且由于Kimi-K2使用了MLA，所以上述公式更新为：</p>
+<p><span class="math display">\[
+\begin{align}
+    &amp;if\ S_{max}^{(l,h)} &gt; \tau: \\
+    &amp;\qquad if\ W \in \{W_{qc}^{(l,h)}, W_{kc}^{(l,h)}\}: \\
+    &amp;\qquad \qquad W_t \leftarrow W_t \times \sqrt{\tau /
+S_{max}^{(l,h)}} \\
+    &amp;\qquad elif\ W \in \{W_{qr}^{(l,h)}\}: \\
+    &amp;\qquad \qquad W_t \leftarrow W_t \times \tau / S_{max}^{(l,h)}
+\end{align}
+\]</span></p>
+<div class="note info"><p>MLA的<span class="math inline">\(Q,K\)</span>有<span class="math inline">\(qr、qc、kr、kc\)</span>四部分，其中<span class="math inline">\(kr\)</span>是所有Head共享的。</p>
+</div>
+<div class="note info"><p>不管哪种Attention变体都有多个Head，一开始我们是每一层Attention只监控一个MaxLogit指标，所有Head的Logit是放在一起取Max的，这导致QK-Clip也是所有Head一起Clip的。<br>
+然而，实际上每层只有为数不多的Head会出现MaxLogit爆炸，如果所有Head按同一个比例来Clip，那么大部份Head都是被“无辜受累”的了，这就是过度裁剪的含义。</p>
+</div>
+<h1 id="todo">TODO</h1>
+<ol type="1">
+<li>画完上面的图。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>丰言
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/" title="优化器(optimizer)介绍">https://fengyan-wby.github.io/2025/07/23/优化器-optimizer-介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/optimizer/" rel="tag"><i class="fa fa-tag"></i> optimizer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/30/DeepSeekMoE-MTP/" rel="prev" title="DeepSeekMoE+MTP">
+                  <i class="fa fa-angle-left"></i> DeepSeekMoE+MTP
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2023 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">丰言</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">220k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">13:19</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

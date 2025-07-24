@@ -32,7 +32,7 @@
 <meta property="og:description" content="由于需要在多个设备上更新Hexo博客，所以我在仓库中建立了两个分支，一个用来存放hexo generate生成的静态文件，一个用来存放博客源码。这样就可以在不同设备中通过git来管理博客。 这样就会导致一个问题，博客源码中一些没办法公开的东西也在仓库中被展示了出来。所以想着能不能将整个仓库变为private，从而隐藏信息。 然后就出现了一个新的问题，将仓库设置为private之后用github p">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-05T16:04:08.000Z">
-<meta property="article:modified_time" content="2025-07-03T03:01:25.063Z">
+<meta property="article:modified_time" content="2025-07-24T08:27:22.779Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="hexo">
 <meta name="twitter:card" content="summary">
@@ -94,7 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">75</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">83</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">76</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">84</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">84</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -170,7 +170,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-count">76</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -457,6 +457,9 @@ if(canvas.getContext){
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/" title="2025&#x2F;07&#x2F;23&#x2F;优化器-optimizer-介绍&#x2F;">优化器(optimizer)介绍</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/06/30/DeepSeekMoE-MTP/" title="2025&#x2F;06&#x2F;30&#x2F;DeepSeekMoE-MTP&#x2F;">DeepSeekMoE+MTP</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -467,9 +470,6 @@ if(canvas.getContext){
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/03/04/Pytorch%E5%AE%9E%E7%8E%B0AverageModel/" title="2025&#x2F;03&#x2F;04&#x2F;Pytorch实现AverageModel&#x2F;">Pytorch实现AverageModel</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/02/18/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Better-Faster-Large-Language-Models-via-Multi-token-Prediction/" title="2025&#x2F;02&#x2F;18&#x2F;【文献阅读】Better-Faster-Large-Language-Models-via-Multi-token-Prediction&#x2F;">【文献阅读】Better & Faster Large Language Models via Multi-token Prediction</a>
         </li>
     </ul>
   </div>
@@ -535,7 +535,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-03 03:01:25" itemprop="dateModified" datetime="2025-07-03T03:01:25+00:00">2025-07-03</time>
+      <time title="修改时间：2025-07-24 08:27:22" itemprop="dateModified" datetime="2025-07-24T08:27:22+00:00">2025-07-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -701,14 +701,14 @@ Actions就会自动生成静态文件并发布到public仓库上，博客网页�
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">218k</span>
+    <span title="站点总字数">220k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">13:13</span>
+    <span title="站点阅读时长">13:19</span>
   </span>
 </div>
 <div class="busuanzi-count">
