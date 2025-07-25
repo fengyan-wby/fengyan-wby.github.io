@@ -187,7 +187,7 @@ Descent，随机梯度下降，1847年提出。每次选择一个mini-batch，�
 g^{t-1}\]</span></p>
 <p>其中，<span class="math inline">\(\eta\)</span>为学习率，<span class="math inline">\(g^{t-1}\)</span>为<span class="math inline">\(t-1\)</span>时刻的梯度。</p>
 <p>SGD计算过程如下图所示：</p>
-<!-- ![]() -->
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/1_1.jpg"></p>
 <h2 id="sgdm">SGDM</h2>
 <p>SGDM即为SGD with
 momentum，它在SGD的基础上加入了动量机制，1986年提出。</p>
@@ -199,7 +199,7 @@ momentum，它在SGD的基础上加入了动量机制，1986年提出。</p>
 \end{align}
 \]</span></p>
 <p>SGDM计算过程如下图所示：</p>
-<!-- ![]() -->
+<p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_1.jpg"></p>
 <p>可以看到，此时<span class="math inline">\(\theta^{t-1}\)</span>减去的不再是当前的梯度，而是前<span class="math inline">\(t-1\)</span>次迭代的梯度的加权累积。其中<span class="math inline">\(\lambda\)</span>为衰减权重，越远的迭代权重越小。<br>
 从而我们可以发现，SGDM相比于SGD的差别就在于，参数更新时，不仅仅减去了当前迭代的梯度，还减去了前<span class="math inline">\(t-1\)</span>迭代的梯度的加权和。加入动量后，参数更新就可以保持之前更新趋势，而不会卡在当前梯度较小的点了。如下图所示：</p>
 <p><img src="/2025/07/23/%E4%BC%98%E5%8C%96%E5%99%A8-optimizer-%E4%BB%8B%E7%BB%8D/2_2.png"></p>
@@ -209,8 +209,8 @@ momentum，它在SGD的基础上加入了动量机制，1986年提出。</p>
 <p>Adagrad的计算公式为：</p>
 <p><span class="math display">\[
 \begin{align}
-    \theta^t = \theta^{t-1} -
-\frac{\eta}{\sqrt{\sum_{t=0}^{t-1}(g_i^2)}}g_{t-1}
+    \theta^t = \theta^{t-1} - \frac{\eta}{\sqrt{\sum
+\limits_{t=0}^{t-1}(g_i^2)}}g_{t-1}
 \end{align}
 \]</span></p>
 <p>Adagrad与SGD的区别在于学习率除以前<span class="math inline">\(t-1\)</span>迭代的梯度的平方和,故称为自适应梯度下降。</p>
@@ -303,13 +303,8 @@ S_{max}^{(l,h)}} \\
 \]</span></p>
 <div class="note info"><p>MLA的<span class="math inline">\(Q,K\)</span>有<span class="math inline">\(qr、qc、kr、kc\)</span>四部分，其中<span class="math inline">\(kr\)</span>是所有Head共享的。</p>
 </div>
-<div class="note info"><p>不管哪种Attention变体都有多个Head，一开始我们是每一层Attention只监控一个MaxLogit指标，所有Head的Logit是放在一起取Max的，这导致QK-Clip也是所有Head一起Clip的。<br>
-然而，实际上每层只有为数不多的Head会出现MaxLogit爆炸，如果所有Head按同一个比例来Clip，那么大部份Head都是被“无辜受累”的了，这就是过度裁剪的含义。</p>
+<div class="note info"><p>不管哪种Attention变体都有多个Head，如果每一层Attention只监控一个MaxLogit指标，所有Head的Logit是放在一起取Max的，这导致QK-Clip是将所有Head一起Clip的。然而，实际上每层只有为数不多的Head会出现MaxLogit爆炸，如果所有Head按同一个比例来Clip，那么大部份Head都是被“无辜受累”的了，这就是过度裁剪的含义。</p>
 </div>
-<h1 id="todo">TODO</h1>
-<ol type="1">
-<li>画完上面的图。</li>
-</ol>
 ]]></content>
       <categories>
         <category>算法</category>
