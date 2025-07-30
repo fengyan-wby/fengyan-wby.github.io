@@ -178,16 +178,13 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
     <title>git merge和git rebase的区别</title>
     <url>/2025/07/30/git-merge%E5%92%8Cgit-rebase%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<p>参考<a href="https://blog.csdn.net/u010698107/article/details/129000177">https://blog.csdn.net/u010698107/article/details/129000177</a></p>
-<p>Git版本控制中，git rebase 和 git merge
-这两个命令都可以用来集成从一个分支和另一个分支的更改。它们是两种不同的合并方法，本文将介绍它们的差异。</p>
+<p>Git版本控制中，<code>git rebase</code>和<code>git merge</code>这两个命令都可以用来集成从一个分支和另一个分支的更改。它们是两种不同的合并方法，本文将介绍它们的差异。</p>
 <span id="more"></span>
 <p>下面举例说明一下这两个命令的区别，从<code>master</code>拉一个叫<code>feature</code>的分支出来:</p>
 <p><img src="/2025/07/30/git-merge%E5%92%8Cgit-rebase%E7%9A%84%E5%8C%BA%E5%88%AB/1.png" width="200"></p>
-<p>在<code>feature</code>分支进行了两次提交(C5、C6)，此时其它人也进行了两次提交(C3、C4)，并且合并到了
-<code>master</code> 分支:</p>
+<p>在<code>feature</code>分支进行了两次提交(C5、C6)，此时其它人也进行了两次提交(C3、C4)，并且合并到了<code>master</code>分支:</p>
 <p><img src="/2025/07/30/git-merge%E5%92%8Cgit-rebase%E7%9A%84%E5%8C%BA%E5%88%AB/2.png" width="500"></p>
-<p>feature分支和master分支需要进行分支合并，下面来演示git rebase 和 git
-merge 这两个命令的差异。</p>
+<p><code>feature</code>分支和<code>master</code>分支需要进行分支合并，下面来演示<code>git rebase</code>和<code>git merge</code>这两个命令的差异。</p>
 <h2 id="git-merge操作"><code>git merge</code>操作</h2>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout feature</span><br><span class="line">git pull origin master  <span class="comment"># 相当于git fetch origin master + git merge origin/master feature</span></span><br></pre></td></tr></table></figure>
 <p><code>git merge</code>命令会在<code>feature</code>分支创建一个新的“合并的提交”(merge
