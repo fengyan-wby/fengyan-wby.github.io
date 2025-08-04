@@ -29,15 +29,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
-    
-    <lastmod>2025-08-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/categories/index.html</loc>
     
     <lastmod>2025-08-04</lastmod>
@@ -47,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/ghchart/index.html</loc>
+    <loc>https://fengyan-wby.github.io/archives/index.html</loc>
     
     <lastmod>2025-08-04</lastmod>
     
@@ -56,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/</loc>
+    <loc>https://fengyan-wby.github.io/ghchart/index.html</loc>
     
     <lastmod>2025-08-04</lastmod>
     
@@ -75,6 +66,15 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/2024/01/23/%E8%AF%AD%E4%B9%89%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E4%B9%8B%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</loc>
+    
+    <lastmod>2025-08-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/2023/10/25/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E5%AD%A6%E4%B9%A0/</loc>
     
     <lastmod>2025-08-04</lastmod>
     
@@ -881,6 +881,13 @@
   </url>
   
   <url>
+    <loc>https://fengyan-wby.github.io/tags/DeepSeek/</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://fengyan-wby.github.io/tags/MoE/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
@@ -889,13 +896,6 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/MTP/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fengyan-wby.github.io/tags/DeepSeek/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -951,13 +951,6 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/KMP/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://fengyan-wby.github.io/tags/Java/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
@@ -966,6 +959,13 @@
   
   <url>
     <loc>https://fengyan-wby.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengyan-wby.github.io/tags/KMP/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1119,14 +1119,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
+    <loc>https://fengyan-wby.github.io/tags/PEFT/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/PEFT/</loc>
+    <loc>https://fengyan-wby.github.io/tags/BERT/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1343,14 +1343,14 @@
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</loc>
+    <loc>https://fengyan-wby.github.io/tags/MCTS/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://fengyan-wby.github.io/tags/MCTS/</loc>
+    <loc>https://fengyan-wby.github.io/tags/%E6%B5%8B%E5%9C%B0%E7%BA%BF%E8%B7%9D%E7%A6%BB/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
