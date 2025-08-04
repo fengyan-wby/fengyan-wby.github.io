@@ -175,6 +175,57 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>【文献阅读】Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention</title>
+    <url>/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/</url>
+    <content><![CDATA[<p>论文地址：</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2502.11089">https://arxiv.org/pdf/2502.11089</a></li>
+</ul>
+<p>Native Sparse
+Attention(NSA)是DeepSeek-AI团队开发的框架，用以解决Transformer架构中注意力机制<span class="math inline">\(O(n^2)\)</span>复杂度的问题。</p>
+<span id="more"></span>
+<p>参数的设定：</p>
+<ul>
+<li>序列长度设定为N=32k，即32768，相当于一本短篇小说的长度</li>
+<li>滑动窗口大小w=512</li>
+<li>压缩块大小l=32</li>
+<li>压缩块步长d=16</li>
+<li>选择块大小l'=64</li>
+<li>选择块数量n=16</li>
+</ul>
+<h2 id="设计理念">设计理念</h2>
+<p>NSA的核心设计哲学源于对人类阅读行为的深入观察。人类在处理长文档时并非对每个词语给予相等的注意力，而是采用分层的认知策略。这种策略可以概括为三个并行的注意力机制：专注于当前句子的本地上下文处理、回顾前文章节的全局摘要理解，以及对关键段落和重要信息的选择性关注。</p>
+<p>NSA将这种认知模式转化为三个计算分支：</p>
+<ol type="1">
+<li>Sliding Window：专注于当前句子的本地上下文</li>
+<li>Token Compression：提供全局摘要</li>
+<li>Token Selection：实现关键信息扫描</li>
+</ol>
+<p>这三个分支的输出通过门控机制智能融合，形成完整的语义理解。</p>
+<h2 id="sliding-window">Sliding Window</h2>
+<p>滑动窗口分支旨在保留最近本地上下文中的细粒度信息，确保模型对当前位置附近的语义关系具有高精度的理解能力。</p>
+<p>该分支将注意力计算限制在最近的<span class="math inline">\(w=512\)</span>个键值对范围内，并在此局部窗口上执行标准的注意力计算。计算公式如下所示：</p>
+<p><span class="math display">\[Output_{win}=Attention(q_t, K_{t-w:t},
+V_{t-w:t})\]</span></p>
+<div class="note info"><p>计算复杂度分析： 处理单个token的计算成本为<span class="math inline">\(O(w)\)</span>，这是一个与整体序列长度<span class="math inline">\(N\)</span>无关的常数。整个序列的总计算成本为<span class="math inline">\(O(N*w)\)</span>，相比标准的<span class="math inline">\(O(N^2)\)</span>复杂度实现了线性化的显著改进。</p>
+</div>
+<h2 id="token-compression">Token Compression</h2>
+<h2 id="token-selection">Token Selection</h2>
+<h3 id="blockwise-selection">Blockwise Selection</h3>
+<h3 id="importance-score-computation">Importance Score Computation</h3>
+<h3 id="top-𝑛-block-selection">Top-𝑛 Block Selection</h3>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>文献阅读</category>
+      </categories>
+      <tags>
+        <tag>文献阅读</tag>
+        <tag>Attention</tag>
+        <tag>NSA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>How continuous batching enables 23x throughput in LLM inference while reducing p50 latency</title>
     <url>/2025/08/01/How-continuous-batching-enables-23x-throughput-in-LLM-inference-while-reducing-p50-latency/</url>
     <content><![CDATA[<p>参考<a href="https://www.anyscale.com/blog/continuous-batching-llm-inference">https://www.anyscale.com/blog/continuous-batching-llm-inference</a></p>
