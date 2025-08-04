@@ -31,13 +31,18 @@
 <meta property="og:site_name" content="丰言的博客">
 <meta property="og:description" content="论文地址：  https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2502.11089  Native Sparse Attention(NSA)是DeepSeek-AI团队开发的框架，用以解决Transformer架构中注意力机制\(O(n^2)\)复杂度的问题。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/2_1.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_1.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_2.jpg">
+<meta property="og:image" content="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/4_1.jpg">
 <meta property="article:published_time" content="2025-08-04T11:23:46.000Z">
-<meta property="article:modified_time" content="2025-08-04T06:46:49.467Z">
+<meta property="article:modified_time" content="2025-08-04T09:50:35.058Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="Attention">
 <meta property="article:tag" content="NSA">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/2_1.jpg">
 
 
 <link rel="canonical" href="https://fengyan-wby.github.io/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/">
@@ -147,7 +152,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">设计理念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sliding-window"><span class="nav-number">2.</span> <span class="nav-text">Sliding Window</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-compression"><span class="nav-number">3.</span> <span class="nav-text">Token Compression</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-selection"><span class="nav-number">4.</span> <span class="nav-text">Token Selection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#blockwise-selection"><span class="nav-number">4.1.</span> <span class="nav-text">Blockwise Selection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#importance-score-computation"><span class="nav-number">4.2.</span> <span class="nav-text">Importance Score Computation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top-%F0%9D%91%9B-block-selection"><span class="nav-number">4.3.</span> <span class="nav-text">Top-𝑛 Block Selection</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">设计理念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sliding-window"><span class="nav-number">2.</span> <span class="nav-text">Sliding Window</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-compression"><span class="nav-number">3.</span> <span class="nav-text">Token Compression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A41%E4%BB%8E32768%E4%B8%AAtoken%E7%9A%84%E5%8E%9F%E6%96%87%E7%94%9F%E6%88%902047%E4%B8%AAtoken%E7%9A%84%E6%91%98%E8%A6%81"><span class="nav-number">3.1.</span> <span class="nav-text">步骤1：从32768个token的原文生成2047个token的摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A42%E5%9C%A8%E6%91%98%E8%A6%81%E4%B8%8A%E8%BF%9B%E8%A1%8C%E6%B3%A8%E6%84%8F%E5%8A%9B%E8%AE%A1%E7%AE%97"><span class="nav-number">3.2.</span> <span class="nav-text">步骤2：在摘要上进行注意力计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-selection"><span class="nav-number">4.</span> <span class="nav-text">Token Selection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#blockwise-selection-importance-score-computation"><span class="nav-number">4.1.</span> <span class="nav-text">Blockwise
+Selection &amp; Importance Score Computation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top-%F0%9D%91%9B-block-selection"><span class="nav-number">4.2.</span> <span class="nav-text">Top-𝑛 Block Selection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%A8%E6%8E%A7%E8%BE%93%E5%87%BA%E8%9E%8D%E5%90%88%E6%9C%BA%E5%88%B6"><span class="nav-number">5.</span> <span class="nav-text">门控输出融合机制</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -532,7 +538,7 @@ if(canvas.getContext){
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-08-04 11:23:46 / 修改时间：06:46:49" itemprop="dateCreated datePublished" datetime="2025-08-04T11:23:46+00:00">2025-08-04</time>
+      <time title="创建时间：2025-08-04 11:23:46 / 修改时间：09:50:35" itemprop="dateCreated datePublished" datetime="2025-08-04T11:23:46+00:00">2025-08-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -577,14 +583,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>516</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>5 分钟</span>
     </span>
 </div>
 
@@ -608,7 +614,8 @@ Attention(NSA)是DeepSeek-AI团队开发的框架，用以解决Transformer架�
 <li>压缩块大小l=32</li>
 <li>压缩块步长d=16</li>
 <li>选择块大小l'=64</li>
-<li>选择块数量n=16</li>
+<li>选择块数量n=16
+注意，为了方便，下面所有的计算都忽略了MultiHead。</li>
 </ul>
 <h2 id="设计理念">设计理念</h2>
 <p>NSA的核心设计哲学源于对人类阅读行为的深入观察。人类在处理长文档时并非对每个词语给予相等的注意力，而是采用分层的认知策略。这种策略可以概括为三个并行的注意力机制：专注于当前句子的本地上下文处理、回顾前文章节的全局摘要理解，以及对关键段落和重要信息的选择性关注。</p>
@@ -624,13 +631,59 @@ Attention(NSA)是DeepSeek-AI团队开发的框架，用以解决Transformer架�
 <p>该分支将注意力计算限制在最近的<span class="math inline">\(w=512\)</span>个键值对范围内，并在此局部窗口上执行标准的注意力计算。计算公式如下所示：</p>
 <p><span class="math display">\[Output_{win}=Attention(q_t, K_{t-w:t},
 V_{t-w:t})\]</span></p>
+<p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/2_1.jpg" width="300"></p>
 <div class="note info"><p>计算复杂度分析： 处理单个token的计算成本为<span class="math inline">\(O(w)\)</span>，这是一个与整体序列长度<span class="math inline">\(N\)</span>无关的常数。整个序列的总计算成本为<span class="math inline">\(O(N*w)\)</span>，相比标准的<span class="math inline">\(O(N^2)\)</span>复杂度实现了线性化的显著改进。</p>
 </div>
 <h2 id="token-compression">Token Compression</h2>
+<p>压缩分支负责快速高效地构建整个序列历史的粗粒度全局视图，这是理解文档整体结构和主题的关键步骤。</p>
+<h3 id="步骤1从32768个token的原文生成2047个token的摘要">步骤1：从32768个token的原文生成2047个token的摘要</h3>
+<p>在序列上滑动大小为<span class="math inline">\(l=32\)</span>的窗口，每次前进<span class="math inline">\(d=16\)</span>个token，形成50%的重叠覆盖。这种重叠设计可以减轻块边界处的信息碎片化现象，确保生成的摘要具有良好的连续性。这样，长度为<span class="math inline">\(N=32768\)</span>的序列就可以被分割为2047个块，这里的块被称为压缩块，如下图所示：</p>
+<p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_1.jpg" width="600"></p>
+<div class="note info"><p>Token Compression生成的块的数量可以由公式<span class="math inline">\(floor(\frac{N-l}{d})\)</span>计算得到，其中<span class="math inline">\(N\)</span>为序列长度，<span class="math inline">\(l\)</span>为压缩块大小，<span class="math inline">\(d\)</span>为压缩步长。<br>
+代入可得<span class="math inline">\(压缩块数量=floor(\frac{32768 -
+16}{16})=2047\)</span>。</p>
+</div>
+<p>通过上述步骤，原始的长度为32768的token序列被转换为包含2047个压缩块的表示，每个块由32个token组成。假设每个Attention
+Head的维度<span class="math inline">\(d_k=128\)</span>，则矩阵形状可表示为<code>[32, 128]</code>。
+论文指出，为保持向量的局部顺序信息，系统会向这些向量添加块内位置编码。然后矩阵通过一个小型的MLP（论文中记为<span class="math inline">\(\phi\)</span>，MLP通过多层线性变换和非线性激活函数，学习如何从32个输入token中提取和聚合最重要的语义信息），得到形状为<code>[1, 128]</code>的输出。如下图所示：</p>
+<p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_2.jpg" width="600"></p>
+<p>这一过程在所有2047个块上重复执行，最终生成形状为<code>[2047, 128]</code>的压缩键矩阵<span class="math inline">\(K_{cmp}\)</span>，同理可以得到压缩值矩阵<span class="math inline">\(V_{cmp}\)</span>。</p>
+<p>这样，注意力计算只需要在长度为2047的摘要上进行，而不需要对原始的N个token进行注意力计算，相当于序列长度由原来的32768缩减为2047。</p>
+<h3 id="步骤2在摘要上进行注意力计算">步骤2：在摘要上进行注意力计算</h3>
+<p>接下来在<span class="math inline">\(q_t,\ K_{cmp},\
+V_{cmp}\)</span>上进行标准的注意力计算，如下式所示：</p>
+<p><span class="math display">\[
+\begin{align}
+p_{cmp}&amp;=Softmax(q_t K_{cmp}^T) \\
+Output_{cmp} &amp;= p_{cmp}V_{cmp}
+\end{align}
+\]</span></p>
+<p>其中，<span class="math inline">\(q_t \in R^{1 \times
+128}\)</span>，<span class="math inline">\(K_{cmp} \in R^{2047 \times
+128}\)</span>，<span class="math inline">\(V_{cmp} \in R^{2047 \times
+128}\)</span>，注意力分数<span class="math inline">\(p_{cmp} \in R^{1
+\times 2047}\)</span>，<span class="math inline">\(Output_{cmp} \in R^{1
+\times 128}\)</span>。</p>
 <h2 id="token-selection">Token Selection</h2>
-<h3 id="blockwise-selection">Blockwise Selection</h3>
-<h3 id="importance-score-computation">Importance Score Computation</h3>
+<p>选择分支专注于捕获关键的长程细粒度依赖关系，通过将计算资源集中于文本中最相关的部分来实现这一目标。</p>
+<h3 id="blockwise-selection-importance-score-computation">Blockwise
+Selection &amp; Importance Score Computation</h3>
+<p>首先将原文分成512个块，每个块的大小为64（<span class="math inline">\(512 \times
+64=32768\)</span>），这里的块被称为选择块。对于选择块i，通过对与其空间有重叠的压缩块的<span class="math inline">\(p_{cmp}\)</span>分数进行求和来计算选择块的重要性分数，计算方法如下：</p>
+<p><span class="math display">\[p_t^{slc}[i] = \sum_{j \in overlapping\
+blocks}p_t^{cmp}[j]\]</span></p>
+<p>计算图示如下所示：</p>
+<p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/4_1.jpg" width="600"></p>
 <h3 id="top-𝑛-block-selection">Top-𝑛 Block Selection</h3>
+<p>得到了每个选择块的分数之后，我们需要从中选出最具有潜力的块进行进一步详细的分析，论文中直接选取Top16个分数最高的选择块进行注意力计算，如下所示：</p>
+<p><span class="math display">\[Output_{slc} = Attention(q_t, K_{slc},
+V_{slc})\]</span></p>
+<p>其中，<span class="math inline">\(q_t \in R^{1 \times
+128}\)</span>，<span class="math inline">\(K_{slc} \in R^{64 \times
+128}\)</span>，<span class="math inline">\(V_{slc} \in R^{64 \times
+128}\)</span>，<span class="math inline">\(Output_{slc} \in R^{1 \times
+128}\)</span>。</p>
+<h2 id="门控输出融合机制">门控输出融合机制</h2>
 
     </div>
 
@@ -707,14 +760,14 @@ V_{t-w:t})\]</span></p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">221k</span>
+    <span title="站点总字数">222k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">13:24</span>
+    <span title="站点阅读时长">13:28</span>
   </span>
 </div>
 <div class="busuanzi-count">
