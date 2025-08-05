@@ -222,10 +222,10 @@ V_{t-w:t})\]</span></p>
 </div>
 <p>通过上述步骤，原始的长度为32768的token序列被转换为包含2047个压缩块的表示，每个块由32个token组成。假设每个Attention
 Head的维度<span class="math inline">\(d_k=128\)</span>，则矩阵形状可表示为<code>[32, 128]</code>。
-论文指出，为保持向量的局部顺序信息，系统会向这些向量添加块内位置编码。然后矩阵通过一个小型的MLP（论文中记为<span class="math inline">\(\phi\)</span>，MLP通过多层线性变换和非线性激活函数，学习如何从32个输入token中提取和聚合最重要的语义信息），得到形状为<code>[1, 128]</code>的输出。如下图所示：</p>
+论文指出，为保持向量的局部顺序信息，系统会向这些向量添加块内位置编码。然后矩阵通过一个小型的MLP（论文中记为<span class="math inline">\(\varphi\)</span>，MLP通过多层线性变换和非线性激活函数，学习如何从32个输入token中提取和聚合最重要的语义信息），得到形状为<code>[1, 128]</code>的输出。如下图所示：</p>
 <p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_2.jpg" width="600"></p>
-<p>这一过程在所有2047个块上重复执行，最终生成形状为<code>[2047, 128]</code>的压缩键矩阵<span class="math inline">\(K_{cmp}\)</span>，同理可以得到压缩值矩阵<span class="math inline">\(V_{cmp}\)</span>。</p>
-<p>这样，注意力计算只需要在长度为2047的摘要上进行，而不需要对原始的N个token进行注意力计算，相当于序列长度由原来的32768缩减为2047。</p>
+<p>这一过程在所有2047个块上重复执行，最终生成形状为<code>[2047, 128]</code>的压缩键矩阵<span class="math inline">\(K_{cmp}\)</span>，同理可以得到压缩值矩阵<span class="math inline">\(V_{cmp}\)</span>。<br>
+这样，注意力计算只需要在长度为2047的摘要上进行，而不需要对原始的N个token进行注意力计算，相当于序列长度由原来的32768缩减为2047。</p>
 <h3 id="步骤2在摘要上进行注意力计算">步骤2：在摘要上进行注意力计算</h3>
 <p>接下来在<span class="math inline">\(q_t,\ K_{cmp},\
 V_{cmp}\)</span>上进行标准的注意力计算，如下式所示：</p>
@@ -263,6 +263,8 @@ V_{slc})\]</span></p>
 \in R^{1 \times 128}\)</span>。</p>
 <h2 id="门控输出融合机制">门控输出融合机制</h2>
 <p>最后，我们来融合三个分支（<span class="math inline">\(Output_{win}、Output_{cmp}、Output_{slc}\)</span>）的输出结果。采用一个小型可学习的门控多层感知器，以<span class="math inline">\(q_t\)</span>作为输入，为每个分支生成相应的"门控"分数。通过Sigmoid激活函数确保这些分数处于0到1的范围内，使其能够作为各分支输出的权重系数。如下所示：</p>
+<p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/5_1.png" width="600"></p>
+<p>对应公式如下:</p>
 <p><span class="math display">\[
 \begin{align}
 o_t &amp;= \sum_{c \in \{win,cmp,slc\}}g_t^c Output_c \\
