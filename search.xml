@@ -216,8 +216,8 @@ V_{t-w:t})\]</span></p>
 <h3 id="步骤1从32768个token的原文生成2047个token的摘要">步骤1：从32768个token的原文生成2047个token的摘要</h3>
 <p>在序列上滑动大小为<span class="math inline">\(l=32\)</span>的窗口，每次前进<span class="math inline">\(d=16\)</span>个token，形成50%的重叠覆盖。这种重叠设计可以减轻块边界处的信息碎片化现象，确保生成的摘要具有良好的连续性。这样，长度为<span class="math inline">\(N=32768\)</span>的序列就可以被分割为2047个块，这里的块被称为压缩块，如下图所示：</p>
 <p><img src="/2025/08/04/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Native-Sparse-Attention-Hardware-Aligned-and-Natively-Trainable-Sparse-Attention/3_1.jpg" width="600"></p>
-<div class="note info"><p>Token Compression生成的块的数量可以由公式<span class="math inline">\(floor(\frac{N-l}{d}) +
-1\)</span>计算得到，其中<span class="math inline">\(N\)</span>为序列长度，<span class="math inline">\(l\)</span>为压缩块大小，<span class="math inline">\(d\)</span>为压缩步长。<br>
+<div class="note info"><p>Token Compression生成的块的数量可以由公式<span class="math inline">\(floor(\frac{N-l}{d}) + 1\)</span>计算得到。<br>
+其中<span class="math inline">\(N\)</span>为序列长度，<span class="math inline">\(l\)</span>为压缩块大小，<span class="math inline">\(d\)</span>为压缩步长。<br>
 代入可得<span class="math inline">\(压缩块数量=floor(\frac{32768 -
 32}{16}) + 1=2047\)</span>。</p>
 </div>
@@ -1096,8 +1096,8 @@ log\frac{P_{\theta^{\prime}}(a_n^t|s_n^t)}{P_{\theta}(a_n^t|s_n^t)} - 1
       </categories>
       <tags>
         <tag>PPO</tag>
-        <tag>强化学习</tag>
         <tag>GRPO</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
