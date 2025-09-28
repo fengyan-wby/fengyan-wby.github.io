@@ -257,7 +257,7 @@ ID 选取同样数量的数据做计算。</p>
 <h2 id="flashattention的计算优化">FlashAttention的计算优化</h2>
 <p>考虑attention计算：</p>
 <p><span class="math display">\[Attn(A,B)=softmax(QK^{\top})V\]</span></p>
-<h2 id="算子融合-1">算子融合</h2>
+<h3 id="算子融合-1">算子融合</h3>
 <p>PyTorch 版 Attention 的代码如下所示。</p>
 <p><img src="/2025/09/28/FlashAttention%E7%AE%97%E6%B3%95/4-1.jpg"></p>
 <p>光看 PyTorch
@@ -267,7 +267,7 @@ PyTorch 代码对应一个标准库里的 GPU 算子，要加入的 IO 操作如
 <p>这样，我们就能立刻发现一个可优化项：中间变量 s, p 前脚刚写入
 HBM，后脚又被读回了 SRAM。如果能用算子融合技术，把整个 Attention
 运算放到同一个 GPU 算子里，就能规避这些额外的访存操作。</p>
-<h2 id="并行编程-1">并行编程</h2>
+<h3 id="并行编程-1">并行编程</h3>
 <p>需要注意的是，如果中间变量不多，多读写两次并不会浪费多少时间。然而，此处的
 s, p 是两个数据量很大的变量。这是因为在当今大模型的 Transformer
 中，（多头注意力的）特征维度 D 一般只是 32, 64
