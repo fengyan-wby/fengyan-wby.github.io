@@ -175,6 +175,39 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>uv使用教程</title>
+    <url>/2026/02/26/uv%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>uv的安装和使用。</p>
+<span id="more"></span>
+<h2 id="安装-uv">安装 uv</h2>
+<h3 id="在-macos-上安装">在 macOS 上安装</h3>
+<p>推荐使用 Homebrew 安装： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 推荐使用 Homebrew 安装：</span></span><br><span class="line">brew install uv</span><br><span class="line"><span class="comment"># 或者使用官方安装脚本：</span></span><br><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure></p>
+<h3 id="在-linux-上安装">在 Linux 上安装</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
+<h3 id="在-windows-上安装">在 Windows 上安装</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用 Winget：</span></span><br><span class="line">winget install uv</span><br></pre></td></tr></table></figure>
+<p>安装完成后，验证安装是否成功： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uv --version</span><br></pre></td></tr></table></figure></p>
+<h2 id="核心使用场景">核心使用场景</h2>
+<h3 id="python版本管理">Python版本管理</h3>
+<p>查看可用的 Python 版本： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uv python list</span><br></pre></td></tr></table></figure></p>
+<p>安装特定版本的 Python： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装最新的 Python 3.12</span></span><br><span class="line">uv python install 3.12</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装特定版本</span></span><br><span class="line">uv python install 3.11.6</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 PyPy 版本</span></span><br><span class="line">uv python install pypy3.10</span><br></pre></td></tr></table></figure></p>
+<p>切换当前Python版本 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uv python use 3.10</span><br></pre></td></tr></table></figure></p>
+<p>设置全局默认 Python 版本： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uv python default 3.12</span><br></pre></td></tr></table></figure></p>
+<h3 id="虚拟环境管理">虚拟环境管理</h3>
+<p>环境创建 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建名为 .venv 的虚拟环境（默认）</span></span><br><span class="line">uv venv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Python 3.12虚拟环境</span></span><br><span class="line">uv venv --python 3.12 .venv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在当前目录下创建一个名为 my-project-env 的虚拟环境，使用指定的 Python 3.11 版本</span></span><br><span class="line">uv venv -p python3.11 my-project-env</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在指定路径创建一个名为 custom-env 的虚拟环境，使用 Python 3.10</span></span><br><span class="line">uv venv -p python3.10 /path/to/my/project/custom-env</span><br></pre></td></tr></table></figure></p>
+<p>激活环境 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Windows (CMD): </span></span><br><span class="line">.\venv\Scripts\activate</span><br><span class="line"><span class="comment"># macOS/Linux (Bash/Zsh): </span></span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br></pre></td></tr></table></figure></p>
+<p>使用环境 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装环境专属依赖</span></span><br><span class="line">uv pip install torch</span><br><span class="line"><span class="comment"># 安装全局依赖（--system表示全局安装）</span></span><br><span class="line">uv pip install numpy --system</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装指定版本的 Flask 包</span></span><br><span class="line">uv pip install Flask==2.2.2</span><br><span class="line"><span class="comment"># 从 requirements.txt 文件安装所有依赖</span></span><br><span class="line">uv pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载 requests 包</span></span><br><span class="line">uv pip uninstall requests</span><br></pre></td></tr></table></figure></p>
+<p>移除虚拟环境 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除当前目录下的名为 .venv 的虚拟环境</span></span><br><span class="line">uv venv --remove .venv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定路径的虚拟环境</span></span><br><span class="line">uv venv --remove /path/to/my/project/my-project-env</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>openpyxl使用介绍</title>
     <url>/2025/10/15/openpyxl%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>openpyxl是一个强大的Python库，可以方便地处理Excel文件。它提供了丰富的API来创建、读取、修改和格式化Excel文件。掌握这些基本操作后，你可以轻松地进行数据分析和报表生成等工作。</p>
