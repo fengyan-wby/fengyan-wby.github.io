@@ -175,6 +175,39 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>保持进程在SSH客户端断开后仍继续运行的方法</title>
+    <url>/2026/02/27/%E4%BF%9D%E6%8C%81%E8%BF%9B%E7%A8%8B%E5%9C%A8SSH%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%96%AD%E5%BC%80%E5%90%8E%E4%BB%8D%E7%BB%A7%E7%BB%AD%E8%BF%90%E8%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>使用SCREEN让客户端断开之后仍然执行命令。</p>
+<span id="more"></span>
+<h2 id="安装">安装</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y screen</span><br></pre></td></tr></table></figure>
+<h2 id="使用">使用</h2>
+<ol type="1">
+<li>创建并进入新会话。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -S [Name]  <span class="comment"># [Name]为自定义会话名称。</span></span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>在新会话中执行目标任务。</li>
+<li>分离会话。 同时按下Ctrl+A+D键，分离当前 screen
+会话，此时进程在SSH客户端断开后仍可继续运行。</li>
+<li>恢复会话。
+<ul>
+<li>查看会话进程PID，用于后续恢复。 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo screen -<span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line">There is a screen on:</span><br><span class="line">       2046.mytask     (Detached)</span><br><span class="line">1 Socket <span class="keyword">in</span> /run/screen/S-root.</span><br></pre></td></tr></table></figure>
+示例中screen会话进程PID为2046。</li>
+<li>恢复对后台任务的控制。 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -r -d [PID]</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li>注销会话。 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> [PID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>SCREEN</category>
+      </categories>
+      <tags>
+        <tag>SCREEN</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>uv使用教程</title>
     <url>/2026/02/26/uv%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>uv的安装和使用。</p>
