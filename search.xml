@@ -220,6 +220,11 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
 </ul></li>
 <li>注销会话。 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> [PID]</span><br></pre></td></tr></table></figure></li>
 </ol>
+<div class="note warning"><p>使用conda建立了虚拟环境的话需要注意，会出现环境不起作用的问题。</p>
+<p>需要在进入screen前先退出环境： <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> deactivate <span class="comment"># 或conda deactivate</span></span><br></pre></td></tr></table></figure></p>
+<p>然后进入screen <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -r my_screen</span><br></pre></td></tr></table></figure></p>
+<p>在screen里面激活环境: <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> activate <span class="built_in">env</span></span><br></pre></td></tr></table></figure> 这时conda环境才会起作用。</p>
+</div>
 ]]></content>
       <categories>
         <category>工具</category>
@@ -1392,8 +1397,8 @@ log\frac{P_{\theta^{\prime}}(a_n^t|s_n^t)}{P_{\theta}(a_n^t|s_n^t)} - 1
       </categories>
       <tags>
         <tag>PPO</tag>
-        <tag>强化学习</tag>
         <tag>GRPO</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
