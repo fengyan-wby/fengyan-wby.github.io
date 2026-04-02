@@ -207,7 +207,7 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
 <ol type="1">
 <li><p>在你的用户目录下（例如
 <code>C:\Users\你的用户名</code>），会有一个<code>.claude.json</code>文件。
-在文件中添加<code>"hasCompletedOnboarding": true</code>。</p></li>
+在文件中添加<code>"hasCompletedOnboarding": true</code>（作用是跳过claudecode的登录）。</p></li>
 <li><p>设置环境变量。 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="variable">$env:ANTHROPIC_BASE_URL</span>=<span class="string">&quot;https://api.moonshot.cn/anthropic&quot;</span>;</span><br><span class="line"><span class="variable">$env:ANTHROPIC_AUTH_TOKEN</span>=<span class="string">&quot;YOUR_MOONSHOT_API_KEY&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_OPUS_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_SONNET_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_HAIKU_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:CLAUDE_CODE_SUBAGENT_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ENABLE_TOOL_SEARCH</span>=false</span><br></pre></td></tr></table></figure></p></li>
 </ol>
 <p>或者直接在用户环境变量中添加上述的变量使配置永久生效。</p>
@@ -2076,8 +2076,8 @@ token，因为它会影响模型如何生成思考过程。作者选择将思考
         <category>AIGC</category>
       </categories>
       <tags>
-        <tag>文献阅读</tag>
         <tag>AIGC</tag>
+        <tag>文献阅读</tag>
         <tag>大模型</tag>
       </tags>
   </entry>
