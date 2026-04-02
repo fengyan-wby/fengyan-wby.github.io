@@ -175,6 +175,33 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>windows配置claudecode</title>
+    <url>/2026/04/02/windows%E9%85%8D%E7%BD%AEclaudecode/</url>
+    <content><![CDATA[<p>win11下配置claudecode，附加其他模型（如kimi-k2.5）的设置方法。</p>
+<span id="more"></span>
+<h2 id="claudecode安装">claudecode安装</h2>
+<p>Windows PowerShell安装方法如下，其他系统安装可查看官网。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">irm</span> https://claude.ai/install.ps1 | <span class="built_in">iex</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置修改">配置修改</h2>
+<p>如有claudecode账号，可直接使用<code>claude</code>命令启动。如需使用其他模型，需要修改配置。</p>
+<ol type="1">
+<li><p>在你的用户目录下（例如 C:），会有一个.claude.json文件。
+在文件中添加<code>"hasCompletedOnboarding": true</code>。</p></li>
+<li><p>设置环境变量。 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="variable">$env:ANTHROPIC_BASE_URL</span>=<span class="string">&quot;https://api.moonshot.cn/anthropic&quot;</span>;</span><br><span class="line"><span class="variable">$env:ANTHROPIC_AUTH_TOKEN</span>=<span class="string">&quot;YOUR_MOONSHOT_API_KEY&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_OPUS_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_SONNET_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ANTHROPIC_DEFAULT_HAIKU_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:CLAUDE_CODE_SUBAGENT_MODEL</span>=<span class="string">&quot;kimi-k2.5&quot;</span></span><br><span class="line"><span class="variable">$env:ENABLE_TOOL_SEARCH</span>=false</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p>或者直接在用户环境变量中添加上述的配置。</p>
+<h2 id="启动claudecode">启动claudecode</h2>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">claude</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>claudecode</category>
+      </categories>
+      <tags>
+        <tag>claudecode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Qwen3量化实践</title>
     <url>/2026/03/02/Qwen3%E9%87%8F%E5%8C%96%E5%AE%9E%E8%B7%B5/</url>
     <content><![CDATA[<p>Pytorch实现Qwen3的AWQ以及GPTQ量化。</p>
@@ -4994,8 +5021,8 @@ size解耦。</li>
         <category>学习</category>
       </categories>
       <tags>
-        <tag>特征提取</tag>
         <tag>对比学习</tag>
+        <tag>特征提取</tag>
       </tags>
   </entry>
   <entry>
