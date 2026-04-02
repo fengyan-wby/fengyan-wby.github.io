@@ -200,7 +200,7 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
     <content><![CDATA[<p>win11下配置claudecode，附加其他模型（如kimi-k2.5）的设置方法。</p>
 <span id="more"></span>
 <h2 id="claudecode安装">claudecode安装</h2>
-<p>Windows PowerShell安装方法如下，其他系统安装可查看官网。</p>
+<p>Windows PowerShell安装方法如下，其他系统安装可查看<a href="https://code.claude.com/docs/zh-CN/overview">官方文档</a>。</p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">irm</span> https://claude.ai/install.ps1 | <span class="built_in">iex</span></span><br></pre></td></tr></table></figure>
 <h2 id="配置修改">配置修改</h2>
 <p>如有claudecode账号，可直接使用<code>claude</code>命令启动。如需使用其他模型，需要修改配置。</p>
