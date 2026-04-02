@@ -175,6 +175,26 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>openclaw安装教程</title>
+    <url>/2026/04/02/openclaw%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>openclaw的安装和使用。</p>
+<span id="more"></span>
+<h2 id="安装nvm通过nvm控制nodejs版本">安装nvm（通过nvm控制nodejs版本）</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Download and install nvm:</span></span><br><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash</span><br><span class="line"><span class="comment"># in lieu of restarting the shell</span></span><br><span class="line">\. <span class="string">&quot;<span class="variable">$HOME</span>/.nvm/nvm.sh&quot;</span></span><br><span class="line"><span class="comment"># Download and install Node.js:</span></span><br><span class="line">nvm install 24</span><br><span class="line"><span class="comment"># Verify the Node.js version:</span></span><br><span class="line">node -v <span class="comment"># Should print &quot;v24.14.1&quot;.</span></span><br><span class="line"><span class="comment"># Verify npm version:</span></span><br><span class="line">npm -v <span class="comment"># Should print &quot;11.11.0&quot;.</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装openclaw">安装openclaw</h2>
+<p>具体可参考<a href="https://docs.openclaw.ai/zh-CN/install">官方教程</a>。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://openclaw.ai/install.sh | bash</span><br></pre></td></tr></table></figure>
+<p>然后进行交互式安装，配置channels和skills以及使用的模型。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>openclaw</category>
+      </categories>
+      <tags>
+        <tag>openclaw</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>windows配置claudecode</title>
     <url>/2026/04/02/windows%E9%85%8D%E7%BD%AEclaudecode/</url>
     <content><![CDATA[<p>win11下配置claudecode，附加其他模型（如kimi-k2.5）的设置方法。</p>
@@ -5021,8 +5041,8 @@ size解耦。</li>
         <category>学习</category>
       </categories>
       <tags>
-        <tag>对比学习</tag>
         <tag>特征提取</tag>
+        <tag>对比学习</tag>
       </tags>
   </entry>
   <entry>
