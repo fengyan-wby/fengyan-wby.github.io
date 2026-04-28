@@ -175,6 +175,151 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>大模型蒸馏：On-Policy 与 Off-Policy 的区别</title>
+    <url>/2026/04/28/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F-On-Policy-vs-Off-Policy/</url>
+    <content><![CDATA[<h2 id="引言">引言</h2>
+<p>在大语言模型（LLM）的蒸馏（Distillation）过程中，<strong>On-Policy</strong>
+和 <strong>Off-Policy</strong>
+是两种截然不同的数据采样策略。理解它们的区别对于设计高效的蒸馏方案至关重要。</p>
+<span id="more"></span>
+<h2 id="核心概念">核心概念</h2>
+<h3 id="on-policy-蒸馏">On-Policy 蒸馏</h3>
+<p><strong>定义</strong>：使用<strong>学生模型（Student）自身生成</strong>的数据进行蒸馏训练。</p>
+<p><strong>工作流程</strong>：<br>
+1. 学生模型针对输入问题生成回答<br>
+2. 教师模型（Teacher）对学生生成的回答进行评分或提供反馈<br>
+3. 学生模型根据反馈优化自身策略</p>
+<p><strong>特点</strong>：<br>
+- 数据分布与学生模型当前策略一致<br>
+- 训练数据是"新鲜"生成的，反映学生当前能力<br>
+- 类似强化学习中的策略梯度方法</p>
+<h3 id="off-policy-蒸馏">Off-Policy 蒸馏</h3>
+<p><strong>定义</strong>：使用<strong>外部数据源或教师模型生成</strong>的数据进行蒸馏训练。</p>
+<p><strong>工作流程</strong>：<br>
+1. 教师模型或人工准备高质量的训练数据（输入-输出对）<br>
+2. 学生模型学习模仿这些固定数据<br>
+3. 数据在训练过程中保持不变</p>
+<p><strong>特点</strong>：<br>
+- 数据分布与教师模型或人工标注一致<br>
+- 训练数据是"静态"的，预先准备好的<br>
+- 类似传统的监督学习</p>
+<h2 id="对比分析">对比分析</h2>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>On-Policy</th>
+<th>Off-Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>数据来源</strong></td>
+<td>学生模型自生成</td>
+<td>教师模型/人工准备</td>
+</tr>
+<tr class="even">
+<td><strong>数据分布</strong></td>
+<td>动态变化，随学生改进而更新</td>
+<td>静态固定</td>
+</tr>
+<tr class="odd">
+<td><strong>计算成本</strong></td>
+<td>高（需实时生成）</td>
+<td>低（数据预先准备）</td>
+</tr>
+<tr class="even">
+<td><strong>探索能力</strong></td>
+<td>强，能发现新的解决路径</td>
+<td>弱，局限于已有数据</td>
+</tr>
+<tr class="odd">
+<td><strong>训练稳定性</strong></td>
+<td>较低，数据分布不断变化</td>
+<td>较高，数据固定</td>
+</tr>
+<tr class="even">
+<td><strong>适用场景</strong></td>
+<td>推理能力提升、自我改进</td>
+<td>知识迁移、快速部署</td>
+</tr>
+<tr class="odd">
+<td><strong>数据分布</strong></td>
+<td>与学生当前策略一致</td>
+<td>与学生策略不一致，存在分布偏移</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实践建议">实践建议</h2>
+<h3 id="何时选择-on-policy">何时选择 On-Policy？</h3>
+<p>✅ <strong>推荐使用</strong>：<br>
+- 目标是提升特定能力（如数学推理、代码生成）<br>
+- 有可靠的奖励信号（验证器、测试用例、奖励模型）<br>
+- 计算资源充足，支持在线生成<br>
+- 需要模型自我改进、迭代优化</p>
+<h3 id="何时选择-off-policy">何时选择 Off-Policy？</h3>
+<p>✅ <strong>推荐使用</strong>：<br>
+- 快速复现或基线对比<br>
+- 通用能力迁移（如从 GPT-4 到本地小模型）<br>
+- 资源受限，需要控制训练成本<br>
+- 已有高质量的教学数据集</p>
+<h3 id="常见陷阱">常见陷阱</h3>
+<p>⚠️ <strong>On-Policy 陷阱</strong>：<br>
+- <strong>模式崩溃</strong>：学生可能陷入局部最优，生成相似回答<br>
+- <strong>奖励黑客</strong>：学生找到欺骗奖励模型的捷径<br>
+- <strong>训练不稳定</strong>：分布漂移导致训练困难</p>
+<p>⚠️ <strong>Off-Policy 陷阱</strong>：<br>
+-
+<strong>分布不匹配</strong>：学生能力超过训练数据水平后，继续训练收益递减<br>
+- <strong>能力天花板</strong>：无法超越教师数据的质量上限<br>
+- <strong>遗忘问题</strong>：过度拟合蒸馏数据，丢失预训练知识</p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>On-Policy</th>
+<th>Off-Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>本质</strong></td>
+<td>学生"边做边学"</td>
+<td>学生"模仿范例"</td>
+</tr>
+<tr class="even">
+<td><strong>数据</strong></td>
+<td>动态生成</td>
+<td>静态固定</td>
+</tr>
+<tr class="odd">
+<td><strong>优势</strong></td>
+<td>针对性强、可自我超越</td>
+<td>稳定高效、易于部署</td>
+</tr>
+<tr class="even">
+<td><strong>劣势</strong></td>
+<td>计算成本高、训练复杂</td>
+<td>存在能力上限</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最佳实践</strong>：先用 Off-Policy 快速获得基础能力，再用
+On-Policy 针对性提升关键技能。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>学习</category>
+        <category>AIGC</category>
+      </categories>
+      <tags>
+        <tag>AIGC</tag>
+        <tag>大模型</tag>
+        <tag>知识蒸馏</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>openclaw安装教程</title>
     <url>/2026/04/02/openclaw%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>openclaw的安装和使用。</p>
@@ -1651,8 +1796,8 @@ mK-K_s), \\
         <category>学习</category>
       </categories>
       <tags>
-        <tag>MoE</tag>
         <tag>DeepSeek</tag>
+        <tag>MoE</tag>
       </tags>
   </entry>
   <entry>
