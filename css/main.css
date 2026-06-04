@@ -2735,7 +2735,7 @@ header.header {
   border-radius: 0px;
 }
 body {
-  background: url("/images/rain_light.gif");
+  background: url("/images/rain_dark.gif");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
