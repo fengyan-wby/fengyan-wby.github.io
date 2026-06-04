@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/6.png">
 <meta property="og:image" content="https://fengyan-wby.github.io/2024/01/16/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Mixtral-of-Experts/7.png">
 <meta property="article:published_time" content="2024-01-16T10:13:52.000Z">
-<meta property="article:modified_time" content="2026-04-28T03:26:34.424Z">
+<meta property="article:modified_time" content="2026-06-04T06:35:09.100Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="MoE">
@@ -545,7 +545,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-04-28 03:26:34" itemprop="dateModified" datetime="2026-04-28T03:26:34+00:00">2026-04-28</time>
+      <time title="修改时间：2026-06-04 06:35:09" itemprop="dateModified" datetime="2026-06-04T06:35:09+00:00">2026-06-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -849,8 +849,8 @@ var options = {
   time: '0.3s',
   mixColor: 'transparent',
   backgroundColor: 'transparent',
-  buttonColorDark: '#100f2c',
-  buttonColorLight: '#fff',
+  buttonColorDark: '#222',
+  buttonColorLight: '#222',
   saveInCookies: true,
   label: '🌓',
   autoMatchOsTheme: true
@@ -861,6 +861,64 @@ darkmode.showWidget();
 </script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
+
+
+<div class="scroll-nav-btns" id="scrollNavBtns" aria-label="Page scroll controls">
+  <button class="scroll-nav-btn" id="scrollToTopBtn"
+          title="Back to top" aria-label="Scroll to top">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+  </button>
+  <button class="scroll-nav-btn" id="scrollToBottomBtn"
+          title="Go to bottom" aria-label="Scroll to bottom">
+    <i class="fa fa-angle-down" aria-hidden="true"></i>
+  </button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SHOW_TOP_THRESHOLD    = 50;   // px from top — show ↑ button
+  var HIDE_BOTTOM_THRESHOLD = 50;   // px from bottom — hide ↓ button
+  var SCROLL_DURATION       = 500;  // ms, matches NexT's back-to-top
+
+  var topBtn    = document.getElementById('scrollToTopBtn');
+  var bottomBtn = document.getElementById('scrollToBottomBtn');
+  if (!topBtn || !bottomBtn) return;
+
+  function updateVisibility() {
+    var scrollY       = window.scrollY || window.pageYOffset;
+    var contentHeight = document.body.scrollHeight - window.innerHeight;
+
+    // ↑ button: show when scrolled down past threshold
+    topBtn.classList.toggle('scroll-nav-btn--visible', scrollY > SHOW_TOP_THRESHOLD);
+
+    // ↓ button: hide when near the bottom
+    var nearBottom = contentHeight > 0 && (contentHeight - scrollY) < HIDE_BOTTOM_THRESHOLD;
+    bottomBtn.classList.toggle('scroll-nav-btn--visible', !nearBottom);
+  }
+
+  function scrollTo(targetTop) {
+    if (window.anime) {
+      window.anime({
+        targets  : document.scrollingElement || document.documentElement,
+        duration : SCROLL_DURATION,
+        easing   : 'linear',
+        scrollTop: targetTop
+      });
+    } else {
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+  }
+
+  topBtn.addEventListener('click', function () { scrollTo(0); });
+  bottomBtn.addEventListener('click', function () { scrollTo(document.body.scrollHeight); });
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+
+  // Set initial state on page load
+  updateVisibility();
+}());
+</script>
 
 </body>
 </html>

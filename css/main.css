@@ -2772,3 +2772,46 @@ body {
 .site-author {
   font-family: Ma Shan Zheng;
 }
+.scroll-nav-btns {
+  position: fixed;
+  right: 32px;
+  bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1050;
+}
+.scroll-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background-color: #222;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+.scroll-nav-btn:hover {
+  background-color: #555;
+}
+.scroll-nav-btn:focus {
+  outline: 2px solid rgba(255,255,255,0.4);
+  outline-offset: 2px;
+}
+.scroll-nav-btn.scroll-nav-btn--visible {
+  opacity: 0.8;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-nav-btn.scroll-nav-btn--visible:hover {
+  opacity: 1;
+}
