@@ -2735,11 +2735,17 @@ header.header {
   border-radius: 0px;
 }
 body {
-  background: url("/images/rain.gif");
+  background: url("/images/rain_light.gif");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   background-position: 50% 50%;
+}
+:root {
+  --content-bg-color: rgba(255,255,255,0.9);
+}
+[data-theme="dark"] {
+  --content-bg-color: rgba(30,30,30,0.9);
 }
 .post-body a:not(.btn) {
   color: #428bca;
