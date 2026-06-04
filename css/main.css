@@ -2815,3 +2815,12 @@ body {
 .scroll-nav-btn.scroll-nav-btn--visible:hover {
   opacity: 1;
 }
+.code-container.unfold .expand-btn,
+figure.highlight.unfold .expand-btn {
+  display: block;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, var(--highlight-background, #1a1a1a) 40%, rgba(0,0,0,0) 100%);
+  padding-top: 20px;
+  padding-bottom: 4px;
+}

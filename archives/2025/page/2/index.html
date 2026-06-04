@@ -801,5 +801,62 @@ darkmode.showWidget();
 }());
 </script>
 
+<script>
+
+(function () {
+  'use strict';
+
+  function patchFoldButtons() {
+    document.querySelectorAll('.expand-btn').forEach(function (btn) {
+      if (btn.dataset.collapsePatched) return;
+      btn.dataset.collapsePatched = '1';
+
+      var target = btn.parentElement;  // .code-container or figure.highlight (mac style)
+
+      // Clone the button to strip NexT's original click listener
+      var newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener('click', function () {
+        var icon = newBtn.querySelector('i');
+        if (target.classList.contains('unfold')) {
+          // --- Collapse ---
+          target.classList.remove('unfold');
+          target.classList.add('highlight-fold');
+          if (icon) {
+            icon.classList.remove('fa-angle-up');
+            icon.classList.add('fa-angle-down');
+          }
+          // Scroll block back into view if it scrolled above viewport
+          var rect = target.getBoundingClientRect();
+          if (rect.top < 0) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          // --- Expand ---
+          target.classList.remove('highlight-fold');
+          target.classList.add('unfold');
+          if (icon) {
+            icon.classList.remove('fa-angle-down');
+            icon.classList.add('fa-angle-up');
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchFoldButtons);
+  } else {
+    setTimeout(patchFoldButtons, 0);
+  }
+
+  // Handle PJAX page transitions
+  document.addEventListener('pjax:success', function () {
+    setTimeout(patchFoldButtons, 0);
+  });
+}());
+</script>
+
 </body>
 </html>
