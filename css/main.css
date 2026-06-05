@@ -2742,10 +2742,10 @@ body {
   background-position: 50% 50%;
 }
 :root {
-  --content-bg-color: rgba(255,255,255,0.9);
+  --content-bg-color: #fff;
 }
 [data-theme="dark"] {
-  --content-bg-color: rgba(30,30,30,0.9);
+  --content-bg-color: #1e1e1e;
 }
 .post-body a:not(.btn) {
   color: #428bca;
