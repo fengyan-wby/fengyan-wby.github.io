@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CMa+Shan+Zheng:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="离开电脑还在惦记 AI Agent 有没有跑完？Happy Coder 就是为此而生的——它把 Claude Code &#x2F; Codex 的控制权延伸到你的手机和浏览器，让你随时随地都能盯着你的 AI 编码助手。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Happy Coder 教程：用手机远程掌控 Claude Code">
+<meta property="og:url" content="https://fengyan-wby.github.io/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/index.html">
+<meta property="og:site_name" content="丰言的博客">
+<meta property="og:description" content="离开电脑还在惦记 AI Agent 有没有跑完？Happy Coder 就是为此而生的——它把 Claude Code &#x2F; Codex 的控制权延伸到你的手机和浏览器，让你随时随地都能盯着你的 AI 编码助手。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-08T14:46:05.000Z">
+<meta property="article:modified_time" content="2026-06-08T06:50:45.204Z">
+<meta property="article:author" content="丰言">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="AI编程">
+<meta property="article:tag" content="效率工具">
+<meta property="article:tag" content="移动端">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/","path":"2026/06/08/Happy-Coder-教程：用手机远程掌控-Claude-Code/","title":"Happy Coder 教程：用手机远程掌控 Claude Code"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Happy Coder 教程：用手机远程掌控 Claude Code | 丰言的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰言的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">89</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">30</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">96</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#happy-coder-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Happy Coder 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="nav-number">2.</span> <span class="nav-text">核心功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%B8%8B%E8%BD%BD-app"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：下载 App</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%89%E8%A3%85-cli"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：安装 CLI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%90%AF%E5%8A%A8%E4%BC%9A%E8%AF%9D"><span class="nav-number">3.3.</span> <span class="nav-text">第三步：启动会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">基本使用流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">推送通知配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E5%BC%80%E5%8F%91%E8%80%85%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">项目结构（开发者参考）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%BA%90"><span class="nav-number">8.</span> <span class="nav-text">相关资源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="丰言"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">丰言</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/" title="2026&#x2F;06&#x2F;08&#x2F;Happy-Coder-教程：用手机远程掌控-Claude-Code&#x2F;">Happy Coder 教程：用手机远程掌控 Claude Code</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/28/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F-On-Policy-vs-Off-Policy/" title="2026&#x2F;04&#x2F;28&#x2F;大模型蒸馏-On-Policy-vs-Off-Policy&#x2F;">大模型蒸馏：On-Policy 与 Off-Policy 的区别</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/02/openclaw%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" title="2026&#x2F;04&#x2F;02&#x2F;openclaw安装教程&#x2F;">openclaw安装教程</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/02/windows%E9%85%8D%E7%BD%AEclaudecode/" title="2026&#x2F;04&#x2F;02&#x2F;windows配置claudecode&#x2F;">windows配置claudecode</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/03/02/Qwen3%E9%87%8F%E5%8C%96%E5%AE%9E%E8%B7%B5/" title="2026&#x2F;03&#x2F;02&#x2F;Qwen3量化实践&#x2F;">Qwen3量化实践</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="丰言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰言的博客">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Happy Coder 教程：用手机远程掌控 Claude Code | 丰言的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Happy Coder 教程：用手机远程掌控 Claude Code
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-08 14:46:05 / 修改时间：06:50:45" itemprop="dateCreated datePublished" datetime="2026-06-08T14:46:05+00:00">2026-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2026/06/08/Happy-Coder-教程：用手机远程掌控-Claude-Code/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>离开电脑还在惦记 AI Agent 有没有跑完？<strong>Happy Coder</strong>
+就是为此而生的——它把 Claude Code / Codex
+的控制权延伸到你的手机和浏览器，让你随时随地都能盯着你的 AI
+编码助手。</p>
+<span id="more"></span>
+<h2 id="happy-coder-是什么">Happy Coder 是什么？</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/slopus/happy">Happy Coder</a>
+是一个<strong>开源的 Claude Code / Codex 移动端 &amp; Web
+客户端</strong>，基于端对端加密，让你可以在手机（iOS /
+Android）或任意浏览器中查看、控制正在你电脑上跑着的 AI 编程会话。</p>
+<p>它的核心原理很简单：在电脑上运行
+<code>happy claude</code>（替代原来的
+<code>claude</code>），会启动一个包裹层（wrapper）；当你想从手机接管时，会话会自动切换到远程模式；想回到电脑，在键盘上按任意键即可切回。</p>
+<div class="note info"><p><strong>开源 &amp; 无追踪</strong>：MIT
+协议，代码可审计，无遥测、无埋点。你的代码从不以明文形式离开你的设备。</p>
+</div>
+<hr>
+<h2 id="核心功能">核心功能</h2>
+<table>
+<thead>
+<tr class="header">
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>📱 移动端监控</td>
+<td>离开座位后仍可查看 AI 正在构建什么</td>
+</tr>
+<tr class="even">
+<td>🔔 推送通知</td>
+<td>Claude Code / Codex 需要授权或报错时立即推送</td>
+</tr>
+<tr class="odd">
+<td>⚡ 设备秒切</td>
+<td>手机 ↔︎ 电脑，一键无缝接管</td>
+</tr>
+<tr class="even">
+<td>🔐 端对端加密</td>
+<td>代码在传输中全程加密，服务器看不到明文</td>
+</tr>
+<tr class="odd">
+<td>🛠️ 完全开源</td>
+<td>可自审代码，无任何遥测</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="安装与配置">安装与配置</h2>
+<h3 id="第一步下载-app">第一步：下载 App</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>平台</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>iOS</td>
+<td><a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/happy-claude-code-client/id6748571505">App
+Store — Happy Claude Code Client</a></td>
+</tr>
+<tr class="even">
+<td>Android</td>
+<td><a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.ex3ndr.happy">Google
+Play — Happy</a></td>
+</tr>
+<tr class="odd">
+<td>Web</td>
+<td><a target="_blank" rel="noopener" href="https://app.happy.engineering">app.happy.engineering</a></td>
+</tr>
+</tbody>
+</table>
+<p>在手机上安装好 App 后，按照 App 内引导完成账号注册/登录。</p>
+<h3 id="第二步安装-cli">第二步：安装 CLI</h3>
+<p>确保本地已安装 Node.js（建议 18+），然后全局安装
+<code>happy</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g happy</span><br></pre></td></tr></table></figure>
+<p>安装完成后验证一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">happy --version</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>旧版包名为 <code>happy-coder</code>，新版已迁移至
+<code>happy</code>，直接装新版即可。</p>
+</blockquote>
+<h3 id="第三步启动会话">第三步：启动会话</h3>
+<p>用 <code>happy claude</code> 替代原来的 <code>claude</code>
+命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原来你这样用</span></span><br><span class="line">claude</span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在改成</span></span><br><span class="line">happy claude</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Codex 同理</span></span><br><span class="line">happy codex</span><br></pre></td></tr></table></figure>
+<p>首次运行时，CLI 会引导你扫码或输入配对码，将当前会话与手机 App
+绑定。绑定成功后，手机端即可看到实时输出。</p>
+<hr>
+<h2 id="基本使用流程">基本使用流程</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">电脑启动会话            手机接管操作             切回电脑</span><br><span class="line">     │                      │                      │</span><br><span class="line">happy claude  ──────►  App 中查看/发指令  ──────►  键盘按任意键</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><strong>在电脑上</strong>：进入项目目录，执行
+<code>happy claude</code>，像平时一样开始 AI 编程任务。</li>
+<li><strong>离开电脑</strong>：打开手机
+App，即可看到当前会话的实时输出流。</li>
+<li><strong>需要操作</strong>：直接在 App
+里输入指令或给出权限确认；Claude Code 需要你审批时，App
+会推送通知。</li>
+<li><strong>回到电脑</strong>：在电脑键盘上按任意键，控制权自动切回终端。</li>
+</ol>
+<hr>
+<h2 id="推送通知配置">推送通知配置</h2>
+<p>推送通知是 Happy Coder
+最实用的功能之一。在以下情况下你会收到通知：</p>
+<ul>
+<li>Claude Code 请求执行危险命令，等待你的批准</li>
+<li>任务遭遇错误，Agent 暂停等待输入</li>
+<li>长时间任务执行完毕</li>
+</ul>
+<p>App 内可以在<strong>设置 → 通知</strong>中自定义通知级别（全部 /
+仅需要操作 / 关闭）。请确保系统层面已允许 App 发送通知。</p>
+<hr>
+<h2 id="项目结构开发者参考">项目结构（开发者参考）</h2>
+<p>Happy Coder 是一个 monorepo，包含四个子包：</p>
+<table>
+<thead>
+<tr class="header">
+<th>包名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>happy-app</code></td>
+<td>Web UI + 移动客户端（基于 Expo 构建）</td>
+</tr>
+<tr class="even">
+<td><code>happy-cli</code></td>
+<td>包裹 Claude Code / Codex 的命令行工具</td>
+</tr>
+<tr class="odd">
+<td><code>happy-agent</code></td>
+<td>远程 Agent 控制 CLI（创建、发送、监控会话）</td>
+</tr>
+<tr class="even">
+<td><code>happy-server</code></td>
+<td>处理加密同步的后端服务</td>
+</tr>
+</tbody>
+</table>
+<p>如需自部署服务端，参考 <a target="_blank" rel="noopener" href="https://happy.engineering/docs/">官方文档</a>。</p>
+<hr>
+<h2 id="常见问题">常见问题</h2>
+<p><strong>Q：手机和电脑必须在同一 Wi-Fi 吗？</strong> 不需要。同步通过
+Happy 的加密中继服务器进行，手机用 4G/5G 也完全可以。</p>
+<p><strong>Q：我的代码安全吗？</strong>
+所有内容在离开你的设备前均已加密，服务器只转发密文，无法读取你的代码内容。</p>
+<p><strong>Q：支持 Windows 吗？</strong> CLI 基于 Node.js，理论上
+Windows / macOS / Linux 均支持。</p>
+<p><strong>Q：能同时在多台设备上监控吗？</strong>
+可以。多个设备登录同一账号后，都能看到实时输出；但同一时刻只有一个设备拥有输入控制权。</p>
+<hr>
+<h2 id="相关资源">相关资源</h2>
+<ul>
+<li>🎥 <a target="_blank" rel="noopener" href="https://youtu.be/GCS0OG9QMSE">Demo 视频</a></li>
+<li>📚 <a target="_blank" rel="noopener" href="https://happy.engineering/docs/">官方文档</a></li>
+<li>💻 <a target="_blank" rel="noopener" href="https://github.com/slopus/happy">GitHub 仓库</a></li>
+<li>💬 <a target="_blank" rel="noopener" href="https://discord.gg/fX9WBAhyfD">Discord 社区</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>丰言
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/" title="Happy Coder 教程：用手机远程掌控 Claude Code">https://fengyan-wby.github.io/2026/06/08/Happy-Coder-教程：用手机远程掌控-Claude-Code/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Claude-Code/" rel="tag"><i class="fa fa-tag"></i> Claude Code</a>
+              <a href="/tags/AI%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> AI编程</a>
+              <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag"><i class="fa fa-tag"></i> 效率工具</a>
+              <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag"><i class="fa fa-tag"></i> 移动端</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/28/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F-On-Policy-vs-Off-Policy/" rel="prev" title="大模型蒸馏：On-Policy 与 Off-Policy 的区别">
+                  <i class="fa fa-angle-left"></i> 大模型蒸馏：On-Policy 与 Off-Policy 的区别
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2023 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">丰言</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">230k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">13:55</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#222',
+  buttonColorLight: '#222',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+
+<div class="scroll-nav-btns" id="scrollNavBtns" aria-label="Page scroll controls">
+  <button class="scroll-nav-btn" id="scrollToTopBtn"
+          title="Back to top" aria-label="Scroll to top">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+  </button>
+  <button class="scroll-nav-btn" id="scrollToBottomBtn"
+          title="Go to bottom" aria-label="Scroll to bottom">
+    <i class="fa fa-angle-down" aria-hidden="true"></i>
+  </button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SHOW_TOP_THRESHOLD    = 50;   // px from top — show ↑ button
+  var HIDE_BOTTOM_THRESHOLD = 50;   // px from bottom — hide ↓ button
+  var SCROLL_DURATION       = 500;  // ms, matches NexT's back-to-top
+
+  var topBtn    = document.getElementById('scrollToTopBtn');
+  var bottomBtn = document.getElementById('scrollToBottomBtn');
+  if (!topBtn || !bottomBtn) return;
+
+  function updateVisibility() {
+    var scrollY       = window.scrollY || window.pageYOffset;
+    var contentHeight = document.body.scrollHeight - window.innerHeight;
+
+    // ↑ button: show when scrolled down past threshold
+    topBtn.classList.toggle('scroll-nav-btn--visible', scrollY > SHOW_TOP_THRESHOLD);
+
+    // ↓ button: hide when near the bottom
+    var nearBottom = contentHeight > 0 && (contentHeight - scrollY) < HIDE_BOTTOM_THRESHOLD;
+    bottomBtn.classList.toggle('scroll-nav-btn--visible', !nearBottom);
+  }
+
+  function scrollTo(targetTop) {
+    if (window.anime) {
+      window.anime({
+        targets  : document.scrollingElement || document.documentElement,
+        duration : SCROLL_DURATION,
+        easing   : 'linear',
+        scrollTop: targetTop
+      });
+    } else {
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+  }
+
+  topBtn.addEventListener('click', function () { scrollTo(0); });
+  bottomBtn.addEventListener('click', function () { scrollTo(document.body.scrollHeight); });
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+
+  // Set initial state on page load
+  updateVisibility();
+}());
+</script>
+
+<script>
+
+(function () {
+  'use strict';
+
+  function patchFoldButtons() {
+    document.querySelectorAll('.expand-btn').forEach(function (btn) {
+      if (btn.dataset.collapsePatched) return;
+      btn.dataset.collapsePatched = '1';
+
+      var target = btn.parentElement;  // .code-container or figure.highlight (mac style)
+
+      // Clone the button to strip NexT's original click listener
+      var newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener('click', function () {
+        var icon = newBtn.querySelector('i');
+        if (target.classList.contains('unfold')) {
+          // --- Collapse ---
+          target.classList.remove('unfold');
+          target.classList.add('highlight-fold');
+          if (icon) {
+            icon.classList.remove('fa-angle-up');
+            icon.classList.add('fa-angle-down');
+          }
+          // Scroll block back into view if it scrolled above viewport
+          var rect = target.getBoundingClientRect();
+          if (rect.top < 0) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          // --- Expand ---
+          target.classList.remove('highlight-fold');
+          target.classList.add('unfold');
+          if (icon) {
+            icon.classList.remove('fa-angle-down');
+            icon.classList.add('fa-angle-up');
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchFoldButtons);
+  } else {
+    setTimeout(patchFoldButtons, 0);
+  }
+
+  // Handle PJAX page transitions
+  document.addEventListener('pjax:success', function () {
+    setTimeout(patchFoldButtons, 0);
+  });
+}());
+</script>
+
+</body>
+</html>

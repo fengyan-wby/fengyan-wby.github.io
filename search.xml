@@ -175,6 +175,188 @@ DataParallel 模型, 请保存<code>model.module.state_dict()</code>。</p>
       </tags>
   </entry>
   <entry>
+    <title>Happy Coder 教程：用手机远程掌控 Claude Code</title>
+    <url>/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/</url>
+    <content><![CDATA[<p>离开电脑还在惦记 AI Agent 有没有跑完？<strong>Happy Coder</strong>
+就是为此而生的——它把 Claude Code / Codex
+的控制权延伸到你的手机和浏览器，让你随时随地都能盯着你的 AI
+编码助手。</p>
+<span id="more"></span>
+<h2 id="happy-coder-是什么">Happy Coder 是什么？</h2>
+<p><a href="https://github.com/slopus/happy">Happy Coder</a>
+是一个<strong>开源的 Claude Code / Codex 移动端 &amp; Web
+客户端</strong>，基于端对端加密，让你可以在手机（iOS /
+Android）或任意浏览器中查看、控制正在你电脑上跑着的 AI 编程会话。</p>
+<p>它的核心原理很简单：在电脑上运行
+<code>happy claude</code>（替代原来的
+<code>claude</code>），会启动一个包裹层（wrapper）；当你想从手机接管时，会话会自动切换到远程模式；想回到电脑，在键盘上按任意键即可切回。</p>
+<div class="note info"><p><strong>开源 &amp; 无追踪</strong>：MIT
+协议，代码可审计，无遥测、无埋点。你的代码从不以明文形式离开你的设备。</p>
+</div>
+<hr>
+<h2 id="核心功能">核心功能</h2>
+<table>
+<thead>
+<tr class="header">
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>📱 移动端监控</td>
+<td>离开座位后仍可查看 AI 正在构建什么</td>
+</tr>
+<tr class="even">
+<td>🔔 推送通知</td>
+<td>Claude Code / Codex 需要授权或报错时立即推送</td>
+</tr>
+<tr class="odd">
+<td>⚡ 设备秒切</td>
+<td>手机 ↔︎ 电脑，一键无缝接管</td>
+</tr>
+<tr class="even">
+<td>🔐 端对端加密</td>
+<td>代码在传输中全程加密，服务器看不到明文</td>
+</tr>
+<tr class="odd">
+<td>🛠️ 完全开源</td>
+<td>可自审代码，无任何遥测</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="安装与配置">安装与配置</h2>
+<h3 id="第一步下载-app">第一步：下载 App</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>平台</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>iOS</td>
+<td><a href="https://apps.apple.com/us/app/happy-claude-code-client/id6748571505">App
+Store — Happy Claude Code Client</a></td>
+</tr>
+<tr class="even">
+<td>Android</td>
+<td><a href="https://play.google.com/store/apps/details?id=com.ex3ndr.happy">Google
+Play — Happy</a></td>
+</tr>
+<tr class="odd">
+<td>Web</td>
+<td><a href="https://app.happy.engineering">app.happy.engineering</a></td>
+</tr>
+</tbody>
+</table>
+<p>在手机上安装好 App 后，按照 App 内引导完成账号注册/登录。</p>
+<h3 id="第二步安装-cli">第二步：安装 CLI</h3>
+<p>确保本地已安装 Node.js（建议 18+），然后全局安装
+<code>happy</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g happy</span><br></pre></td></tr></table></figure>
+<p>安装完成后验证一下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">happy --version</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>旧版包名为 <code>happy-coder</code>，新版已迁移至
+<code>happy</code>，直接装新版即可。</p>
+</blockquote>
+<h3 id="第三步启动会话">第三步：启动会话</h3>
+<p>用 <code>happy claude</code> 替代原来的 <code>claude</code>
+命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 原来你这样用</span></span><br><span class="line">claude</span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在改成</span></span><br><span class="line">happy claude</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Codex 同理</span></span><br><span class="line">happy codex</span><br></pre></td></tr></table></figure>
+<p>首次运行时，CLI 会引导你扫码或输入配对码，将当前会话与手机 App
+绑定。绑定成功后，手机端即可看到实时输出。</p>
+<hr>
+<h2 id="基本使用流程">基本使用流程</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">电脑启动会话            手机接管操作             切回电脑</span><br><span class="line">     │                      │                      │</span><br><span class="line">happy claude  ──────►  App 中查看/发指令  ──────►  键盘按任意键</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><strong>在电脑上</strong>：进入项目目录，执行
+<code>happy claude</code>，像平时一样开始 AI 编程任务。</li>
+<li><strong>离开电脑</strong>：打开手机
+App，即可看到当前会话的实时输出流。</li>
+<li><strong>需要操作</strong>：直接在 App
+里输入指令或给出权限确认；Claude Code 需要你审批时，App
+会推送通知。</li>
+<li><strong>回到电脑</strong>：在电脑键盘上按任意键，控制权自动切回终端。</li>
+</ol>
+<hr>
+<h2 id="推送通知配置">推送通知配置</h2>
+<p>推送通知是 Happy Coder
+最实用的功能之一。在以下情况下你会收到通知：</p>
+<ul>
+<li>Claude Code 请求执行危险命令，等待你的批准</li>
+<li>任务遭遇错误，Agent 暂停等待输入</li>
+<li>长时间任务执行完毕</li>
+</ul>
+<p>App 内可以在<strong>设置 → 通知</strong>中自定义通知级别（全部 /
+仅需要操作 / 关闭）。请确保系统层面已允许 App 发送通知。</p>
+<hr>
+<h2 id="项目结构开发者参考">项目结构（开发者参考）</h2>
+<p>Happy Coder 是一个 monorepo，包含四个子包：</p>
+<table>
+<thead>
+<tr class="header">
+<th>包名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>happy-app</code></td>
+<td>Web UI + 移动客户端（基于 Expo 构建）</td>
+</tr>
+<tr class="even">
+<td><code>happy-cli</code></td>
+<td>包裹 Claude Code / Codex 的命令行工具</td>
+</tr>
+<tr class="odd">
+<td><code>happy-agent</code></td>
+<td>远程 Agent 控制 CLI（创建、发送、监控会话）</td>
+</tr>
+<tr class="even">
+<td><code>happy-server</code></td>
+<td>处理加密同步的后端服务</td>
+</tr>
+</tbody>
+</table>
+<p>如需自部署服务端，参考 <a href="https://happy.engineering/docs/">官方文档</a>。</p>
+<hr>
+<h2 id="常见问题">常见问题</h2>
+<p><strong>Q：手机和电脑必须在同一 Wi-Fi 吗？</strong> 不需要。同步通过
+Happy 的加密中继服务器进行，手机用 4G/5G 也完全可以。</p>
+<p><strong>Q：我的代码安全吗？</strong>
+所有内容在离开你的设备前均已加密，服务器只转发密文，无法读取你的代码内容。</p>
+<p><strong>Q：支持 Windows 吗？</strong> CLI 基于 Node.js，理论上
+Windows / macOS / Linux 均支持。</p>
+<p><strong>Q：能同时在多台设备上监控吗？</strong>
+可以。多个设备登录同一账号后，都能看到实时输出；但同一时刻只有一个设备拥有输入控制权。</p>
+<hr>
+<h2 id="相关资源">相关资源</h2>
+<ul>
+<li>🎥 <a href="https://youtu.be/GCS0OG9QMSE">Demo 视频</a></li>
+<li>📚 <a href="https://happy.engineering/docs/">官方文档</a></li>
+<li>💻 <a href="https://github.com/slopus/happy">GitHub 仓库</a></li>
+<li>💬 <a href="https://discord.gg/fX9WBAhyfD">Discord 社区</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Claude Code</tag>
+        <tag>AI编程</tag>
+        <tag>效率工具</tag>
+        <tag>移动端</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大模型蒸馏：On-Policy 与 Off-Policy 的区别</title>
     <url>/2026/04/28/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F-On-Policy-vs-Off-Policy/</url>
     <content><![CDATA[<h2 id="引言">引言</h2>
