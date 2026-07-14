@@ -33,7 +33,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fengyan-wby.github.io/2023/08/23/%E3%80%90%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E3%80%91Longformer-The-Long-Document-Transformer/1.png">
 <meta property="article:published_time" content="2023-08-23T19:44:20.000Z">
-<meta property="article:modified_time" content="2026-06-29T09:34:18.986Z">
+<meta property="article:modified_time" content="2026-07-14T09:55:48.055Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="文献阅读">
 <meta property="article:tag" content="Longformer">
@@ -539,7 +539,7 @@ if(canvas.getContext){
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-29 09:34:18" itemprop="dateModified" datetime="2026-06-29T09:34:18+00:00">2026-06-29</time>
+      <time title="修改时间：2026-07-14 09:55:48" itemprop="dateModified" datetime="2026-07-14T09:55:48+00:00">2026-07-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -584,14 +584,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>686</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -711,14 +711,14 @@ Window如上图(c)所示。为了进一步提升感受野大小，可以在滑�
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">230k</span>
+    <span title="站点总字数">611k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">13:55</span>
+    <span title="站点阅读时长">9:16</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -932,6 +932,224 @@ darkmode.showWidget();
   // Handle PJAX page transitions
   document.addEventListener('pjax:success', function () {
     setTimeout(patchFoldButtons, 0);
+  });
+}());
+</script>
+
+
+<script>
+(function () {
+  'use strict';
+
+  // 从 .pagination DOM 解析当前页、总页数
+  function parsePagination() {
+    var pagination = document.querySelector('.pagination');
+    if (!pagination) return null;
+
+    var currentEl = pagination.querySelector('.page-number.current');
+    var current = currentEl ? parseInt(currentEl.textContent.trim(), 10) : 1;
+
+    var allPageNums = pagination.querySelectorAll('.page-number');
+    var total = 1;
+    allPageNums.forEach(function (el) {
+      var n = parseInt(el.textContent.trim(), 10);
+      if (!isNaN(n) && n > total) total = n;
+    });
+
+    if (total <= 1) {
+      var nextLink = pagination.querySelector('.extend.next');
+      if (nextLink) total = current + 1;
+    }
+
+    return { current: current, total: total };
+  }
+
+  // 构建页码 URL
+  function buildPageUrl(page, root) {
+    root = root || '/';
+    if (root.charAt(root.length - 1) !== '/') root += '/';
+    if (page === 1) return root;
+    return root + 'page/' + page + '/';
+  }
+
+  // 获取 Hexo root 路径
+  function getRoot() {
+    if (window.CONFIG && window.CONFIG.root) return window.CONFIG.root;
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      try {
+        var url = new URL(canonical.href);
+        return url.pathname.replace(/page\/\d+\/?$/, '').replace(/\/$/, '') + '/';
+      } catch (e) {}
+    }
+    return '/';
+  }
+
+  // 根据省略号位置（left/right），决定气泡里显示哪些页码
+  // left  省略号：显示 1 附近未展示的页码（2 ~ prevVisible-1）
+  // right 省略号：显示 nextVisible+1 ~ total-1 附近未展示的页码
+  function buildPages(side, current, total, adjacentPages) {
+    var shown = new Set(adjacentPages);
+    var pages = [];
+    if (side === 'left') {
+      // 第1页已在栏上，显示 2 到 min(current-2, total-1) 中未显示的
+      for (var i = 2; i <= total - 1; i++) {
+        if (!shown.has(i) && i < current - 1) pages.push(i);
+      }
+    } else {
+      // 末页已在栏上，显示 max(current+2,2) 到 total-1 中未显示的
+      for (var j = 2; j <= total - 1; j++) {
+        if (!shown.has(j) && j > current + 1) pages.push(j);
+      }
+    }
+    return pages;
+  }
+
+  // 当前已显示的页码列表（从 .page-number 读取）
+  function getVisiblePageNums(pagination) {
+    var nums = [];
+    pagination.querySelectorAll('.page-number').forEach(function (el) {
+      var n = parseInt(el.textContent.trim(), 10);
+      if (!isNaN(n)) nums.push(n);
+    });
+    return nums;
+  }
+
+  // 创建并定位 popover（position:fixed，视口坐标，无需 scrollX/Y）
+  function createPopover(triggerEl, pages, root) {
+    var pop = document.createElement('div');
+    pop.className = 'pj-popover';
+    pop.setAttribute('role', 'listbox');
+    pop.setAttribute('aria-label', '选择页码');
+
+    pages.forEach(function (n) {
+      var a = document.createElement('a');
+      a.className = 'pj-pop-num';
+      a.textContent = n;
+      a.href = buildPageUrl(n, root);
+      a.setAttribute('aria-label', '第 ' + n + ' 页');
+      pop.appendChild(a);
+    });
+
+    document.body.appendChild(pop);
+
+    // 用 requestAnimationFrame 延迟定位，确保浏览器完成布局后再读取尺寸
+    function reposition() {
+      var rect = triggerEl.getBoundingClientRect();
+      var popW = pop.offsetWidth || 200;   // 兜底值防止为 0
+      var popH = pop.offsetHeight || 60;
+      var left = rect.left + rect.width / 2 - popW / 2;
+      var top  = rect.top - popH - 10;
+      // 防止超出视口左右边缘
+      var minLeft = 8;
+      var maxLeft = window.innerWidth - popW - 8;
+      left = Math.max(minLeft, Math.min(left, maxLeft));
+      // 若上方空间不足，改为显示在下方
+      if (top < 8) top = rect.bottom + 10;
+      pop.style.left = left + 'px';
+      pop.style.top  = top  + 'px';
+    }
+
+    requestAnimationFrame(reposition);
+    return { el: pop, reposition: reposition };
+  }
+
+  function initPageJump() {
+    var paginationEl = document.querySelector('.pagination');
+    if (!paginationEl) return;
+
+    var info = parsePagination();
+    if (!info || info.total <= 1) return;
+
+    var root = getRoot();
+    var visibleNums = getVisiblePageNums(paginationEl);
+    var currentPopover = null; // { el, triggerEl }
+    var justOpened = false;   // 防止 open 后立即被 document click 关掉
+
+    function closePopover() {
+      if (currentPopover) {
+        currentPopover.el.remove();
+        currentPopover.triggerEl.setAttribute('aria-expanded', 'false');
+        currentPopover = null;
+      }
+    }
+
+    // 把所有 .space 替换成可点击的 <a>
+    var spaceEls = Array.from(paginationEl.querySelectorAll('.space'));
+    spaceEls.forEach(function (span) {
+      // 判断这个省略号是左侧还是右侧：
+      // 看省略号后面最近的 .page-number 的页码
+      //   > current → 右侧省略号（隐藏了 current+2 ~ 该页码-1）
+      //   <= current → 左侧省略号（隐藏了 2 ~ current-2）
+      var side = 'left';
+      var nextSib = span.nextElementSibling;
+      while (nextSib) {
+        if (nextSib.classList.contains('page-number')) {
+          var nn = parseInt(nextSib.textContent.trim(), 10);
+          if (!isNaN(nn) && nn > info.current) side = 'right';
+          break;
+        }
+        nextSib = nextSib.nextElementSibling;
+      }
+
+      var pages = buildPages(side, info.current, info.total, visibleNums);
+
+      // 若该侧没有隐藏页码（页数较少时），直接跳过，保留原 span
+      if (pages.length === 0) return;
+
+      var btn = document.createElement('a');
+      btn.className = 'space page-jump-trigger';
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('aria-label', '展开更多页码');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('title', '点击展开页码');
+      btn.textContent = '…';
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // 点击的是当前已打开的那个 → 关闭
+        if (currentPopover && currentPopover.triggerEl === btn) {
+          closePopover();
+          return;
+        }
+
+        // 先关闭已有气泡
+        closePopover();
+
+        var pop = createPopover(btn, pages, root);
+        btn.setAttribute('aria-expanded', 'true');
+        currentPopover = { el: pop.el, triggerEl: btn };
+        justOpened = true;
+        setTimeout(function () { justOpened = false; }, 0);
+      });
+
+      span.parentNode.replaceChild(btn, span);
+    });
+
+    // 点击其他区域关闭气泡
+    document.addEventListener('click', function (e) {
+      if (!currentPopover) return;
+      if (justOpened) return;
+      if (!currentPopover.el.contains(e.target)) closePopover();
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.keyCode === 27) closePopover();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageJump);
+  } else {
+    initPageJump();
+  }
+
+  // PJAX 支持：每次页面切换后重新初始化
+  document.addEventListener('pjax:success', function () {
+    initPageJump();
   });
 }());
 </script>
