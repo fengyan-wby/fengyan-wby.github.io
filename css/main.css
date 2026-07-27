@@ -2924,3 +2924,15 @@ figure.highlight.unfold .expand-btn {
   border-color: #0078d4;
   color: #fff !important;
 }
+.music-toggle-btn {
+  opacity: 0.8 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+.music-toggle-btn.is-playing {
+  background-color: #37c6c0 !important;
+  opacity: 1 !important;
+}
+.music-toggle-btn.is-playing:hover {
+  background-color: #2ba8a3 !important;
+}
