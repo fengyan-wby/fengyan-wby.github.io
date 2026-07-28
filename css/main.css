@@ -2936,3 +2936,58 @@ figure.highlight.unfold .expand-btn {
 .music-toggle-btn.is-playing:hover {
   background-color: #2ba8a3 !important;
 }
+.lyrics-panel {
+  position: fixed;
+  right: 92px;
+  bottom: 90px;
+  width: 260px;
+  max-height: 300px;
+  overflow: hidden;
+  background: rgba(30,30,30,0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px 12px;
+  z-index: 1049;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.lyrics-panel.lyrics-panel--visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+.lyrics-inner {
+  overflow-y: auto;
+  max-height: 268px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.lyrics-inner::-webkit-scrollbar {
+  display: none;
+}
+.lyric-line {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  transition: color 0.3s, font-size 0.3s, font-weight 0.3s;
+}
+.lyric-line.active {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+[data-theme="light"] .lyrics-panel {
+  background: rgba(255,255,255,0.88);
+}
+[data-theme="light"] .lyric-line {
+  color: rgba(0,0,0,0.35);
+}
+[data-theme="light"] .lyric-line.active {
+  color: #222;
+}
