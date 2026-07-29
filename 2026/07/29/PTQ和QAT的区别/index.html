@@ -32,7 +32,7 @@
 <meta property="og:description" content="Post-training-quantization（PTQ） Quantization-aware-training（QAT）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-07-29T15:14:28.000Z">
-<meta property="article:modified_time" content="2026-07-29T07:28:05.763Z">
+<meta property="article:modified_time" content="2026-07-29T08:11:42.138Z">
 <meta property="article:author" content="丰言">
 <meta property="article:tag" content="PTQ">
 <meta property="article:tag" content="QAT">
@@ -530,7 +530,7 @@ if(canvas.getContext){
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-07-29 15:14:28 / 修改时间：07:28:05" itemprop="dateCreated datePublished" datetime="2026-07-29T15:14:28+00:00">2026-07-29</time>
+      <time title="创建时间：2026-07-29 15:14:28 / 修改时间：08:11:42" itemprop="dateCreated datePublished" datetime="2026-07-29T15:14:28+00:00">2026-07-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -575,14 +575,14 @@ if(canvas.getContext){
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>430</span>
+      <span>737</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -592,27 +592,17 @@ if(canvas.getContext){
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>Post-training-quantization（PTQ）
-Quantization-aware-training（QAT）</p>
+    <div class="post-body" itemprop="articleBody"><p>Post-training-quantization（PTQ）</p>
+<p>Quantization-aware-training（QAT）</p>
 <span id="more"></span>
 <p>Post-training-quantization（PTQ）是目前常用的模型量化方法之一。以INT8量化为例，PTQ处理流程为：</p>
-<ol type="1">
-<li>首先在数据集上以FP32精度进行模型训练，得到训练好的baseline模型。</li>
-<li>然后使用小部分数据对FP32
-baseline模型进行calibration，这一步主要是得到网络各层weights以及activation的数据分布特性。再根据数据分布特性计算出网络各层的量化参数。</li>
-<li>使用量化参数对FP32 baseline进行量化得到INT8模型。</li>
-</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 首先在数据集上以FP32精度进行模型训练，得到训练好的baseline模型。</span><br><span class="line">2. 然后使用小部分数据对FP32 baseline模型进行calibration，这一步主要是得到网络各层weights以及activation的数据分布特性。再根据数据分布特性计算出网络各层的量化参数。</span><br><span class="line">3. 使用量化参数对FP32 baseline进行量化得到INT8模型。</span><br></pre></td></tr></table></figure>
 <p>可以看出如果PTQ中模型训练和量化是分开的，而QAT则是在模型训练时加入了伪量化节点，用于模拟模型量化时引起的误差。以INT8量化为例，QAT处理流程为：</p>
-<ol type="1">
-<li>首先在数据集上以FP32精度进行模型训练，得到训练好的baseline模型。</li>
-<li>在baseline模型中插入伪量化节点，得到QAT模型，并且在数据集上对QAT模型进行finetune（伪量化节点会模拟推理时的量化过程并且保存finetune过程中计算得到的量化参数）。</li>
-<li>使用量化参数对QAT模型进行量化得到INT8模型。</li>
-</ol>
-<p>&lt;% note info %&gt;
-伪量化实际上是quantization+dequantization的结合，通过quantization+dequantization操作模拟量化引起的误差。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 首先在数据集上以FP32精度进行模型训练，得到训练好的baseline模型。</span><br><span class="line">2. 在baseline模型中插入伪量化节点，得到QAT模型，并且在数据集上对QAT模型进行finetune（伪量化节点会模拟推理时的量化过程并且保存finetune过程中计算得到的量化参数）。</span><br><span class="line">3. 使用量化参数对QAT模型进行量化得到INT8模型。</span><br></pre></td></tr></table></figure>
+<div class="note info"><p>伪量化实际上是quantization+dequantization的结合，通过quantization+dequantization操作模拟量化引起的误差。</p>
 <p>伪量化的操作看起来输入输出没变，但是实际上在其中模拟了量化round操作，将这种误差当做一种训练的噪声，在QAT
-finetune的同时，模型会去适应这种噪声，从而在最后量化为INT8时，减少精度的损失。
-&lt;% endnote %&gt;</p>
+finetune的同时，模型会去适应这种噪声，从而在最后量化为INT8时，减少精度的损失。</p>
+</div>
 
     </div>
 
@@ -688,14 +678,14 @@ finetune的同时，模型会去适应这种噪声，从而在最后量化为INT
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">231k</span>
+    <span title="站点总字数">614k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">13:59</span>
+    <span title="站点阅读时长">9:19</span>
   </span>
 </div>
 <div class="busuanzi-count">
