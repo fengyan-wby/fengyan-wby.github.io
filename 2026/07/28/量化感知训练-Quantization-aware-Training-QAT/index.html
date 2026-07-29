@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="p0fiZ6nt8BB4FMkuAluLSrVQBjtlCFIBDt3dtwwnpY4">
+  <meta name="msvalidate.01" content="41161148FC819624AED1F8F29D6C5719">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CMa+Shan+Zheng:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="看到Kimi-K3中使用了量化感知训练（QAT），这里记录一下在 PyTorch 中如何实现 QAT。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="量化感知训练(Quantization-aware Training, QAT)">
+<meta property="og:url" content="https://fengyan-wby.github.io/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/index.html">
+<meta property="og:site_name" content="丰言的博客">
+<meta property="og:description" content="看到Kimi-K3中使用了量化感知训练（QAT），这里记录一下在 PyTorch 中如何实现 QAT。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-28T15:36:44.000Z">
+<meta property="article:modified_time" content="2026-07-29T01:46:17.078Z">
+<meta property="article:author" content="丰言">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fengyan-wby.github.io/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fengyan-wby.github.io/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/","path":"2026/07/28/量化感知训练-Quantization-aware-Training-QAT/","title":"量化感知训练(Quantization-aware Training, QAT)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>量化感知训练(Quantization-aware Training, QAT) | 丰言的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰言的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">89</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">97</span></a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-ghchart"><a href="/ghchart/" rel="section"><i class="fab fa-github fa-fw"></i>更新表</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-pytorch-%E4%B8%AD%E5%AE%9E%E7%8E%B0-qat"><span class="nav-number">1.</span> <span class="nav-text">在 PyTorch 中实现 QAT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%87%86%E5%A4%87"><span class="nav-number">1.1.</span> <span class="nav-text">模型准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83"><span class="nav-number">1.2.</span> <span class="nav-text">微调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E4%B8%BA%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">转换为量化模型</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="丰言"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">丰言</p>
+  <div class="site-description" itemprop="description">行到水穷处，坐看云起时</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fengyan-wby" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fengyan-wby" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wubangyu1993@gmail.com" title="E-Mail → mailto:wubangyu1993@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/" title="2026&#x2F;07&#x2F;28&#x2F;量化感知训练-Quantization-aware-Training-QAT&#x2F;">量化感知训练(Quantization-aware Training, QAT)</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/" title="2026&#x2F;06&#x2F;08&#x2F;Happy-Coder-教程：用手机远程掌控-Claude-Code&#x2F;">Happy Coder 教程：用手机远程掌控 Claude Code</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/28/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F-On-Policy-vs-Off-Policy/" title="2026&#x2F;04&#x2F;28&#x2F;大模型蒸馏-On-Policy-vs-Off-Policy&#x2F;">大模型蒸馏：On-Policy 与 Off-Policy 的区别</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/02/openclaw%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" title="2026&#x2F;04&#x2F;02&#x2F;openclaw安装教程&#x2F;">openclaw安装教程</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2026/04/02/windows%E9%85%8D%E7%BD%AEclaudecode/" title="2026&#x2F;04&#x2F;02&#x2F;windows配置claudecode&#x2F;">windows配置claudecode</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fengyan-wby.github.io/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="丰言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰言的博客">
+      <meta itemprop="description" content="行到水穷处，坐看云起时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="量化感知训练(Quantization-aware Training, QAT) | 丰言的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          量化感知训练(Quantization-aware Training, QAT)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-28 15:36:44" itemprop="dateCreated datePublished" datetime="2026-07-28T15:36:44+00:00">2026-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-29 01:46:17" itemprop="dateModified" datetime="2026-07-29T01:46:17+00:00">2026-07-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/%E5%AD%A6%E4%B9%A0/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/%E5%AD%A6%E4%B9%A0/%E5%B7%A5%E5%85%B7/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2026/07/28/量化感知训练-Quantization-aware-Training-QAT/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>778</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>看到Kimi-K3中使用了量化感知训练（QAT），这里记录一下在 PyTorch
+中如何实现 QAT。</p>
+<span id="more"></span>
+<h2 id="在-pytorch-中实现-qat">在 PyTorch 中实现 QAT</h2>
+<p>PyTorch 提供了一个专门的 <code>torch.quantization</code> 模块来方便
+QAT。一般流程包含为 QAT 准备模型、进行微调
+(fine-tuning)，然后将其转换为真正的量化 (quantization)模型。</p>
+<h3 id="模型准备">模型准备</h3>
+<ol type="1">
+<li>定义一个<code>QConfig</code>，它指定量化设置（例如，用于激活统计的观测器、用于权重
+(weight)和激活的伪量化模块、目标数据类型如
+<code>torch.qint8</code>）。</li>
+<li>在想要量化的模型部分的开头和结尾插入 <code>QuantStub</code> 和
+<code>DeQuantStub</code> 层。这些层作为标记
+(token)，告知框架量化操作的起点和终点。</li>
+<li>使用 <code>torch.quantization.prepare_qat</code> 根据提供的
+<code>QConfig</code>
+自动将伪量化模块和观测器插入到您的模型中。此函数会就地修改模型，或返回一个为
+QAT 准备好的新模型实例。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.quantization</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：一个简单模型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyModel</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.quant = torch.quantization.QuantStub() <span class="comment"># 输入量化标记</span></span><br><span class="line">        self.linear = nn.Linear(<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line">        self.dequant = torch.quantization.DeQuantStub() <span class="comment"># 输出去量化标记</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.quant(x) <span class="comment"># 对输入应用伪量化</span></span><br><span class="line">        x = self.linear(x)</span><br><span class="line">        x = self.relu(x)</span><br><span class="line">        x = self.dequant(x) <span class="comment"># 返回浮点数前对输出去量化</span></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 实例化浮点模型</span></span><br><span class="line">float_model = MyModel()</span><br><span class="line">float_model.train() <span class="comment"># 将模型设置为训练模式以进行 QAT</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 定义 QConfig（支持 INT8 对称逐张量后端示例）</span></span><br><span class="line"><span class="comment">#    根据目标硬件/后端需求进行调整。</span></span><br><span class="line">qconfig = torch.quantization.get_default_qat_qconfig(<span class="string">&#x27;fbgemm&#x27;</span>) <span class="comment"># 或 &#x27;qnnpack&#x27; 等</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 为 QAT 准备模型</span></span><br><span class="line">prepared_model = torch.quantization.prepare_qat(float_model, &#123;<span class="string">&#x27;&#x27;</span>: qconfig&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(prepared_model) <span class="comment"># 观察插入的 FakeQuantize 模块</span></span><br></pre></td></tr></table></figure>
+<h3 id="微调">微调</h3>
+<ol type="1">
+<li>像训练常规浮点模型一样训练
+<code>prepared_model</code>。使用您的标准训练循环、损失函数 (loss
+function)和优化器。</li>
+<li>在前向传播过程中，伪量化模块根据观测器收集的统计数据模拟量化效果（钳制、舍入）。</li>
+<li>在反向传播 (backpropagation)过程中，STE
+允许梯度通过模拟量化步骤回传，使模型权重能够适应量化过程。</li>
+<li>通常做法是从预训练 (pre-training)的浮点模型检查点开始
+QAT，并以较小的学习率微调几个周期。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">num_epochs_qat = <span class="number">3</span> <span class="comment"># 通常比初始训练的周期数少</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs_qat):</span><br><span class="line">    prepared_model.train() <span class="comment"># 确保模型处于训练模式</span></span><br><span class="line">    <span class="keyword">for</span> data, target <span class="keyword">in</span> train_loader:</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        output = prepared_model(data)</span><br><span class="line">        loss = criterion(output, target)</span><br><span class="line">        loss.backward() <span class="comment"># 梯度通过 STE 流经伪量化节点</span></span><br><span class="line">        optimizer.step()</span><br><span class="line">    <span class="comment"># 如有需要，添加验证循环</span></span><br></pre></td></tr></table></figure>
+<h3 id="转换为量化模型">转换为量化模型</h3>
+<ol type="1">
+<li>微调后，将模型切换到评估模式（<code>prepared_model.eval()</code>）。</li>
+<li>使用 <code>torch.quantization.convert</code> 将经过 QAT
+训练的模型转换为真正的量化模型。这会使用学到的参数
+(parameter)，将伪量化模块和观测到的浮点模块（如
+<code>nn.Linear</code>）替换为它们的基于整数的对应模块（如
+<code>nn.quantized.Linear</code>）。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 转换前确保模型处于评估模式</span></span><br><span class="line">prepared_model.<span class="built_in">eval</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 QAT 模型转换为可部署的量化模型</span></span><br><span class="line">quantized_model = torch.quantization.convert(prepared_model.cpu()) <span class="comment"># 通常先转换为 CPU 模型</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(quantized_model) <span class="comment"># 观察量化模块（例如，QuantizedLinear）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在 &#x27;quantized_model&#x27; 可以保存并用于推理</span></span><br><span class="line"><span class="comment"># torch.save(quantized_model.state_dict(), &quot;quantized_model.pth&quot;)</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>丰言
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://fengyan-wby.github.io/2026/07/28/%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83-Quantization-aware-Training-QAT/" title="量化感知训练(Quantization-aware Training, QAT)">https://fengyan-wby.github.io/2026/07/28/量化感知训练-Quantization-aware-Training-QAT/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"><i class="fa fa-tag"></i> PyTorch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/08/Happy-Coder-%E6%95%99%E7%A8%8B%EF%BC%9A%E7%94%A8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E6%8E%8C%E6%8E%A7-Claude-Code/" rel="prev" title="Happy Coder 教程：用手机远程掌控 Claude Code">
+                  <i class="fa fa-angle-left"></i> Happy Coder 教程：用手机远程掌控 Claude Code
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2023 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">丰言</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">230k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">13:58</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><!-- 网站运行时间的设置 -->
+
+    <span id="times">载入日期...</span>
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("02/01/2023 12:00:00");
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} 
+            minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("times").innerHTML = "小破站已走过 " + dnum + " 天 " + hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+    setInterval("createtime()",250);
+    </script>
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.3s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#222',
+  buttonColorLight: '#222',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"fengyan-blog-comments","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+
+<div class="scroll-nav-btns" id="scrollNavBtns" aria-label="Page scroll controls">
+  <button class="scroll-nav-btn" id="scrollToTopBtn"
+          title="Back to top" aria-label="Scroll to top">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+  </button>
+  <button class="scroll-nav-btn music-toggle-btn" id="musicToggleBtn"
+          title="播放/暂停背景音乐" aria-label="播放/暂停背景音乐">
+    <i class="fa fa-music" aria-hidden="true" id="musicIcon"></i>
+  </button>
+  <button class="scroll-nav-btn" id="scrollToBottomBtn"
+          title="Go to bottom" aria-label="Scroll to bottom">
+    <i class="fa fa-angle-down" aria-hidden="true"></i>
+  </button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SHOW_TOP_THRESHOLD    = 50;   // px from top — show ↑ button
+  var HIDE_BOTTOM_THRESHOLD = 50;   // px from bottom — hide ↓ button
+  var SCROLL_DURATION       = 500;  // ms, matches NexT's back-to-top
+
+  var topBtn    = document.getElementById('scrollToTopBtn');
+  var bottomBtn = document.getElementById('scrollToBottomBtn');
+  if (!topBtn || !bottomBtn) return;
+
+  function updateVisibility() {
+    var scrollY       = window.scrollY || window.pageYOffset;
+    var contentHeight = document.body.scrollHeight - window.innerHeight;
+
+    // ↑ button: show when scrolled down past threshold
+    topBtn.classList.toggle('scroll-nav-btn--visible', scrollY > SHOW_TOP_THRESHOLD);
+
+    // ↓ button: hide when near the bottom
+    var nearBottom = contentHeight > 0 && (contentHeight - scrollY) < HIDE_BOTTOM_THRESHOLD;
+    bottomBtn.classList.toggle('scroll-nav-btn--visible', !nearBottom);
+  }
+
+  function scrollTo(targetTop) {
+    if (window.anime) {
+      window.anime({
+        targets  : document.scrollingElement || document.documentElement,
+        duration : SCROLL_DURATION,
+        easing   : 'linear',
+        scrollTop: targetTop
+      });
+    } else {
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+  }
+
+  topBtn.addEventListener('click', function () { scrollTo(0); });
+  bottomBtn.addEventListener('click', function () { scrollTo(document.body.scrollHeight); });
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+
+  // Set initial state on page load
+  updateVisibility();
+}());
+</script>
+
+<script>
+
+(function () {
+  'use strict';
+
+  function patchFoldButtons() {
+    document.querySelectorAll('.expand-btn').forEach(function (btn) {
+      if (btn.dataset.collapsePatched) return;
+      btn.dataset.collapsePatched = '1';
+
+      var target = btn.parentElement;  // .code-container or figure.highlight (mac style)
+
+      // Clone the button to strip NexT's original click listener
+      var newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener('click', function () {
+        var icon = newBtn.querySelector('i');
+        if (target.classList.contains('unfold')) {
+          // --- Collapse ---
+          target.classList.remove('unfold');
+          target.classList.add('highlight-fold');
+          if (icon) {
+            icon.classList.remove('fa-angle-up');
+            icon.classList.add('fa-angle-down');
+          }
+          // Scroll block back into view if it scrolled above viewport
+          var rect = target.getBoundingClientRect();
+          if (rect.top < 0) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          // --- Expand ---
+          target.classList.remove('highlight-fold');
+          target.classList.add('unfold');
+          if (icon) {
+            icon.classList.remove('fa-angle-down');
+            icon.classList.add('fa-angle-up');
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchFoldButtons);
+  } else {
+    setTimeout(patchFoldButtons, 0);
+  }
+
+  // Handle PJAX page transitions
+  document.addEventListener('pjax:success', function () {
+    setTimeout(patchFoldButtons, 0);
+  });
+}());
+</script>
+
+
+<script>
+(function () {
+  'use strict';
+
+  // 从 .pagination DOM 解析当前页、总页数
+  function parsePagination() {
+    var pagination = document.querySelector('.pagination');
+    if (!pagination) return null;
+
+    var currentEl = pagination.querySelector('.page-number.current');
+    var current = currentEl ? parseInt(currentEl.textContent.trim(), 10) : 1;
+
+    var allPageNums = pagination.querySelectorAll('.page-number');
+    var total = 1;
+    allPageNums.forEach(function (el) {
+      var n = parseInt(el.textContent.trim(), 10);
+      if (!isNaN(n) && n > total) total = n;
+    });
+
+    if (total <= 1) {
+      var nextLink = pagination.querySelector('.extend.next');
+      if (nextLink) total = current + 1;
+    }
+
+    return { current: current, total: total };
+  }
+
+  // 构建页码 URL
+  function buildPageUrl(page, root) {
+    root = root || '/';
+    if (root.charAt(root.length - 1) !== '/') root += '/';
+    if (page === 1) return root;
+    return root + 'page/' + page + '/';
+  }
+
+  // 获取 Hexo root 路径
+  function getRoot() {
+    if (window.CONFIG && window.CONFIG.root) return window.CONFIG.root;
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      try {
+        var url = new URL(canonical.href);
+        return url.pathname.replace(/page\/\d+\/?$/, '').replace(/\/$/, '') + '/';
+      } catch (e) {}
+    }
+    return '/';
+  }
+
+  // 根据省略号位置（left/right），决定气泡里显示哪些页码
+  // left  省略号：显示 1 附近未展示的页码（2 ~ prevVisible-1）
+  // right 省略号：显示 nextVisible+1 ~ total-1 附近未展示的页码
+  function buildPages(side, current, total, adjacentPages) {
+    var shown = new Set(adjacentPages);
+    var pages = [];
+    if (side === 'left') {
+      // 第1页已在栏上，显示 2 到 min(current-2, total-1) 中未显示的
+      for (var i = 2; i <= total - 1; i++) {
+        if (!shown.has(i) && i < current - 1) pages.push(i);
+      }
+    } else {
+      // 末页已在栏上，显示 max(current+2,2) 到 total-1 中未显示的
+      for (var j = 2; j <= total - 1; j++) {
+        if (!shown.has(j) && j > current + 1) pages.push(j);
+      }
+    }
+    return pages;
+  }
+
+  // 当前已显示的页码列表（从 .page-number 读取）
+  function getVisiblePageNums(pagination) {
+    var nums = [];
+    pagination.querySelectorAll('.page-number').forEach(function (el) {
+      var n = parseInt(el.textContent.trim(), 10);
+      if (!isNaN(n)) nums.push(n);
+    });
+    return nums;
+  }
+
+  // 创建并定位 popover（position:fixed，视口坐标，无需 scrollX/Y）
+  function createPopover(triggerEl, pages, root) {
+    var pop = document.createElement('div');
+    pop.className = 'pj-popover';
+    pop.setAttribute('role', 'listbox');
+    pop.setAttribute('aria-label', '选择页码');
+
+    pages.forEach(function (n) {
+      var a = document.createElement('a');
+      a.className = 'pj-pop-num';
+      a.textContent = n;
+      a.href = buildPageUrl(n, root);
+      a.setAttribute('aria-label', '第 ' + n + ' 页');
+      pop.appendChild(a);
+    });
+
+    document.body.appendChild(pop);
+
+    // 用 requestAnimationFrame 延迟定位，确保浏览器完成布局后再读取尺寸
+    function reposition() {
+      var rect = triggerEl.getBoundingClientRect();
+      var popW = pop.offsetWidth || 200;   // 兜底值防止为 0
+      var popH = pop.offsetHeight || 60;
+      var left = rect.left + rect.width / 2 - popW / 2;
+      var top  = rect.top - popH - 10;
+      // 防止超出视口左右边缘
+      var minLeft = 8;
+      var maxLeft = window.innerWidth - popW - 8;
+      left = Math.max(minLeft, Math.min(left, maxLeft));
+      // 若上方空间不足，改为显示在下方
+      if (top < 8) top = rect.bottom + 10;
+      pop.style.left = left + 'px';
+      pop.style.top  = top  + 'px';
+    }
+
+    requestAnimationFrame(reposition);
+    return { el: pop, reposition: reposition };
+  }
+
+  function initPageJump() {
+    var paginationEl = document.querySelector('.pagination');
+    if (!paginationEl) return;
+
+    var info = parsePagination();
+    if (!info || info.total <= 1) return;
+
+    var root = getRoot();
+    var visibleNums = getVisiblePageNums(paginationEl);
+    var currentPopover = null; // { el, triggerEl }
+    var justOpened = false;   // 防止 open 后立即被 document click 关掉
+
+    function closePopover() {
+      if (currentPopover) {
+        currentPopover.el.remove();
+        currentPopover.triggerEl.setAttribute('aria-expanded', 'false');
+        currentPopover = null;
+      }
+    }
+
+    // 把所有 .space 替换成可点击的 <a>
+    var spaceEls = Array.from(paginationEl.querySelectorAll('.space'));
+    spaceEls.forEach(function (span) {
+      // 判断这个省略号是左侧还是右侧：
+      // 看省略号后面最近的 .page-number 的页码
+      //   > current → 右侧省略号（隐藏了 current+2 ~ 该页码-1）
+      //   <= current → 左侧省略号（隐藏了 2 ~ current-2）
+      var side = 'left';
+      var nextSib = span.nextElementSibling;
+      while (nextSib) {
+        if (nextSib.classList.contains('page-number')) {
+          var nn = parseInt(nextSib.textContent.trim(), 10);
+          if (!isNaN(nn) && nn > info.current) side = 'right';
+          break;
+        }
+        nextSib = nextSib.nextElementSibling;
+      }
+
+      var pages = buildPages(side, info.current, info.total, visibleNums);
+
+      // 若该侧没有隐藏页码（页数较少时），直接跳过，保留原 span
+      if (pages.length === 0) return;
+
+      var btn = document.createElement('a');
+      btn.className = 'space page-jump-trigger';
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('aria-label', '展开更多页码');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('title', '点击展开页码');
+      btn.textContent = '…';
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // 点击的是当前已打开的那个 → 关闭
+        if (currentPopover && currentPopover.triggerEl === btn) {
+          closePopover();
+          return;
+        }
+
+        // 先关闭已有气泡
+        closePopover();
+
+        var pop = createPopover(btn, pages, root);
+        btn.setAttribute('aria-expanded', 'true');
+        currentPopover = { el: pop.el, triggerEl: btn };
+        justOpened = true;
+        setTimeout(function () { justOpened = false; }, 0);
+      });
+
+      span.parentNode.replaceChild(btn, span);
+    });
+
+    // 点击其他区域关闭气泡
+    document.addEventListener('click', function (e) {
+      if (!currentPopover) return;
+      if (justOpened) return;
+      if (!currentPopover.el.contains(e.target)) closePopover();
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.keyCode === 27) closePopover();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageJump);
+  } else {
+    initPageJump();
+  }
+
+  // PJAX 支持：每次页面切换后重新初始化
+  document.addEventListener('pjax:success', function () {
+    initPageJump();
+  });
+}());
+</script>
+
+
+<audio id="bgAudio" loop preload="none">
+  <source src="/music/bgm.mp3" type="audio/mpeg">
+</audio>
+
+
+<div id="lyricsPanel" class="lyrics-panel" aria-live="polite" aria-label="歌词">
+  <div id="lyricsInner" class="lyrics-inner"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var btn        = document.getElementById('musicToggleBtn');
+  var icon       = document.getElementById('musicIcon');
+  var audio      = document.getElementById('bgAudio');
+  var panel      = document.getElementById('lyricsPanel');
+  var lyricsInner = document.getElementById('lyricsInner');
+  if (!btn || !audio) return;
+
+  var STORAGE_KEY = 'bgm_playing';
+  var isPlaying = sessionStorage.getItem(STORAGE_KEY) === '1';
+
+  // ── LRC 解析 ──────────────────────────────────────────────
+  var lrcLines = [];   // [{time: seconds, text: string}]
+  var curIdx   = -1;
+
+  function parseLrc(raw) {
+    var lines = raw.split('\n');
+    var result = [];
+    var timeRe = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/g;
+    lines.forEach(function (line) {
+      var match;
+      timeRe.lastIndex = 0;
+      var times = [];
+      while ((match = timeRe.exec(line)) !== null) {
+        var t = parseInt(match[1], 10) * 60
+              + parseInt(match[2], 10)
+              + parseInt(match[3], 10) / (match[3].length === 3 ? 1000 : 100);
+        times.push(t);
+      }
+      var text = line.replace(/\[\d{2}:\d{2}\.\d{2,3}\]/g, '').trim();
+      if (text) {
+        times.forEach(function (t) { result.push({ time: t, text: text }); });
+      }
+    });
+    result.sort(function (a, b) { return a.time - b.time; });
+    return result;
+  }
+
+  function renderLyrics() {
+    lyricsInner.innerHTML = '';
+    lrcLines.forEach(function (line, i) {
+      var p = document.createElement('p');
+      p.className = 'lyric-line';
+      p.textContent = line.text;
+      p.dataset.idx = i;
+      lyricsInner.appendChild(p);
+    });
+  }
+
+  function highlightLyric(idx) {
+    if (idx === curIdx) return;
+    var prev = lyricsInner.querySelector('.lyric-line.active');
+    if (prev) prev.classList.remove('active');
+    var el = lyricsInner.querySelector('[data-idx="' + idx + '"]');
+    if (el) {
+      el.classList.add('active');
+      // 让当前歌词滚动到面板中央
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+    curIdx = idx;
+  }
+
+  function syncLyric() {
+    if (!lrcLines.length) return;
+    var t = audio.currentTime;
+    var idx = 0;
+    for (var i = lrcLines.length - 1; i >= 0; i--) {
+      if (t >= lrcLines[i].time) { idx = i; break; }
+    }
+    highlightLyric(idx);
+  }
+
+  // 加载 lrc 文件
+  fetch('/music/bgm.lrc')
+    .then(function (r) { return r.text(); })
+    .then(function (raw) {
+      lrcLines = parseLrc(raw);
+      renderLyrics();
+    })
+    .catch(function () {});
+
+  // timeupdate 驱动歌词同步
+  audio.addEventListener('timeupdate', syncLyric);
+
+  // ── 歌词面板开关：悬停按钮或面板时显示 ──────────────────────
+  var hideTimer = null;
+
+  function showPanel() {
+    clearTimeout(hideTimer);
+    panel.classList.add('lyrics-panel--visible');
+  }
+
+  function scheduleHide() {
+    hideTimer = setTimeout(function () {
+      panel.classList.remove('lyrics-panel--visible');
+    }, 200);  // 短暂延迟，让鼠标有时间移入面板
+  }
+
+  btn.addEventListener('mouseenter', showPanel);
+  btn.addEventListener('mouseleave', scheduleHide);
+  panel.addEventListener('mouseenter', showPanel);
+  panel.addEventListener('mouseleave', scheduleHide);
+
+  // ── 播放控制 ─────────────────────────────────────────────
+  function updateUI(playing) {
+    btn.classList.toggle('is-playing', playing);
+    icon.className = playing ? 'fa fa-pause' : 'fa fa-music';
+  }
+
+  function setPlaying(play) {
+    isPlaying = play;
+    sessionStorage.setItem(STORAGE_KEY, play ? '1' : '0');
+    updateUI(play);
+    if (play) {
+      audio.play().catch(function () {
+        isPlaying = false;
+        sessionStorage.setItem(STORAGE_KEY, '0');
+        updateUI(false);
+      });
+    } else {
+      audio.pause();
+    }
+  }
+
+  // 初始化：若上次是播放状态（同会话内 PJAX 跳转），尝试继续播放
+  if (isPlaying) {
+    audio.play().then(function () {
+      updateUI(true);
+    }).catch(function () {
+      isPlaying = false;
+      sessionStorage.setItem(STORAGE_KEY, '0');
+      updateUI(false);
+    });
+  }
+
+  btn.addEventListener('click', function () {
+    setPlaying(!isPlaying);
+  });
+
+  // PJAX：audio 元素在 PJAX 管理区域外，页面切换时持续播放，无需重新初始化
+}());
+</script>
+
+</body>
+</html>
