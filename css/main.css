@@ -2924,7 +2924,8 @@ figure.highlight.unfold .expand-btn {
   border-color: #0078d4;
   color: #fff !important;
 }
-.music-toggle-btn {
+.music-toggle-btn,
+.home-nav-btn {
   opacity: 0.8 !important;
   pointer-events: auto !important;
   transform: translateY(0) !important;
