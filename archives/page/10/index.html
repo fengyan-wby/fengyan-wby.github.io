@@ -1300,5 +1300,38 @@ darkmode.showWidget();
 }());
 </script>
 
+
+<script>
+(function () {
+  'use strict';
+
+  var TOOLTIP_TEXT = '切换深色/浅色模式';
+
+  function setTooltip() {
+    var btn = document.querySelector('.darkmode-toggle');
+    if (!btn) return false;
+    if (!btn.dataset.tooltipSet) {
+      btn.dataset.tooltipSet = '1';
+      btn.setAttribute('title', TOOLTIP_TEXT);
+      btn.setAttribute('aria-label', TOOLTIP_TEXT);
+    }
+    return true;
+  }
+
+  // darkmode-js 从 CDN 加载，按钮可能在当前脚本之后才创建，轮询兜底
+  if (!setTooltip()) {
+    var tries = 0;
+    var interval = setInterval(function () {
+      if (setTooltip() || ++tries > 50) {  // 50 × 200ms = 10s
+        clearInterval(interval);
+      }
+    }, 200);
+  }
+
+  // PJAX：按钮在 body 层级通常不重建，保险起见重新检查
+  document.addEventListener('pjax:success', setTooltip);
+}());
+</script>
+
 </body>
 </html>

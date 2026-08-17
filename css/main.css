@@ -2937,6 +2937,14 @@ figure.highlight.unfold .expand-btn {
 .music-toggle-btn.is-playing:hover {
   background-color: #2ba8a3 !important;
 }
+.darkmode-toggle {
+  opacity: 0.8 !important;
+  transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out !important;
+}
+.darkmode-toggle:hover {
+  background-color: #555 !important;
+  opacity: 1 !important;
+}
 .lyrics-panel {
   position: fixed;
   right: 92px;
