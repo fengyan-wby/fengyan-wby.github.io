@@ -3000,3 +3000,91 @@ figure.highlight.unfold .expand-btn {
 [data-theme="light"] .lyric-line.active {
   color: #222;
 }
+.darkmode--activated .post-body .note {
+  background: #3b3b3b;
+  border-left-color: #a0a0a0;
+}
+.darkmode--activated .post-body .note.default {
+  background: #333;
+  border-left-color: #a0a0a0;
+}
+.darkmode--activated .post-body .note.default h2,
+.darkmode--activated .post-body .note.default h3,
+.darkmode--activated .post-body .note.default h4,
+.darkmode--activated .post-body .note.default h5,
+.darkmode--activated .post-body .note.default h6 {
+  color: #a0a0a0;
+}
+.darkmode--activated .post-body .note.default:not(.no-icon)::before {
+  color: #a0a0a0;
+}
+.darkmode--activated .post-body .note.primary {
+  background: #322b3e;
+  border-left-color: #9a7bd4;
+}
+.darkmode--activated .post-body .note.primary h2,
+.darkmode--activated .post-body .note.primary h3,
+.darkmode--activated .post-body .note.primary h4,
+.darkmode--activated .post-body .note.primary h5,
+.darkmode--activated .post-body .note.primary h6 {
+  color: #9a7bd4;
+}
+.darkmode--activated .post-body .note.primary:not(.no-icon)::before {
+  color: #9a7bd4;
+}
+.darkmode--activated .post-body .note.info {
+  background: #2b3640;
+  border-left-color: #7baeda;
+}
+.darkmode--activated .post-body .note.info h2,
+.darkmode--activated .post-body .note.info h3,
+.darkmode--activated .post-body .note.info h4,
+.darkmode--activated .post-body .note.info h5,
+.darkmode--activated .post-body .note.info h6 {
+  color: #7baeda;
+}
+.darkmode--activated .post-body .note.info:not(.no-icon)::before {
+  color: #7baeda;
+}
+.darkmode--activated .post-body .note.success {
+  background: #2f3d2f;
+  border-left-color: #8dcd8d;
+}
+.darkmode--activated .post-body .note.success h2,
+.darkmode--activated .post-body .note.success h3,
+.darkmode--activated .post-body .note.success h4,
+.darkmode--activated .post-body .note.success h5,
+.darkmode--activated .post-body .note.success h6 {
+  color: #8dcd8d;
+}
+.darkmode--activated .post-body .note.success:not(.no-icon)::before {
+  color: #8dcd8d;
+}
+.darkmode--activated .post-body .note.warning {
+  background: #463b2d;
+  border-left-color: #f4c683;
+}
+.darkmode--activated .post-body .note.warning h2,
+.darkmode--activated .post-body .note.warning h3,
+.darkmode--activated .post-body .note.warning h4,
+.darkmode--activated .post-body .note.warning h5,
+.darkmode--activated .post-body .note.warning h6 {
+  color: #f4c683;
+}
+.darkmode--activated .post-body .note.warning:not(.no-icon)::before {
+  color: #f4c683;
+}
+.darkmode--activated .post-body .note.danger {
+  background: #422e2d;
+  border-left-color: #e48784;
+}
+.darkmode--activated .post-body .note.danger h2,
+.darkmode--activated .post-body .note.danger h3,
+.darkmode--activated .post-body .note.danger h4,
+.darkmode--activated .post-body .note.danger h5,
+.darkmode--activated .post-body .note.danger h6 {
+  color: #e48784;
+}
+.darkmode--activated .post-body .note.danger:not(.no-icon)::before {
+  color: #e48784;
+}
