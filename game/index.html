@@ -24,15 +24,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fengyan-wby.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="无聊的时候来玩一把 2048：方向键（或 WASD &#x2F; 滑动屏幕）移动数字方块，相同数字相撞即可合并，看看你能合成到多少！">
+    <meta name="description" content="无聊的时候来放松一下！三款小游戏：2048、贪吃蛇、扫雷，点击下方标签切换着玩，最高分 &#x2F; 最快用时自动保存在本地浏览器。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="小游戏">
 <meta property="og:url" content="https://fengyan-wby.github.io/game/index.html">
 <meta property="og:site_name" content="丰言的博客">
-<meta property="og:description" content="无聊的时候来玩一把 2048：方向键（或 WASD &#x2F; 滑动屏幕）移动数字方块，相同数字相撞即可合并，看看你能合成到多少！">
+<meta property="og:description" content="无聊的时候来放松一下！三款小游戏：2048、贪吃蛇、扫雷，点击下方标签切换着玩，最高分 &#x2F; 最快用时自动保存在本地浏览器。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-28T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-28T10:15:29.856Z">
+<meta property="article:modified_time" content="2026-09-29T07:05:14.036Z">
 <meta property="article:author" content="丰言">
 <meta name="twitter:card" content="summary">
 
@@ -507,13 +507,86 @@ if(canvas.getContext){
       
       
       <div class="post-body">
-          <div class="note info"><p>无聊的时候来玩一把 2048：方向键（或 WASD /
-滑动屏幕）移动数字方块，相同数字相撞即可合并，看看你能合成到多少！</p>
+          <div class="note info"><p>无聊的时候来放松一下！三款小游戏：2048、贪吃蛇、扫雷，点击下方标签切换着玩，最高分
+/ 最快用时自动保存在本地浏览器。</p>
 </div>
+<span id="more"></span>
+<style>
+.game-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 14px;
+}
+.game-tabs button {
+  padding: 8px 20px;
+  border: 1px solid var(--btn-default-border-color);
+  border-radius: 8px;
+  background: var(--btn-default-bg);
+  color: var(--btn-default-color);
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.game-tabs button.active {
+  border-color: var(--btn-default-hover-border-color);
+  background: var(--btn-default-hover-bg);
+  color: var(--btn-default-hover-color);
+  font-weight: 700;
+}
+</style>
 <div style="max-width: 440px; margin: 0 auto;">
-<iframe src="/game/2048.html" title="2048 小游戏" loading="lazy" style="display: block; width: 100%; aspect-ratio: 2 / 3; border: 0; border-radius: 12px;">
+<div class="game-tabs">
+<button class="active" data-game="game-2048">
+2048
+</button>
+<button data-game="game-snake">
+贪吃蛇
+</button>
+<button data-game="game-mine">
+扫雷
+</button>
+</div>
+<!-- 不加 loading="lazy"：隐藏面板里的懒加载 iframe 在部分浏览器切出来时不会触发加载 -->
+<div id="game-2048" class="game-frame">
+<iframe src="/game/2048.html" title="2048 小游戏" style="display: block; width: 100%; aspect-ratio: 2 / 3; border: 0; border-radius: 12px;">
 </iframe>
 </div>
+<div id="game-snake" class="game-frame" hidden>
+<iframe src="/game/snake.html" title="贪吃蛇小游戏" style="display: block; width: 100%; aspect-ratio: 2 / 3; border: 0; border-radius: 12px;">
+</iframe>
+</div>
+<div id="game-mine" class="game-frame" hidden>
+<iframe src="/game/minesweeper.html" title="扫雷小游戏" style="display: block; width: 100%; aspect-ratio: 2 / 3; border: 0; border-radius: 12px;">
+</iframe>
+</div>
+</div>
+<!-- data-pjax：站点开启了 pjax（点击菜单切换页面时内容由 innerHTML 替换、
+     其中的 <script> 不会执行，NexT 只重新执行带 data-pjax 的脚本），
+     缺了它从站内其他页面导航过来时标签点击会失效 -->
+<script data-pjax>
+(function () {
+  var tabs = document.querySelectorAll('.game-tabs button');
+  var panes = document.querySelectorAll('.game-frame');
+  function activate(tab) {
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i] === tab);
+    for (var j = 0; j < panes.length; j++) panes[j].hidden = panes[j].id !== tab.dataset.game;
+    // 切走的游戏若正在计时（贪吃蛇），通知它自动暂停
+    for (var k = 0; k < panes.length; k++) {
+      if (!panes[k].hidden) continue;
+      var frame = panes[k].querySelector('iframe');
+      if (frame) {
+        try { frame.contentWindow.postMessage('pause-game', '*'); } catch (e) { /* 忽略 */ }
+      }
+    }
+  }
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', function () { activate(this); });
+  }
+})();
+</script>
 
       </div>
       

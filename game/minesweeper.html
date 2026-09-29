@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>扫雷</title>
+<style>
+  /* ===== 亮 / 暗两套配色（由 <script> 在渲染前根据父页面 darkmode 切换 data-mode）===== */
+  :root {
+    --page-bg: #faf8ef;
+    --text: #776e65;
+    --text-dim: #9b9184;
+    --board-bg: #a89a86;   /* 格子间缝隙 */
+    --cell-bg: #cfc3b2;    /* 未翻开 */
+    --cell-hover: #c2b4a0;
+    --cell-open: #ece7dd;  /* 已翻开 */
+    --wrong-bg: rgba(224, 92, 75, 0.28); /* 标错的旗 */
+    --boom-bg: #e05c4b;    /* 踩中的雷 */
+    --seg-bg: #e9e2d3;
+    --box-bg: #bbada0;
+    --box-label: #eee4da;
+    --box-text: #ffffff;
+    --btn-bg: #8f7a66;
+    --btn-text: #f9f6f2;
+    --overlay-bg: rgba(238, 228, 218, 0.82);
+    --overlay-text: #776e65;
+    /* 数字 1-8 经典配色（亮色） */
+    --n1: #1976d2; --n2: #388e3c; --n3: #d32f2f; --n4: #7b1fa2;
+    --n5: #8d5524; --n6: #00838f; --n7: #4e463c; --n8: #9b9184;
+  }
+  :root[data-mode="dark"] {
+    --page-bg: #22252a;
+    --text: #d8d5cf;
+    --text-dim: #8b9199;
+    --board-bg: #1f2226;
+    --cell-bg: #43484f;
+    --cell-hover: #4d535b;
+    --cell-open: #2b2f35;
+    --wrong-bg: rgba(200, 90, 75, 0.30);
+    --boom-bg: #a8453a;
+    --seg-bg: #3a3f46;
+    --box-bg: #34383f;
+    --box-label: #b8bcc2;
+    --box-text: #f0eee9;
+    --btn-bg: #5a6470;
+    --btn-text: #f0eee9;
+    --overlay-bg: rgba(24, 26, 30, 0.82);
+    --overlay-text: #e8e6e1;
+    /* 数字 1-8 暗色下整体调亮 */
+    --n1: #64b5f6; --n2: #81c784; --n3: #e57373; --n4: #ce93d8;
+    --n5: #d4a26a; --n6: #4dd0e1; --n7: #e0dcd5; --n8: #8b9199;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: "Clear Sans", "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* --bw：棋盘及顶栏的统一宽度 —— 受宽度、上限、视口高度三者约束，
+     保证棋盘加顶部栏/提示后总能装进 iframe 视口（iframe 由父页面按 2:3 比例给高） */
+  .wrap {
+    --bw: min(100%, 420px, calc(100vh - 170px));
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ===== 顶栏：标题 + 雷数 / 用时 ===== */
+  .header {
+    width: var(--bw);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 {
+    font-size: clamp(26px, 11vw, 36px);
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: 2px;
+  }
+  .scores { display: flex; gap: 8px; }
+  .score-box {
+    min-width: 76px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--box-bg);
+    text-align: center;
+  }
+  .score-box .label {
+    display: block;
+    font-size: 11px;
+    color: var(--box-label);
+  }
+  .score-box .value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--box-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .subbar {
+    width: var(--bw);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  /* 难度切换（分段按钮） */
+  .seg { display: flex; border-radius: 8px; overflow: hidden; }
+  .seg button {
+    padding: 8px 14px;
+    border: 0;
+    background: var(--seg-bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .seg button:not(:last-child) { border-right: 1px solid var(--board-bg); }
+  .seg button.active { background: var(--btn-bg); color: var(--btn-text); }
+  .seg button:active { filter: brightness(1.08); }
+
+  /* 重开按钮（表情） */
+  .face {
+    flex: none;
+    width: 44px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--btn-bg);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+  }
+  .face:hover { filter: brightness(1.08); }
+  .face:active { transform: scale(0.96); }
+
+  /* ===== 棋盘 ===== */
+  .board {
+    position: relative;
+    width: var(--bw);
+    padding: 6px;
+    border-radius: 10px;
+    background: var(--board-bg);
+  }
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 9), 1fr);
+    gap: 2px;
+    width: 100%;
+  }
+  .cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--cellpx, 24px) * 0.14);
+    background: var(--cell-bg);
+    font-size: calc(var(--cellpx, 24px) * 0.52);
+    font-weight: 700;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none; /* 长按不弹 iOS 放大镜 */
+    touch-action: manipulation;  /* 禁双击缩放，保留点按与滚动 */
+  }
+  .board:not(.done) .cell:not(.revealed):not(.flag):hover { background: var(--cell-hover); }
+  .cell.revealed {
+    background: var(--cell-open);
+    cursor: default;
+    animation: cell-open 120ms ease;
+  }
+  .cell.wrong { background: var(--wrong-bg); }
+  .cell.boom  { background: var(--boom-bg); }
+  .n1 { color: var(--n1); } .n2 { color: var(--n2); } .n3 { color: var(--n3); } .n4 { color: var(--n4); }
+  .n5 { color: var(--n5); } .n6 { color: var(--n6); } .n7 { color: var(--n7); } .n8 { color: var(--n8); }
+
+  /* ===== 遮罩（胜利 / 踩雷）===== */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    border-radius: 10px;
+    background: var(--overlay-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 12px;
+  }
+  .overlay[hidden] { display: none; }
+  .overlay .msg {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--overlay-text);
+    line-height: 1.4;
+  }
+  .overlay .sub {
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .overlay .btn { font-size: 16px; padding: 10px 22px; }
+  .btn {
+    flex: none;
+    border: 0;
+    border-radius: 8px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: scale(0.96); }
+
+  .hint { font-size: 12px; color: var(--text-dim); text-align: center; }
+
+  @keyframes cell-open {
+    from { scale: 0.85; }
+    to   { scale: 1; }
+  }
+</style>
+<script>
+  // 暗色模式检测：嵌入博客时跟随父页面 body 的 .darkmode--activated 类
+  // （hexo-next-darkmode 插件的实现方式，见 CLAUDE.md），独立打开时回退 prefers-color-scheme。
+  // 放在 <head> 里、样式之后、首帧渲染之前执行，避免闪白。
+  (function () {
+    var apply = function () {
+      var dark = false;
+      try {
+        if (window.parent && window.parent !== window && window.parent.document.body) {
+          dark = window.parent.document.body.classList.contains('darkmode--activated');
+        } else {
+          dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+      } catch (e) {
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      document.documentElement.dataset.mode = dark ? 'dark' : 'light';
+    };
+    apply();
+    try {
+      if (window.parent && window.parent !== window && window.parent.document.body) {
+        new MutationObserver(apply).observe(window.parent.document.body, {
+          attributes: true, attributeFilter: ['class']
+        });
+      }
+    } catch (e) { /* 跨域时忽略 */ }
+  })();
+</script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>扫雷</h1>
+      <div class="scores">
+        <div class="score-box">
+          <span class="label">剩余雷数</span><span class="value" id="mine-count">010</span>
+        </div>
+        <div class="score-box">
+          <span class="label">用时</span><span class="value" id="time">000</span>
+        </div>
+      </div>
+    </div>
+    <div class="subbar">
+      <div class="seg">
+        <button data-diff="easy" class="active">初级 9×9</button>
+        <button data-diff="mid">中级 16×16</button>
+      </div>
+      <button class="face" id="face" title="重新开始">🙂</button>
+    </div>
+    <div class="board" id="board">
+      <div class="cells" id="cells"></div>
+      <div class="overlay" id="overlay" hidden>
+        <p class="msg" id="overlay-msg"></p>
+        <p class="sub" id="overlay-sub"></p>
+        <button class="btn" id="overlay-btn"></button>
+      </div>
+    </div>
+    <p class="hint">左键翻开 &middot; 右键 / 长按插旗 &middot; 双击数字快速展开</p>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DIFFS = {
+    easy: { cols: 9,  rows: 9,  mines: 10 },
+    mid:  { cols: 16, rows: 16, mines: 40 }
+  };
+
+  var boardEl   = document.getElementById('board');
+  var cellsEl   = document.getElementById('cells');
+  var countEl   = document.getElementById('mine-count');
+  var timeEl    = document.getElementById('time');
+  var faceEl    = document.getElementById('face');
+  var overlayEl = document.getElementById('overlay');
+  var overlayMsg = document.getElementById('overlay-msg');
+  var overlaySub = document.getElementById('overlay-sub');
+  var overlayBtn = document.getElementById('overlay-btn');
+
+  var diff = 'easy';
+  var COLS, ROWS, MINES;
+  var mines, nums, opened, flags, cellEls;
+  var openedCount, flagCount;
+  var state;         // 'idle' | 'playing' | 'over' | 'won'
+  var time, timerInt = null;
+
+  // ===== 工具 =====
+  function id(r, c) { return r * COLS + c; }
+  function neighbors(r, c, fn) {
+    for (var dr = -1; dr <= 1; dr++) {
+      for (var dc = -1; dc <= 1; dc++) {
+        if (!dr && !dc) continue;
+        var nr = r + dr, nc = c + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) fn(nr, nc);
+      }
+    }
+  }
+  function fmt3(n) { return n < 0 ? String(n) : String(n).padStart(3, '0'); }
+
+  // ===== 布雷：首击及其邻格必空（翻开必是一大片），之后才计算邻雷数 =====
+  function placeMines(exR, exC) {
+    var allowed = [];
+    for (var r = 0; r < ROWS; r++)
+      for (var c = 0; c < COLS; c++)
+        if (Math.abs(r - exR) > 1 || Math.abs(c - exC) > 1) allowed.push(id(r, c));
+    // 部分洗牌：前 MINES 个即为雷
+    for (var i = 0; i < MINES; i++) {
+      var j = i + Math.floor(Math.random() * (allowed.length - i));
+      var t = allowed[i]; allowed[i] = allowed[j]; allowed[j] = t;
+      mines[allowed[i]] = true;
+    }
+    for (var r2 = 0; r2 < ROWS; r2++) {
+      for (var c2 = 0; c2 < COLS; c2++) {
+        var n = 0;
+        neighbors(r2, c2, function (nr, nc) { if (mines[id(nr, nc)]) n++; });
+        nums[id(r2, c2)] = n;
+      }
+    }
+  }
+
+  // ===== 计数 / 计时 =====
+  function updateCount() { countEl.textContent = fmt3(MINES - flagCount); }
+  function startTimer() {
+    stopTimer();
+    time = 0;
+    timeEl.textContent = fmt3(0);
+    timerInt = setInterval(function () {
+      if (time < 999) { time++; timeEl.textContent = fmt3(time); }
+    }, 1000);
+  }
+  function stopTimer() { if (timerInt) { clearInterval(timerInt); timerInt = null; } }
+
+  // ===== 翻开（含空白连锁）=====
+  function openCellAt(i) {
+    if (state === 'over' || state === 'won') return;
+    if (flags[i] || opened[i]) return;
+    if (state === 'idle') {
+      placeMines(Math.floor(i / COLS), i % COLS);
+      startTimer();
+      state = 'playing';
+    }
+    if (mines[i]) { lose(i); return; }
+
+    var stack = [i];
+    while (stack.length) {
+      var k = stack.pop();
+      if (opened[k] || flags[k]) continue;
+      opened[k] = true;
+      openedCount++;
+      var el = cellEls[k];
+      el.classList.add('revealed');
+      if (nums[k]) {
+        el.textContent = nums[k];
+        el.classList.add('n' + nums[k]);
+      } else {
+        neighbors(Math.floor(k / COLS), k % COLS, function (nr, nc) {
+          if (!opened[id(nr, nc)]) stack.push(id(nr, nc));
+        });
+      }
+    }
+    checkWin();
+  }
+
+  // ===== 插旗 =====
+  function toggleFlag(i) {
+    if (state === 'over' || state === 'won' || opened[i]) return;
+    flags[i] = !flags[i];
+    flagCount += flags[i] ? 1 : -1;
+    var el = cellEls[i];
+    if (flags[i]) { el.classList.add('flag'); el.textContent = '🚩'; }
+    else { el.classList.remove('flag'); el.textContent = ''; }
+    updateCount();
+  }
+
+  // ===== 双击数字：周围旗数已够时快速翻开其余邻格 =====
+  function chordAt(i) {
+    if (state !== 'playing') return;
+    if (!opened[i] || !nums[i]) return;
+    var r = Math.floor(i / COLS), c = i % COLS;
+    var fc = 0;
+    neighbors(r, c, function (nr, nc) { if (flags[id(nr, nc)]) fc++; });
+    if (fc !== nums[i]) return;
+    var targets = [];
+    neighbors(r, c, function (nr, nc) {
+      var k = id(nr, nc);
+      if (!flags[k] && !opened[k]) targets.push(k);
+    });
+    for (var t = 0; t < targets.length; t++) openCellAt(targets[t]);
+  }
+
+  // ===== 胜负 =====
+  function lose(boomIdx) {
+    state = 'over';
+    stopTimer();
+    faceEl.textContent = '😵';
+    boardEl.classList.add('done');
+    for (var i = 0; i < cellEls.length; i++) {
+      if (i === boomIdx) continue;
+      if (mines[i] && !flags[i] && !opened[i]) {
+        cellEls[i].classList.add('revealed', 'mine');
+        cellEls[i].textContent = '💣';
+      } else if (!mines[i] && flags[i]) {
+        cellEls[i].classList.add('wrong'); // 标错的旗
+      }
+    }
+    cellEls[boomIdx].classList.add('revealed', 'boom');
+    cellEls[boomIdx].textContent = '💣';
+    showOverlay('💥 踩到雷了！', '用时 ' + time + ' 秒', '再试一次', newGame);
+  }
+
+  function checkWin() {
+    if (state !== 'playing' || openedCount !== COLS * ROWS - MINES) return;
+    state = 'won';
+    stopTimer();
+    faceEl.textContent = '😎';
+    boardEl.classList.add('done');
+    // 剩下的雷自动插旗
+    for (var i = 0; i < cellEls.length; i++) {
+      if (mines[i] && !flags[i]) {
+        flags[i] = true;
+        flagCount++;
+        cellEls[i].classList.add('flag');
+        cellEls[i].textContent = '🚩';
+      }
+    }
+    updateCount();
+    // 每个难度分别记录最快用时
+    var key = 'blogmine-best-' + diff;
+    var bestT = null;
+    try { bestT = +localStorage.getItem(key) || null; } catch (e) { /* 忽略 */ }
+    var isNew = bestT === null || time < bestT;
+    if (isNew) { try { localStorage.setItem(key, time); } catch (e) { /* 忽略 */ } }
+    showOverlay('🎉 扫雷成功！',
+      '用时 ' + time + ' 秒' + (isNew && bestT !== null ? ' · 新纪录！' : ''),
+      '再来一局', newGame);
+  }
+
+  // ===== 遮罩 =====
+  function showOverlay(msg, sub, btnText, onBtn) {
+    overlayMsg.textContent = msg;
+    overlaySub.textContent = sub || '';
+    overlaySub.hidden = !sub;
+    overlayBtn.textContent = btnText;
+    overlayBtn.onclick = onBtn;
+    overlayEl.hidden = false;
+  }
+  function hideOverlay() { overlayEl.hidden = true; }
+
+  // ===== 新游戏 =====
+  function newGame() {
+    var d = DIFFS[diff];
+    COLS = d.cols; ROWS = d.rows; MINES = d.mines;
+    var total = COLS * ROWS;
+    mines = []; nums = []; opened = []; flags = [];
+    for (var i = 0; i < total; i++) { mines.push(false); nums.push(0); opened.push(false); flags.push(false); }
+    openedCount = 0; flagCount = 0;
+    state = 'idle';
+    stopTimer();
+    time = 0;
+    timeEl.textContent = fmt3(0);
+    updateCount();
+    faceEl.textContent = '🙂';
+    boardEl.classList.remove('done');
+    hideOverlay();
+
+    cellsEl.style.setProperty('--cols', COLS);
+    cellsEl.innerHTML = '';
+    cellEls = [];
+    for (var k = 0; k < total; k++) {
+      var el = document.createElement('div');
+      el.className = 'cell';
+      el.dataset.i = k;
+      cellsEl.appendChild(el);
+      cellEls.push(el);
+    }
+    measure();
+  }
+
+  // ===== 尺寸：格子边长写入 CSS 变量（控制圆角与字号）=====
+  function measure() {
+    var w = cellsEl.clientWidth;
+    if (!w) return;
+    var cw = (w - (COLS - 1) * 2) / COLS; // gap 固定 2px
+    cellsEl.style.setProperty('--cellpx', cw + 'px');
+  }
+
+  // ===== 输入：左键翻开 / 右键插旗 / 双击展开 / 触屏长按插旗 =====
+  cellsEl.addEventListener('click', function (e) {
+    if (suppressClick) { suppressClick = false; return; }
+    var cell = e.target.closest('.cell');
+    if (cell) openCellAt(+cell.dataset.i);
+  });
+  cellsEl.addEventListener('dblclick', function (e) {
+    var cell = e.target.closest('.cell');
+    if (cell) chordAt(+cell.dataset.i);
+  });
+  boardEl.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    if (Date.now() - touchAt < 600) return; // 触屏长按已自行处理，避免双重切换
+    var cell = e.target.closest('.cell');
+    if (cell) toggleFlag(+cell.dataset.i);
+  });
+
+  var lpTimer = null, suppressClick = false, touchAt = 0, lpX = 0, lpY = 0;
+  function cancelLongPress() {
+    if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; }
+  }
+  if (window.PointerEvent) {
+    cellsEl.addEventListener('pointerdown', function (e) {
+      suppressClick = false; // 清掉可能残留的抑制标记
+      if (e.pointerType !== 'touch') return;
+      touchAt = Date.now();
+      lpX = e.clientX; lpY = e.clientY;
+      var cell = e.target.closest('.cell');
+      if (!cell) return;
+      var i = +cell.dataset.i;
+      cancelLongPress();
+      lpTimer = setTimeout(function () {
+        lpTimer = null;
+        suppressClick = true; // 吞掉长按后的 click
+        toggleFlag(i);
+        try { if (navigator.vibrate) navigator.vibrate(30); } catch (err) { /* 忽略 */ }
+      }, 400);
+    });
+    cellsEl.addEventListener('pointermove', function (e) {
+      if (lpTimer && (Math.abs(e.clientX - lpX) > 10 || Math.abs(e.clientY - lpY) > 10)) cancelLongPress();
+    });
+    cellsEl.addEventListener('pointerup', cancelLongPress);
+    cellsEl.addEventListener('pointercancel', cancelLongPress);
+  }
+
+  // ===== 难度切换 / 重开 =====
+  var segBtns = document.querySelectorAll('.seg button');
+  for (var b = 0; b < segBtns.length; b++) {
+    segBtns[b].addEventListener('click', function () {
+      diff = this.dataset.diff;
+      for (var j = 0; j < segBtns.length; j++) segBtns[j].classList.toggle('active', segBtns[j] === this);
+      newGame();
+    });
+  }
+  faceEl.addEventListener('click', newGame);
+
+  // ===== 启动 =====
+  newGame();
+  if (window.ResizeObserver) new ResizeObserver(measure).observe(cellsEl);
+  window.addEventListener('resize', measure);
+})();
+</script>
+</body>
+</html>
